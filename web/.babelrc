@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry"
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "babel-plugin-styled-components",
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "syntax-dynamic-import"
+  ]
+}

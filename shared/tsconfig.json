@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "downlevelIteration": true,
+    "lib": ["es2018", "DOM"],
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "target": "es6"
+  },
+  "include": ["src"]
+}

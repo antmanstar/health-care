@@ -1,0 +1,17 @@
+<svg id="heart-health-logo" data-name="Heart Health Plan Logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <defs>
+    <style>
+      .heart-health-logo-shape-1 {
+        fill: none;
+        stroke: #00263a;
+        stroke-width: 2px;
+      }
+      .heart-health-logo-shape-2 {
+        fill: #00263a;
+      }
+    </style>
+  </defs>
+  <title>Heart Health Plan Logo</title>
+  <path class="heart-health-logo-shape-1" d="M25,49A24,24,0,1,0,1,25,24,24,0,0,0,25,49Z" />
+  <path class="heart-health-logo-shape-2" d="M24.91,32.14,18,23.88l3.06-2.6,3.83,5.06L38.42,13.91a9.59,9.59,0,0,0-1.86-1.08A10.09,10.09,0,0,0,25,16a10.07,10.07,0,0,0-11.56-3.11c-8.64,3.87-2.5,13.3-2.5,13.3L25,41.86,39.06,26.14s3.09-4.75,1.8-8.89Z" />
+</svg>

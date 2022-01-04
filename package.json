@@ -1,0 +1,34 @@
+{
+  "name": "@evry-member-app/root",
+  "version": "0.0.1",
+  "engines": {
+    "node": "14.18.0",
+    "npm": "7.24.2"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build:shared": "lerna run --stream --scope=@evry-member-app/shared build",
+    "build:web": "lerna run --stream --scope=@evry-member-app/web build",
+    "lerna": "lerna",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "set-up": "npm i && npm run bootstrap && npm run build:shared",
+    "set-up:fresh": "lerna clean -y && npm ci && npm run bootstrap && npm run build:shared",
+    "start:web": "lerna run --stream --scope=@evry-member-app/web start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@ssh.dev.azure.com:v3/EvryHealthINC/EHG/evry-member-app"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "process": "^0.11.10"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-native": "^0.66.3"
+  }
+}

@@ -1,0 +1,3 @@
+## Webpack build artifacts
+dist
+*.bundle.*

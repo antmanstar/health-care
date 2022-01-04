@@ -1,0 +1,11 @@
+{
+  "name": "@evry-member-app/assets",
+  "version": "0.0.0",
+  "description": "Dedicated assets package, for inclusion in web and (native) mobile apps.",
+  "files": [
+    "images/**"
+  ],
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}

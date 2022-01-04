@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "assets",
+    "mobile",
+    "shared",
+    "web"
+  ],
+  "version": "0.0.0"
+}
