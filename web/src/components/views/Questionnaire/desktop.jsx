@@ -144,7 +144,7 @@ class Questionnaire extends Component {
   }
 
   forwardToSuggestion() {
-    const { isQuestionnaireComplete  } = this.props;
+    const { isQuestionnaireComplete } = this.props;
     const carePlanSuggestion = this.getCarePlanSuggestion();
     if (!isEmpty(carePlanSuggestion) || isQuestionnaireComplete) {
       history.push('/change-plan');
@@ -166,7 +166,7 @@ class Questionnaire extends Component {
     let currentAnswer = undefined
 
     if (this.state.answers !== undefined)
-      currentAnswer = this.state.answers[currentQuestion-1]
+      currentAnswer = this.state.answers[currentQuestion - 1]
 
     if (currentAnswer) {
       return true;
@@ -187,13 +187,18 @@ class Questionnaire extends Component {
       const questionAnswer = question.question_selections.find(
         selection => selection.question_selection_id === answer.questionSelectionId
       );
+      const questionPreviousAnswer = question.question_selections.find(
+        selection => selection.question_selection_id !== answer.questionSelectionId
+      );
 
-      questionAnswer.question_selection_answer.push({
+      questionPreviousAnswer.question_selection_answer.length = 0;
+      questionAnswer.question_selection_answer.length = 0;
+      questionAnswer.question_selection_answer[0] = {
         name: null,
         question_selection_answer_id: 0,
         value: null,
         value_data_type: null
-      });
+      };
     });
 
     questionnaire.completion_date_utc = moment.utc().format();
@@ -298,7 +303,7 @@ class Questionnaire extends Component {
             }}
           />
           {
-            isSavingQuestionnaire && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
+            isSavingQuestionnaire && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
           }
         </Wrapper>
       </>
