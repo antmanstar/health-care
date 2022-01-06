@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import values from 'lodash/values';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -106,10 +106,19 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
-class SignIn extends PureComponent {
-  componentDidMount() {
-    const { authError, handleClearAuthError, hasBasicInfo, isAuthenticated, isOnboardingComplete } = this.props;
-
+function SignIn({
+  authError,
+  handleSubmit,
+  isSigningIn,
+  handleTwoFactorSubmit,
+  handleClearAuthError,
+  handleClear2FA,
+  hasBasicInfo,
+  isAuthenticated,
+  isOnboardingComplete,
+  payload2FA
+}) {
+  useEffect(() => {
     if (isAuthenticated && hasBasicInfo && !isOnboardingComplete) {
       if (isOnboardingComplete) {
         history.push('/');
@@ -119,10 +128,9 @@ class SignIn extends PureComponent {
     } else if (authError && authError.data) {
       handleClearAuthError();
     }
-  }
+  }, []);
 
-  renderAuthError() {
-    const { authError } = this.props;
+  const renderAuthError = () => {
     let authErrorMessage = null;
     if (authError) {
       authErrorMessage = (
@@ -132,89 +140,83 @@ class SignIn extends PureComponent {
       );
     }
     return authErrorMessage;
-  }
+  };
 
-  render() {
-    const { handleClear2FA, handleSubmit, handleTwoFactorSubmit, payload2FA, isSigningIn } = this.props;
-
-    return (
-      <LayoutWrapper>
-        <Helmet>
-          <title>{reflection.layoutProps.title} - Evry Health</title>
-        </Helmet>
-        {payload2FA && payload2FA.two_way_factor_challenge_required ? (
-          <>
-            <Title>Enter Your Code</Title>
-            <SectionDivider />
-            <form autoComplete="false" onSubmit={handleTwoFactorSubmit}>
-              <input type="hidden" value={payload2FA.two_way_factor_token} name="twoFactorToken" />
-              <input type="hidden" value={payload2FA.email_address} name="email" />
-              <Input
-                type="text"
-                autoComplete="off"
-                name="idCode"
-                placeholder={`Code Sent To ${payload2FA.two_way_factor_sent_to}`}
-              />
-              {this.renderAuthError()}
-              <ButtonWrapper>
-                <Button buttonType="submit" value="Finish Sign In" text="Finish Sign In" />
-              </ButtonWrapper>
-            </form>
-            <GoToRegistration>
-              <RouterLink to="/" onClick={handleClear2FA}>
-                Start Over
-              </RouterLink>
-            </GoToRegistration>
-          </>
-        ) : (
-          <>
-            <Title>Sign In</Title>
-            <SectionDivider />
-            <form autoComplete="false" onSubmit={handleSubmit}>
-              <EditedTwoColumnRow>
-                <SmallContainer>
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    autoComplete="username"
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Enter your email address."
+  return (
+    <LayoutWrapper>
+      <Helmet>
+        <title>{reflection.layoutProps.title} - Evry Health</title>
+      </Helmet>
+      {payload2FA && payload2FA.two_way_factor_challenge_required ? (
+        <>
+          <Title>Enter Your Code</Title>
+          <SectionDivider />
+          <form autoComplete="false" onSubmit={handleTwoFactorSubmit}>
+            <input type="hidden" value={payload2FA.two_way_factor_token} name="twoFactorToken" />
+            <input type="hidden" value={payload2FA.email_address} name="email" />
+            <Input
+              type="text"
+              autoComplete="off"
+              name="idCode"
+              placeholder={`Code Sent To ${payload2FA.two_way_factor_sent_to}`}
+            />
+            {renderAuthError()}
+            <ButtonWrapper>
+              <Button buttonType="submit" value="Finish Sign In" text="Finish Sign In" />
+            </ButtonWrapper>
+          </form>
+          <GoToRegistration>
+            <RouterLink to="/" onClick={handleClear2FA}>
+              Start Over
+            </RouterLink>
+          </GoToRegistration>
+        </>
+      ) : (
+        <>
+          <Title>Sign In</Title>
+          <SectionDivider />
+          <form autoComplete="false" onSubmit={handleSubmit}>
+            <EditedTwoColumnRow>
+              <SmallContainer>
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  autoComplete="username"
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Enter your email address."
                   // className="error"
-                  />
-                </SmallContainer>
-                <SmallContainer>
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    autoComplete="current-password"
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Enter your password."
-                  />
-                  <PasswordRecovery>
-                    <RouterLink to="/password-reset">Forgot your password?</RouterLink>
-                  </PasswordRecovery>
-                </SmallContainer>
-              </EditedTwoColumnRow>
-              {this.renderAuthError()}
-              <SectionDivider />
-              <ButtonWrapper>
-                <Button buttonType="submit" value="Sign In" text="Sign In" />
-              </ButtonWrapper>
-            </form>
-          </>
-        )}
-        <GoToRegistration>
-          <p>Don&apos;t have an account yet?</p>
-          <RouterLink to="/register">Register your account</RouterLink>
-        </GoToRegistration>
-        {
-          isSigningIn && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
-        }
-      </LayoutWrapper>
-    );
-  }
+                />
+              </SmallContainer>
+              <SmallContainer>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  autoComplete="current-password"
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Enter your password."
+                />
+                <PasswordRecovery>
+                  <RouterLink to="/password-reset">Forgot your password?</RouterLink>
+                </PasswordRecovery>
+              </SmallContainer>
+            </EditedTwoColumnRow>
+            {renderAuthError()}
+            <SectionDivider />
+            <ButtonWrapper>
+              <Button buttonType="submit" value="Sign In" text="Sign In" />
+            </ButtonWrapper>
+          </form>
+        </>
+      )}
+      <GoToRegistration>
+        <p>Don&apos;t have an account yet?</p>
+        <RouterLink to="/register">Register your account</RouterLink>
+      </GoToRegistration>
+      {isSigningIn && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+    </LayoutWrapper>
+  );
 }
 
 SignIn.propTypes = {
@@ -265,10 +267,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const ConnectedSignIn = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignIn);
+const ConnectedSignIn = connect(mapStateToProps, mapDispatchToProps)(SignIn);
 
 const reflection = {
   component: ConnectedSignIn,
