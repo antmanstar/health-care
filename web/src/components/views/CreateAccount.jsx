@@ -14,6 +14,7 @@ import history from '../../utils/history';
 const { register } = actions;
 const {
   getAuthError,
+  getRegisterError,
   getRegisteringUser,
   isVerifiedRegisteringUser,
   successfulRegistration
@@ -59,7 +60,6 @@ const Label = styled.p`
   margin: 0 0 16px;
   font-size: 18px;
   font-weight: 400;
-  color: ${props => props.theme.colors.shades.blue};
 `;
 
 const PasswordLabelWrapper = styled.div`
@@ -70,7 +70,13 @@ const PasswordLabelWrapper = styled.div`
 
   p {
     margin: 0;
+    margin-right: 20px;
   }
+`;
+
+const PasswordHelp = styled.div`
+  display: flex;
+  color: ${props => props.theme.colors.shades.blue};
 `;
 
 const ShowPassword = styled.button`
@@ -91,6 +97,14 @@ const ButtonWrapper = styled.div`
   align-items: center;
   width: 100%;
   padding-top: 32px;
+`;
+const ErrorWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${props => props.theme.colors.shades.pinkRed};
+  p {
+    margin-left: 16px;
+  }
 `;
 
 class CreateAccount extends Component {
@@ -127,8 +141,7 @@ class CreateAccount extends Component {
   }
 
   render() {
-    const { isVerifiedRegisteringUser } = this.props;
-
+    const { isVerifiedRegisteringUser, registerError } = this.props;
     if (!isVerifiedRegisteringUser) {
       return <Redirect to="/register" />;
     }
@@ -137,8 +150,16 @@ class CreateAccount extends Component {
 
     return (
       <LayoutWrapper>
-        <Title>Create your online account.</Title>
+        <Title>Create your online profile.</Title>
         <SectionDivider />
+        {registerError && (
+          <ErrorWrapper>
+            <i className="material-icons">error</i>
+            <p>{registerError.message}. Check for mistakes or contact us at 1-800-555-1234 for</p>
+            assistance
+          </ErrorWrapper>
+        )}
+
         <form autoComplete="false">
           <EditedTwoColumnRow>
             <SmallContainer>
@@ -153,7 +174,11 @@ class CreateAccount extends Component {
             </SmallContainer>
             <SmallContainer>
               <PasswordLabelWrapper>
-                <Label htmlFor="password">Choose a Password</Label>
+                <PasswordHelp>
+                  <Label htmlFor="password">Choose a Password</Label>
+                  <i className="material-icons">help_outline</i>
+                </PasswordHelp>
+
                 <ShowPassword
                   type="button"
                   onClick={() => {
@@ -185,7 +210,6 @@ class CreateAccount extends Component {
               text="Register Account"
               onClick={this.handleSubmit}
             />
-            <Button value="Cancel" text="Cancel" type="negative" />
           </ButtonWrapper>
         </form>
       </LayoutWrapper>
@@ -194,6 +218,7 @@ class CreateAccount extends Component {
 }
 
 CreateAccount.propTypes = {
+  registerError: PropTypes.object,
   isVerifiedRegisteringUser: PropTypes.bool,
   register: PropTypes.func,
   registeringUser: PropTypes.shape({}),
@@ -201,6 +226,7 @@ CreateAccount.propTypes = {
 };
 
 CreateAccount.defaultProps = {
+  registerError: null,
   isVerifiedRegisteringUser: false,
   register: () => {},
   registeringUser: null,
@@ -209,6 +235,7 @@ CreateAccount.defaultProps = {
 
 const mapStateToProps = state => ({
   authError: getAuthError(state),
+  registerError: getRegisterError(state),
   isVerifiedRegisteringUser: isVerifiedRegisteringUser(state),
   registeringUser: getRegisteringUser(state),
   successfulRegistration: successfulRegistration(state)

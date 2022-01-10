@@ -12,7 +12,12 @@ import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpi
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 
 const { verifyEligibilityIdAndSSN } = actions;
-const { getAuthError, isVerifiedRegisteringUser, isVerifyingElegibility, getVerifyMembershipError } = selectors;
+const {
+  getAuthError,
+  isVerifiedRegisteringUser,
+  isVerifyingElegibility,
+  getVerifyMembershipError
+} = selectors;
 
 //  Registration Start View
 // TODO: need to send Evry member id & last 4 of ssn to confirm membership to move to Create Account View
@@ -79,7 +84,7 @@ const ButtonWrapper = styled.div`
 const GoToSignIn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 218px;
 
   p {
     margin: 0;
@@ -119,7 +124,10 @@ class Register extends Component {
 
   renderVerifyMembershipError() {
     const { verifyMembershipError } = this.props;
-    const message = (verifyMembershipError?.result !== undefined && !verifyMembershipError?.result) ? "An error occured, Please try again." : verifyMembershipError?.error;
+    const message =
+      verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
+        ? 'An error occured, Please try again.'
+        : verifyMembershipError?.error;
     if (message) {
       return <ErrorMessage message={message} />;
     }
@@ -183,9 +191,7 @@ class Register extends Component {
           <p>Already have an account?</p>
           <RouterLink to="/sign-in">Sign In</RouterLink>
         </GoToSignIn>
-        {
-          isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
-        }
+        {isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
       </LayoutWrapper>
     );
   }
@@ -199,14 +205,14 @@ Register.propTypes = {
 
 Register.defaultProps = {
   isVerifiedRegisteringUser: false,
-  verifyEligibilityIdAndSSN: () => { }
+  verifyEligibilityIdAndSSN: () => {}
 };
 
 const mapStateToProps = state => ({
   authError: getAuthError(state),
   isVerifiedRegisteringUser: isVerifiedRegisteringUser(state),
   isVerifyingElegibility: isVerifyingElegibility(state),
-  verifyMembershipError: getVerifyMembershipError(state),
+  verifyMembershipError: getVerifyMembershipError(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -215,10 +221,7 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const ConnectedRegister = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Register);
+const ConnectedRegister = connect(mapStateToProps, mapDispatchToProps)(Register);
 
 const reflection = {
   component: ConnectedRegister,

@@ -27,7 +27,7 @@ const Wrapper = styled.div`
 
 const MainSection = styled.div`
   position: relative;
-  padding-top: ${props => (props.fullWidth ? '0' : '32px')};
+  padding-top: ${props => (props.fullWidth ? '0' : '64px')};
 
   &.standard-desktop-section {
     max-width: ${props => (props.fullWidth ? '100vw' : '960px')};

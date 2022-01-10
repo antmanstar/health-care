@@ -18,7 +18,7 @@ const Wrapper = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  height: 8px;
   background: ${props => props.theme.gradients.main};
   color: white;
 
@@ -59,31 +59,7 @@ const PhoneNumber = styled.div`
   margin-left: auto;
 `;
 
-const Footer = ({ phoneNumber }) => (
-  <Wrapper>
-    <LeftWrapper>
-      <RouterLink to="/">
-        <img src={logoImg} alt="Evry Logo" />
-      </RouterLink>
-    </LeftWrapper>
-    <CenterWrapper>
-      <p>
-        &copy;
-        {` 2018-`}
-        {Moment(new Date()).format('YYYY')}
-        {` | Evry Health, Inc`}
-      </p>
-    </CenterWrapper>
-    <PhoneNumber>
-      {phoneNumber && (
-        <>
-          <i className="material-icons">phone</i>
-          <p>{`1-${phoneNumber}`}</p>
-        </>
-      )}
-    </PhoneNumber>
-  </Wrapper>
-);
+const Footer = ({ phoneNumber }) => <Wrapper></Wrapper>;
 
 Footer.propTypes = {
   phoneNumber: PropTypes.string.isRequired
