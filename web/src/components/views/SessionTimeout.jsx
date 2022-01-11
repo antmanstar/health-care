@@ -21,8 +21,8 @@ const { getToken } = selectors;
 const SessionTimeout = (props) => {
   const [ isOpen, setOpen ] = useState(undefined);
   const events = ['click', 'load', 'scroll'];
-  const inactivityLimit = 180000;
-  const warningInterval = 10000;
+  const inactivityLimit = 900000;
+  const warningInterval = 30000;
 
   const {
     Scrim,

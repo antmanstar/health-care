@@ -13,9 +13,10 @@
     "build:web": "lerna run --stream --scope=@evry-member-app/web build",
     "lerna": "lerna",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-shared": "nodemon --watch 'shared/src' --exec npm run build:shared",
     "set-up": "npm i && npm run bootstrap && npm run build:shared",
     "set-up:fresh": "lerna clean -y && npm ci && npm run bootstrap && npm run build:shared",
-    "start:web": "lerna run --stream --scope=@evry-member-app/web start"
+    "start:web": "concurrently \"npm run watch-shared\" \"lerna run --stream --scope=@evry-member-app/web start\""
   },
   "repository": {
     "type": "git",
@@ -24,7 +25,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^7.0.0",
     "lerna": "^4.0.0",
+    "nodemon": "^2.0.15",
     "process": "^0.11.10"
   },
   "dependencies": {

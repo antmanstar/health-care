@@ -19,25 +19,25 @@ const carePlans = [
   {
     title: 'Heart Health',
     icon: 'heart-health',
-    desc: 'COPY NEEDED HERE',
+    desc: 'I have been treated for a heart or lung condition, or I am concerned of being at risk for one.',
     id: HEART_HEALTH_PLAN_ID
   },
   {
     title: 'Bone & Joint Health',
     icon: 'bone-and-joint-health',
-    desc: 'COPY NEEDED HERE',
+    desc: 'I frequently have bone or joint pain and would like to find good ways of dealing with that.',
     id: BONE_AND_JOINT_HEALTH_PLAN_ID
   },
   {
     title: 'Cancer Treatment',
     icon: 'cancer-treatment',
-    desc: 'COPY NEEDED HERE',
+    desc: 'I am a cancer survivor or have recently been diagnosed with cancer.',
     id: CANCER_TREATMENT_PLAN_ID
   },
   {
     title: "Women's Health",
     icon: 'womens-health',
-    desc: 'COPY NEEDED HERE',
+    desc: 'I am planning on becoming pregnant or I am currently pregnant.',
     id: WOMENS_HEALTH_PLAN_ID
   }
 ];
