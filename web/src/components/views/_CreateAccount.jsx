@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -108,43 +108,41 @@ const ErrorWrapper = styled.div`
   }
 `;
 
-function CreateAccount({
-  authError,
-  registerError,
-  isVerifiedRegisteringUser,
-  registeringUser,
-  register,
-  successfulRegistration,
-  ...restProps
-}) {
-  console.log('restProps ', restProps);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+class CreateAccount extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      showPassword: false
+    };
 
-  useEffect(() => {
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidUpdate() {
+    const { successfulRegistration } = this.props;
+
     if (successfulRegistration) {
       history.push('/sign-in');
     }
-    if (!isVerifiedRegisteringUser) {
-      history.push('/register');
-    }
-  }, [successfulRegistration, isVerifiedRegisteringUser]);
+  }
 
-  const handleChangeEmail = e => {
-    setEmail(e.target.value);
-  };
+  handleChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
-  const handleChangePassword = e => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = e => {
+  handleSubmit(e) {
     e.preventDefault();
-    register({ email, password });
-  };
 
-  const renderRegisterError = () => {
+    const { register } = this.props;
+    const { email, password } = this.state;
+    register({ email, password });
+  }
+
+  renderRegisterError() {
+    const { registerError } = this.props;
     const message =
       registerError?.result !== undefined && !registerError?.result
         ? 'An error occured, Please try again.'
@@ -153,65 +151,76 @@ function CreateAccount({
       return <ErrorMessage message={message} />;
     }
     return null;
-  };
+  }
 
-  return (
-    <LayoutWrapper>
-      <Title>Create your online profile.</Title>
-      <SectionDivider />
-      {renderRegisterError()}
-      <form autoComplete="false">
-        <EditedTwoColumnRow>
-          <SmallContainer>
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter your email address."
-              onChange={handleChangeEmail}
-            />
-          </SmallContainer>
-          <SmallContainer>
-            <PasswordLabelWrapper>
-              <PasswordHelp>
-                <Label htmlFor="password">Choose a Password</Label>
-                <i className="material-icons">help_outline</i>
-              </PasswordHelp>
+  render() {
+    const { isVerifiedRegisteringUser } = this.props;
+    if (!isVerifiedRegisteringUser) {
+      return <Redirect to="/register" />;
+    }
 
-              <ShowPassword
-                type="button"
-                onClick={() => {
-                  setShowPassword(!showPassword);
-                }}
-              >
-                {showPassword !== true ? 'show password' : 'hide password'}
-              </ShowPassword>
-            </PasswordLabelWrapper>
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              autoComplete="off"
-              name="password"
-              id="password"
-              placeholder="Choose a password."
-              onChange={handleChangePassword}
-            />
-            <PasswordStrengthMeter password={password} />
-          </SmallContainer>
-        </EditedTwoColumnRow>
+    const { showPassword, password } = this.state;
+
+    return (
+      <LayoutWrapper>
+        <Title>Create your online profile.</Title>
         <SectionDivider />
-        <ButtonWrapper>
-          <Button
-            buttonType="submit"
-            value="Register Account"
-            text="Register Account"
-            onClick={handleSubmit}
-          />
-        </ButtonWrapper>
-      </form>
-    </LayoutWrapper>
-  );
+        {this.renderRegisterError()}
+        <form autoComplete="false">
+          <EditedTwoColumnRow>
+            <SmallContainer>
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Enter your email address."
+                onChange={this.handleChange}
+              />
+            </SmallContainer>
+            <SmallContainer>
+              <PasswordLabelWrapper>
+                <PasswordHelp>
+                  <Label htmlFor="password">Choose a Password</Label>
+                  <i className="material-icons">help_outline</i>
+                </PasswordHelp>
+
+                <ShowPassword
+                  type="button"
+                  onClick={() => {
+                    this.setState({
+                      showPassword: !showPassword
+                    });
+                  }}
+                >
+                  {showPassword !== true ? 'show password' : 'hide password'}
+                </ShowPassword>
+              </PasswordLabelWrapper>
+              <Input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                autoComplete="off"
+                name="password"
+                id="password"
+                placeholder="Choose a password."
+                onChange={this.handleChange}
+              />
+              <PasswordStrengthMeter password={password} />
+            </SmallContainer>
+          </EditedTwoColumnRow>
+          <SectionDivider />
+          <ButtonWrapper>
+            <Button
+              buttonType="submit"
+              value="Register Account"
+              text="Register Account"
+              onClick={this.handleSubmit}
+            />
+          </ButtonWrapper>
+        </form>
+      </LayoutWrapper>
+    );
+  }
 }
 
 CreateAccount.propTypes = {
