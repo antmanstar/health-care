@@ -165,8 +165,7 @@ export const isQuestionnaireLoaded = (state) =>
 
 export const getAuthError = (state) => get(state, ['user', 'auth', 'error'])
 
-export const getRegisterError = (state) =>
-  get(state, ['user', 'register', 'error'])
+export const getRegisterError = (state) => get(state, ['user', 'register'])
 
 export const getVerifyMembershipError = (state) =>
   get(state, ['user', 'registering'])

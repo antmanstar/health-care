@@ -10,6 +10,7 @@ import PasswordStrengthMeter from '../presentation/shared/desktop/PasswordStreng
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import history from '../../utils/history';
+import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 
 const { register } = actions;
 const {
@@ -140,8 +141,20 @@ class CreateAccount extends Component {
     register({ email, password });
   }
 
+  renderRegisterError() {
+    const { registerError } = this.props;
+    const message =
+      registerError?.result !== undefined && !registerError?.result
+        ? 'An error occured, Please try again.'
+        : registerError?.error;
+    if (message) {
+      return <ErrorMessage message={message} />;
+    }
+    return null;
+  }
+
   render() {
-    const { isVerifiedRegisteringUser, registerError } = this.props;
+    const { isVerifiedRegisteringUser } = this.props;
     if (!isVerifiedRegisteringUser) {
       return <Redirect to="/register" />;
     }
@@ -152,14 +165,7 @@ class CreateAccount extends Component {
       <LayoutWrapper>
         <Title>Create your online profile.</Title>
         <SectionDivider />
-        {registerError && (
-          <ErrorWrapper>
-            <i className="material-icons">error</i>
-            <p>{registerError.message}. Check for mistakes or contact us at 1-800-555-1234 for</p>
-            assistance
-          </ErrorWrapper>
-        )}
-
+        {this.renderRegisterError()}
         <form autoComplete="false">
           <EditedTwoColumnRow>
             <SmallContainer>

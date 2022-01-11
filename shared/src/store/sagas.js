@@ -20,11 +20,9 @@ export const generateFetchWorker = (type, fetch) =>
       return response.data
     } catch (error) {
       // dispatch a failure action to the store with the error
-      console.log('error ', error)
-
       const { response } = error
       error = { ...error.toJSON(), response }
-      yield put({ type: `${type}_FAILURE`, payload: error })
+      yield put({ type: `${type}_FAILURE`, error })
       if (response.status === 401 && (yield select(isAuthenticated))) {
         yield put(clearAuth('Signed out automatically'))
       }
