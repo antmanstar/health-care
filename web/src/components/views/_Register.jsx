@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,7 +10,6 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
-import history from '../../utils/history';
 
 const { verifyEligibilityIdAndSSN } = actions;
 const {
@@ -99,33 +98,32 @@ const GoToSignIn = styled.div`
   }
 `;
 
-function Register({
-  authError,
-  isVerifiedRegisteringUser,
-  isVerifyingElegibility,
-  verifyMembershipError,
-  verifyEligibilityIdAndSSN
-}) {
-  const [memberId, setMemberId] = useState('');
-  const [ssn, setSsn] = useState('');
-  useEffect(() => {
-    if (isVerifiedRegisteringUser) {
-      history.push('/create-account');
-    }
-  }, [isVerifiedRegisteringUser]);
-  const handleChangeMemberId = e => {
-    setMemberId(e.target.value);
-  };
+class Register extends Component {
+  constructor(props) {
+    super(props);
 
-  const handleChangeSSN = e => {
-    setSsn(e.target.value);
-  };
+    this.state = {
+      memberId: '',
+      ssn: ''
+    };
 
-  const handleSubmit = () => {
-    verifyEligibilityIdAndSSN({ eligibilityId: memberId, last4SSN: ssn });
-  };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  const renderVerifyMembershipError = () => {
+  handleChange(e) {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  }
+
+  handleSubmit() {
+    const { verifyEligibilityIdAndSSN } = this.props;
+    const { memberId: eligibilityId, ssn: last4SSN } = this.state;
+    verifyEligibilityIdAndSSN({ eligibilityId, last4SSN });
+  }
+
+  renderVerifyMembershipError() {
+    const { verifyMembershipError } = this.props;
     const message =
       verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
         ? 'An error occured, Please try again.'
@@ -134,60 +132,69 @@ function Register({
       return <ErrorMessage message={message} />;
     }
     return null;
-  };
+  }
 
-  return (
-    <LayoutWrapper>
-      <Title>Find your membership.</Title>
-      <SectionDivider />
-      <form autoComplete="false">
-        <EditedTwoColumnRow>
-          <SmallContainer>
-            <Label htmlFor="memberId">Enter your Member ID.</Label>
-            <InputInstruction>
-              You can find you Member ID on your Membership Card or in your Evry Benefits Guidebook.
-            </InputInstruction>
-            <Input
-              type="text"
-              name="memberId"
-              id="memberId"
-              placeholder="Example: EVR19238400032"
-              onChange={handleChangeMemberId}
-            />
-          </SmallContainer>
-          <SmallContainer>
-            <Label htmlFor="social">Confirm your membership.</Label>
-            <InputInstruction>
-              Enter the last 4 digits of your social security number.
-            </InputInstruction>
-            <Input
-              className="push-down"
-              type="password"
-              name="ssn"
-              id="ssn"
-              placeholder="****"
-              onChange={handleChangeSSN}
-            />
-          </SmallContainer>
-        </EditedTwoColumnRow>
-        {renderVerifyMembershipError()}
+  render() {
+    const { isVerifiedRegisteringUser, isVerifyingElegibility } = this.props;
+
+    if (isVerifiedRegisteringUser) {
+      return <Redirect to="/create-account" />;
+    }
+
+    return (
+      <LayoutWrapper>
+        <Title>Find your membership.</Title>
         <SectionDivider />
-        <ButtonWrapper>
-          <Button
-            type="submit"
-            value="Confirm Membership"
-            text="Confirm Membership"
-            onClick={handleSubmit}
-          />
-        </ButtonWrapper>
-      </form>
-      <GoToSignIn>
-        <p>Already have an account?</p>
-        <RouterLink to="/sign-in">Sign In</RouterLink>
-      </GoToSignIn>
-      {isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-    </LayoutWrapper>
-  );
+        <form autoComplete="false">
+          <EditedTwoColumnRow>
+            <SmallContainer>
+              <Label htmlFor="memberId">Enter your Member ID.</Label>
+              <InputInstruction>
+                You can find you Member ID on your Membership Card or in your Evry Benefits
+                Guidebook.
+              </InputInstruction>
+              <Input
+                type="text"
+                name="memberId"
+                id="memberId"
+                placeholder="Example: EVR19238400032"
+                onChange={this.handleChange}
+              />
+            </SmallContainer>
+            <SmallContainer>
+              <Label htmlFor="social">Confirm your membership.</Label>
+              <InputInstruction>
+                Enter the last 4 digits of your social security number.
+              </InputInstruction>
+              <Input
+                className="push-down"
+                type="password"
+                name="ssn"
+                id="ssn"
+                placeholder="****"
+                onChange={this.handleChange}
+              />
+            </SmallContainer>
+          </EditedTwoColumnRow>
+          {this.renderVerifyMembershipError()}
+          <SectionDivider />
+          <ButtonWrapper>
+            <Button
+              type="submit"
+              value="Confirm Membership"
+              text="Confirm Membership"
+              onClick={this.handleSubmit}
+            />
+          </ButtonWrapper>
+        </form>
+        <GoToSignIn>
+          <p>Already have an account?</p>
+          <RouterLink to="/sign-in">Sign In</RouterLink>
+        </GoToSignIn>
+        {isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      </LayoutWrapper>
+    );
+  }
 }
 
 Register.propTypes = {

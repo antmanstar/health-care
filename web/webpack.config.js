@@ -21,7 +21,7 @@ const clientConfig = env => ({
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://apiqa.evryhealth.com/',
+        target: 'https://scudevehg.azurewebsites.net/',
         secure: false,
         logLevel: 'debug',
         changeOrigin: true
@@ -33,7 +33,7 @@ const clientConfig = env => ({
       {
         test: /\.js$/,
         enforce: 'pre',
-        use: ['source-map-loader'],
+        use: ['source-map-loader']
       },
       {
         test: /\.jsx?$/,
@@ -60,7 +60,7 @@ const clientConfig = env => ({
       },
       {
         test: /\.(gif|jpe?g|png)$/,
-        type: 'asset/resource'        
+        type: 'asset/resource'
       },
       {
         test: /\.svg$/,
@@ -77,21 +77,21 @@ const clientConfig = env => ({
       chunks: ['index'],
       filename: 'index.html',
       template: './src/templates/markup/husk-wds-rendered.html',
-      favicon: "./assets/favicon.ico"
+      favicon: './assets/favicon.ico'
     }),
     new HtmlWebPackPlugin({
       hash: true,
       chunks: ['style-guide'],
       filename: 'style-guide.html',
       template: './src/templates/markup/husk-wds-rendered.html',
-      favicon: "./assets/favicon.ico"
+      favicon: './assets/favicon.ico'
     }),
     new HtmlWebPackPlugin({
       hash: true,
       chunks: ['sandbox'],
       filename: 'sandbox.html',
       template: './src/templates/markup/husk-wds-rendered.html',
-      favicon: "./assets/favicon.ico"
+      favicon: './assets/favicon.ico'
     }),
     new MiniCssExtractPlugin({ filename: 'css/style.css' }),
     new webpack.DefinePlugin({
@@ -104,7 +104,7 @@ const clientConfig = env => ({
       __evryAPIURL__: env.dev ? `''` : `'${process.env.EVRY_API_URL}'`
     }),
     new webpack.ProvidePlugin({
-      process: 'process/browser',
+      process: 'process/browser'
     })
   ]
 });
