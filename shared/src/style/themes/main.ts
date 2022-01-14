@@ -1,5 +1,5 @@
 /* stylelint-disable no-descending-specificity  */
-import { css } from 'styled-components';
+import { css } from 'styled-components'
 
 // Building the theme
 
@@ -28,16 +28,14 @@ const colors = {
     pending: '#f9c22e',
     actionRequired: '#f03a47'
   }
-};
+}
 
 // Assembling the theme
 
 const theme = {
   colors,
   gradients: {
-    main: `linear-gradient(to bottom right, ${colors.shades.darkTealBlue}, ${
-      colors.shades.tealBlue
-    })`
+    main: `linear-gradient(to bottom right, ${colors.shades.darkTealBlue}, ${colors.shades.tealBlue})`
   },
   components: {
     Container: css`
@@ -49,7 +47,7 @@ const theme = {
     FormLabel: css`
       margin-bottom: 16px;
       font-weight: 400;
-      color: ${props => props.theme.colors.shades.blue};
+      color: ${(props) => props.theme.colors.shades.blue};
     `,
     Scrim: css`
       position: fixed;
@@ -70,8 +68,8 @@ const theme = {
       line-height: 48px;
       font-size: 16px;
       font-weight: 400;
-      background: ${props => props.theme.colors.shades.nearlyWhite};
-      color: ${props => props.theme.colors.shades.blue};
+      background: ${(props) => props.theme.colors.shades.nearlyWhite};
+      color: ${(props) => props.theme.colors.shades.blue};
       border: 1px solid transparent;
       border-radius: 4px;
 
@@ -81,31 +79,32 @@ const theme = {
 
       ::placeholder {
         font-weight: 300;
-        color: ${props => props.theme.colors.shades.gray};
+        color: ${(props) => props.theme.colors.shades.gray};
       }
 
       &:hover {
-        border-color: ${props => props.theme.colors.shades.mediumGray};
+        border-color: ${(props) => props.theme.colors.shades.mediumGray};
       }
 
       &:focus {
         outline: none;
-        border-color: ${props => props.theme.colors.shades.darkGray};
+        border-color: ${(props) => props.theme.colors.shades.darkGray};
       }
 
       &.error {
-        border-color: ${props => props.theme.colors.roles.danger};
+        border-color: ${(props) => props.theme.colors.roles.danger};
       }
     `,
     LayoutWrapper: css`
       margin: 0 auto 16px;
+      width: 100%;
     `,
     MobileModalBackButton: css`
       position: absolute;
       top: 16px;
       font-size: 12px;
       font-weight: 500;
-      color: ${props => props.theme.colors.shades.white};
+      color: ${(props) => props.theme.colors.shades.white};
       outline: none;
       background: none;
       border: none;
@@ -115,7 +114,7 @@ const theme = {
     MobileModalDivider: css`
       padding: 0 0 12px;
       width: 100%;
-      border-bottom: solid 1px ${props => props.theme.colors.shades.white};
+      border-bottom: solid 1px ${(props) => props.theme.colors.shades.white};
     `,
     MobileModalTitleWrapper: css`
       display: flex;
@@ -138,7 +137,7 @@ const theme = {
     MobileSectionBackground: css`
       width: 100%;
       margin: 0 auto 8px;
-      background: ${props => props.theme.colors.shades.white};
+      background: ${(props) => props.theme.colors.shades.white};
       border-radius: 4px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     `,
@@ -172,15 +171,15 @@ const theme = {
       width: 100%;
       font-size: 14px;
       font-weight: 400;
-      background: ${props => props.theme.colors.shades.white};
-      color: ${props => props.theme.colors.shades.blue};
+      background: ${(props) => props.theme.colors.shades.white};
+      color: ${(props) => props.theme.colors.shades.blue};
       border: 1px solid transparent;
       border-radius: 4px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 
       ::placeholder {
         font-weight: 300;
-        color: ${props => props.theme.colors.shades.gray};
+        color: ${(props) => props.theme.colors.shades.gray};
       }
 
       &:last-child {
@@ -188,35 +187,35 @@ const theme = {
       }
 
       &:hover {
-        border-color: ${props => props.theme.colors.shades.mediumGray};
+        border-color: ${(props) => props.theme.colors.shades.mediumGray};
       }
 
       &:focus {
         outline: none;
-        border-color: ${props => props.theme.colors.shades.darkGray};
+        border-color: ${(props) => props.theme.colors.shades.darkGray};
       }
 
       &.error {
-        border-color: ${props => props.theme.colors.roles.danger};
+        border-color: ${(props) => props.theme.colors.roles.danger};
       }
     `,
     MobileListTitle: css`
       margin: 24px 0 16px;
       font-size: 16px;
       font-weight: 700;
-      color: ${props => props.theme.colors.shades.blue};
+      color: ${(props) => props.theme.colors.shades.blue};
     `,
     MobileModalListTitle: css`
       margin: 24px 0 16px;
       font-size: 16px;
       font-weight: 300;
-      color: ${props => props.theme.colors.shades.white};
+      color: ${(props) => props.theme.colors.shades.white};
     `,
     MobileSectionInstruction: css`
       margin: 0;
       font-size: 13px;
       font-weight: 400;
-      color: ${props => props.theme.colors.shades.gray};
+      color: ${(props) => props.theme.colors.shades.gray};
     `,
     MobileTextArea: css`
       box-sizing: border-box;
@@ -225,15 +224,15 @@ const theme = {
       width: 100%;
       font-size: 14px;
       font-weight: 400;
-      background: ${props => props.theme.colors.shades.white};
-      color: ${props => props.theme.colors.shades.blue};
+      background: ${(props) => props.theme.colors.shades.white};
+      color: ${(props) => props.theme.colors.shades.blue};
       border: 1px solid transparent;
       border-radius: 4px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 
       ::placeholder {
         font-weight: 300;
-        color: ${props => props.theme.colors.shades.gray};
+        color: ${(props) => props.theme.colors.shades.gray};
       }
 
       &:last-child {
@@ -241,16 +240,16 @@ const theme = {
       }
 
       &:hover {
-        border-color: ${props => props.theme.colors.shades.mediumGray};
+        border-color: ${(props) => props.theme.colors.shades.mediumGray};
       }
 
       &:focus {
         outline: none;
-        border-color: ${props => props.theme.colors.shades.darkGray};
+        border-color: ${(props) => props.theme.colors.shades.darkGray};
       }
 
       &.error {
-        border-color: ${props => props.theme.colors.roles.danger};
+        border-color: ${(props) => props.theme.colors.roles.danger};
       }
     `,
     ModalBody: css`
@@ -278,13 +277,14 @@ const theme = {
     ModalHeader: css`
       margin: -48px -48px 0;
       padding: 48px 48px 24px;
-      background: ${props => props.theme.colors.shades.nearlyWhite};
+      background: ${(props) => props.theme.colors.shades.nearlyWhite};
       border-radius: 4px 4px 0 0;
     `,
     ModalSectionDivider: css`
       margin: 24px 0;
       border: none;
-      border-bottom: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+      border-bottom: 1px solid
+        ${(props) => props.theme.colors.shades.nearlyWhite};
     `,
     ModalTextArea: css`
       display: block;
@@ -295,8 +295,8 @@ const theme = {
       line-height: 48px;
       font-size: 16px;
       font-weight: 400;
-      background: ${props => props.theme.colors.shades.nearlyWhite};
-      color: ${props => props.theme.colors.shades.blue};
+      background: ${(props) => props.theme.colors.shades.nearlyWhite};
+      color: ${(props) => props.theme.colors.shades.blue};
       border: 1px solid transparent;
       border-radius: 4px;
 
@@ -306,23 +306,23 @@ const theme = {
 
       ::placeholder {
         font-weight: 300;
-        color: ${props => props.theme.colors.shades.gray};
+        color: ${(props) => props.theme.colors.shades.gray};
       }
 
       &:hover {
-        border-color: ${props => props.theme.colors.shades.mediumGray};
+        border-color: ${(props) => props.theme.colors.shades.mediumGray};
       }
 
       &:focus {
         outline: none;
-        border-color: ${props => props.theme.colors.shades.darkGray};
+        border-color: ${(props) => props.theme.colors.shades.darkGray};
       }
     `,
     ModalTitle: css`
       margin: 0;
       font-size: 24px;
       font-weight: 400;
-      color: ${props => props.theme.colors.shades.blue};
+      color: ${(props) => props.theme.colors.shades.blue};
     `,
     ModalWrapper: css`
       position: fixed;
@@ -333,7 +333,7 @@ const theme = {
       width: 80%;
       max-width: 800px;
       padding: 48px;
-      background: ${props => props.theme.colors.shades.white};
+      background: ${(props) => props.theme.colors.shades.white};
       border-radius: 4px;
       box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
       box-sizing: border-box;
@@ -346,7 +346,7 @@ const theme = {
       }
     `,
     SectionBackground: css`
-      background: ${props => props.theme.colors.shades.white};
+      background: ${(props) => props.theme.colors.shades.white};
       width: 100%;
       margin: 0 auto 16px;
       border-radius: 4px;
@@ -355,7 +355,8 @@ const theme = {
     SectionDivider: css`
       margin: 0;
       border: none;
-      border-bottom: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+      border-bottom: 1px solid
+        ${(props) => props.theme.colors.shades.nearlyWhite};
     `,
     SpaceBetween: css`
       display: flex;
@@ -365,8 +366,17 @@ const theme = {
     TrimmedHeader: css`
       height: 100px;
       width: 100%;
-      background: ${props => props.theme.colors.shades.nearlyWhite};
-      clip-path: polygon(20% 0%, 80% 0%, 100% 0, 100% 80%, 50% 100%, 50% 100%, 0 80%, 0 0);
+      background: ${(props) => props.theme.colors.shades.nearlyWhite};
+      clip-path: polygon(
+        20% 0%,
+        80% 0%,
+        100% 0,
+        100% 80%,
+        50% 100%,
+        50% 100%,
+        0 80%,
+        0 0
+      );
       z-index: -1;
       &.long {
         height: 220px;
@@ -385,6 +395,6 @@ const theme = {
       }
     `
   }
-};
+}
 
-export { theme as default };
+export { theme as default }

@@ -9,11 +9,31 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import Interpolation from '../../../utils/Interpolation';
 import history from '../../../utils/history';
 import { Helmet } from 'react-helmet-async';
-
+import styled from 'styled-components';
+import defaultTheme from '../../../style/themes';
 const { getMemberName, isOnboardingComplete } = selectors;
 
 // Onboarding
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: auto auto 0;
+  padding: 16px 0 0 0;
+  box-sizing: border-box;
+  border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
 
+  @media ${defaultTheme.device.tablet} {
+    border-top: none;
+  }
+
+  @media ${defaultTheme.device.desktopXL} {
+    max-width: 1024px;
+  }
+`;
 class Onboarding extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +77,7 @@ class Onboarding extends Component {
     const { currentStep, maxSteps } = this.state;
 
     return (
-      <>
+      <Wrapper>
         <Helmet>
           <title>Onboarding - Evry Health</title>
         </Helmet>
@@ -69,7 +89,7 @@ class Onboarding extends Component {
           handleNextFunction={this.handleStepForward}
           handlePrevFunction={this.handleStepBackward}
         />
-      </>
+      </Wrapper>
     );
   }
 }

@@ -11,6 +11,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import history from '../../utils/history';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
+import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 
 const { register } = actions;
 const {
@@ -18,7 +19,8 @@ const {
   getRegisterError,
   getRegisteringUser,
   isVerifiedRegisteringUser,
-  successfulRegistration
+  successfulRegistration,
+  isRegisteringElegibility
 } = selectors;
 
 // Create Account View
@@ -115,9 +117,9 @@ function CreateAccount({
   registeringUser,
   register,
   successfulRegistration,
+  isRegisteringElegibility,
   ...restProps
 }) {
-  console.log('restProps ', restProps);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -144,6 +146,11 @@ function CreateAccount({
     register({ email, password });
   };
 
+  const handleCancel = e => {
+    e.preventDefault();
+    // initRegister();
+    history.push('/register');
+  };
   const renderRegisterError = () => {
     const message =
       registerError?.result !== undefined && !registerError?.result
@@ -207,9 +214,21 @@ function CreateAccount({
             value="Register Account"
             text="Register Account"
             onClick={handleSubmit}
+            disabled={isRegisteringElegibility}
+          />
+        </ButtonWrapper>
+        <ButtonWrapper>
+          <Button
+            type="negative"
+            value="Cancel"
+            text="Cancel"
+            onClick={handleCancel}
+            color="red"
+            disabled={isRegisteringElegibility}
           />
         </ButtonWrapper>
       </form>
+      {isRegisteringElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
     </LayoutWrapper>
   );
 }
@@ -235,7 +254,8 @@ const mapStateToProps = state => ({
   registerError: getRegisterError(state),
   isVerifiedRegisteringUser: isVerifiedRegisteringUser(state),
   registeringUser: getRegisteringUser(state),
-  successfulRegistration: successfulRegistration(state)
+  successfulRegistration: successfulRegistration(state),
+  isRegisteringElegibility: isRegisteringElegibility(state)
 });
 
 const mapDispatchToProps = dispatch => ({

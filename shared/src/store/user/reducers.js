@@ -110,9 +110,9 @@ const userReducer = (state = {}, action) => {
       return {
         ...state,
         registering: {
-          ...action.payload
-        },
-        isVerifyingElegibility: true
+          ...action.payload,
+          isVerifyingElegibility: true
+        }
       }
     case types.ELEGIBILITY_ID_SSN_VERIFY_SUCCESS:
       return {
@@ -121,17 +121,17 @@ const userReducer = (state = {}, action) => {
           ...state.registering,
           phone: action.payload.member_cell_number,
           verified: action.payload.result,
-          result: action.payload.result
-        },
-        isVerifyingElegibility: false
+          result: action.payload.result,
+          isVerifyingElegibility: false
+        }
       }
     case types.ELEGIBILITY_ID_SSN_VERIFY_FAILURE:
       return {
         ...state,
         registering: {
-          error: action.error.response.data.messages
-        },
-        isVerifyingElegibility: false
+          error: action.error?.response?.data?.messages,
+          isVerifyingElegibility: false
+        }
       }
     case types.FAMILY_MEMBER_COB_FETCH_SUCCESS:
       return { ...state, familyCOB: action.payload }
@@ -266,21 +266,23 @@ const userReducer = (state = {}, action) => {
       return {
         ...state,
         register: {
-          registering: true
+          isRegisteringElegibility: true
         }
       }
     case types.REGISTER_SUCCESS:
       return {
         ...state,
         register: {
-          ...action.payload
+          ...action.payload,
+          isRegisteringElegibility: false
         }
       }
     case types.REGISTER_FAILURE:
       return {
         ...state,
         register: {
-          error: action.error.response.data.messages
+          error: action.error?.response?.data?.messages,
+          isRegisteringElegibility: false
         }
       }
     case types.SIGN_IN:

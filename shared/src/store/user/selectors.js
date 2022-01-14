@@ -62,7 +62,10 @@ export const isSignedOut = (state) => get(state, ['user', 'isSignedOut'])
 export const isSigningOut = (state) => get(state, ['user', 'isSigningOut'])
 
 export const isVerifyingElegibility = (state) =>
-  get(state, ['user', 'isVerifyingElegibility'])
+  get(state, ['user', 'registering', 'isVerifyingElegibility'])
+
+export const isRegisteringElegibility = (state) =>
+  get(state, ['user', 'register', 'isRegisteringElegibility'])
 
 export const isChoosingCarePlan = (state) =>
   get(state, ['user', 'isChoosingCarePlan'])

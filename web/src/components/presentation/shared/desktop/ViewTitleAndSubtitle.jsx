@@ -11,19 +11,23 @@ const Wrapper = styled.div`
 
 const Title = styled.h1`
   margin: 0 0 8px;
-  font-size: 40px;
-  font-weight: 900;
+  font-size: 25px;
+  font-weight: 700;
 
   @media ${props => props.theme.device.desktop} {
-    font-size: 48px;
+    font-size: 40px;
   }
 `;
 
 const Subtitle = styled.h3`
   margin: 0;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 300;
   letter-spacing: 0.4px;
+
+  @media ${props => props.theme.device.desktop} {
+    font-size: 18px;
+  }
 `;
 
 const ViewTitleAndSubtitle = ({ title, subtitle }) => (

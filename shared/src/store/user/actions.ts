@@ -1,5 +1,5 @@
-import * as types from './types';
-import constants from '../../constants';
+import * as types from './types'
+import constants from '../../constants'
 
 export const {
   TEXT,
@@ -18,16 +18,22 @@ export const {
   PCP_UPDATE,
   APPOINTED_REPRESENTATIVE_UPDATE,
   COB_UPDATE
-} = constants;
+} = constants
 
 export const anonymousTest = (token: string) => ({
   type: types.ANONYMOUS_TEST_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const assignCarePlan = ({ from, id, replace = true, to = null, token }) => ({
+export const assignCarePlan = ({
+  from,
+  id,
+  replace = true,
+  to = null,
+  token
+}) => ({
   type: types.ASSIGN_CARE_PLAN,
   payload: {
     from,
@@ -36,7 +42,7 @@ export const assignCarePlan = ({ from, id, replace = true, to = null, token }) =
     to,
     token
   }
-});
+})
 
 export const authenticate = (email: string, password: string) => ({
   type: types.SIGN_IN,
@@ -44,14 +50,14 @@ export const authenticate = (email: string, password: string) => ({
     email,
     password
   }
-});
+})
 
 export const auhorizationRequiredTest = (token: string) => ({
   type: types.ANONYMOUS_TEST_FETCH,
   payload: {
     token
   }
-});
+})
 
 export const checkEmailAddress = (token: string, email: string) => ({
   type: types.MEMBERSHIP_SUMMARY_FETCH,
@@ -59,25 +65,39 @@ export const checkEmailAddress = (token: string, email: string) => ({
     token,
     email
   }
-});
+})
 
 export const clearAuth = (message?: string) => ({
   type: types.CLEAR_AUTH,
   payload: {
     message
   }
-});
+})
 
 export const clearAuthError = () => ({
   type: types.CLEAR_AUTH_ERROR
-});
+})
 
 export const clear2FA = () => ({
   type: types.CLEAR_2FA
-});
+})
 
-export const createAddressUpdateCase = ({ address1, address2, city, files, state, token, zip }: {
-  address1: string, address2: string, city: string, files: any[], state: string, token: string, zip: string
+export const createAddressUpdateCase = ({
+  address1,
+  address2,
+  city,
+  files,
+  state,
+  token,
+  zip
+}: {
+  address1: string
+  address2: string
+  city: string
+  files: any[]
+  state: string
+  token: string
+  zip: string
 }) =>
   createCase({
     files,
@@ -110,7 +130,7 @@ export const createAddressUpdateCase = ({ address1, address2, city, files, state
     ],
     token,
     type: ADDRESS_UPDATE
-  });
+  })
 
 export const createAppointedRepresentativeUpdateCase = ({ files, token }) =>
   createCase({
@@ -118,7 +138,7 @@ export const createAppointedRepresentativeUpdateCase = ({ files, token }) =>
     metadata: [],
     token,
     type: APPOINTED_REPRESENTATIVE_UPDATE
-  });
+  })
 
 export const createCase = ({ files = [], metadata, token, type }) => ({
   type: types.CREATE_CASE,
@@ -128,7 +148,7 @@ export const createCase = ({ files = [], metadata, token, type }) => ({
     token,
     type
   }
-});
+})
 
 export const createClaimFeedbackCase = ({ claimNumber, files, rate, token }) =>
   createCase({
@@ -147,7 +167,7 @@ export const createClaimFeedbackCase = ({ claimNumber, files, rate, token }) =>
     ],
     token,
     type: CLAIM_FEEDBACK
-  });
+  })
 
 export const createCOBUpdateCase = ({
   files,
@@ -237,7 +257,7 @@ export const createCOBUpdateCase = ({
     ],
     token,
     type: COB_UPDATE
-  });
+  })
 
 export const createPCPUpdateCase = ({ files, providerNPI, token }) =>
   createCase({
@@ -251,10 +271,18 @@ export const createPCPUpdateCase = ({ files, providerNPI, token }) =>
     ],
     token,
     type: PCP_UPDATE
-  });
+  })
 
-export const createPhoneNumberUpdateCase = ({ files, phoneNumber, phoneType, token }: {
-  files, phoneNumber: string, phoneType, token
+export const createPhoneNumberUpdateCase = ({
+  files,
+  phoneNumber,
+  phoneType,
+  token
+}: {
+  files
+  phoneNumber: string
+  phoneType
+  token
 }) =>
   createCase({
     files,
@@ -272,9 +300,14 @@ export const createPhoneNumberUpdateCase = ({ files, phoneNumber, phoneType, tok
     ],
     token,
     type: PHONE_NUMBER_UPDATE
-  });
+  })
 
-export const createProviderFeedbackCase = ({ files, providerNPI, rate, token }) =>
+export const createProviderFeedbackCase = ({
+  files,
+  providerNPI,
+  rate,
+  token
+}) =>
   createCase({
     files,
     metadata: [
@@ -291,7 +324,7 @@ export const createProviderFeedbackCase = ({ files, providerNPI, rate, token }) 
     ],
     token,
     type: PROVIDER_FEEDBACK
-  });
+  })
 
 export const createRequestForIdCardCase = ({ files, token }) =>
   createCase({
@@ -299,9 +332,14 @@ export const createRequestForIdCardCase = ({ files, token }) =>
     metadata: [],
     token,
     type: ID_CARD_REQUEST
-  });
+  })
 
-export const createRequestInformationCase = ({ files, informationType, message, token }) =>
+export const createRequestInformationCase = ({
+  files,
+  informationType,
+  message,
+  token
+}) =>
   createCase({
     files,
     metadata: [
@@ -318,7 +356,7 @@ export const createRequestInformationCase = ({ files, informationType, message, 
     ],
     token,
     type: REQUEST_INFORMATION
-  });
+  })
 
 export const createScheduleAppointmentCase = ({
   appointmentDataTime,
@@ -354,7 +392,7 @@ export const createScheduleAppointmentCase = ({
     ],
     token,
     type: SCHEDULE_APPOINTMENT
-  });
+  })
 
 export const createSchedulePhoneCallCase = ({
   files,
@@ -384,9 +422,14 @@ export const createSchedulePhoneCallCase = ({
     ],
     token,
     type: SCHEDULE_PHONE_CALL
-  });
+  })
 
-export const createSendAMessageToCareCoordinatorCase = ({ files, message, title, token }) =>
+export const createSendAMessageToCareCoordinatorCase = ({
+  files,
+  message,
+  title,
+  token
+}) =>
   createCase({
     files,
     metadata: [
@@ -403,14 +446,14 @@ export const createSendAMessageToCareCoordinatorCase = ({ files, message, title,
     ],
     token,
     type: SEND_A_MESSAGE_TO_CARE_COORDINATOR
-  });
+  })
 
-export const fetchAccountInfo = token => ({
+export const fetchAccountInfo = (token) => ({
   type: types.ACCOUNT_INFO_FETCH,
   payload: {
     token
   }
-});
+})
 
 export const fetchAccumulators = (token, id, date, type) => ({
   type: types.ACCUMULATORS_FETCH,
@@ -420,49 +463,49 @@ export const fetchAccumulators = (token, id, date, type) => ({
     date,
     type
   }
-});
+})
 
-export const fetchAvailableLanguages = token => ({
+export const fetchAvailableLanguages = (token) => ({
   type: types.ACCOUNT_INFO_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchAvailableSpecialties = token => ({
+export const fetchAvailableSpecialties = (token) => ({
   type: types.AVAILABLE_SPECIALTIES_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchBasicInfo = token => ({
+export const fetchBasicInfo = (token) => ({
   type: types.BASIC_INFO_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchBenefitCoverages = token => ({
+export const fetchBenefitCoverages = (token) => ({
   type: types.BENEFIT_COVERAGES_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchCareGuideInfo = token => ({
+export const fetchCareGuideInfo = (token) => ({
   type: types.CARE_GUIDE_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchCarePlan = token => ({
+export const fetchCarePlan = (token) => ({
   type: types.CARE_PLAN_FETCH,
   payload: {
     token
   }
-});
+})
 
 export const fetchCases = ({
   direction,
@@ -485,7 +528,7 @@ export const fetchCases = ({
     token,
     types: caseTypes
   }
-});
+})
 
 export const fetchClaimsSummary = ({ id, token, type }) => ({
   type: types.CLAIMS_SUMMARY_FETCH,
@@ -494,7 +537,7 @@ export const fetchClaimsSummary = ({ id, token, type }) => ({
     token,
     type
   }
-});
+})
 
 export const fetchClaimDetail = (token, claimId) => ({
   type: types.CLAIM_DETAIL_FETCH,
@@ -502,9 +545,14 @@ export const fetchClaimDetail = (token, claimId) => ({
     token,
     claimId
   }
-});
+})
 
-export const fetchClaimsList = ({ page = 1, query, recordsPerPage = 10, token }) => ({
+export const fetchClaimsList = ({
+  page = 1,
+  query,
+  recordsPerPage = 10,
+  token
+}) => ({
   type: types.CLAIMS_LIST_FETCH,
   payload: {
     token,
@@ -512,35 +560,35 @@ export const fetchClaimsList = ({ page = 1, query, recordsPerPage = 10, token })
     recordsPerPage,
     query
   }
-});
+})
 
-export const fetchEducationalResources = token => ({
+export const fetchEducationalResources = (token) => ({
   type: types.EDUCATIONAL_RESOURCES_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchEvryContactInfo = token => ({
+export const fetchEvryContactInfo = (token) => ({
   type: types.EVRY_CONTACT_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchFamilyMemberCOB = token => ({
+export const fetchFamilyMemberCOB = (token) => ({
   type: types.FAMILY_MEMBER_COB_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchFamilyMemberCOBSummary = token => ({
+export const fetchFamilyMemberCOBSummary = (token) => ({
   type: types.FAMILY_MEMBER_COB_SUMMARY_FETCH,
   payload: {
     token
   }
-});
+})
 
 export const fetchFiles = ({
   token,
@@ -563,7 +611,7 @@ export const fetchFiles = ({
     orderBy,
     direction
   }
-});
+})
 
 export const getLastQuestionnaireOrCreate = ({ id, token }) => ({
   type: types.GET_LAST_QUESTIONNAIRE_OR_CREATE,
@@ -571,35 +619,35 @@ export const getLastQuestionnaireOrCreate = ({ id, token }) => ({
     id,
     token
   }
-});
+})
 
-export const fetchMembershipSummary = token => ({
+export const fetchMembershipSummary = (token) => ({
   type: types.MEMBERSHIP_SUMMARY_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchRewardBenefits = token => ({
+export const fetchRewardBenefits = (token) => ({
   type: types.REWARD_BENEFITS_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchRewardCategories = token => ({
+export const fetchRewardCategories = (token) => ({
   type: types.REWARD_CATEGORIES_FETCH,
   payload: {
     token
   }
-});
+})
 
-export const fetchWellnessGoals = token => ({
+export const fetchWellnessGoals = (token) => ({
   type: types.WELLNESS_GOALS_FETCH,
   payload: {
     token
   }
-});
+})
 
 export const fetchNotifications = ({
   direction,
@@ -612,7 +660,7 @@ export const fetchNotifications = ({
 }) => ({
   type: types.NOTIFICATIONS_FETCH,
   payload: { direction, orderBy, page, query, read, recordsPerPage, token }
-});
+})
 
 export const fetch2FACode = (email, password) => ({
   type: types.TWO_FACTOR_CODE_FETCH,
@@ -620,7 +668,7 @@ export const fetch2FACode = (email, password) => ({
     email,
     password
   }
-});
+})
 
 export const fetchFAQs = ({
   token,
@@ -641,7 +689,7 @@ export const fetchFAQs = ({
     orderByDesc,
     supportArticleType
   }
-});
+})
 
 export const fetchSupportArticles = ({
   token,
@@ -662,7 +710,7 @@ export const fetchSupportArticles = ({
     orderByDesc,
     supportArticleType
   }
-});
+})
 
 export const findCases = ({
   direction,
@@ -684,21 +732,27 @@ export const findCases = ({
     token,
     types: caseTypes
   }
-});
+})
 
-export const initiatePasswordReset = email => ({
+export const initiatePasswordReset = (email) => ({
   type: types.INITIATE_PASSWORD_RESET,
   payload: {
     email
   }
-});
+})
 
 export const markNotificationsAsRead = ({ ids, token }) => ({
   type: types.NOTIFICATIONS_READ_FETCH,
   payload: { ids, token }
-});
+})
 
-export const register = ({ eligibilityId, email, last4SSN, password, passwordConfirm }) => ({
+export const register = ({
+  eligibilityId,
+  email,
+  last4SSN,
+  password,
+  passwordConfirm
+}) => ({
   type: types.REGISTER,
   payload: {
     eligibilityId,
@@ -707,7 +761,7 @@ export const register = ({ eligibilityId, email, last4SSN, password, passwordCon
     password,
     passwordConfirm
   }
-});
+})
 
 export const savePasswordReset = (email, password, passwordConfirm, token) => ({
   type: types.SAVE_PASSWORD_RESET,
@@ -717,7 +771,7 @@ export const savePasswordReset = (email, password, passwordConfirm, token) => ({
     passwordConfirm,
     token
   }
-});
+})
 
 export const saveQuestionnaire = ({ questionnaire, token }) => ({
   type: types.SAVE_QUESTIONNAIRE,
@@ -725,24 +779,24 @@ export const saveQuestionnaire = ({ questionnaire, token }) => ({
     questionnaire,
     token
   }
-});
+})
 
-export const signOut = token => ({
+export const signOut = (token) => ({
   type: types.SIGN_OUT,
   payload: {
     token
   }
-});
+})
 
 export const unsetUser = () => ({
   type: types.UNSET,
   payload: {}
-});
+})
 
 export const uploadFiles = () => ({
   type: types.UPLOAD_FILES,
   payload: {}
-});
+})
 
 export const verifyEligibilityIdAndSSN = ({ eligibilityId, last4SSN }) => ({
   type: types.ELEGIBILITY_ID_SSN_VERIFY,
@@ -750,14 +804,14 @@ export const verifyEligibilityIdAndSSN = ({ eligibilityId, last4SSN }) => ({
     eligibilityId,
     last4SSN
   }
-});
+})
 
-export const verifyEmail = token => ({
+export const verifyEmail = (token) => ({
   type: types.EMAIL_VERIFY,
   payload: {
     token
   }
-});
+})
 
 export const verify2FACode = (email, code, token) => ({
   type: types.TWO_FACTOR_CODE_VERIFY,
@@ -766,4 +820,9 @@ export const verify2FACode = (email, code, token) => ({
     code,
     token
   }
-});
+})
+
+export const initRegister = () => ({
+  type: types.ELEGIBILITY_ID_SSN_VERIFY_FAILURE,
+  error: {}
+})

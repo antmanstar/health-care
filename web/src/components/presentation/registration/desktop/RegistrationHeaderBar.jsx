@@ -30,11 +30,14 @@ const Logo = styled.img`
 
 const PhoneNumber = styled.div`
   margin-right: 8px;
-  display: flex;
+  display: none;
   align-items: center;
   color: ${props => props.theme.colors.shades.white};
   font-size: 16px;
   font-weight: 300;
+  @media ${props => props.theme.device.tabletXL} {
+    display: flex;
+  }
 `;
 
 const PhoneGraphic = styled.i`
@@ -71,18 +74,14 @@ const RegistrationHeaderBar = ({ phoneNumber, isAuthenticated, signOut }) => (
         <p>Need Help?</p>
         <PhoneGraphic className="material-icons">phone</PhoneGraphic>
         <p>{`1-${phoneNumber}`}</p>
-        {isAuthenticated ?
-          <Link onClick={() => signOut()}>Sign Out</Link>
-          :
-          undefined
-        }
+        {isAuthenticated ? <Link onClick={() => signOut()}>Sign Out</Link> : undefined}
       </PhoneNumber>
     )}
   </Wrapper>
 );
 
 RegistrationHeaderBar.defaultProps = {
-  isAuthenticated: false,
+  isAuthenticated: false
 };
 
 RegistrationHeaderBar.propTypes = {

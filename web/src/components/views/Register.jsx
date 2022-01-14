@@ -12,7 +12,7 @@ import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpi
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import history from '../../utils/history';
 
-const { verifyEligibilityIdAndSSN } = actions;
+const { verifyEligibilityIdAndSSN, initRegister } = actions;
 const {
   getAuthError,
   isVerifiedRegisteringUser,
@@ -24,6 +24,27 @@ const {
 // TODO: need to send Evry member id & last 4 of ssn to confirm membership to move to Create Account View
 
 const { LayoutWrapper, Input, TwoColumnRow, SectionDivider } = defaultTheme.components;
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: auto auto 0;
+  padding: 16px 0 0 0;
+  box-sizing: border-box;
+  border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+
+  @media ${defaultTheme.device.tablet} {
+    border-top: none;
+  }
+
+  @media ${defaultTheme.device.desktopXL} {
+    max-width: 1024px;
+  }
+`;
+const FormWrapper = styled.div``;
 
 const SmallContainer = styled.div`
   display: flex;
@@ -85,8 +106,13 @@ const ButtonWrapper = styled.div`
 const GoToSignIn = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 218px;
-
+  margin-bottom: 10px;
+  margin-top: 20px;
+  flex-direction: column;
+  text-align: center;
+  @media ${props => props.theme.device.tabletXL} {
+    flex-direction: row;
+  }
   p {
     margin: 0;
     margin-right: 8px;
@@ -98,21 +124,33 @@ const GoToSignIn = styled.div`
     color: ${props => props.theme.colors.shades.pinkOrange};
   }
 `;
-
+const BottomSectionDivider = styled.div`
+  padding: 16px 0;
+  height: fit-content;
+  width: 100%;
+`;
 function Register({
   authError,
   isVerifiedRegisteringUser,
   isVerifyingElegibility,
   verifyMembershipError,
-  verifyEligibilityIdAndSSN
+  verifyEligibilityIdAndSSN,
+  initRegister
 }) {
   const [memberId, setMemberId] = useState('');
+  const [firstLoading, setFirstLoading] = useState(true);
   const [ssn, setSsn] = useState('');
+
   useEffect(() => {
-    if (isVerifiedRegisteringUser) {
+    if (firstLoading) {
+      setFirstLoading(false);
+      initRegister();
+    }
+
+    if (isVerifiedRegisteringUser && !firstLoading) {
       history.push('/create-account');
     }
-  }, [isVerifiedRegisteringUser]);
+  }, [isVerifiedRegisteringUser, firstLoading]);
   const handleChangeMemberId = e => {
     setMemberId(e.target.value);
   };
@@ -137,56 +175,64 @@ function Register({
   };
 
   return (
-    <LayoutWrapper>
-      <Title>Find your membership.</Title>
-      <SectionDivider />
-      <form autoComplete="false">
-        <EditedTwoColumnRow>
-          <SmallContainer>
-            <Label htmlFor="memberId">Enter your Member ID.</Label>
-            <InputInstruction>
-              You can find you Member ID on your Membership Card or in your Evry Benefits Guidebook.
-            </InputInstruction>
-            <Input
-              type="text"
-              name="memberId"
-              id="memberId"
-              placeholder="Example: EVR19238400032"
-              onChange={handleChangeMemberId}
-            />
-          </SmallContainer>
-          <SmallContainer>
-            <Label htmlFor="social">Confirm your membership.</Label>
-            <InputInstruction>
-              Enter the last 4 digits of your social security number.
-            </InputInstruction>
-            <Input
-              className="push-down"
-              type="password"
-              name="ssn"
-              id="ssn"
-              placeholder="****"
-              onChange={handleChangeSSN}
-            />
-          </SmallContainer>
-        </EditedTwoColumnRow>
-        {renderVerifyMembershipError()}
+    <Wrapper>
+      <FormWrapper>
+        <Title>Find your membership.</Title>
         <SectionDivider />
-        <ButtonWrapper>
-          <Button
-            type="submit"
-            value="Confirm Membership"
-            text="Confirm Membership"
-            onClick={handleSubmit}
-          />
-        </ButtonWrapper>
-      </form>
-      <GoToSignIn>
-        <p>Already have an account?</p>
-        <RouterLink to="/sign-in">Sign In</RouterLink>
-      </GoToSignIn>
+        <form autoComplete="false">
+          <EditedTwoColumnRow>
+            <SmallContainer>
+              <Label htmlFor="memberId">Enter your Member ID.</Label>
+              <InputInstruction>
+                You can find you Member ID on your Membership Card or in your Evry Benefits
+                Guidebook.
+              </InputInstruction>
+              <Input
+                type="text"
+                name="memberId"
+                id="memberId"
+                placeholder="Example: EVR19238400032"
+                onChange={handleChangeMemberId}
+              />
+            </SmallContainer>
+            <SmallContainer>
+              <Label htmlFor="social">Confirm your membership.</Label>
+              <InputInstruction>
+                Enter the last 4 digits of your social security number.
+              </InputInstruction>
+              <Input
+                className="push-down"
+                type="password"
+                name="ssn"
+                id="ssn"
+                placeholder="****"
+                onChange={handleChangeSSN}
+              />
+            </SmallContainer>
+          </EditedTwoColumnRow>
+          {renderVerifyMembershipError()}
+          <SectionDivider />
+          <ButtonWrapper>
+            <Button
+              type="submit"
+              value="Confirm Membership"
+              text="Confirm Membership"
+              onClick={handleSubmit}
+              disabled={isVerifyingElegibility}
+            />
+          </ButtonWrapper>
+        </form>
+      </FormWrapper>
+      <BottomSectionDivider>
+        <SectionDivider />
+        <GoToSignIn>
+          <p>Already have an account?</p>
+          <RouterLink to="/sign-in">Sign In</RouterLink>
+        </GoToSignIn>
+      </BottomSectionDivider>
+
       {isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-    </LayoutWrapper>
+    </Wrapper>
   );
 }
 
@@ -211,6 +257,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   verifyEligibilityIdAndSSN: ({ eligibilityId, last4SSN }) => {
     dispatch(verifyEligibilityIdAndSSN({ eligibilityId, last4SSN }));
+  },
+  initRegister: () => {
+    dispatch(initRegister());
   }
 });
 

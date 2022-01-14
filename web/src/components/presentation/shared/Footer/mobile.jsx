@@ -6,18 +6,15 @@ import BottomBar from '../mobile/BottomBar';
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 48px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  background: ${props => props.theme.colors.shades.white};
+  height: 8px;
+ 
+  background: ${props => props.theme.gradients.main};
 `;
 
 const Footer = React.memo(() => (
   <>
     <Wrapper className="standard-mobile-footer">
-      <BottomBar />
+      {/* <BottomBar /> */}
     </Wrapper>
   </>
 ));

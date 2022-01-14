@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const BaseButton = styled.button`
   background: ${props => props.theme.colors.shades.tealBlue};
-  color: ${props => props.theme.colors.shades.white};
+  color: ${props => (props.color ? props.color : props.theme.colors.shades.white)};
   height: 48px;
   padding: 0 32px;
   border: none;
@@ -23,10 +23,13 @@ const BaseButton = styled.button`
   &:focus {
     outline: none;
   }
-
+  &: disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
   &.negative {
     background: none;
-    color: ${props => props.theme.colors.shades.gray};
+    color: ${props => (props.color ? props.color : props.theme.colors.shades.gray)};
     opacity: 0.6;
     box-shadow: none;
     &:hover {

@@ -11,7 +11,7 @@ import Interpolation from '../../utils/Interpolation';
 // Sparse Layout
 
 const Header = styled.div`
-  height: 227px;
+  height: fit-conent;
   width: 100%;
   background: ${props => props.theme.gradients.main};
 `;
@@ -27,11 +27,17 @@ const Wrapper = styled.div`
 
 const MainSection = styled.div`
   position: relative;
-  padding-top: ${props => (props.fullWidth ? '0' : '64px')};
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+  padding-top: ${props => (props.fullWidth ? '0' : '8px')};
 
   &.standard-desktop-section {
     max-width: ${props => (props.fullWidth ? '100vw' : '960px')};
 
+    @media ${defaultTheme.device.desktop} {
+      padding-top: ${props => (props.fullWidth ? '0' : '64px')};
+    }
     @media ${defaultTheme.device.desktopXL} {
       max-width: ${props => (props.fullWidth ? '100vw' : '1024px')};
     }
