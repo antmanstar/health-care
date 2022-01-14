@@ -78,7 +78,7 @@ const reflection = {
   layoutProps: {
     titleWrapperClass: 'none'
   },
-  route: '/onboarding'
+  route: '/choose-a-care-plan'
 };
 
 export default Onboarding;

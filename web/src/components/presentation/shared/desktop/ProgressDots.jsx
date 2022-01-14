@@ -8,9 +8,7 @@ const InnerWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 32px;
-  width: 960px;
-  margin: auto;
+  margin-top: 16px;
 `;
 
 const Dot = styled.div`

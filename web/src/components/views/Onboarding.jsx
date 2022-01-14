@@ -44,6 +44,7 @@ class Onboarding extends Component {
   }
 
   componentDidMount() {
+    console.log('mounting');
     this.checkOnboardingStatus();
   }
 

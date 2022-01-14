@@ -13,9 +13,8 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 960px;
-  margin: 60px auto 0;
-  padding: 16px;
+  min-height: 100px;
+  padding-top: 32px;
   box-sizing: border-box;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
 
