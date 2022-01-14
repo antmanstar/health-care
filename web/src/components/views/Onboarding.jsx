@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Sparse } from '../../layouts';
-import OnboardingProgressBar from '../../presentation/registration/desktop/OnboardingProgressBar';
-import OnboardingSlide from '../../presentation/registration/desktop/OnboardingSlide';
-import OnboardingControls from '../../presentation/registration/desktop/OnboardingControls';
+import { Sparse } from '../layouts';
+import OnboardingProgressBar from '../presentation/registration/desktop/OnboardingProgressBar';
+import OnboardingSlide from '../presentation/registration/desktop/OnboardingSlide';
+import OnboardingControls from '../presentation/registration/desktop/OnboardingControls';
 import selectors from '@evry-member-app/shared/store/selectors';
-import Interpolation from '../../../utils/Interpolation';
-import history from '../../../utils/history';
+import Interpolation from '../../utils/Interpolation';
+import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components';
-import defaultTheme from '../../../style/themes';
+import defaultTheme from '../../style/themes';
 const { getMemberName, isOnboardingComplete } = selectors;
 
 // Onboarding
@@ -119,6 +119,6 @@ const reflection = {
   route: '/onboarding'
 };
 
-export default ConnectedOnboarding;
+export default Onboarding;
 
 export { reflection };
