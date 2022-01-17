@@ -63,7 +63,8 @@ const Label = styled.div`
   transition: all 300ms cubic-bezier(0.895, 0.03, 0.685, 0.22);
   color: ${props =>
     props.completed ? props.theme.colors.shades.white : props.theme.colors.shades.blue};
-  font-size: 92%;
+  font-size: 86%;
+  padding: 10px;
 `;
 
 const OnboardingCellStart = styled(OnboardingCell)`

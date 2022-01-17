@@ -18,12 +18,16 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
 
+  @media ${defaultTheme.device.mobile} {
+    border-top: none;
+  }
+
   @media ${defaultTheme.device.tablet} {
     border-top: none;
   }
 
   @media ${defaultTheme.device.desktopXL} {
-    max-width: 1024px;
+    border-top: none;
   }
 `;
 

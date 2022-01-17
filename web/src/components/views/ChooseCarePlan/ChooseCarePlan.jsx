@@ -20,6 +20,18 @@ const Wrapper = styled.div`
   width: 960px;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+  }
 `;
 
 // ChooseCarePlan
@@ -68,9 +80,7 @@ class ChooseCarePlan extends Component {
         <OnboardingProgressBar progressStep={2} />
         <Wrapper>
           <CarePlanSelectionSlideWithData />
-          {
-            isChoosingCarePlan && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
-          }
+          {isChoosingCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </Wrapper>
       </>
     );
