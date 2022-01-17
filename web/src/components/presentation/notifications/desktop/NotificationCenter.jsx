@@ -5,6 +5,12 @@ import SearchAndFilterBar from '../../shared/desktop/SearchAndFilterBar';
 import Message from './Message';
 import Loader from '../../shared/Loader/Loader';
 import withInfiniteScroll from '../../../containers/base/withInfiniteScroll';
+import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
+import { connect } from 'react-redux';
+
+const { fetchNotifications } = actions;
+const { getToken } = selectors;
 
 // DESKTOP: Notification Center Drawer
 // TODO: API should supply messages
@@ -89,7 +95,8 @@ const NotificationCenter = ({
   handleClick,
   markNotificationsAsRead,
   notifications,
-  notificationsDataFrame
+  notificationsDataFrame,
+  fetchNotifications
 }) => (
   <>
     <Wrapper>
@@ -103,7 +110,7 @@ const NotificationCenter = ({
         </CloseDrawer>
       </Header>
       <SearchWrapper>
-        <SearchAndFilterBar dateButton filterButton placeholder="Search Messages" />
+        <SearchAndFilterBar search={fetchNotifications} dateButton filterButton placeholder="Search Messages" />
       </SearchWrapper>
       <ScrollerWithInfiniteScroll
         fetch={() => {
@@ -125,6 +132,7 @@ const NotificationCenter = ({
               title={message.title}
               id={message.user_notification_id}
               passThroughRef={message.ref}
+              onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
             />
           ))}
           {notifications && notifications.pending && <Loader />}
@@ -147,4 +155,25 @@ NotificationCenter.defaultProps = {
   notificationsDataFrame: {}
 };
 
-export default NotificationCenter;
+const mapStateToProps = state => ({
+  token: getToken(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchNotifications: args => 
+    dispatch(fetchNotifications(args)),
+});
+
+const mergeProps = ({ token, ...stateProps }, { fetchNotifications }, ownProps) => ({
+  fetchNotifications: args => fetchNotifications({token, ...args}),
+  ...stateProps,
+  ...ownProps
+});
+
+const ConnectedNotificationCenter = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(NotificationCenter);
+
+export default ConnectedNotificationCenter;

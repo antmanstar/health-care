@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -57,44 +57,65 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-class FilterOptions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+const FilterOptions = ({ handleClose, search, query }) => {
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('');
+  const [clear, setClear] = useState(0);
+
+  const handleClear = () => {
+    setDateStart(null)
+    setDateEnd(null)
+    setClear(clear + 1);
+  }
+  
+  const handleDateChange = (value, type) => {
+    if (type === 'date-start') {
+      setDateStart(value);
+    } else {
+      setDateEnd(value);
+    }
   }
 
-  render() {
-    const { handleClose } = this.props;
-    return (
-      <>
-        <TransparentScrim onClick={handleClose} />
-        <Wrapper>
-          <Header>
-            <SpaceBetween>
-              Filters
-              <button type="button" onClick={handleClose}>
-                <i className="material-icons">close</i>
-              </button>
-            </SpaceBetween>
-          </Header>
-          <Container>
-            <EditedSpaceBetween>
-              <DatePicker placeholder="Choose Start Date" />
-              <DatePicker placeholder="Choose End Date" />
-            </EditedSpaceBetween>
-          </Container>
-          <SectionDivider />
-          <Container>
-            <ButtonWrapper>
-              <SmallButton text="Apply Filters" />
-              <SmallButton text="Clear Filters" negative />
-            </ButtonWrapper>
-          </Container>
-        </Wrapper>
-      </>
-    );
-  }
+  return (
+    <>
+      <TransparentScrim onClick={() => handleClose()} />
+      <Wrapper>
+        <Header>
+          <SpaceBetween>
+            Filters
+            <button type="button" onClick={() => handleClose()}>
+              <i className="material-icons">close</i>
+            </button>
+          </SpaceBetween>
+        </Header>
+        <Container>
+          <EditedSpaceBetween>
+            <DatePicker
+              placeholder="Choose Start Date"
+              changeCallback={handleDateChange}
+              inputName="date-start"
+              clear={clear}
+            />
+            <DatePicker
+              placeholder="Choose End Date"
+              changeCallback={handleDateChange}
+              inputName="date-end"
+              clear={clear}
+            />
+          </EditedSpaceBetween>
+        </Container>
+        <SectionDivider />
+        <Container>
+          <ButtonWrapper>
+            <SmallButton text="Apply Filters" onClick={() => search({dateFrom: dateStart, dateTo: dateEnd, query: query})} />
+            <SmallButton text="Clear Filters" onClick={() => handleClear()} negative />
+          </ButtonWrapper>
+        </Container>
+      </Wrapper>
+    </>
+  );
 }
+
 
 FilterOptions.propTypes = {
   handleClose: PropTypes.func.isRequired

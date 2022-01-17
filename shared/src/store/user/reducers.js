@@ -218,10 +218,9 @@ const userReducer = (state = {}, action) => {
         ...state,
         notifications: {
           ...state.notifications,
-          markedQueue: uniq([
-            ...get(state, ['notifications', 'markedQueue'], []),
+          markedQueue: uniq(
             ...action.payload.ids
-          ])
+          )
         }
       }
     case types.NOTIFICATIONS_READ_FETCH_SUCCESS:
@@ -255,10 +254,7 @@ const userReducer = (state = {}, action) => {
         notifications: {
           ...state.notifications,
           ...action.payload,
-          data: [
-            ...get(state, ['notifications', 'data'], []),
-            ...action.payload.data
-          ],
+          data: [...action.payload.data],
           pending: false
         }
       }

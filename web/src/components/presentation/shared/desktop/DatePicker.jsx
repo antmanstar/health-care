@@ -1,97 +1,69 @@
-import React, { Component } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
-import 'react-widgets/lib/scss/react-widgets.scss';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import styled from 'styled-components';
+import DatePicker from "react-datepicker";
 import defaultTheme from '../../../../style/themes';
 
 const { DateWrapper, DateWrapperIcon } = defaultTheme.components;
 
-class DatePicker extends Component {
-  constructor(props) {
-    super(props);
+const DatePickerWrapper = styled.div`
+  display: flex;
+  position: relative;
 
-    this.state = {
-      pickerIsOpen: false,
-      chosenDate: props.chosenDate
-    };
-
-    this.handlers = {
-      openPicker: this.openPicker.bind(this),
-      handleChange: this.handleChange.bind(this),
-      closePicker: this.closePicker.bind(this),
-      setChosenDate: this.setChosenDate.bind(this)
-    };
+  input {
+    border: none;
+    height: 50px;
   }
 
-  setChosenDate(value, callback) {
+  i {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #02324c;
+  }
+`;
+
+const DateTimePicker = ({ inputName, styleType, placeholder, changeCallback, minDateChoice, maxDateChoice, chosenDate, clear }) => {
+  //const [ startDate, setStartDate ] = useState(new Date());
+  const [dateSelected, setDateSelected] = useState(chosenDate);
+
+  useEffect(() => {
+    setDateSelected(null)
+  }, [clear])
+
+  const setChosenDate = (value, callback) => {
+    const chosenDate = value || new Date();
     if (callback) {
-      this.setState(
-        { chosenDate: value || new Date() },
-        callback(Moment(value).format('MMM D, YYYY'))
-      );
+      callback(Moment(value).format('YYYY-MM-DD'), inputName)
     } else {
-      this.setState({ chosenDate: value || new Date() });
+      setDateSelected(chosenDate)
     }
   }
 
-  handleChange(value, callback) {
-    this.setChosenDate(value, callback);
-    this.closePicker();
+  const handleChange = (value, callback) => {
+    setChosenDate(value, callback);
   }
 
-  closePicker() {
-    this.setState({ pickerIsOpen: false });
-  }
-
-  openPicker() {
-    this.setState({ pickerIsOpen: 'date' });
-  }
-
-  render() {
-    Moment.locale('en');
-    momentLocalizer();
-
-    const { pickerIsOpen, chosenDate } = this.state;
-    const {
-      inputName,
-      styleType,
-      placeholder,
-      changeCallback,
-      minDateChoice,
-      maxDateChoice
-    } = this.props;
-
-    const min = minDateChoice ? new Date(minDateChoice) : new Date();
-    const max = maxDateChoice ? new Date(maxDateChoice) : new Date('Dec 31, 2030');
-
-    return (
-      <DateWrapper styleType={styleType}>
-        <DateTimePicker
-          time={false}
-          open={pickerIsOpen}
-          format="MMM D, YYYY"
-          messages={placeholder}
-          name={inputName}
-          onClick={!pickerIsOpen ? this.handlers.openPicker : undefined}
-          onFocus={this.handlers.openPicker}
-          onBlur={this.handlers.closePicker}
-          defaultValue={chosenDate}
-          inputProps={{ onBlur: ev => ev.target.blur() }}
-          onChange={value => this.handlers.handleChange(value, changeCallback)}
-          min={min}
-          max={max}
-          value={chosenDate}
-          placeholder={placeholder}
-        />
-        <DateWrapperIcon className="material-icons">date_range</DateWrapperIcon>
-      </DateWrapper>
-    );
-  }
+  return (
+    <DatePickerWrapper>
+      <DatePicker
+        selected={dateSelected}
+        onChange={(value) => {
+          setDateSelected(value)
+          handleChange(value, changeCallback)
+        }}
+        name={inputName}
+        placeholderText={placeholder}
+      />
+      <DateWrapperIcon className="material-icons">date_range</DateWrapperIcon>
+    </DatePickerWrapper>
+  )
 }
 
-DatePicker.propTypes = {
+DateTimePicker.propTypes = {
   inputName: PropTypes.string.isRequired,
   chosenDate: PropTypes.string,
   styleType: PropTypes.string,
@@ -100,7 +72,7 @@ DatePicker.propTypes = {
   minDateChoice: PropTypes.string,
   maxDateChoice: PropTypes.string
 };
-DatePicker.defaultProps = {
+DateTimePicker.defaultProps = {
   chosenDate: null,
   styleType: 'standard',
   placeholder: 'Choose a date',
@@ -109,4 +81,5 @@ DatePicker.defaultProps = {
   maxDateChoice: null
 };
 
-export default DatePicker;
+
+export default DateTimePicker;

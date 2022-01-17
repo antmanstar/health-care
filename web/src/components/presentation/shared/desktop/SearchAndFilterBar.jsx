@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import FilterOptions from './FilterOptions';
@@ -75,9 +75,9 @@ const FilterButton = styled.button`
   border: none;
   border-left: 1px solid
     ${props =>
-      props.bordered
-        ? props.theme.colors.shades.mediumGray
-        : props.theme.colors.shades.nearlyWhite};
+    props.bordered
+      ? props.theme.colors.shades.mediumGray
+      : props.theme.colors.shades.nearlyWhite};
 
   &:last-child {
     border-radius: 0 4px 4px 0;
@@ -89,71 +89,55 @@ const FilterButton = styled.button`
   }
 `;
 
-class SearchAndFilterBar extends Component {
-  constructor(props) {
-    super(props);
+const SearchAndFilterBar = ({ bordered, search, placeholder, dateButton, filterButton }) => {
+  const [query, setQuery] = useState('');
+  const [showDateFilters, setShowDateFilters] = useState(false);
+  const [showSortFilters, setShowSortFilters] = useState(false);
 
-    this.state = {
-      query: '',
-      showFilters: false
-    };
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setQuery(e.target.value);
+      search({query: query});
+    }
   }
 
-  handleClose = () => {
-    this.setState({ showFilters: false });
-  };
-
-  render() {
-    const { bordered, placeholder, dateButton, filterButton } = this.props;
-    const { query, showFilters } = this.state;
-
-    return (
-      <>
-        <Wrapper bordered={bordered}>
-          <Search>
-            <i
-              className="material-icons"
-              onClick={() => {
-                const { search } = this.props;
-                const { query } = this.state;
-                search(query);
-              }}
+  return (
+    <>
+      <Wrapper bordered={bordered}>
+        <Search>
+          <i
+            className="material-icons"
+            onClick={() => {
+              search({query: query});
+            }}
+          >
+            search
+          </i>
+          <input
+            type="text"
+            name="search"
+            placeholder={placeholder}
+            value={query}
+            onChange={e => {
+              setQuery(e.target.value);
+            }}
+            onKeyDown={(e) => handleKeyDown(e)}
+          />
+        </Search>
+        <FilterButtons>
+          {dateButton && (
+            <FilterButton
+              bordered={bordered}
+              onClick={() => setShowDateFilters(true)}
             >
-              search
-            </i>
-            <input
-              type="text"
-              name="search"
-              placeholder={placeholder}
-              value={query}
-              onChange={e => {
-                this.setState({ query: e.target.value });
-              }}
-            />
-          </Search>
-          <FilterButtons>
-            {dateButton && (
-              <FilterButton
-                bordered={bordered}
-                onClick={() => this.setState({ showFilters: true })}
-              >
-                <i className="material-icons">date_range</i>
-              </FilterButton>
-            )}
-            {filterButton && (
-              <FilterButton
-                bordered={bordered}
-                onClick={() => this.setState({ showFilters: true })}
-              >
-                <i className="material-icons">filter_list</i>
-              </FilterButton>
-            )}
-          </FilterButtons>
-          {showFilters && <FilterOptions handleClose={this.handleClose} />}
-        </Wrapper>
-      </>
-    );
-  }
+              <i className="material-icons">date_range</i>
+            </FilterButton>
+          )}
+        </FilterButtons>
+        {showDateFilters && <FilterOptions search={search} query={query} handleClose={() => setShowDateFilters(false)} />}
+      </Wrapper>
+    </>
+  );
 }
 
 SearchAndFilterBar.propTypes = {
@@ -168,7 +152,7 @@ SearchAndFilterBar.propTypes = {
 SearchAndFilterBar.defaultProps = {
   bordered: false,
   bigShadow: false,
-  search: () => {},
+  search: () => { },
   dateButton: false,
   filterButton: false
 };

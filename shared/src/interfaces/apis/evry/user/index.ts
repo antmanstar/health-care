@@ -383,6 +383,8 @@ export function fetchNotifications({
   query = null,
   read = null,
   recordsPerPage = 10,
+  dateFrom,
+  dateTo,
   token
 }) {
   return axios.post(
@@ -391,6 +393,8 @@ export function fetchNotifications({
       order_by: orderBy,
       order_by_desc: direction,
       page,
+      date_from: dateFrom,
+      date_to: dateTo,
       read_or_not: (read === true && 3) || (read === false && 2) || 1,
       records_per_page: recordsPerPage,
       search_string: query

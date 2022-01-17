@@ -21,7 +21,7 @@ const clientConfig = env => ({
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://scudevehg.azurewebsites.net/',
+        target: 'https://apidev.evryhealth.com/',
         secure: false,
         logLevel: 'debug',
         changeOrigin: true

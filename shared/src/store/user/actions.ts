@@ -655,12 +655,14 @@ export const fetchNotifications = ({
   page,
   query,
   read,
+  dateFrom,
+  dateTo,
   recordsPerPage,
   token
 }) => ({
   type: types.NOTIFICATIONS_FETCH,
-  payload: { direction, orderBy, page, query, read, recordsPerPage, token }
-})
+  payload: { direction, orderBy, page, query, read, recordsPerPage, dateFrom, dateTo, token }
+});
 
 export const fetch2FACode = (email, password) => ({
   type: types.TWO_FACTOR_CODE_FETCH,

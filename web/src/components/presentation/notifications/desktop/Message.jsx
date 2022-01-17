@@ -3,8 +3,15 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import styled from 'styled-components';
 import SmallButton from '../../shared/desktop/SmallButton';
+import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
+import { connect } from 'react-redux';
 
 // Individual Message for the Notification Center
+
+const { fetchEvryContactInfo } = actions;
+const { getEvryContactInfo, getToken } = selectors;
+
 
 const Wrapper = styled.div`
   margin-bottom: 8px;
@@ -12,6 +19,7 @@ const Wrapper = styled.div`
   background: #fafafa;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   border-bottom: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+  cursor: pointer;
 
   p {
     line-height: 24px;
@@ -44,8 +52,8 @@ const NewAlert = styled.div`
 `;
 
 const Message = React.memo(
-  ({ bodyText, buttonText, dateSent, id, isNew, passThroughRef, title }) => (
-    <Wrapper key={id}>
+  ({ bodyText, buttonText, dateSent, id, isNew, passThroughRef, title, onClick, evryContactInfo }) => (
+    <Wrapper key={id} onClick={onClick}>
       <TitleSection>
         {isNew === true && <NewAlert />}
         <h2>{title}</h2>
@@ -55,7 +63,7 @@ const Message = React.memo(
         {Moment(dateSent).format('MMM DD, YYYY')}
       </DateSent>
       <p ref={passThroughRef}>{bodyText}</p>
-      {Boolean(buttonText) && <SmallButton text={buttonText} />}
+      {Boolean(buttonText) && <SmallButton onClick={() => window.location.href = `mailto:${evryContactInfo.support_email.email_address}`} text={buttonText} />}
     </Wrapper>
   )
 );
@@ -77,4 +85,25 @@ Message.defaultProps = {
   passThroughRef: null
 };
 
-export default Message;
+const mapStateToProps = state => ({
+  token: getToken(state),
+  evryContactInfo: getEvryContactInfo(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchEvryContactInfo: token => dispatch(fetchEvryContactInfo(token)),
+});
+
+const mergeProps = ({ token, ...stateProps }, { fetchEvryContactInfo }, ownProps) => ({
+  fetchEvryContactInfo: () => fetchEvryContactInfo(token),
+  ...stateProps,
+  ...ownProps
+});
+
+const ConnectedMessage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+)(Message);
+
+export default ConnectedMessage;

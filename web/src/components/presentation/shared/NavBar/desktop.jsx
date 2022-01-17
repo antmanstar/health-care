@@ -314,8 +314,10 @@ const NotificationCenterWithData = withStoreData(
     const fetch = args => fetchNotifications({ token, ...args });
     return {
       fetch,
-      markNotificationsAsRead: ({ ids = [], ...args }) =>
-        markNotificationsAsRead({ ids: ids.concat(notificationsMarkedQueue), token, ...args }),
+      markNotificationsAsRead: ({ ids = [], ...args }) => {
+        let uniqueIds = [... new Set(ids.concat(notificationsMarkedQueue))].map(String)
+        markNotificationsAsRead({ ids: [uniqueIds], token, ...args })
+      },
       notifications:
         notifications &&
         notifications.map(notification => ({
@@ -323,7 +325,7 @@ const NotificationCenterWithData = withStoreData(
           ...notification
         })),
       notificationsDataFrame: elasticDataFrame(notificationsDataFrame, fetch),
-      shouldFetch: () => isEmpty(notificationsDataFrame),
+      shouldFetch: () => true,
       ...ownProps
     };
   }
@@ -449,7 +451,7 @@ class NavBar extends Component {
           <NotificationCenterWithData handleClick={this.handlers.toggleDrawer(false)} />
         </SwipeableDrawer>
         {
-          isSigningOut && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
+          isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
         }
       </Wrapper>
     );
