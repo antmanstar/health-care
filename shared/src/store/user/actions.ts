@@ -815,6 +815,13 @@ export const verifyEmail = (token) => ({
   }
 })
 
+export const verifyEmailChallenge = (emailAddress, verificationCode) => ({
+  type: types.EMAIL_VERIFY_CHALLENGE,
+  payload: {
+    emailAddress, verificationCode
+  }
+})
+
 export const verify2FACode = (email, code, token) => ({
   type: types.TWO_FACTOR_CODE_VERIFY,
   payload: {

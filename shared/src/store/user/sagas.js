@@ -154,6 +154,13 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.EMAIL_VERIFY_CHALLENGE,
+        generateFetchWorker,
+        api.verifyEmailChallenge
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.FAMILY_MEMBER_COB_FETCH,
         generateFetchWorker,
         api.fetchFamilyMemberCOB
@@ -352,5 +359,5 @@ function* successfulAuthWorkerSaga(action) {
 }
 
 function* initRegistration(action) {
-  yield put({ type: types.REGISTER_FAILURE, error: action.error })
+  yield put({ type: types.REGISTER_FAILURE, error: {} })
 }

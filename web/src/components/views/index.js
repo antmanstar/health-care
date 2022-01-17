@@ -44,6 +44,9 @@ import PersonalInformation, {
 import ContactPreferences, {
   reflection as contactPreferencesReflection
 } from './ContactPreferences';
+import VerifyEmail, { reflection as verifyEmailReflection } from './VerifyEmail';
+import EmailVerificationSent, { reflection as emailVerificationSentReflection } from './EmailVerificationSent';
+import EmailVerification, { reflection as emailVerificationReflection } from './EmailVerification';
 
 const reflections = [
   accountReflection,
@@ -60,6 +63,9 @@ const reflections = [
   dashboardReflection,
   documentReflection,
   downloadFormsReflection,
+  verifyEmailReflection,
+  emailVerificationSentReflection,
+  emailVerificationReflection,
   getStartedReflection,
   healthAssessmentReflection,
   meetYourGoalsReflection,
@@ -99,6 +105,9 @@ export {
   Dashboard,
   Documents,
   DownloadForms,
+  VerifyEmail,
+  EmailVerificationSent,
+  EmailVerification,
   GetStarted,
   HealthAssessment,
   MeetYourGoals,

@@ -638,3 +638,16 @@ export function verifyEmail({ token }) {
     }
   );
 }
+
+export function verifyEmailChallenge({ emailAddress, verificationCode }) {
+  return axios.post(
+    '/api/v1/Member/EmailVerificationChallenge',
+    {
+      email_address: emailAddress,
+      email_address_verification_code: verificationCode
+    },
+    {
+      'Content-Type': 'application/json-patch+json'
+    }
+  );
+}

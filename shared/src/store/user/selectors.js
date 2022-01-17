@@ -185,6 +185,8 @@ export const getMemberName = (state, baseGetter) => ({
 export const getEmail = (state, baseGetter = getAccountInfo) =>
   get(baseGetter(state), ['email_address'])
 
+export const getIsEmailVerified = (state) => get(getBasicInfo(state), ['email_verified'])
+
 export const getAddress = (state, baseGetter = getAccountInfo) => ({
   ...get(baseGetter(state), ['address'], {}),
   ...addressMethods

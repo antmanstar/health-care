@@ -648,8 +648,22 @@ export function verifyEligibilityIdAndSSN({ eligibilityId, last4SSN }) {
 export function verifyEmail({ token }: TokenOnly) {
   return axios.post(
     '/api/v1/Member/EmailVerificationRequest',
+    {},
     {
-      token
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
+export function verifyEmailChallenge({ emailAddress, verificationCode }) {
+  return axios.post(
+    '/api/v1/Member/EmailVerificationChallenge',
+    {
+      email_address: emailAddress,
+      email_address_verification_code: verificationCode
     },
     {
       headers: {

@@ -166,7 +166,6 @@ function CreateAccount({
     <LayoutWrapper>
       <Title>Create your online profile.</Title>
       <SectionDivider />
-      {renderRegisterError()}
       <form autoComplete="false">
         <EditedTwoColumnRow>
           <SmallContainer>
@@ -176,6 +175,7 @@ function CreateAccount({
               name="email"
               id="email"
               placeholder="Enter your email address."
+              tabindex="1"
               onChange={handleChangeEmail}
             />
           </SmallContainer>
@@ -188,6 +188,7 @@ function CreateAccount({
 
               <ShowPassword
                 type="button"
+                tabIndex="-1"
                 onClick={() => {
                   setShowPassword(!showPassword);
                 }}
@@ -201,12 +202,17 @@ function CreateAccount({
               autoComplete="off"
               name="password"
               id="password"
+              tabindex="1"
+              minLength={4}
+              maxLength={64}
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{8,}"
               placeholder="Choose a password."
               onChange={handleChangePassword}
             />
             <PasswordStrengthMeter password={password} />
           </SmallContainer>
         </EditedTwoColumnRow>
+        {renderRegisterError()}
         <SectionDivider />
         <ButtonWrapper>
           <Button

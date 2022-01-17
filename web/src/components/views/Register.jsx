@@ -11,6 +11,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import history from '../../utils/history';
+import { Divider } from '@material-ui/core';
 
 const { verifyEligibilityIdAndSSN, initRegister } = actions;
 const {
@@ -110,10 +111,12 @@ const GoToSignIn = styled.div`
   margin-top: 20px;
   flex-direction: column;
   text-align: center;
-  align-items: baseline;
+  align-items: center;
 
   @media ${props => props.theme.device.tabletXL} {
     flex-direction: row;
+    align-items: baseline;
+    font-size: 20px;
   }
   p {
     margin: 0;
@@ -130,6 +133,16 @@ const BottomSectionDivider = styled.div`
   padding: 16px 0;
   height: fit-content;
   width: 100%;
+`;
+const DividerWrapper = styled.div`
+  @media ${props => props.theme.device.tabletXL} {
+    display: none;
+  }
+`;
+const BottomText = styled.p`
+  @media ${props => props.theme.device.tabletXL} {
+    font-size: 20px;
+  }
 `;
 function Register({
   authError,
@@ -168,7 +181,7 @@ function Register({
   const renderVerifyMembershipError = () => {
     const message =
       verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
-        ? 'An error occured, Please try again.'
+        ? 'Invalid combination of Member ID and social security number.'
         : verifyMembershipError?.error;
     if (message) {
       return <ErrorMessage message={message} />;
@@ -227,9 +240,11 @@ function Register({
         </form>
       </FormWrapper>
       <BottomSectionDivider>
-        <SectionDivider />
+        <DividerWrapper>
+          <SectionDivider />
+        </DividerWrapper>
         <GoToSignIn>
-          <p>Already have an account?</p>
+          <BottomText>Already have an account?</BottomText>
           <RouterLink to="/sign-in">Sign In</RouterLink>
         </GoToSignIn>
       </BottomSectionDivider>

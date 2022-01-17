@@ -9,3 +9,5 @@ yarn-error.log
 ## Editors
 # Vim
 .*.swp
+web/package-lock.json
+shared/package-lock.json
