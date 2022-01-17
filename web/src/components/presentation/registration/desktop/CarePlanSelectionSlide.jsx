@@ -13,6 +13,24 @@ const Options = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+
+  @media ${props => props.theme.device.mobile} {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
 `;
 
 const Information = styled.div`

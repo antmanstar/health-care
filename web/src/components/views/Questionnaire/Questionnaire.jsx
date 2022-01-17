@@ -17,27 +17,94 @@ import moment from 'moment';
 import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
 
 const { saveQuestionnaire } = actions;
-const { getCarePlanSuggestion, getQuestionnaire, getToken, isQuestionnaireComplete, isSavingQuestionnaire } = selectors;
+const {
+  getCarePlanSuggestion,
+  getQuestionnaire,
+  getToken,
+  isQuestionnaireComplete,
+  isSavingQuestionnaire
+} = selectors;
 
 const Wrapper = styled.form`
-  margin: 40px auto 80px;
+  margin: 40px auto 0px;
   width: 960px;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+  }
 `;
 
 const Question = styled.h1`
   margin: 0 auto;
   text-align: center;
   width: 772px;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+    font-size: 25px;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+  }
 `;
 
+const AnswerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 const AnswerSet = styled.ol`
   list-style: none;
   margin: 40px auto 0;
   padding: 0;
   text-align: left;
   width: 452px;
+  display: flex;
+  justify-content: center;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+    margin: 60px 0 60px 0;
+    justify-content: space-around;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+    margin: 70px 0 70px 0;
+    justify-content: space-around;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+    margin: 70px 0 70px 0;
+    justify-content: space-around;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 50%;
+    margin-bottom: 110px;
+    justify-content: space-evenly;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 50%;
+    margin-bottom: 110px;
+    justify-content: space-evenly;
+  }
 `;
 
 const Answer = styled.li`
@@ -49,10 +116,13 @@ const Answer = styled.li`
   }
 
   & label {
-    height: 32px;
-    padding-left: 48px;
+    height: 48px;
     position: relative;
     vertical-align: middle;
+
+    @media ${props => props.theme.device.desktop} {
+      left: -50px;
+    }
   }
 
   & label::before,
@@ -60,17 +130,22 @@ const Answer = styled.li`
     position: absolute;
   }
   & label::before {
-    border: 1px solid #bbbcbc;
+    border: 0px solid #bbbcbc;
     box-sizing: border-box;
+    background: #f4f4f4;
     border-radius: 4px;
     content: '';
     display: inline-block;
-    height: 32px;
-    left: 0;
-    top: -10px;
-    width: 32px;
+    height: 48px;
+    left: -50px;
+    top: -16px;
+    width: 128px;
     margin-right: 16px;
   }
+  &.active label {
+    color: #ffffff;
+  }
+
   & label:hover::before,
   &.active label:hover::before {
     border-color: ${props => props.theme.colors.shades.pinkOrange};
@@ -81,8 +156,6 @@ const Answer = styled.li`
   }
 
   & label::after {
-    border-bottom: 3px solid white;
-    border-left: 3px solid white;
     content: '';
     display: none;
     height: 8px;
@@ -98,8 +171,27 @@ const Answer = styled.li`
   & input {
     display: none;
   }
+
+  @media ${props => props.theme.device.desktop} {
+    margin-left: 90px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    margin-left: 90px;
+  }
 `;
 
+const InputWrapper = styled.div`
+  background: #f4f4f4;
+  border-radius: 4px;
+`;
+
+const OnboardWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+`;
 // ChooseCarePlan
 
 class Questionnaire extends Component {
@@ -163,10 +255,9 @@ class Questionnaire extends Component {
 
   isQuestionAnswered() {
     const { currentQuestion } = this.state;
-    let currentAnswer = undefined
+    let currentAnswer = undefined;
 
-    if (this.state.answers !== undefined)
-      currentAnswer = this.state.answers[currentQuestion - 1]
+    if (this.state.answers !== undefined) currentAnswer = this.state.answers[currentQuestion - 1];
 
     if (currentAnswer) {
       return true;
@@ -223,56 +314,65 @@ class Questionnaire extends Component {
         <OnboardingProgressBar progressStep={3} />
         <Wrapper>
           <Question>{question.question}</Question>
-          <AnswerSet>
-            {answers &&
-              answers.map(answer => (
-                <Answer
-                  className={selectedAnswers.includes(answer.question_selection_id) ? 'active' : ''}
-                  key={answer.question_selection_id}
-                >
-                  <label htmlFor={answer.question_selection_id}>
-                    <input
-                      type="checkbox"
-                      id={answer.question_selection_id}
-                      onClick={e => {
-                        e.stopPropagation();
-                        this.setState(prevState => {
-                          const { answers } = prevState;
-                          if (
-                            !isEmpty(
-                              answers.filter(
-                                answerToTest =>
-                                  answer.question_selection_id === answerToTest.questionSelectionId
-                              )
-                            )
-                          ) {
-                            return {
-                              answers: [
-                                ...answers.filter(
-                                  answer => answer.questionId !== question.question_id
+          <AnswerWrapper>
+            <AnswerSet>
+              {answers &&
+                answers.map(answer => (
+                  <Answer
+                    className={
+                      selectedAnswers.includes(answer.question_selection_id) ? 'active' : ''
+                    }
+                    key={answer.question_selection_id}
+                  >
+                    <label htmlFor={answer.question_selection_id}>
+                      <InputWrapper>
+                        <input
+                          type="checkbox"
+                          id={answer.question_selection_id}
+                          onClick={e => {
+                            e.stopPropagation();
+                            this.setState(prevState => {
+                              const { answers } = prevState;
+                              if (
+                                !isEmpty(
+                                  answers.filter(
+                                    answerToTest =>
+                                      answer.question_selection_id ===
+                                      answerToTest.questionSelectionId
+                                  )
                                 )
-                              ]
-                            };
-                          }
-                          return {
-                            answers: [
-                              ...answers.filter(
-                                answer => answer.questionId !== question.question_id
-                              ),
-                              {
-                                questionId: question.question_id,
-                                questionSelectionId: answer.question_selection_id
+                              ) {
+                                return {
+                                  answers: [
+                                    ...answers.filter(
+                                      answer => answer.questionId !== question.question_id
+                                    )
+                                  ]
+                                };
                               }
-                            ]
-                          };
-                        });
-                      }}
-                    />
-                    {answer.selection}
-                  </label>
-                </Answer>
-              ))}
-          </AnswerSet>
+                              return {
+                                answers: [
+                                  ...answers.filter(
+                                    answer => answer.questionId !== question.question_id
+                                  ),
+                                  {
+                                    questionId: question.question_id,
+                                    questionSelectionId: answer.question_selection_id
+                                  }
+                                ]
+                              };
+                            });
+                          }}
+                        />
+                      </InputWrapper>
+                      {answer.selection}
+                    </label>
+                  </Answer>
+                ))}
+            </AnswerSet>
+          </AnswerWrapper>
+        </Wrapper>
+        <OnboardWrapper>
           <OnboardingControls
             isQuestionAnswered={this.isQuestionAnswered()}
             currentStep={currentQuestion}
@@ -302,10 +402,8 @@ class Questionnaire extends Component {
               }));
             }}
           />
-          {
-            isSavingQuestionnaire && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
-          }
-        </Wrapper>
+          {isSavingQuestionnaire && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+        </OnboardWrapper>
       </>
     );
   }
@@ -321,7 +419,7 @@ Questionnaire.propTypes = {
 Questionnaire.defaultProps = {
   questionnaire: {},
   isQuestionnaireComplete: false,
-  saveQuestionnaire: () => { }
+  saveQuestionnaire: () => {}
 };
 
 const mapStateToProps = state => ({
