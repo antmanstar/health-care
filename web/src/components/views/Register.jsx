@@ -110,6 +110,8 @@ const GoToSignIn = styled.div`
   margin-top: 20px;
   flex-direction: column;
   text-align: center;
+  align-items: baseline;
+
   @media ${props => props.theme.device.tabletXL} {
     flex-direction: row;
   }
@@ -205,6 +207,7 @@ function Register({
                 type="password"
                 name="ssn"
                 id="ssn"
+                maxLength={4}
                 placeholder="****"
                 onChange={handleChangeSSN}
               />
