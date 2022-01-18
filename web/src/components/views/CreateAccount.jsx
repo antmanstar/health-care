@@ -236,7 +236,6 @@ function CreateAccount({
             <PasswordStrengthMeter password={password} />
           </SmallContainer>
         </EditedTwoColumnRow>
-        {renderRegisterError()}
         <SectionDivider />
         <ButtonWrapper>
           <Button
@@ -258,6 +257,7 @@ function CreateAccount({
           />
         </ButtonWrapper>
       </form>
+      {renderRegisterError()}
       {isRegisteringElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
     </LayoutWrapper>
   );

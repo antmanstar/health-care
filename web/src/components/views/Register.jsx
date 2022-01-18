@@ -236,7 +236,6 @@ function Register({
               />
             </SmallContainer>
           </EditedTwoColumnRow>
-          {renderVerifyMembershipError()}
           <SectionDivider />
           <ButtonWrapper>
             <Button
@@ -249,6 +248,7 @@ function Register({
           </ButtonWrapper>
         </form>
       </FormWrapper>
+      {renderVerifyMembershipError()}
       <BottomSectionDivider>
         <DividerWrapper>
           <SectionDivider />

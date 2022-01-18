@@ -203,12 +203,12 @@ function SignIn({
                 </PasswordRecovery>
               </SmallContainer>
             </EditedTwoColumnRow>
-            {renderAuthError()}
             <SectionDivider />
             <ButtonWrapper>
               <Button buttonType="submit" value="Sign In" text="Sign In" />
             </ButtonWrapper>
           </form>
+          {renderAuthError()}
         </>
       )}
       <GoToRegistration>

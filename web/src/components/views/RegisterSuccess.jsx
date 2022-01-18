@@ -126,34 +126,15 @@ const ButtonWrapper = styled.div`
 `;
 const SuccessWrapper = styled.div`
   display: flex;
-
-  @media ${props => props.theme.device.mobile} {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
-  }
-
-  @media ${props => props.theme.device.tablet} {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
-  }
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   @media ${props => props.theme.device.tabletXL} {
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     margin-top: 40px;
-  }
-
-  @media ${props => props.theme.device.desktop} {
-    flex-direction: row;
-  }
-
-  @media ${props => props.theme.device.desktopXL} {
-    flex-direction: row;
   }
 `;
 
@@ -179,9 +160,9 @@ function RegisterSuccess({
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (successfulRegistration) {
-      history.push('/sign-in');
-    }
+    // if (successfulRegistration) {
+    //   history.push('/sign-in');
+    // }
     if (!isVerifiedRegisteringUser) {
       history.push('/register');
     }
@@ -211,8 +192,8 @@ function RegisterSuccess({
         <ButtonWrapper>
           <SignInButton
             buttonType="submit"
-            value="Sign IN"
-            text="Sign IN"
+            value="Sign In"
+            text="Sign In"
             onClick={handleSubmit}
             disabled={isRegisteringElegibility}
           />
