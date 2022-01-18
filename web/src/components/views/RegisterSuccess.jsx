@@ -13,6 +13,7 @@ import history from '../../utils/history';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 import ReactTooltip from 'react-tooltip';
+import successImg from '@evry-member-app/assets/images/vector/success-ellipse.svg';
 
 const { register } = actions;
 const {
@@ -55,15 +56,19 @@ const Title = styled.h2`
 `;
 
 const EditedTwoColumnRow = styled(TwoColumnRow)`
-  padding: 32px 0 16px;
+  padding: 32px 0 16px 32px;
   flex-wrap: wrap;
   margin-bottom: 0;
+  flex-direction: column;
 `;
 
 const Label = styled.p`
   margin: 0 0 16px;
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 400;
+  color: #4a4a4b;
+  padding: 36px 0 36px;
+  width: 65%;
 `;
 
 const PasswordLabelWrapper = styled.div`
@@ -122,7 +127,17 @@ const StyledTooltip = styled(ReactTooltip)`
   white-space: normal;
 `;
 
-function CreateAccount({
+const SuccessWrapper = styled.div`
+  display: flex;
+`;
+
+const SuccessIco = styled.img``;
+
+const SignInButton = styled(Button)`
+  background: #8ed081;
+  border-radius: 4px;
+`;
+function RegisterSuccess({
   authError,
   registerError,
   isVerifiedRegisteringUser,
@@ -132,128 +147,44 @@ function CreateAccount({
   isRegisteringElegibility,
   ...restProps
 }) {
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (successfulRegistration) {
-      history.push('/register-success');
+      history.push('/sign-in');
     }
     if (!isVerifiedRegisteringUser) {
       history.push('/register');
     }
   }, [successfulRegistration, isVerifiedRegisteringUser]);
 
-  const handleChangeEmail = e => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = e => {
-    setPassword(e.target.value);
-  };
-
   const handleSubmit = e => {
     e.preventDefault();
-    register({ email, password });
-  };
-
-  const handleCancel = e => {
-    e.preventDefault();
-    // initRegister();
-    history.push('/register');
-  };
-  const renderRegisterError = () => {
-    const message =
-      registerError?.result !== undefined && !registerError?.result
-        ? 'An error occured, Please try again.'
-        : registerError?.error;
-    if (message) {
-      return <ErrorMessage message={message} />;
-    }
-    return null;
+    history.push('/sign-in');
   };
 
   return (
     <LayoutWrapper>
-      <Title>Create your online profile.</Title>
-      <SectionDivider />
-      <form autoComplete="false">
+      <SuccessWrapper>
+        <SuccessIco src={successImg} />
         <EditedTwoColumnRow>
-          <SmallContainer>
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="Enter your email address."
-              tabindex="1"
-              onChange={handleChangeEmail}
-            />
-          </SmallContainer>
-          <SmallContainer>
-            <PasswordLabelWrapper>
-              <PasswordHelp>
-                <Label htmlFor="password">Choose a Password</Label>
-                <i className="material-icons" data-tip data-for="registerTip">
-                  help_outline
-                </i>
-                <StyledTooltip
-                  id="registerTip"
-                  place="bottom"
-                  textColor="#000000"
-                  backgroundColor="#FFFFFF"
-                  offset={{ top: -5, left: 0 }}
-                  type="light"
-                >
-                  Password must be between 4 to 64 characters
-                </StyledTooltip>
-              </PasswordHelp>
-
-              <ShowPassword
-                type="button"
-                tabIndex="-1"
-                onClick={() => {
-                  setShowPassword(!showPassword);
-                }}
-              >
-                {showPassword !== true ? 'show password' : 'hide password'}
-              </ShowPassword>
-            </PasswordLabelWrapper>
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              autoComplete="off"
-              name="password"
-              id="password"
-              tabindex="1"
-              minLength={4}
-              maxLength={64}
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{8,}"
-              placeholder="Choose a password."
-              onChange={handleChangePassword}
-            />
-            <PasswordStrengthMeter password={password} />
-          </SmallContainer>
+          <Title>You’ve been registered!</Title>
+          <SectionDivider />
+          <Label>
+            Thank you for registering an account with us. Use the login credentials you created to
+            sign into your personalized dashboard.
+          </Label>
+          <SectionDivider />
         </EditedTwoColumnRow>
-        {renderRegisterError()}
-        <SectionDivider />
+      </SuccessWrapper>
+
+      <form autoComplete="false">
         <ButtonWrapper>
-          <Button
+          <SignInButton
             buttonType="submit"
-            value="Register Account"
-            text="Register Account"
+            value="Sign IN"
+            text="Sign IN"
             onClick={handleSubmit}
-            disabled={isRegisteringElegibility}
-          />
-        </ButtonWrapper>
-        <ButtonWrapper>
-          <Button
-            type="negative"
-            value="Cancel"
-            text="Cancel"
-            onClick={handleCancel}
-            color="red"
             disabled={isRegisteringElegibility}
           />
         </ButtonWrapper>
@@ -263,7 +194,7 @@ function CreateAccount({
   );
 }
 
-CreateAccount.propTypes = {
+RegisterSuccess.propTypes = {
   registerError: PropTypes.object,
   isVerifiedRegisteringUser: PropTypes.bool,
   register: PropTypes.func,
@@ -271,7 +202,7 @@ CreateAccount.propTypes = {
   successfulRegistration: PropTypes.bool
 };
 
-CreateAccount.defaultProps = {
+RegisterSuccess.defaultProps = {
   registerError: null,
   isVerifiedRegisteringUser: false,
   register: () => {},
@@ -303,22 +234,22 @@ const mergeProps = ({ registeringUser, ...stateProps }, { register }, ownProps) 
   ...ownProps
 });
 
-const ConnectedCreateAccount = connect(
+const ConnectedRegisterSuccess = connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps
-)(CreateAccount);
+)(RegisterSuccess);
 
 const reflection = {
-  component: ConnectedCreateAccount,
+  component: ConnectedRegisterSuccess,
   layout: Sparse,
   layoutProps: {
-    title: 'Register your account.',
-    subtitle: 'Enter your details to confirm your Evry Membership and setup your online account.'
+    title: 'Evry Member Portal',
+    subtitle: 'Account is registered!'
   },
-  route: '/create-account'
+  route: '/register-success'
 };
 
-export default CreateAccount;
+export default RegisterSuccess;
 
 export { reflection };

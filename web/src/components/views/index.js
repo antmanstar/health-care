@@ -1,7 +1,7 @@
 import Account, { reflection as accountReflection } from './Account';
 import ChooseCarePlan, { reflection as chooseCarePlanReflection } from './ChooseCarePlan';
 import CarePlanSuggestion, {
-  reflection as carePlanSuggestionReflection
+  reflection as carePlanSuggestionReflection,
 } from './CarePlanSuggestion';
 import Questionnaire, { reflection as questionnaireReflection } from './Questionnaire';
 import Claims, { reflection as claimsReflection } from './Claims';
@@ -15,13 +15,14 @@ import Support, { reflection as supportReflection } from './Support';
 import MeetYourGoals, { reflection as meetYourGoalsReflection } from './MeetYourGoals';
 import GetStarted, { reflection as getStartedReflection } from './GetStarted';
 import ArticlesAndResources, {
-  reflection as articlesAndResourcesReflection
+  reflection as articlesAndResourcesReflection,
 } from './ArticlesAndResources';
 import Rewards, { reflection as rewardsReflection } from './Rewards';
 import WellnessProgram, { reflection as wellnessProgramReflection } from './WellnessProgram';
 import Dashboard, { reflection as dashboardReflection } from './Dashboard';
 import ContactEvry, { reflection as contactEvryReflection } from './ContactEvry';
 import CreateAccount, { reflection as createAccountReflection } from './CreateAccount';
+import RegisterSuccess, { reflection as registerSuccessReflection } from './RegisterSuccess';
 import Onboarding, { reflection as onboardingReflection } from './Onboarding';
 import ClaimsDetails, { reflection as claimsDetailsReflection } from './ClaimsDetails';
 import SupportRequest, { reflection as supportRequestReflection } from './SupportRequest';
@@ -33,19 +34,21 @@ import HealthAssessment, { reflection as healthAssessmentReflection } from './He
 import PasswordReset, { reflection as passwordResetReflection } from './PasswordReset';
 import UpdatePassword, { reflection as updatePasswordReflection } from './UpdatePassword';
 import UpdateSecurityQuestions, {
-  reflection as updateSecurityQuestionsReflection
+  reflection as updateSecurityQuestionsReflection,
 } from './UpdateSecurityQuestions';
 import ContactSupportClaim, {
-  reflection as contactSupportClaimReflection
+  reflection as contactSupportClaimReflection,
 } from './ContactSupportClaim';
 import PersonalInformation, {
-  reflection as personalInformationReflection
+  reflection as personalInformationReflection,
 } from './PersonalInformation';
 import ContactPreferences, {
-  reflection as contactPreferencesReflection
+  reflection as contactPreferencesReflection,
 } from './ContactPreferences';
 import VerifyEmail, { reflection as verifyEmailReflection } from './VerifyEmail';
-import EmailVerificationSent, { reflection as emailVerificationSentReflection } from './EmailVerificationSent';
+import EmailVerificationSent, {
+  reflection as emailVerificationSentReflection,
+} from './EmailVerificationSent';
 import EmailVerification, { reflection as emailVerificationReflection } from './EmailVerification';
 
 const reflections = [
@@ -60,6 +63,7 @@ const reflections = [
   contactSupportClaimReflection,
   coverageReflection,
   createAccountReflection,
+  registerSuccessReflection,
   dashboardReflection,
   documentReflection,
   downloadFormsReflection,
@@ -85,7 +89,7 @@ const reflections = [
   supportRequestsReflection,
   updatePasswordReflection,
   updateSecurityQuestionsReflection,
-  wellnessProgramReflection
+  wellnessProgramReflection,
 ];
 
 export default reflections;
@@ -102,6 +106,7 @@ export {
   ContactSupportClaim,
   Coverage,
   CreateAccount,
+  RegisterSuccess,
   Dashboard,
   Documents,
   DownloadForms,
@@ -127,5 +132,5 @@ export {
   SupportRequests,
   UpdatePassword,
   UpdateSecurityQuestions,
-  WellnessProgram
+  WellnessProgram,
 };
