@@ -30,29 +30,30 @@ const {
 
 const { LayoutWrapper, Input, SectionDivider, TwoColumnRow } = defaultTheme.components;
 
-const SmallContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-bottom: 16px;
-  @media ${props => props.theme.device.tablet} {
-    width: 48%;
-    margin-bottom: 24px;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  > .push-down {
-    margin-top: auto;
-  }
-`;
-
 const Title = styled.h2`
   font-size: 24px;
   font-weight: 400;
   color: ${props => props.theme.colors.shades.blue};
+
+  @media ${props => props.theme.device.mobile} {
+    text-align: center;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    text-align: center;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    text-align: center;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    text-align: unset;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    text-align: unset;
+  }
 `;
 
 const EditedTwoColumnRow = styled(TwoColumnRow)`
@@ -60,6 +61,31 @@ const EditedTwoColumnRow = styled(TwoColumnRow)`
   flex-wrap: wrap;
   margin-bottom: 0;
   flex-direction: column;
+
+  @media ${props => props.theme.device.mobile} {
+    padding: 32px 32px 16px 32px;
+    align-items: center;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    padding: 32px 32px 16px 32px;
+    align-items: center;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    padding: 32px 32px 16px 32px;
+    align-items: center;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    padding: 32px 0 16px 32px;
+    align-items: unset;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    padding: 32px 0 16px 32px;
+    align-items: unset;
+  }
 `;
 
 const Label = styled.p`
@@ -69,34 +95,25 @@ const Label = styled.p`
   color: #4a4a4b;
   padding: 36px 0 36px;
   width: 65%;
-`;
 
-const PasswordLabelWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 16px;
-
-  p {
-    margin: 0;
-    margin-right: 20px;
+  @media ${props => props.theme.device.mobile} {
+    text-align: center;
   }
-`;
 
-const PasswordHelp = styled.div`
-  display: flex;
-  color: ${props => props.theme.colors.shades.blue};
-`;
+  @media ${props => props.theme.device.tablet} {
+    text-align: center;
+  }
 
-const ShowPassword = styled.button`
-  border: none;
-  outline: none;
-  font-size: 12px;
-  font-style: italic;
-  color: ${props => props.theme.colors.shades.gray};
-  cursor: pointer;
-  &:hover {
-    color: ${props => props.theme.colors.shades.darkGray};
+  @media ${props => props.theme.device.tabletXL} {
+    text-align: center;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    text-align: unset;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    text-align: unset;
   }
 `;
 
@@ -107,31 +124,43 @@ const ButtonWrapper = styled.div`
   width: 100%;
   padding-top: 32px;
 `;
-const ErrorWrapper = styled.div`
+const SuccessWrapper = styled.div`
   display: flex;
-  align-items: center;
-  color: ${props => props.theme.colors.shades.pinkRed};
-  p {
-    margin-left: 16px;
+
+  @media ${props => props.theme.device.mobile} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    flex-direction: row;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    flex-direction: row;
   }
 `;
 
-const StyledTooltip = styled(ReactTooltip)`
-  max-width: 40vh;
-  background: #ffffff;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-  height: 30px;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  white-space: normal;
+const SuccessIco = styled.img`
+  width: 128px;
+  height: 125px;
 `;
-
-const SuccessWrapper = styled.div`
-  display: flex;
-`;
-
-const SuccessIco = styled.img``;
 
 const SignInButton = styled(Button)`
   background: #8ed081;
@@ -150,9 +179,9 @@ function RegisterSuccess({
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    if (successfulRegistration) {
-      history.push('/sign-in');
-    }
+    // if (successfulRegistration) {
+    //   history.push('/sign-in');
+    // }
     if (!isVerifiedRegisteringUser) {
       history.push('/register');
     }
