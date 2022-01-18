@@ -174,19 +174,19 @@ class MainNavigation extends Component {
           Member Tools
           <DropdownModal>
             <DropDownItem>
-              <img src={images["provider-lookup"]} alt="Provider Lookup" />
+              <img src={images['provider-lookup']} alt="Provider Lookup" />
               <DropDownLink to="/provider-lookup" activeClassName="active">
                 Provider Lookup
               </DropDownLink>
             </DropDownItem>
             <DropDownItem>
-              <img src={images["formulary"]} alt="Prescription Formulary" />
+              <img src={images['formulary']} alt="Prescription Formulary" />
               <DropDownLink to="https://www.google.com" activeClassName="active">
                 Prescription Formulary
               </DropDownLink>
             </DropDownItem>
             <DropDownItem>
-              <img src={images["expense-calculator"]} alt="Expense Calculator" />
+              <img src={images['expense-calculator']} alt="Expense Calculator" />
               <DropDownLink to="https://www.google.com" activeClassName="active">
                 Expense Calculator
               </DropDownLink>

@@ -12,6 +12,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import history from '../../utils/history';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import ReactTooltip from 'react-tooltip';
 
 const { register } = actions;
 const {
@@ -110,6 +111,17 @@ const ErrorWrapper = styled.div`
   }
 `;
 
+const StyledTooltip = styled(ReactTooltip)`
+  max-width: 40vh;
+  background: #ffffff;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  height: 30px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  white-space: normal;
+`;
+
 function CreateAccount({
   authError,
   registerError,
@@ -183,7 +195,19 @@ function CreateAccount({
             <PasswordLabelWrapper>
               <PasswordHelp>
                 <Label htmlFor="password">Choose a Password</Label>
-                <i className="material-icons">help_outline</i>
+                <i className="material-icons" data-tip data-for="registerTip">
+                  help_outline
+                </i>
+                <StyledTooltip
+                  id="registerTip"
+                  place="bottom"
+                  textColor="#000000"
+                  backgroundColor="#FFFFFF"
+                  offset={{ top: -5, left: 0 }}
+                  type="light"
+                >
+                  Password must be between 4 to 64 characters
+                </StyledTooltip>
               </PasswordHelp>
 
               <ShowPassword

@@ -1,9 +1,9 @@
-import Desktop, { reflection as desktopReflection } from './desktop';
-import Mobile, { reflection as mobileReflection } from './mobile';
-import { isClientMobile } from '../../../utils/browser';
+import CarePlanSuggestion, {
+  reflection as careplanSuggestionReflection,
+} from './CarePlanSuggestion';
 
-const Component = isClientMobile() ? Mobile : Desktop;
-const reflection = isClientMobile() ? mobileReflection : desktopReflection;
+const Component = CarePlanSuggestion;
+const reflection = careplanSuggestionReflection;
 
 export default Component;
 export { reflection };

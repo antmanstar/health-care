@@ -41,10 +41,12 @@ const Wrapper = styled.div`
   }
 
   @media ${defaultTheme.device.desktopXL} {
-    max-width: 1024px;
+    border-top: none;
   }
 `;
-const FormWrapper = styled.div``;
+const FormWrapper = styled.div`
+  width: 100%;
+`;
 
 const SmallContainer = styled.div`
   display: flex;
@@ -131,6 +133,10 @@ const BottomSectionDivider = styled.div`
   height: fit-content;
   width: 100%;
 `;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 20px;
+`;
+
 function Register({
   authError,
   isVerifiedRegisteringUser,
@@ -166,14 +172,18 @@ function Register({
   };
 
   const renderVerifyMembershipError = () => {
-    const message =
+    let message =
       verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
         ? 'An error occured, Please try again.'
         : verifyMembershipError?.error;
     if (message) {
-      return <ErrorMessage message={message} />;
+      message = (
+        <ErrorMessageWrapper>
+          <ErrorMessage message={message} />
+        </ErrorMessageWrapper>
+      );
     }
-    return null;
+    return message;
   };
 
   return (
