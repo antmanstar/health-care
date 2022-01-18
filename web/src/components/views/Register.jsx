@@ -139,6 +139,16 @@ const BottomSectionDivider = styled.div`
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
 `;
+const DividerWrapper = styled.div`
+  @media ${props => props.theme.device.tabletXL} {
+    display: none;
+  }
+`;
+const BottomText = styled.p`
+  @media ${props => props.theme.device.tabletXL} {
+    font-size: 20px;
+  }
+`;
 
 function Register({
   authError,
