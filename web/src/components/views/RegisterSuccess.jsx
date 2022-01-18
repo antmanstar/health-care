@@ -179,9 +179,9 @@ function RegisterSuccess({
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    // if (successfulRegistration) {
-    //   history.push('/sign-in');
-    // }
+    if (successfulRegistration) {
+      history.push('/sign-in');
+    }
     if (!isVerifiedRegisteringUser) {
       history.push('/register');
     }
