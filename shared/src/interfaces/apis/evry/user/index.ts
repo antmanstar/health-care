@@ -200,11 +200,13 @@ export function fetchBenefitCoverages({ token }: TokenOnly) {
   });
 }
 
-export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null }) {
+export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null, dateFrom = null, dateTo = null }) {
   return axios.post(
     '/api/v1/Member/GetClaimList',
     {
       page,
+      dos_from: dateFrom,
+      dos_to: dateTo,
       records_per_page: recordsPerPage,
       search_string: query
     },

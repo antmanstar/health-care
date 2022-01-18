@@ -26,8 +26,16 @@ const Error = styled.div`
   display: flex;
   align-items: center;
 `;
-
+const extractEmails = text => {
+  return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+};
 const convertMsg2Redable = msg => {
+  // User name justin.viola@o2m.systems already exists. Email address justin.viola@o2m.systems already exists.
+  const emails = extractEmails(msg);
+  if (msg.includes('already exists') && emails.length > 0) {
+    return `Email address ${emails[0]} is already registered to another account`;
+  }
+
   switch (msg) {
     case 'The eligibility_id field is required.':
       return 'Member ID is required';
@@ -40,7 +48,7 @@ const convertMsg2Redable = msg => {
     case 'The password field is required.':
       return 'Password is required.';
     case 'The field password must be a string with a minimum length of 4 and a maximum length of 64.':
-      return 'Password must be between 4 and 64 characters.';
+      return 'Password must be between 8 and 64 characters.';
     case 'The email_address field is required.':
       return 'Email is required.';
     case 'The field email_address must be a string with a minimum length of 3 and a maximum length of 128.':

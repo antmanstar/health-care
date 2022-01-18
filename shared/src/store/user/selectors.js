@@ -185,7 +185,8 @@ export const getMemberName = (state, baseGetter) => ({
 export const getEmail = (state, baseGetter = getAccountInfo) =>
   get(baseGetter(state), ['email_address'])
 
-export const getIsEmailVerified = (state) => get(getBasicInfo(state), ['email_verified'])
+export const getIsEmailVerified = (state) =>
+  get(getBasicInfo(state), ['email_verified'])
 
 export const getAddress = (state, baseGetter = getAccountInfo) => ({
   ...get(baseGetter(state), ['address'], {}),
@@ -344,6 +345,11 @@ export const getClaimsList = (state) => {
       )
     }))
   )
+}
+
+export const getClaimLoading = (state) => {
+  const pending = get(state, 'user.claimsList.pending')
+  return pending
 }
 
 export const getClaimsListDataFrame = (state) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Moment from 'moment';
 import defaultTheme from '../../../../style/themes';
 import DatePicker from './DatePicker';
 import SmallButton from './SmallButton';
@@ -63,18 +64,18 @@ const FilterOptions = ({ handleClose, search, query }) => {
   const [clear, setClear] = useState(0);
 
   const handleClear = () => {
-    setDateStart(null)
-    setDateEnd(null)
+    setDateStart(null);
+    setDateEnd(null);
     setClear(clear + 1);
-  }
-  
+  };
+
   const handleDateChange = (value, type) => {
     if (type === 'date-start') {
       setDateStart(value);
     } else {
       setDateEnd(value);
     }
-  }
+  };
 
   return (
     <>
@@ -107,15 +108,23 @@ const FilterOptions = ({ handleClose, search, query }) => {
         <SectionDivider />
         <Container>
           <ButtonWrapper>
-            <SmallButton text="Apply Filters" onClick={() => search({dateFrom: dateStart, dateTo: dateEnd, query: query})} />
+            <SmallButton
+              text="Apply Filters"
+              onClick={() =>
+                search({
+                  dateFrom: dateStart,
+                  dateTo: dateEnd ? dateEnd : Moment(new Date()).format('YYYY-MM-DD'),
+                  query: query
+                })
+              }
+            />
             <SmallButton text="Clear Filters" onClick={() => handleClear()} negative />
           </ButtonWrapper>
         </Container>
       </Wrapper>
     </>
   );
-}
-
+};
 
 FilterOptions.propTypes = {
   handleClose: PropTypes.func.isRequired

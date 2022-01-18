@@ -258,13 +258,6 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
-        types.SAVE_QUESTIONNAIRE,
-        generateFetchWorker,
-        api.saveQuestionnaire
-      )
-    ),
-    takeLatest(
-      ...takeAllBundler(
         types.SUPPORT_ARTICLES_FETCH,
         generateFetchWorker,
         api.fetchSupportArticles

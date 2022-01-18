@@ -131,7 +131,7 @@ const SignIn = (props: SignInProps) => {
             </form>
             <GoToRegistration>
               <Link to="/" onPress={handleClear2FA}>
-                Start Over
+                Back To Sign In
               </Link>
             </GoToRegistration>
           </>

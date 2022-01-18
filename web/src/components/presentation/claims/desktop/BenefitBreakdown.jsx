@@ -81,11 +81,4 @@ const BenefitBreakdown = ({ totalBilled, discounts, payment, owed }) => (
   </>
 );
 
-BenefitBreakdown.propTypes = {
-  totalBilled: PropTypes.string.isRequired,
-  discounts: PropTypes.string.isRequired,
-  payment: PropTypes.string.isRequired,
-  owed: PropTypes.string.isRequired
-};
-
 export default BenefitBreakdown;

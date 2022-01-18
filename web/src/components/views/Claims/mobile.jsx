@@ -35,20 +35,28 @@ const Spacer = styled.div`
   padding-top: 128px;
 `;
 
-const Claims = ({ claimsList }) => (
-  <>
-    <FixedHeader>
-      <ColoredTrimmedHeader />
+const Claims = ({ claimsList, paginator }) => {
+  
+  const search = ({ query, dateFrom, dateTo }) => {
+    const trimmedQuery = query.trim();
+    fetchClaimsList({ page: 1, query: trimmedQuery, recordsPerPage: paginator.recordsPerPage, dateFrom, dateTo });
+  }
+
+  return (
+    <>
+      <FixedHeader>
+        <ColoredTrimmedHeader />
+        <MobileContentWrapper>
+          <SearchAndFilterBar placeholder="Search Claims" search={search} bigShadow dateButton filterButton />
+        </MobileContentWrapper>
+      </FixedHeader>
+      <Spacer />
       <MobileContentWrapper>
-        <SearchAndFilterBar placeholder="Search Claims" bigShadow dateButton filterButton />
+        <MobileClaimsList claims={claimsList} />
       </MobileContentWrapper>
-    </FixedHeader>
-    <Spacer />
-    <MobileContentWrapper>
-      <MobileClaimsList claims={claimsList} />
-    </MobileContentWrapper>
-  </>
-);
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   claimsList: getClaimsList(state),

@@ -88,6 +88,7 @@ const StyledLink = styled(RouterLink)`
 class ClaimsSummarySection extends Component {
   componentDidMount() {
     const { claimsSummary, fetchClaimsSummary } = this.props;
+    console.log(claimsSummary);
     if (Object.getOwnPropertyNames(claimsSummary).length === 0) {
       fetchClaimsSummary();
     }

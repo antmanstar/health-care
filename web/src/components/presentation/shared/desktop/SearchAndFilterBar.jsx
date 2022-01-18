@@ -27,9 +27,11 @@ const Wrapper = styled.div`
 `;
 
 const Search = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
+  form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
 
   i {
     margin-right: 14px;
@@ -89,52 +91,59 @@ const FilterButton = styled.button`
   }
 `;
 
-const SearchAndFilterBar = ({ bordered, search, placeholder, dateButton, filterButton }) => {
-  const [query, setQuery] = useState('');
-  const [showDateFilters, setShowDateFilters] = useState(false);
-  const [showSortFilters, setShowSortFilters] = useState(false);
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      setQuery(e.target.value);
-      search({query: query});
-    }
+const SearchAndFilterBar = ({ bordered, placeholder, dateButton, filterButton, search }) => {
+
+  const [ query, setQuery ] = useState('');
+  const [ showFilters, setShowFilters ] = useState(false);
+
+  const handleClose = () => {
+    setShowFilters(false)
   }
 
   return (
     <>
       <Wrapper bordered={bordered}>
         <Search>
-          <i
-            className="material-icons"
-            onClick={() => {
-              search({query: query});
-            }}
-          >
-            search
-          </i>
-          <input
-            type="text"
-            name="search"
-            placeholder={placeholder}
-            value={query}
-            onChange={e => {
-              setQuery(e.target.value);
-            }}
-            onKeyDown={(e) => handleKeyDown(e)}
-          />
+          <form onSubmit={ (e) => {
+            e.preventDefault();
+            search({query});
+          }}>
+            <i
+              className="material-icons"
+            >
+              search
+            </i>
+            <input
+              type="text"
+              name="search"
+              placeholder={placeholder}
+              value={query}
+              onChange={e => {
+                setQuery( e.target.value )
+              }}
+            />
+          </form>
         </Search>
         <FilterButtons>
           {dateButton && (
             <FilterButton
               bordered={bordered}
-              onClick={() => setShowDateFilters(true)}
+              onClick={() => setShowFilters(true)}
             >
               <i className="material-icons">date_range</i>
             </FilterButton>
           )}
+          {filterButton && (
+            <FilterButton
+              bordered={bordered}
+              onClick={() => setShowFilters(true)}
+            >
+              <i className="material-icons">filter_list</i>
+            </FilterButton>
+          )}
         </FilterButtons>
-        {showDateFilters && <FilterOptions search={search} query={query} handleClose={() => setShowDateFilters(false)} />}
+        {showFilters && <FilterOptions handleClose={handleClose} search={search} query={query}/>}
       </Wrapper>
     </>
   );

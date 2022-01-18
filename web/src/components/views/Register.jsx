@@ -187,7 +187,7 @@ function Register({
   const renderVerifyMembershipError = () => {
     let message =
       verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
-        ? 'Invalid combination of Member ID and social security number.'
+        ? ['Invalid combination of Member ID and social security number.']
         : verifyMembershipError?.error;
     if (message) {
       message = (

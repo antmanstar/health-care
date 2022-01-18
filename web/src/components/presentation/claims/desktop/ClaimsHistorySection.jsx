@@ -13,9 +13,10 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import paginate from '../../../../utils/pagination';
 import constants from '@evry-member-app/shared/constants';
+import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
 
 const { fetchClaimsList, showModal } = actions;
-const { getClaimsList, getClaimsListDataFrame, getToken } = selectors;
+const { getClaimsList, getClaimsListDataFrame, getToken, getClaimLoading } = selectors;
 const { RECORDS_PER_PAGE } = constants;
 
 // Claims History Section on the "Claims" View
@@ -79,18 +80,17 @@ class ClaimsHistorySection extends Component {
     this.props.showModal('CONTACT_CARE_GUIDE');
   }
 
-  search(query) {
+  search(data) {
     const { fetchClaimsList, claimsListDataFrame, paginator } = this.props;
-    const trimmedQuery = query.trim();
+    const trimmedQuery = data.query.trim();
 
     if (trimmedQuery !== claimsListDataFrame.query) {
-      fetchClaimsList({ page: 1, query: trimmedQuery, recordsPerPage: paginator.recordsPerPage });
+      fetchClaimsList({ page: 1, query: trimmedQuery, recordsPerPage: paginator.recordsPerPage, dateFrom: data.dateFrom, dateTo: data.dateTo });
     }
   }
 
   render() {
-    const { claimsList, paginator } = this.props;
-
+    const { claimsList, paginator, pending } = this.props;
     return (
       <LayoutWrapper>
         <SectionBackground>
@@ -105,8 +105,8 @@ class ClaimsHistorySection extends Component {
                 <SearchAndFilterBar
                   bordered
                   search={this.handlers.search}
+                  placeholder="Search Claims"
                   dateButton
-                  filterButton
                 />
               </SearchWrapper>
             </HeaderWrapper>
@@ -114,6 +114,7 @@ class ClaimsHistorySection extends Component {
           <SectionDivider />
           <Container>
             <ClaimsList claims={claimsList} />
+           { pending && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" /> }
           </Container>
         </SectionBackground>
         <PaginationWrapper>
@@ -129,11 +130,14 @@ class ClaimsHistorySection extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  claimsList: getClaimsList(state),
-  claimsListDataFrame: getClaimsListDataFrame(state),
-  token: getToken(state)
-});
+const mapStateToProps = state => {
+  return {
+    pending: getClaimLoading(state),
+    claimsList: getClaimsList(state),
+    claimsListDataFrame: getClaimsListDataFrame(state),
+    token: getToken(state)
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchClaimsList: args => {
@@ -145,8 +149,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
-  const fetchClaimsList = ({ page, query, recordsPerPage }) => {
-    dispatchProps.fetchClaimsList({ page, query, recordsPerPage, token });
+  const fetchClaimsList = ({ page, query, recordsPerPage, dateFrom, dateTo }) => {
+    dispatchProps.fetchClaimsList({ page, query, recordsPerPage, token, dateFrom, dateTo });
   };
 
   return {

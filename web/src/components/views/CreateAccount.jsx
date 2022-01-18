@@ -166,7 +166,7 @@ function CreateAccount({
   const renderRegisterError = () => {
     const message =
       registerError?.result !== undefined && !registerError?.result
-        ? 'An error occured, Please try again.'
+        ? ['An error occured, Please try again.']
         : registerError?.error;
     if (message) {
       return <ErrorMessage message={message} />;
@@ -206,7 +206,7 @@ function CreateAccount({
                   offset={{ top: -5, left: 0 }}
                   type="light"
                 >
-                  Password must be between 4 to 64 characters
+                  Password must be between 8 to 64 characters
                 </StyledTooltip>
               </PasswordHelp>
 
@@ -227,7 +227,7 @@ function CreateAccount({
               name="password"
               id="password"
               tabindex="1"
-              minLength={4}
+              minLength={8}
               maxLength={64}
               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*?[#?!@$%^&*-]).{8,}"
               placeholder="Choose a password."

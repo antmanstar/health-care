@@ -171,7 +171,7 @@ export function fetchCases({
   );
 }
 
-export function fetchClaimsSummary({ id, token, type }) {
+export function fetchClaimsSummary({ id, token, type }) {∫
   return axios.post(
     '/api/v1/Member/GetClaimsSummary',
     {
@@ -196,13 +196,15 @@ export function fetchBenefitCoverages({ token }) {
   });
 }
 
-export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null }) {
+export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null, dateFrom, dateTo }) {
   return axios.post(
     '/api/v1/Member/GetClaimList',
     {
       page,
       records_per_page: recordsPerPage,
-      search_string: query
+      search_string: query,
+      dos_from: dateFrom,
+      dos_to: dateTo
     },
     {
       headers: {

@@ -551,16 +551,22 @@ export const fetchClaimsList = ({
   page = 1,
   query,
   recordsPerPage = 10,
-  token
-}) => ({
-  type: types.CLAIMS_LIST_FETCH,
-  payload: {
-    token,
-    page,
-    recordsPerPage,
-    query
+  token,
+  dateFrom,
+  dateTo
+}) => {
+  return {
+    type: types.CLAIMS_LIST_FETCH,
+    payload: {
+      token,
+      page,
+      recordsPerPage,
+      query,
+      dateFrom,
+      dateTo
+    }
   }
-})
+}
 
 export const fetchEducationalResources = (token) => ({
   type: types.EDUCATIONAL_RESOURCES_FETCH,
@@ -661,8 +667,18 @@ export const fetchNotifications = ({
   token
 }) => ({
   type: types.NOTIFICATIONS_FETCH,
-  payload: { direction, orderBy, page, query, read, recordsPerPage, dateFrom, dateTo, token }
-});
+  payload: {
+    direction,
+    orderBy,
+    page,
+    query,
+    read,
+    recordsPerPage,
+    dateFrom,
+    dateTo,
+    token
+  }
+})
 
 export const fetch2FACode = (email, password) => ({
   type: types.TWO_FACTOR_CODE_FETCH,
@@ -818,7 +834,8 @@ export const verifyEmail = (token) => ({
 export const verifyEmailChallenge = (emailAddress, verificationCode) => ({
   type: types.EMAIL_VERIFY_CHALLENGE,
   payload: {
-    emailAddress, verificationCode
+    emailAddress,
+    verificationCode
   }
 })
 

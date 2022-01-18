@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
+import ClaimDetails from './ClaimDetails';
 
 // MOBILE - Claim Entry in Claims List
 // TODO: What is displayed if no provider / practice data?
@@ -81,27 +82,49 @@ const Button = styled.div`
   }
 `;
 
-const ListClaim = React.memo(({ dateOfService, claimNumber, status, provider }) => (
-  <Wrapper className={status}>
-    <MobileContainer>
-      <SpaceBetween>
-        <DateSent>{dateOfService}</DateSent>
-        <Status className={status.toLowerCase()}>{status}</Status>
-      </SpaceBetween>
-      <Practice>{provider.practice}</Practice>
-      <ProviderName>{provider.name}</ProviderName>
-      <ClaimNumber>{`Claim # ${claimNumber}`}</ClaimNumber>
-    </MobileContainer>
-    <SectionDivider />
-    <Button>
-      <div className="left">
-        <i className="material-icons">description</i>
-        <p>See Claims Details</p>
-      </div>
-      <i className="material-icons">keyboard_arrow_right</i>
-    </Button>
-  </Wrapper>
-));
+const ListClaim = ({ dateOfService, claimNumber, status, provider, claimDetail }) => {
+  const [ visible, setVisible ] = useState(false);
+
+  const toggleClick = () => {
+    setVisible(!visible);
+  }
+
+  return (
+    <Wrapper className={status}>
+      <MobileContainer>
+        <SpaceBetween>
+          <DateSent>{dateOfService}</DateSent>
+          <Status className={status.toLowerCase()}>{status}</Status>
+        </SpaceBetween>
+        <Practice>{provider.practice}</Practice>
+        <ProviderName>{provider.name}</ProviderName>
+        <ClaimNumber>{`Claim # ${claimNumber}`}</ClaimNumber>
+      </MobileContainer>
+      <SectionDivider />
+      <Button onClick={toggleClick}>
+        <div className="left">
+          <i className="material-icons">description</i>
+          <p>{visible ? 'Collapse' : 'See Claims Details'}</p>
+        </div>
+        {visible ? (
+            <i className="material-icons">keyboard_arrow_down</i>
+          ) : (
+            <i className="material-icons">keyboard_arrow_right</i>
+          )}
+      </Button>
+      {
+        visible && (
+          <ClaimDetails 
+          dateOfService={dateOfService} 
+          status={status} 
+          claimNumber={claimNumber}
+          claimDetail={claimDetail}
+          provider={provider}/>
+        )
+      }
+    </Wrapper>
+  )
+};
 
 ListClaim.propTypes = {
   dateOfService: PropTypes.string.isRequired,
@@ -113,4 +136,4 @@ ListClaim.propTypes = {
   }).isRequired
 };
 
-export default ListClaim;
+export default React.memo(ListClaim);

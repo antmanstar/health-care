@@ -150,7 +150,7 @@ class MobileSignIn extends PureComponent {
               </form>
               <GoToRegistration>
                 <RouterLink to="/" onClick={handleClear2FA}>
-                  Start Over
+                  Back To Sign In
                 </RouterLink>
               </GoToRegistration>
             </>

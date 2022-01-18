@@ -107,6 +107,21 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
 `;
 
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 25px 0;
+`;
+
+const EnterCode = styled.div`
+  font-weight: 500;
+  margin-bottom: 12px;
+`;
+
+const WideButton = styled(Button)`
+  width: 200px;
+`;
+
 function SignIn({
   authError,
   handleSubmit,
@@ -150,11 +165,15 @@ function SignIn({
       </Helmet>
       {payload2FA && payload2FA.two_way_factor_challenge_required ? (
         <>
-          <Title>Enter Your Code</Title>
+          <Title>Authenticate your account</Title>
           <SectionDivider />
+          <Body>
+            Please check your phone for the authentication code.
+          </Body>
           <form autoComplete="false" onSubmit={handleTwoFactorSubmit}>
             <input type="hidden" value={payload2FA.two_way_factor_token} name="twoFactorToken" />
             <input type="hidden" value={payload2FA.email_address} name="email" />
+            <EnterCode>Enter Code</EnterCode>
             <Input
               type="text"
               autoComplete="off"
@@ -163,12 +182,12 @@ function SignIn({
             />
             {renderAuthError()}
             <ButtonWrapper>
-              <Button buttonType="submit" value="Finish Sign In" text="Finish Sign In" />
+              <WideButton buttonType="submit" value="Submit" text="Submit" />
             </ButtonWrapper>
           </form>
           <GoToRegistration>
             <RouterLink to="/" onClick={handleClear2FA}>
-              Start Over
+              Back To Sign In
             </RouterLink>
           </GoToRegistration>
         </>
@@ -270,19 +289,26 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedSignIn = connect(mapStateToProps, mapDispatchToProps)(SignIn);
 
+
+
+function getTitle(state) {
+  const title2FA = '2 Factor Authentication';
+  const titleLogin = 'Enter your account credentials to sign in';
+  const payload2FA = getPayload2FA(state);
+
+  return payload2FA && payload2FA.two_way_factor_challenge_required ? title2FA : titleLogin;
+}
+
 const reflection = {
   component: ConnectedSignIn,
   layout: Sparse,
   layoutProps: {
     title: 'Evry Member Portal',
-    subtitle: new Interpolation([
-      'Enter your',
-      state => (successfulRegistration(state) ? ' new' : ''),
-      ' account credentials to sign in.'
-    ])
+    subtitle: new Interpolation([ state => getTitle(state) ])
   },
   route: '/sign-in'
 };
+
 
 export default ConnectedSignIn;
 

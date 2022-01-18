@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Mobile } from '../layouts';
 import defaultTheme from '../../style/themes';
 import { Helmet } from 'react-helmet-async';
 import CheckCircle from '@evry-member-app/assets/images/vector/check-in-circle.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import queryString from 'query-string';
+import { Sparse } from '../layouts';
 
 import { connect } from 'react-redux';
 import actions from '@evry-member-app/shared/store/actions';
-import selectors from '@evry-member-app/shared/store/selectors';
 
 const { MobileContentWrapper } = defaultTheme.components;
 
@@ -20,8 +19,6 @@ const EditedMobileContentWrapper = styled(MobileContentWrapper)`
 const Container = styled.div`
   display: grid;
   justify-content: center;
-  background-color: #F4F4F4;
-  margin-top: 100px;
   grid-template-areas: "check text .";
   grid-template-columns: 1fr auto 1fr;
   column-gap: 50px;
@@ -114,7 +111,7 @@ const EmailVerification = props => {
   return (
     <>
       <Helmet>
-        <title>{reflection.layoutProps.navProps.title} - Evry Health</title>
+        <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <EditedMobileContentWrapper>
         <Container>
@@ -139,32 +136,28 @@ const EmailVerification = props => {
   );
 }
 
-const mapStateToProps = state => ({
-  
-});
+  const mapStateToProps = state => ({
+    
+  });
 
-const mapDispatchToProps = dispatch => ({
-  handleChallenge: (emailAddress, verificationCode) => {
-    dispatch(actions.verifyEmailChallenge(emailAddress, verificationCode));
-  }
-});
+  const mapDispatchToProps = dispatch => ({
+    handleChallenge: (emailAddress, verificationCode) => {
+      dispatch(actions.verifyEmailChallenge(emailAddress, verificationCode));
+    }
+  });
 
-const ConnectedEmailVerification = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EmailVerification);
+  const ConnectedEmailVerification = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(EmailVerification);
+
 
 const reflection = {
   component: ConnectedEmailVerification,
-  layout: Mobile,
+  layout: Sparse,
   layoutProps: {
-    titleWrapperClass: 'none',
-    navProps: {
-      left: 'back',
-      title: 'Email Verification',
-      permanentTitle: true,
-      permanentBg: true
-    }
+    title: 'Evry Member Portal',
+    subtitle: "Email Verified!"
   },
   route: '/email-verification'
 };

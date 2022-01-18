@@ -79,6 +79,16 @@ const userReducer = (state = {}, action) => {
     case types.CLAIMS_LIST_FETCH:
       return {
         ...state,
+        claimsList: { request: { query: action.payload.query }, pending: true }
+      }
+    case types.CLAIMS_LIST_FETCH_SUCCESS:
+      return {
+        ...state,
+        claimsList: { ...state.claimsList, ...action.payload, pending: false }
+      }
+    case types.CLEAR_AUTH:
+      return {
+        ...state,
         claimsList: { request: { query: action.payload.query } }
       }
     case types.CLAIMS_LIST_FETCH_SUCCESS:
@@ -218,9 +228,7 @@ const userReducer = (state = {}, action) => {
         ...state,
         notifications: {
           ...state.notifications,
-          markedQueue: uniq(
-            ...action.payload.ids
-          )
+          markedQueue: uniq(...action.payload.ids)
         }
       }
     case types.NOTIFICATIONS_READ_FETCH_SUCCESS:

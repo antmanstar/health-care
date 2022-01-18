@@ -21,17 +21,9 @@ const { initiatePasswordReset, savePasswordReset, clearAuthError } = actions;
 const { LayoutWrapper, Input, TwoColumnRow, SectionDivider } = defaultTheme.components;
 
 const SmallContainer = styled.div`
-  width: 80%;
-  margin-bottom: 16px;
-  margin-left: 10%;
-  @media ${props => props.theme.device.tablet} {
-    width: 48%;
-    margin-bottom: 0;
-    margin-left: 0;
-    &.center {
-      margin-left: 26%;
-    }
-  }
+  margin-bottom: 0;
+  margin-left: 0;
+  width: 100%;
 
   &:last-child {
     margin-bottom: 0;
@@ -99,6 +91,18 @@ const Copy = styled.p`
   }
 `;
 
+const Body = styled.div`
+  width: 100%;
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 60%;
+  }
+`;
+
+const WideButton = styled(Button)`
+  width: 200px;
+`;
+
 class DesktopPasswordReset extends Component {
   constructor(props) {
     super(props);
@@ -139,23 +143,25 @@ class DesktopPasswordReset extends Component {
 
   renderAuthError() {
     const { authError } = this.props;
-    let authErrorMessage = null;
-    if (authError) {
-        authErrorMessage = <ErrorMessage message={authError} />;
-    }
-    return authErrorMessage;
+
+    return authError ? <ErrorMessage message={authError} /> : null;
   }
 
   render() {
     const { location, authError } = this.props;
     const { initiatePasswordResetSubmission, resetPasswordSubmission, password } = this.state;
     const queryParams = queryString.parse(location.search);
+
     return (
       <LayoutWrapper>
         <Helmet>
           <title>{reflection.layoutProps.title} - Evry Health</title>
         </Helmet>
-        <Title>Password Reset</Title>
+        <Title>Forgot Password?</Title>
+        <Body>
+          After pressing the button below, please check your email for the password reset link.
+          If you haven't got it, you can use the button below to send it again.
+        </Body>
         <SectionDivider />
         {queryParams.token ? (
           <>
@@ -192,7 +198,7 @@ class DesktopPasswordReset extends Component {
               </ButtonWrapper>
             </form>
             {this.renderAuthError()}
-            {resetPasswordSubmission && !authError && (
+            {resetPasswordSubmission && authError && authError.length === 0 && (
               <Copy>
                 Your password has been reset.
                 <RouterLink to="/sign-in">Go back to Sign in.</RouterLink>
@@ -210,28 +216,28 @@ class DesktopPasswordReset extends Component {
                     type="email"
                     name="email"
                     id="email"
-                    placeholder="Email Address"
+                    placeholder="example@domain.com"
                   />
                 </SmallContainer>
               </EditedTwoColumnRow>
               <ButtonWrapper>
-                <Button buttonType="submit" value="Reset" text="Reset" />
+                <WideButton buttonType="submit" value="Send Link" text="Send Link" />
               </ButtonWrapper>
             </form>
             {this.renderAuthError()}
-            {initiatePasswordResetSubmission && !authError && (
+            {initiatePasswordResetSubmission && authError && authError.length === 0 && (
               <Copy>Your email reset has been submitted. Please check your email inbox.</Copy>
             )}
           </>
         )}
         <GoToRegistration>
           <p>
-            Don&apos;t have an account?
-            <RouterLink to="/register">Register a new one.</RouterLink>
+            Don&apos;t have an account yet?
+            <RouterLink to="/register">Register your account</RouterLink>
           </p>
           <p>
-            Or
-            <RouterLink to="/sign-in">Ready to Sign in.</RouterLink>
+            Already have an account?
+            <RouterLink to="/sign-in">Sign in</RouterLink>
           </p>
         </GoToRegistration>
       </LayoutWrapper>
@@ -284,8 +290,8 @@ const reflection = {
   component: ConnectedPasswordReset,
   layout: Sparse,
   layoutProps: {
-    title: 'Password Reset',
-    subtitle: "Enter your email address and we'll send you a link to reset your password."
+    title: 'Evry Member Portal',
+    subtitle: "Reset your password."
   },
   route: '/password-reset'
 };

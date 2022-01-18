@@ -65,18 +65,8 @@ const SpanWrapper = styled(MobileContainer)`
   }
 `;
 
-const ClaimDetails = React.memo(({ dateOfService, status, claimNumber, provider }) => (
+const ClaimDetails = React.memo(({ dateOfService, status, claimNumber, provider, claimDetail }) => (
   <>
-    <MobileSectionBackground>
-      <MobileContainer>
-        <EditedSpaceBetween>
-          <DateSent>{dateOfService}</DateSent>
-          <Status className={status}>{status}</Status>
-        </EditedSpaceBetween>
-        <ProviderTitle>{provider.practice}</ProviderTitle>
-        <ClaimNumber>{`Claim # ${claimNumber}`}</ClaimNumber>
-      </MobileContainer>
-    </MobileSectionBackground>
     <MobileSectionBackground>
       <MobileContainer>
         <ProviderTitle>{provider.name}</ProviderTitle>
@@ -93,7 +83,12 @@ const ClaimDetails = React.memo(({ dateOfService, status, claimNumber, provider 
       </MobileContainer>
     </MobileSectionBackground>
     <MobileSectionBackground>
-      <BenefitBreakdown />
+      <BenefitBreakdown 
+        totalBilled={claimDetail.total_billed}
+        discounts={claimDetail.total_adjustment}
+        payment={claimDetail.total_payment_to_provider}
+        owed={claimDetail.total_member_responsibility}
+      />
     </MobileSectionBackground>
     <MobileSectionBackground>
       <SpanWrapper>
