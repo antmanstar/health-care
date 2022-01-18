@@ -89,6 +89,7 @@ const GoToRegistration = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 80px;
+  align-items: center;
 
   p {
     margin: 0;

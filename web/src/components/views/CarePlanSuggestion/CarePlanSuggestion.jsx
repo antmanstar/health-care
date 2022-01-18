@@ -28,6 +28,26 @@ const Wrapper = styled.div`
   width: 960px;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 960px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 960px;
+  }
 `;
 
 // ChooseCarePlan
@@ -48,12 +68,18 @@ class CarePlanSuggestion extends Component {
   checkOnboardingStatus() {
     const { isOnboardingComplete } = this.props;
     if (isOnboardingComplete) {
-      history.push('/')
+      history.push('/');
     }
   }
 
   render() {
-    const { handleAccept, handleDecline, selectedCarePlanId, suggestedCarePlanId, isAssigningCarePlan } = this.props;
+    const {
+      handleAccept,
+      handleDecline,
+      selectedCarePlanId,
+      suggestedCarePlanId,
+      isAssigningCarePlan
+    } = this.props;
 
     const carePlanSelection = carePlans.find(carePlan => carePlan.id === selectedCarePlanId);
     const carePlanSuggestion = carePlans.find(carePlan => carePlan.id === suggestedCarePlanId);
@@ -71,9 +97,7 @@ class CarePlanSuggestion extends Component {
             carePlanSelection={carePlanSelection}
             carePlanSuggestion={carePlanSuggestion}
           />
-          {
-            isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" />
-          }
+          {isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </Wrapper>
       </>
     );
@@ -89,8 +113,8 @@ CarePlanSuggestion.propTypes = {
 };
 
 CarePlanSuggestion.defaultProps = {
-  handleAccept: () => { },
-  handleDecline: () => { },
+  handleAccept: () => {},
+  handleDecline: () => {},
   selectedCarePlanId: null,
   successfulCarePlanAssignment: false,
   suggestedCarePlanId: null,

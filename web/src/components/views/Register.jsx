@@ -42,10 +42,12 @@ const Wrapper = styled.div`
   }
 
   @media ${defaultTheme.device.desktopXL} {
-    max-width: 1024px;
+    border-top: none;
   }
 `;
-const FormWrapper = styled.div``;
+const FormWrapper = styled.div`
+  width: 100%;
+`;
 
 const SmallContainer = styled.div`
   display: flex;
@@ -134,16 +136,10 @@ const BottomSectionDivider = styled.div`
   height: fit-content;
   width: 100%;
 `;
-const DividerWrapper = styled.div`
-  @media ${props => props.theme.device.tabletXL} {
-    display: none;
-  }
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 20px;
 `;
-const BottomText = styled.p`
-  @media ${props => props.theme.device.tabletXL} {
-    font-size: 20px;
-  }
-`;
+
 function Register({
   authError,
   isVerifiedRegisteringUser,
@@ -179,14 +175,18 @@ function Register({
   };
 
   const renderVerifyMembershipError = () => {
-    const message =
+    let message =
       verifyMembershipError?.result !== undefined && !verifyMembershipError?.result
         ? 'Invalid combination of Member ID and social security number.'
         : verifyMembershipError?.error;
     if (message) {
-      return <ErrorMessage message={message} />;
+      message = (
+        <ErrorMessageWrapper>
+          <ErrorMessage message={message} />
+        </ErrorMessageWrapper>
+      );
     }
-    return null;
+    return message;
   };
 
   return (

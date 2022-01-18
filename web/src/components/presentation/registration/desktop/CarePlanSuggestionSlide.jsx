@@ -12,6 +12,18 @@ const Wrapper = styled.div`
   width: 960px;
   margin: 0 auto 16px;
   text-align: center;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    width: 100%;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: 100%;
+  }
 `;
 
 const Options = styled.div`
@@ -19,9 +31,60 @@ const Options = styled.div`
   justify-content: space-around;
   align-items: center;
   margin-bottom: 32px;
+
+  @media ${props => props.theme.device.mobile} {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    flex-direction: unset;
+    flex-wrap: unset;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    flex-direction: unset;
+    flex-wrap: unset;
+  }
 `;
 
-const BigArrow = props => <img {...props} />;
+const BigArrow = styled.img`
+  @media ${props => props.theme.device.mobile} {
+    margin: 40px;
+    transform: rotate(90deg);
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    margin: 40px;
+    transform: rotate(90deg);
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    margin: 40px;
+    transform: rotate(90deg);
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    transform: unset;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    transform: unset;
+  }
+`;
+{
+  /* <img {...props} />; */
+}
 
 const Information = styled.div`
   margin-bottom: 32px;
@@ -57,15 +120,23 @@ const CarePlanSuggestionSlide = ({
 }) => (
   <Wrapper>
     <Options>
-      {carePlanSelection.title === carePlanSuggestion.title ?
-        <CarePlanBoxBig title={carePlanSuggestion.title} icon={carePlanSuggestion.icon} suggested={true} />
-        :
+      {carePlanSelection.title === carePlanSuggestion.title ? (
+        <CarePlanBoxBig
+          title={carePlanSuggestion.title}
+          icon={carePlanSuggestion.icon}
+          suggested={true}
+        />
+      ) : (
         <>
           <CarePlanBoxBig title={carePlanSelection.title} icon={carePlanSelection.icon} />
-          <BigArrow src={images["big_right_arrow"]} />
-          <CarePlanBoxBig title={carePlanSuggestion.title} icon={carePlanSuggestion.icon} suggested={true} />
+          <BigArrow src={images['big_right_arrow']} />
+          <CarePlanBoxBig
+            title={carePlanSuggestion.title}
+            icon={carePlanSuggestion.icon}
+            suggested={true}
+          />
         </>
-      }
+      )}
     </Options>
     <Information>
       <Title>{carePlanSuggestion.title}</Title>
@@ -90,8 +161,8 @@ CarePlanSuggestionSlide.propTypes = {
 CarePlanSuggestionSlide.defaultProps = {
   carePlanSelection: {},
   carePlanSuggestion: {},
-  handleAccept: () => { },
-  handleDecline: () => { }
+  handleAccept: () => {},
+  handleDecline: () => {}
 };
 
 export default CarePlanSuggestionSlide;
