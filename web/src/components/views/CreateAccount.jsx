@@ -138,7 +138,7 @@ function CreateAccount({
 
   useEffect(() => {
     if (successfulRegistration) {
-      history.push('/sign-in');
+      history.push('/register-success');
     }
     if (!isVerifiedRegisteringUser) {
       history.push('/register');
