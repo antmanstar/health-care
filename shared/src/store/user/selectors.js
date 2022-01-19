@@ -74,7 +74,7 @@ export const isSavingQuestionnaire = (state) =>
   get(state, ['user', 'isSavingQuestionnaire'])
 
 export const isAssigningCarePlan = (state) =>
-  get(state, ['user', 'isAssigningCarePlan'])
+  get(state, ['user', 'onboarding', 'isAssigningCarePlan'])
 
 export const getToken = (state) => get(getAuth(state), ['auth_token'])
 

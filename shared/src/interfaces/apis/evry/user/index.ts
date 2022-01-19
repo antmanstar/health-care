@@ -1,4 +1,4 @@
-import { axios } from '..';
+import { axios } from '..'
 
 type TokenOnly = { token: string }
 
@@ -18,11 +18,11 @@ export function assignCarePlan({ from, id, replace, to, token }) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function createCase({ files, metadata, token, type }) {
-  const data = new FormData();
+  const data = new FormData()
 
   data.append(
     'case_info',
@@ -30,18 +30,18 @@ export function createCase({ files, metadata, token, type }) {
       case_type: type,
       metadata
     })
-  );
+  )
 
-  files.forEach(file => {
-    data.append('files', file);
-  });
+  files.forEach((file) => {
+    data.append('files', file)
+  })
 
   return axios.post('/api/v1/Member/CreateCase', data, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function checkEmailAddress({ email }) {
@@ -53,7 +53,7 @@ export function checkEmailAddress({ email }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function fetchAccountInfo({ token }: TokenOnly) {
@@ -62,7 +62,7 @@ export function fetchAccountInfo({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchAnonymousTest({ token }: TokenOnly) {
@@ -71,7 +71,7 @@ export function fetchAnonymousTest({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchAuthorizationRequiredTest({ token }: TokenOnly) {
@@ -80,7 +80,7 @@ export function fetchAuthorizationRequiredTest({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchAvailableLanguages({ token }: TokenOnly) {
@@ -89,7 +89,7 @@ export function fetchAvailableLanguages({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchAvailableSpecialties({ token }: TokenOnly) {
@@ -98,7 +98,7 @@ export function fetchAvailableSpecialties({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchAccumulators({ token, id, date, type }) {
@@ -115,7 +115,7 @@ export function fetchAccumulators({ token, id, date, type }) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchBasicInfo({ token }: TokenOnly) {
@@ -124,7 +124,7 @@ export function fetchBasicInfo({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchCareGuideInfo({ token }: TokenOnly) {
@@ -133,7 +133,7 @@ export function fetchCareGuideInfo({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchCarePlan({ token }: TokenOnly) {
@@ -142,7 +142,7 @@ export function fetchCarePlan({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchCases({
@@ -172,7 +172,7 @@ export function fetchCases({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchClaimsSummary({ id, token, type }) {
@@ -188,7 +188,7 @@ export function fetchClaimsSummary({ id, token, type }) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchBenefitCoverages({ token }: TokenOnly) {
@@ -197,10 +197,17 @@ export function fetchBenefitCoverages({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
-export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null, dateFrom = null, dateTo = null }) {
+export function fetchClaimsList({
+  token,
+  page = 1,
+  recordsPerPage = 10,
+  query = null,
+  dateFrom = null,
+  dateTo = null
+}) {
   return axios.post(
     '/api/v1/Member/GetClaimList',
     {
@@ -216,7 +223,7 @@ export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = 
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchClaimDetail({ token, claimId }) {
@@ -231,7 +238,7 @@ export function fetchClaimDetail({ token, claimId }) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchEducationalResources({ token }: TokenOnly) {
@@ -240,7 +247,7 @@ export function fetchEducationalResources({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchEvryContactInfo({ token }: TokenOnly) {
@@ -249,7 +256,7 @@ export function fetchEvryContactInfo({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchFamilyMemberCOB({ token }: TokenOnly) {
@@ -258,7 +265,7 @@ export function fetchFamilyMemberCOB({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchFamilyMemberCOBSummary({ token }: TokenOnly) {
@@ -267,7 +274,7 @@ export function fetchFamilyMemberCOBSummary({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchFAQs({
@@ -295,7 +302,7 @@ export function fetchFAQs({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchSupportArticles({
@@ -323,7 +330,7 @@ export function fetchSupportArticles({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchFiles({
@@ -353,7 +360,7 @@ export function fetchFiles({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchFileContent({ token, id }) {
@@ -366,7 +373,7 @@ export function fetchFileContent({ token, id }) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchMembershipSummary({ token }: TokenOnly) {
@@ -375,7 +382,7 @@ export function fetchMembershipSummary({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchNotifications({
@@ -407,7 +414,7 @@ export function fetchNotifications({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function fetchRewardBenefits({ token }: TokenOnly) {
@@ -416,7 +423,7 @@ export function fetchRewardBenefits({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchRewardCategories({ token }: TokenOnly) {
@@ -425,7 +432,7 @@ export function fetchRewardCategories({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetchWellnessGoals({ token }: TokenOnly) {
@@ -434,7 +441,7 @@ export function fetchWellnessGoals({ token }: TokenOnly) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function fetch2FACode({ email, password }) {
@@ -449,7 +456,7 @@ export function fetch2FACode({ email, password }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function initiateAuthentication({ email, password }) {
@@ -464,7 +471,7 @@ export function initiateAuthentication({ email, password }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function initiatePasswordReset({ email }) {
@@ -478,7 +485,7 @@ export function initiatePasswordReset({ email }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function markNotificationsAsRead({ ids = [], token }) {
@@ -493,10 +500,19 @@ export function markNotificationsAsRead({ ids = [], token }) {
         }
       }
     )
-    .then(response => ({ ...response, data: { ...(response?.data as object || {}), ids } }));
+    .then((response) => ({
+      ...response,
+      data: { ...((response?.data as object) || {}), ids }
+    }))
 }
 
-export function register({ eligibilityId, email, last4SSN, password, passwordConfirm }) {
+export function register({
+  eligibilityId,
+  email,
+  last4SSN,
+  password,
+  passwordConfirm
+}) {
   return axios.post(
     '/api/v1/Member/UserRegistration',
     {
@@ -511,20 +527,20 @@ export function register({ eligibilityId, email, last4SSN, password, passwordCon
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function getLastQuestionnaireOrCreate({ id, token }) {
   return axios.post(
     '/api/v1/Member/GetLastUserQuestionnaireAndCreateIfNotExist',
-    { id },
+    { id: id.toString() },
     {
       headers: {
         'Content-Type': 'application/json-patch+json',
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function saveFamilyMemberCOB({
@@ -555,7 +571,7 @@ export function saveFamilyMemberCOB({
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function savePasswordReset({ email, password, passwordConfirm, token }) {
@@ -572,7 +588,7 @@ export function savePasswordReset({ email, password, passwordConfirm, token }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function saveQuestionnaire({ questionnaire, token }) {
@@ -581,7 +597,7 @@ export function saveQuestionnaire({ questionnaire, token }) {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  });
+  })
 }
 
 export function signOut({ token }: TokenOnly) {
@@ -594,15 +610,20 @@ export function signOut({ token }: TokenOnly) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
-export function uploadFiles({ token, classification = '22', documentType = '220', files }) {
-  const formData = new FormData();
+export function uploadFiles({
+  token,
+  classification = '22',
+  documentType = '220',
+  files
+}) {
+  const formData = new FormData()
 
-  files.forEach(file => {
-    formData.append('files', file);
-  });
+  files.forEach((file) => {
+    formData.append('files', file)
+  })
 
   return axios.post(
     `/api/v1/Member/UploadFile?classification=${classification}&document_type=${documentType}`,
@@ -613,7 +634,7 @@ export function uploadFiles({ token, classification = '22', documentType = '220'
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function verify2FACode({ email, token, code }) {
@@ -629,7 +650,7 @@ export function verify2FACode({ email, token, code }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function verifyEligibilityIdAndSSN({ eligibilityId, last4SSN }) {
@@ -644,7 +665,7 @@ export function verifyEligibilityIdAndSSN({ eligibilityId, last4SSN }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }
 
 export function verifyEmail({ token }: TokenOnly) {
@@ -657,7 +678,7 @@ export function verifyEmail({ token }: TokenOnly) {
         Authorization: `Bearer ${token}`
       }
     }
-  );
+  )
 }
 
 export function verifyEmailChallenge({ emailAddress, verificationCode }) {
@@ -672,5 +693,5 @@ export function verifyEmailChallenge({ emailAddress, verificationCode }) {
         'Content-Type': 'application/json-patch+json'
       }
     }
-  );
+  )
 }

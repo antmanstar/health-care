@@ -206,7 +206,8 @@ function CreateAccount({
                   offset={{ top: -5, left: 0 }}
                   type="light"
                 >
-                  Password must be between 8 to 64 characters
+                  Password must contain at least one number, one lower case letter, one upper case
+                  letter, one special character and minimum length of 8.
                 </StyledTooltip>
               </PasswordHelp>
 

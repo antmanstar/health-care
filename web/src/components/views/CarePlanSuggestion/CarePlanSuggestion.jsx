@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -52,56 +52,56 @@ const Wrapper = styled.div`
 
 // ChooseCarePlan
 
-class CarePlanSuggestion extends Component {
-  componentDidUpdate() {
-    const { successfulCarePlanAssignment } = this.props;
+function CarePlanSuggestion({
+  selectedCarePlanId,
+  successfulCarePlanAssignment,
+  suggestedCarePlanId,
+  isAssigningCarePlan,
+  isOnboardingComplete,
+  token,
+  assignCarePlan,
+  handleAccept,
+  handleDecline
+}) {
+  const [carePlanSelection, setCarePlanSelection] = useState(
+    carePlans.find(carePlan => carePlan.id === selectedCarePlanId)
+  );
+  const [carePlanSuggestion, setCarePlanSuggestion] = useState(
+    carePlans.find(carePlan => carePlan.id === suggestedCarePlanId)
+  );
 
+  useEffect(() => {
+    checkOnboardingStatus();
+  }, []);
+  useEffect(() => {
     if (successfulCarePlanAssignment) {
       history.push('/plan');
     }
-  }
+  }, [successfulCarePlanAssignment]);
 
-  componentDidMount() {
-    this.checkOnboardingStatus();
-  }
-
-  checkOnboardingStatus() {
-    const { isOnboardingComplete } = this.props;
+  const checkOnboardingStatus = () => {
     if (isOnboardingComplete) {
       history.push('/');
     }
-  }
+  };
 
-  render() {
-    const {
-      handleAccept,
-      handleDecline,
-      selectedCarePlanId,
-      suggestedCarePlanId,
-      isAssigningCarePlan
-    } = this.props;
-
-    const carePlanSelection = carePlans.find(carePlan => carePlan.id === selectedCarePlanId);
-    const carePlanSuggestion = carePlans.find(carePlan => carePlan.id === suggestedCarePlanId);
-
-    return (
-      <>
-        <Helmet>
-          <title>{reflection.layoutProps.title} - Evry Health</title>
-        </Helmet>
-        <OnboardingProgressBar progressStep={4} />
-        <Wrapper>
-          <CarePlanSuggestionSlide
-            handleAccept={handleAccept}
-            handleDecline={handleDecline}
-            carePlanSelection={carePlanSelection}
-            carePlanSuggestion={carePlanSuggestion}
-          />
-          {isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-        </Wrapper>
-      </>
-    );
-  }
+  return (
+    <>
+      <Helmet>
+        <title>{reflection.layoutProps.title} - Evry Health</title>
+      </Helmet>
+      <OnboardingProgressBar progressStep={4} />
+      <Wrapper>
+        <CarePlanSuggestionSlide
+          handleAccept={handleAccept}
+          handleDecline={handleDecline}
+          carePlanSelection={carePlanSelection}
+          carePlanSuggestion={carePlanSuggestion}
+        />
+        {isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      </Wrapper>
+    </>
+  );
 }
 
 CarePlanSuggestion.propTypes = {

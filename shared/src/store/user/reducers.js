@@ -15,9 +15,9 @@ const userReducer = (state = {}, action) => {
         ...state,
         onboarding: {
           ...state.onboarding,
-          assignCarePlan: action.payload
-        },
-        isAssigningCarePlan: true
+          assignCarePlan: action.payload,
+          isAssigningCarePlan: true
+        }
       }
     case types.ASSIGN_CARE_PLAN_SUCCESS:
       return {
