@@ -150,7 +150,7 @@ export const createCase = ({ files = [], metadata, token, type }) => ({
   }
 })
 
-export const createClaimFeedbackCase = ({ claimNumber, files, rate, token }) =>
+export const createClaimFeedbackCase = ({ files, claimNumber, rate, comment, token }) =>
   createCase({
     files,
     metadata: [
@@ -162,6 +162,11 @@ export const createClaimFeedbackCase = ({ claimNumber, files, rate, token }) =>
       {
         name: 'rate',
         value: rate,
+        value_type: TEXT
+      },
+      {
+        name: 'comment',
+        value: comment,
         value_type: TEXT
       }
     ],

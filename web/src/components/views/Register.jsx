@@ -209,8 +209,8 @@ function Register({
             <SmallContainer>
               <Label htmlFor="memberId">Enter your Member ID.</Label>
               <InputInstruction>
-                You can find you Member ID on your Membership Card or in your Evry Benefits
-                Guidebook.
+                You can find your Member ID on the back of your Membership Card. Please note this is
+                different than the Subscriber ID on the front of your card.
               </InputInstruction>
               <Input
                 type="text"

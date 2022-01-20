@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Sparse } from '../layouts';
@@ -25,75 +25,57 @@ const Wrapper = styled.div`
   padding: 16px 0 0 0;
   box-sizing: border-box;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
-
   @media ${defaultTheme.device.tablet} {
     border-top: none;
   }
-
   @media ${defaultTheme.device.desktopXL} {
     max-width: 1024px;
   }
 `;
-class Onboarding extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentStep: 1,
-      maxSteps: 4
-    };
-  }
 
-  componentDidMount() {
+const Onboarding = ({ isOnboardingComplete }) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const maxSteps = 4;
+
+  useEffect(() => {
     console.log('mounting');
-    this.checkOnboardingStatus();
-  }
+    checkOnboardingStatus();
+  }, [isOnboardingComplete]);
 
-  checkOnboardingStatus() {
-    const { isOnboardingComplete } = this.props;
+  const checkOnboardingStatus = () => {
     if (isOnboardingComplete) {
       history.push('/');
     }
-  }
-
-  handleStepBackward = () => {
-    const decrementStep = () => {
-      const { currentStep } = this.state;
-      return currentStep - 1;
-    };
-    this.setState({ currentStep: decrementStep() });
   };
 
-  handleStepForward = () => {
-    const { currentStep, maxSteps } = this.state;
-    const incrementStep = () => currentStep + 1;
+  const handleStepBackward = () => {
+    setCurrentStep(currentStep - 1);
+  };
 
+  const handleStepForward = () => {
     if (currentStep === maxSteps) {
       history.push('/choose-a-care-plan');
     } else {
-      this.setState({ currentStep: incrementStep() });
+      setCurrentStep(currentStep + 1);
     }
   };
 
-  render() {
-    const { currentStep, maxSteps } = this.state;
-
-    return (
-      <Wrapper>
-        <Helmet>
-          <title>Onboarding - Evry Health</title>
-        </Helmet>
-        <OnboardingProgressBar progressStep={1} />
-        <OnboardingSlide slide={currentStep} />
-        <OnboardingControls
-          currentStep={currentStep}
-          maxSteps={maxSteps}
-          handleNextFunction={this.handleStepForward}
-          handlePrevFunction={this.handleStepBackward}
-        />
-      </Wrapper>
-    );
-  }
-}
+  return (
+    <Wrapper>
+      <Helmet>
+        <title>Onboarding - Evry Health</title>
+      </Helmet>
+      <OnboardingProgressBar progressStep={1} />
+      <OnboardingSlide slide={currentStep} />
+      <OnboardingControls
+        currentStep={currentStep}
+        maxSteps={maxSteps}
+        handleNextFunction={handleStepForward}
+        handlePrevFunction={handleStepBackward}
+      />
+    </Wrapper>
+  );
+};
 
 Onboarding.propTypes = {
   isOnboardingComplete: PropTypes.bool

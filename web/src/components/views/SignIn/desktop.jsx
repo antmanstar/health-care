@@ -144,7 +144,7 @@ function SignIn({
     } else if (authError && authError.data) {
       handleClearAuthError();
     }
-  }, []);
+  }, [isAuthenticated, hasBasicInfo, isOnboardingComplete]);
 
   const renderAuthError = () => {
     let authErrorMessage = null;
@@ -158,6 +158,14 @@ function SignIn({
     return authErrorMessage;
   };
 
+  const [isSubmitting2FA, setIsSubmitting2FA] = useState(false);
+
+  function submit2FA(e) {
+    setIsSubmitting2FA(true);
+
+    handleTwoFactorSubmit(e);
+  }
+
   return (
     <LayoutWrapper>
       <Helmet>
@@ -167,10 +175,8 @@ function SignIn({
         <>
           <Title>Authenticate your account</Title>
           <SectionDivider />
-          <Body>
-            Please check your phone for the authentication code.
-          </Body>
-          <form autoComplete="false" onSubmit={handleTwoFactorSubmit}>
+          <Body>Please check your phone for the authentication code.</Body>
+          <form autoComplete="false" onSubmit={submit2FA}>
             <input type="hidden" value={payload2FA.two_way_factor_token} name="twoFactorToken" />
             <input type="hidden" value={payload2FA.email_address} name="email" />
             <EnterCode>Enter Code</EnterCode>
@@ -190,6 +196,7 @@ function SignIn({
               Back To Sign In
             </RouterLink>
           </GoToRegistration>
+          {isSubmitting2FA && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </>
       ) : (
         <>
@@ -289,8 +296,6 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedSignIn = connect(mapStateToProps, mapDispatchToProps)(SignIn);
 
-
-
 function getTitle(state) {
   const title2FA = '2 Factor Authentication';
   const titleLogin = 'Enter your account credentials to sign in';
@@ -304,11 +309,10 @@ const reflection = {
   layout: Sparse,
   layoutProps: {
     title: 'Evry Member Portal',
-    subtitle: new Interpolation([ state => getTitle(state) ])
+    subtitle: new Interpolation([state => getTitle(state)])
   },
   route: '/sign-in'
 };
-
 
 export default ConnectedSignIn;
 

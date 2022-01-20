@@ -22,6 +22,19 @@ const Wrapper = styled.div`
   align-items: center;
   height: 64px;
   padding: 0 16px;
+
+  background: ${props => props.theme.gradients.main};
+  z-index: 1000;
+
+  @media ${props => props.theme.device.mobile} {
+    z-index: 1;
+    background: linear-gradient(90deg, #02283c, #022f48);
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    z-index: unset;
+    background: unset;
+  }
 `;
 
 const Logo = styled.img`

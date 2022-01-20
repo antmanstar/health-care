@@ -352,7 +352,7 @@ Claim.propTypes = {
     name: PropTypes.string.isRequired,
     practice: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
-    phoneNumber: PropTypes.string.isRequired
+    phoneNumber: PropTypes.string
   }).isRequired,
   eobUrl: PropTypes.string.isRequired,
   showModal: PropTypes.func.isRequired,

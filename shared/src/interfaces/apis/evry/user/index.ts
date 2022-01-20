@@ -21,27 +21,20 @@ export function assignCarePlan({ from, id, replace, to, token }) {
   )
 }
 
-export function createCase({ files, metadata, token, type }) {
-  const data = new FormData()
-
-  data.append(
-    'case_info',
-    JSON.stringify({
+export function createCase({ metadata, token, type }) {
+  return axios.post(
+    '/api/v1/Member/CreateCase',
+    {
       case_type: type,
       metadata
-    })
-  )
-
-  files.forEach((file) => {
-    data.append('files', file)
-  })
-
-  return axios.post('/api/v1/Member/CreateCase', data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: `Bearer ${token}`
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
     }
-  })
+  )
 }
 
 export function checkEmailAddress({ email }) {

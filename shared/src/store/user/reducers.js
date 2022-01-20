@@ -2,7 +2,11 @@
 import { get, uniq } from 'lodash'
 import * as types from './types'
 
-const userReducer = (state = {}, action) => {
+const initialState = {
+  sendingFeedback: true
+}
+
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.ACCOUNT_INFO_FETCH_SUCCESS:
       return { ...state, accountInfo: action.payload }
@@ -108,10 +112,16 @@ const userReducer = (state = {}, action) => {
       return { ...state, auth: {} }
     case types.CLEAR_2FA:
       return { ...state, payload2FA: {}, auth: {} }
+    case types.CREATE_CASE:
+      return { ...state }
     case types.CREATE_CASE_SUCCESS:
-      return { ...state, createCase: action.payload }
+      return { ...state, createCase: action.payload, sendingFeedback: true }
     case types.CREATE_CASE_FAILURE:
-      return { ...state, createCase: { error: action.error } }
+      return {
+        ...state,
+        createCase: { error: action.error },
+        sendingFeedback: false
+      }
     case types.EVRY_CONTACT_FETCH_SUCCESS:
       return { ...state, evryContactInfo: action.payload }
     case types.EDUCATIONAL_RESOURCES_FETCH_SUCCESS:
@@ -274,13 +284,23 @@ const userReducer = (state = {}, action) => {
         }
       }
     case types.REGISTER_SUCCESS:
-      return {
-        ...state,
-        register: {
-          ...action.payload,
-          isRegisteringElegibility: false
-        }
-      }
+      return Object.assign(
+        {
+          ...state,
+          register: {
+            result: true
+          }
+        },
+        action.payload.two_way_factor_challenge_required
+          ? {
+              payload2FA: action.payload
+            }
+          : {
+              isSigningIn: false,
+              isSignedIn: true,
+              auth: action.payload
+            }
+      )
     case types.REGISTER_FAILURE:
       return {
         ...state,
