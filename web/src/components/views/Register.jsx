@@ -138,6 +138,7 @@ const BottomSectionDivider = styled.div`
 `;
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
+  width: 100%;
 `;
 const DividerWrapper = styled.div`
   @media ${props => props.theme.device.tabletXL} {
