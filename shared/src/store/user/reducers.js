@@ -3,7 +3,7 @@ import { get, uniq } from 'lodash'
 import * as types from './types'
 
 const initialState = {
-  sendingFeedback: true
+  sendingFeedback: false
 }
 
 const userReducer = (state = initialState, action) => {
@@ -275,6 +275,20 @@ const userReducer = (state = initialState, action) => {
           data: [...action.payload.data],
           pending: false
         }
+      }
+    case types.EMAIL_VERIFY_CHALLENGE_SUCCESS:
+      return {
+        ...state,
+        basicInfo: {
+          ...state.basicInfo,
+          email_verified: true
+        },
+        emailVerificationChallengeStatus: "success"
+      }
+    case types.EMAIL_VERIFY_CHALLENGE_FAILURE:
+      return {
+        ...state,
+        emailVerificationChallengeStatus: "failure"
       }
     case types.REGISTER:
       return {

@@ -174,6 +174,8 @@ export const getVerifyMembershipError = (state) =>
   get(state, ['user', 'registering'])
 
 export const getPayload2FA = (state) => get(state, ['user', 'payload2FA'])
+  
+export const getEmailVerificationChallengeStatus = (state) => get(state, ['user', 'emailVerificationChallengeStatus']);
 
 export const getMemberName = (state, baseGetter) => ({
   first: getFirstName(state, baseGetter),

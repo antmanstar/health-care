@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
@@ -32,7 +32,6 @@ const SubmitClaimFeedbackModal = ({
   const [ claimFeedback, setClaimFeedback ] = useState({ feedbackChoice: modalData.feedbackChoice, message: '' })
   const { feedbackChoice, message } = claimFeedback;
 
- 
 
   const handleChange = event => {
     setClaimFeedback({...claimFeedback, message: event.target.value})
@@ -51,6 +50,7 @@ const SubmitClaimFeedbackModal = ({
   const handleClick = choice => {
     setClaimFeedback({ ...claimFeedback, feedbackChoice: choice })
   }
+
 
   return (
     <>

@@ -104,7 +104,7 @@ const EmailVerificationSent = props => {
             <Header>Email Verification</Header>
             <Separator />
             <Body>
-              After pressing the button below, please check your email for the email verification link.
+              Check your email for a link to verify your account.
               If you haven't got it, you can use the button below to send it again.
             </Body>
             <Separator />

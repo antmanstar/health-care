@@ -71,7 +71,9 @@ const Status = styled.h4`
   font-size: 16px;
   text-transform: uppercase;
   color: ${props =>
-    props.status === 'closed'
+    props.status === 'approved'
+      ? props.theme.colors.roles.success
+      : props.status === 'closed'
       ? props.theme.colors.roles.success
       : props.theme.colors.shades.darkGray};
 `;
@@ -300,7 +302,7 @@ class Claim extends Component {
                       })
                     }
                   >
-                    <img src={images["feedback-positive"]} alt="positive response" />
+                    <img src={images['feedback-positive']} alt="positive response" />
                   </FeedbackButton>
                   <FeedbackButton
                     onClick={() =>
@@ -310,7 +312,7 @@ class Claim extends Component {
                       })
                     }
                   >
-                    <img src={images["feedback-neutral"]} alt="neutral response" />
+                    <img src={images['feedback-neutral']} alt="neutral response" />
                   </FeedbackButton>
                   <FeedbackButton
                     onClick={() =>
@@ -320,7 +322,7 @@ class Claim extends Component {
                       })
                     }
                   >
-                    <img src={images["feedback-negative"]} alt="negative response" />
+                    <img src={images['feedback-negative']} alt="negative response" />
                   </FeedbackButton>
                 </SubmitFeedback>
                 <SmallButton
@@ -373,7 +375,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Claim);
+export default connect(null, mapDispatchToProps)(Claim);

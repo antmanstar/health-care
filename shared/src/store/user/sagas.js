@@ -341,13 +341,9 @@ function* successfulAuthWorkerSaga(action) {
       payload: { token: action.payload.auth_token }
     })
     yield take(types.BASIC_INFO_FETCH_SUCCESS)
-    const onboardingIsIncomplete = !(yield select(isOnboardingComplete))
-    const history = yield getContext('history')
-    if (onboardingIsIncomplete) {
-      yield history.push('/onboarding')
-    } else {
-      yield history.push('/')
-    }
+
+    const history = yield getContext('history');
+    yield history.push('/');
   }
 }
 
