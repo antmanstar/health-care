@@ -9,7 +9,7 @@ import images from '../../../../utils/images';
 // This is suggesting a new care plan based on questionnaire during onboarding/registration
 
 const Wrapper = styled.div`
-  width: 960px;
+  width: 100%;
   margin: 0 auto 16px;
   text-align: center;
 
@@ -24,6 +24,14 @@ const Wrapper = styled.div`
   @media ${props => props.theme.device.tabletXL} {
     width: 100%;
   }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 960px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 960px;
+  }
 `;
 
 const Options = styled.div`
@@ -31,6 +39,8 @@ const Options = styled.div`
   justify-content: space-around;
   align-items: center;
   margin-bottom: 32px;
+  flex-direction: column;
+  flex-wrap: wrap;
 
   @media ${props => props.theme.device.mobile} {
     flex-direction: column;
@@ -59,6 +69,8 @@ const Options = styled.div`
 `;
 
 const BigArrow = styled.img`
+  margin: 40px;
+  transform: rotate(90deg);
   @media ${props => props.theme.device.mobile} {
     margin: 40px;
     transform: rotate(90deg);

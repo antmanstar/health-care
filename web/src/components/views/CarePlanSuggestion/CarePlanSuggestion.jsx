@@ -25,7 +25,7 @@ const {
 
 const Wrapper = styled.div`
   margin: 40px auto 80px;
-  width: 960px;
+  width: 100%;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
 
@@ -71,13 +71,13 @@ const CarePlanSuggestion = ({
   );
 
   useEffect(() => {
-    // checkOnboardingStatus();
+    checkOnboardingStatus();
   }, []);
 
   useEffect(() => {
-    // if (successfulCarePlanAssignment) {
-    //   history.push('/plan');
-    // }
+    if (successfulCarePlanAssignment) {
+      history.push('/plan');
+    }
   }, [successfulCarePlanAssignment]);
 
   const checkOnboardingStatus = () => {
