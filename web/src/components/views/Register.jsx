@@ -97,6 +97,7 @@ const InputInstruction = styled.p`
   font-size: 14px;
   font-weight: 300;
   color: ${props => props.theme.colors.shades.gray};
+  max-width: 450px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -178,7 +179,11 @@ function Register({
   };
 
   const handleChangeSSN = e => {
-    setSsn(e.target.value);
+    const re = /^[0-9\b]+$/;
+
+    if (e.target.value === '' || re.test(e.target.value)) {
+      setSsn(e.target.value);
+    }
   };
 
   const handleSubmit = () => {
@@ -210,8 +215,8 @@ function Register({
             <SmallContainer>
               <Label htmlFor="memberId">Enter your Member ID.</Label>
               <InputInstruction>
-                You can find your Member ID on the back of your Membership Card. Please note this is
-                different than the Subscriber ID on the front of your card.
+                You can find your Member ID on your Membership Card or in your Evry Benefits
+                Guidebook.
               </InputInstruction>
               <Input
                 type="text"
@@ -222,16 +227,17 @@ function Register({
               />
             </SmallContainer>
             <SmallContainer>
-              <Label htmlFor="social">Confirm your membership.</Label>
-              <InputInstruction>
+              <Label htmlFor="social">
                 Enter the last 4 digits of your social security number.
-              </InputInstruction>
+              </Label>
+              <InputInstruction>This is used to validate your Member ID.</InputInstruction>
               <Input
                 className="push-down"
                 type="password"
                 name="ssn"
                 id="ssn"
                 maxLength={4}
+                value={ssn}
                 placeholder="****"
                 onChange={handleChangeSSN}
               />

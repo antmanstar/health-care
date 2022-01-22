@@ -116,7 +116,8 @@ const CarePlanSuggestionSlide = ({
   carePlanSelection,
   carePlanSuggestion,
   handleAccept,
-  handleDecline
+  handleDecline,
+  isAssigningCarePlan
 }) => (
   <Wrapper>
     <Options>
@@ -143,10 +144,16 @@ const CarePlanSuggestionSlide = ({
       <Description>{carePlanSuggestion.desc}</Description>
     </Information>
     <Buttons>
-      <Button text="Choose Plan" onClick={handleAccept} />
-      {/* Not needed at for now
+      <Button text="Choose Plan" onClick={handleAccept} disabled={isAssigningCarePlan} />
       <br />
-      <NegativeButton text="No Thanks" onClick={handleDecline} /> */}
+      <Button
+        type="negative"
+        value="No Thanks"
+        text="No Thanks"
+        onClick={handleDecline}
+        color="red"
+        disabled={isAssigningCarePlan}
+      />
     </Buttons>
   </Wrapper>
 );
@@ -155,14 +162,16 @@ CarePlanSuggestionSlide.propTypes = {
   carePlanSelection: PropTypes.shape({}),
   carePlanSuggestion: PropTypes.shape({}),
   handleAccept: PropTypes.func,
-  handleDecline: PropTypes.func
+  handleDecline: PropTypes.func,
+  isAssigningCarePlan: PropTypes.bool
 };
 
 CarePlanSuggestionSlide.defaultProps = {
   carePlanSelection: {},
   carePlanSuggestion: {},
   handleAccept: () => {},
-  handleDecline: () => {}
+  handleDecline: () => {},
+  isAssigningCarePlan: true
 };
 
 export default CarePlanSuggestionSlide;

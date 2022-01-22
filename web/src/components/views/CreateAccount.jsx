@@ -113,7 +113,7 @@ const ErrorWrapper = styled.div`
 
 const StyledTooltip = styled(ReactTooltip)`
   max-width: 40vh;
-  background: #ffffff;
+  opacity: 1 !important;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
   height: 30px;
   display: flex !important;
@@ -202,7 +202,7 @@ function CreateAccount({
                   id="registerTip"
                   place="bottom"
                   textColor="#000000"
-                  backgroundColor="#FFFFFF"
+                  backgroundColor="#e1f9fa"
                   offset={{ top: -5, left: 0 }}
                   type="light"
                 >
