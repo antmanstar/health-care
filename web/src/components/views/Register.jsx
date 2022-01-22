@@ -246,7 +246,7 @@ function Register({
           <SectionDivider />
           <ButtonWrapper>
             <Button
-              type="submit"
+              buttonType="submit"
               value="Confirm Membership"
               text="Confirm Membership"
               onClick={handleSubmit}

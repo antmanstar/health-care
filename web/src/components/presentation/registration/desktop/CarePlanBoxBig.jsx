@@ -11,7 +11,8 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   height: 166px;
-  width: 306px;
+  max-width: 306px;
+  width: 100%;
   color: ${props =>
     props.suggested ? props.theme.colors.shades.white : props.theme.colors.shades.blue};
   font-size: 16px;
