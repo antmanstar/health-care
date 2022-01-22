@@ -24,6 +24,8 @@ const Wrapper = styled.div`
   margin: auto auto 0;
   padding: 16px 0 0 0;
   box-sizing: border-box;
+  overflow: hidden;
+  padding-bottom: 5px;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   @media ${defaultTheme.device.tablet} {
     border-top: none;

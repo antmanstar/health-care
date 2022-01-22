@@ -52,7 +52,7 @@ const Wrapper = styled.div`
 
 // ChooseCarePlan
 
-function CarePlanSuggestion({
+const CarePlanSuggestion = ({
   selectedCarePlanId,
   successfulCarePlanAssignment,
   suggestedCarePlanId,
@@ -62,7 +62,7 @@ function CarePlanSuggestion({
   assignCarePlan,
   handleAccept,
   handleDecline
-}) {
+}) => {
   const [carePlanSelection, setCarePlanSelection] = useState(
     carePlans.find(carePlan => carePlan.id === selectedCarePlanId)
   );
@@ -71,12 +71,13 @@ function CarePlanSuggestion({
   );
 
   useEffect(() => {
-    checkOnboardingStatus();
+    // checkOnboardingStatus();
   }, []);
+
   useEffect(() => {
-    if (successfulCarePlanAssignment) {
-      history.push('/plan');
-    }
+    // if (successfulCarePlanAssignment) {
+    //   history.push('/plan');
+    // }
   }, [successfulCarePlanAssignment]);
 
   const checkOnboardingStatus = () => {
@@ -97,12 +98,13 @@ function CarePlanSuggestion({
           handleDecline={handleDecline}
           carePlanSelection={carePlanSelection}
           carePlanSuggestion={carePlanSuggestion}
+          isAssigningCarePlan={isAssigningCarePlan}
         />
         {isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
       </Wrapper>
     </>
   );
-}
+};
 
 CarePlanSuggestion.propTypes = {
   handleAccept: PropTypes.func,

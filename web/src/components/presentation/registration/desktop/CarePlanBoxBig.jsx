@@ -12,14 +12,17 @@ const Wrapper = styled.button`
   align-items: center;
   height: 166px;
   width: 306px;
-  color: ${props => props.suggested ? props.theme.colors.shades.white : props.theme.colors.shades.blue};
+  color: ${props =>
+    props.suggested ? props.theme.colors.shades.white : props.theme.colors.shades.blue};
   font-size: 16px;
   font-weight: 400;
   border-radius: 4px;
-  cursor: pointer;
-  background: ${props => props.suggested ? props.theme.gradients.main : ''};
-  border: ${props => props.suggested ? 'none' : '1px solid #f4f4f4'};
-  box-shadow: ${props => props.suggested ? '0 20px 40px rgba(0, 0, 0, 0.1)' : ''};
+  // cursor: pointer;
+  pointer-events: none;
+  background: ${props => (props.suggested ? props.theme.gradients.main : '')};
+  border: ${props => (props.suggested ? 'none' : '1px solid #f4f4f4')};
+  box-shadow: ${props => (props.suggested ? '0 20px 40px rgba(0, 0, 0, 0.1)' : '')};
+  background: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
 `;
 
 const Icon = styled.div`
@@ -27,7 +30,12 @@ const Icon = styled.div`
   width: 50px;
   border-radius: 50%;
   margin-bottom: 16px;
-  background-image: ${props => props.suggested ? `url(${images[`${props.icon}-active`]})` : (props.icon ? `url(${images[`${props.icon}-blue`]})` : '')};
+  background-image: ${props =>
+    props.suggested
+      ? `url(${images[`${props.icon}-active`]})`
+      : props.icon
+      ? `url(${images[`${props.icon}-blue`]})`
+      : ''};
 `;
 
 const Title = styled.p`
@@ -37,7 +45,7 @@ const Title = styled.p`
 class CarePlanBoxBig extends Component {
   render() {
     return (
-      <Wrapper suggested={this.props.suggested} >
+      <Wrapper suggested={this.props.suggested}>
         <Icon icon={this.props.icon} suggested={this.props.suggested} />
         <Title>{this.props.title}</Title>
       </Wrapper>

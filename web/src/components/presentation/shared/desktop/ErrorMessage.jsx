@@ -26,6 +26,7 @@ const Error = styled.div`
   display: flex;
   align-items: center;
 `;
+
 const extractEmails = text => {
   return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
 };
@@ -52,9 +53,9 @@ const convertMsg2Redable = msg => {
     case 'The email_address field is required.':
       return 'Email is required.';
     case 'The field email_address must be a string with a minimum length of 3 and a maximum length of 128.':
-      return 'The email address must be a string with a minimum length of 3 and a maximum length of 128.';
+      return 'Email must be between 3 and 128 characters.';
     case 'The email_address field is not a valid e-mail address.':
-      return 'The email address is not a valid e-mail address.';
+      return 'Email is not a valid email address.';
     case 'The password_confirm field is required.':
       return '';
     case 'The field password_confirm must be a string with a minimum length of 4 and a maximum length of 64.':
