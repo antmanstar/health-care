@@ -10,26 +10,14 @@ import { carePlans } from '../../../../content';
 
 const Options = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 32px;
-
-  @media ${props => props.theme.device.mobile} {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  @media ${props => props.theme.device.tablet} {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
+  flex-wrap: wrap;
+  gap: 20px;
 
   @media ${props => props.theme.device.tabletXL} {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
+    flex-wrap: unset;
   }
 `;
 

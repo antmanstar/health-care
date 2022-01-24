@@ -17,7 +17,7 @@ const { isQuestionnaireLoaded, getToken, isChoosingCarePlan, isOnboardingComplet
 
 const Wrapper = styled.div`
   margin: 40px auto 80px;
-  width: 960px;
+  width: 100%;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
 
@@ -31,6 +31,14 @@ const Wrapper = styled.div`
 
   @media ${props => props.theme.device.tabletXL} {
     width: 100%;
+  }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 960px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 960px;
   }
 `;
 

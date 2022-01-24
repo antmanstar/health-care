@@ -10,13 +10,17 @@ const Wrapper = styled.button`
   justify-content: center;
   align-items: center;
   height: 166px;
-  width: 178px;
+  width: 100%;
   border: 1px solid #f4f4f4;
   color: #bdbdbd;
   font-size: 16px;
   font-weight: 400;
   border-radius: 4px;
   cursor: pointer;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 178px;
+  }
 
   &:hover,
   &.active {
@@ -38,7 +42,7 @@ const Icon = styled.div`
   margin-bottom: 16px;
   /*background: #f4f4f4;*/
   background-image: ${props => (props.icon ? `url(${images[props.icon]})` : '')};
-  filter: ${props => props.active ? `` : `brightness(80%)`};
+  filter: ${props => (props.active ? `` : `brightness(80%)`)};
 `;
 
 const Title = styled.p`
@@ -47,7 +51,7 @@ const Title = styled.p`
 
 const CarePlanBox = ({ active, icon, onClick, title }) => (
   <Wrapper className={active ? 'active' : ''} onClick={onClick}>
-    <Icon id='icon' active={active} icon={icon} />
+    <Icon id="icon" active={active} icon={icon} />
     <Title>{title}</Title>
   </Wrapper>
 );
@@ -61,7 +65,7 @@ CarePlanBox.propTypes = {
 
 CarePlanBox.defaultProps = {
   active: false,
-  onClick: () => { }
+  onClick: () => {}
 };
 
 export default CarePlanBox;

@@ -115,11 +115,19 @@ const StyledTooltip = styled(ReactTooltip)`
   max-width: 40vh;
   opacity: 1 !important;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-  height: 30px;
   display: flex !important;
   justify-content: center;
   align-items: center;
   white-space: normal;
+  right: 20px;
+
+  @media ${props => props.theme.device.mobile} {
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    height: 30px;
+    right: unset;
+  }
 `;
 
 function CreateAccount({
@@ -189,6 +197,7 @@ function CreateAccount({
               placeholder="Enter your email address."
               tabindex="1"
               onChange={handleChangeEmail}
+              autoCapitalize="off"
             />
           </SmallContainer>
           <SmallContainer>
