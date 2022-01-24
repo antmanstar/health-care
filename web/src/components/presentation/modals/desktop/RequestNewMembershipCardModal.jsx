@@ -34,13 +34,14 @@ const PhoneNumber = styled.div`
   }
 
   p {
-    margin: 0 0 0 8px;
+    //margin: 0 0 0 8px;
     font-weight: 400;
+    white-space: nowrap;
   }
 `;
 
 const Span = styled.span`
-  font-weight: 500;
+  font-weight: 600;
   color: ${props => props.theme.colors.shades.blue};
   display: inline-block;
 `;
@@ -52,7 +53,7 @@ const LINK = styled.a`
     display: inline-block;
     margin-right: 20px;
     margin-bottom: 10px;
-    max-width: 200px;
+    //max-width: 200px;
     max-height: 50px;
   }
 `;
@@ -63,6 +64,25 @@ const Column = styled.div`
   .big-button {
     width: 100%;
     margin-bottom: 8px;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+
+  & div {
+    flex: 1 1 auto;
+    @media (min-width: 550px) {
+      flex: 1 1 0;
+    }
+  }
+
+  .big-button {
+    width: 100%;
   }
 `;
 
@@ -89,22 +109,30 @@ const RequestNewMembershipCardModal = React.memo(({ hideModal, phoneNumber }) =>
         </p>
         <FormLabel>Get the App</FormLabel>
         <LINK href="http://www.google.com">
-          <img src={images["app-store"]} alt="Evry iOS App" />
+          <img src={images['app-store']} alt="Evry iOS App" />
         </LINK>
         <LINK href="http://www.google.com">
-          <img src={images["google-play"]} alt="Evry Android App" />
+          <img src={images['google-play']} alt="Evry Android App" />
         </LINK>
         {/* TODO: Add URLs to the proper app store locations */}
 
         <FormLabel>Get your New Membership Card</FormLabel>
-        <SpaceBetween>
+        {/* <SpaceBetween>
           <Column>
             <BigButtonContainer buttonKey="downloadMembershipCard" />
           </Column>
           <Column>
             <BigButtonContainer buttonKey="requestMembershipCard" />
           </Column>
-        </SpaceBetween>
+        </SpaceBetween> */}
+        <ButtonContainer>
+          <div>
+            <BigButtonContainer buttonKey="downloadMembershipCard" />
+          </div>
+          <div>
+            <BigButtonContainer buttonKey="requestMembershipCard" />
+          </div>
+        </ButtonContainer>
       </ModalBody>
       <ModalSectionDivider />
       <ModalButtonsCenter>

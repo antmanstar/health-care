@@ -11,11 +11,22 @@ const Wrapper = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  h3 {
-    color: ${props => props.theme.colors.shades.blue};
-    font-size: 24px;
-    font-weight: 700;
-    margin: 0;
+  @media (max-width: 549px) {
+    h3 {
+      color: ${props => props.theme.colors.shades.blue};
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+    }
+  }
+
+  @media (min-width: 550px) {
+    h3 {
+      color: ${props => props.theme.colors.shades.blue};
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
   }
 `;
 

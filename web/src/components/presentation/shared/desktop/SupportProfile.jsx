@@ -29,8 +29,13 @@ const ProfilePic = styled.div`
 
 const Name = styled.h3`
   margin-bottom: 4px;
-  font-size: 24px;
   font-weight: 400;
+  @media (max-width: 549px) {
+    font-size: 15px;
+  }
+  @media (min-width: 550px) {
+    font-size: 24px;
+  }
 `;
 
 const Role = styled.h4`
@@ -38,6 +43,12 @@ const Role = styled.h4`
   font-size: 16px;
   font-weight: 300;
   color: ${props => props.theme.colors.shades.pinkOrange};
+  @media (max-width: 549px) {
+    font-size: 12px;
+  }
+  @media (min-width: 550px) {
+    font-size: 16px;
+  }
 `;
 
 const ContactInfoItem = styled.div`
@@ -51,12 +62,29 @@ const ContactInfoItem = styled.div`
     &:hover {
       text-decoration: underline;
     }
+    @media (max-width: 549px) {
+      font-size: 10x;
+    }
+  }
+`;
+const Email = styled.span`
+  @media (max-width: 549px) {
+    font-size: 10px;
+  }
+`;
+
+const PhoneNumber = styled.span`
+  @media (max-width: 549px) {
+    font-size: 10px;
   }
 `;
 
 const Icon = styled.i`
   margin-right: 8px;
   color: ${props => props.theme.colors.shades.blue};
+  @media (max-width: 549px) {
+    font-size: 18px;
+  }
 `;
 
 const SupportProfile = React.memo(({ name, roleLabel, number, email, imgSrc }) => (
@@ -69,11 +97,13 @@ const SupportProfile = React.memo(({ name, roleLabel, number, email, imgSrc }) =
       <Role>{roleLabel}</Role>
       <ContactInfoItem>
         <Icon className="material-icons">phone</Icon>
-        <span>{number}</span>
+        <PhoneNumber>{number}</PhoneNumber>
       </ContactInfoItem>
       <ContactInfoItem>
         <Icon className="material-icons">mail_outline</Icon>
-        <a href={`mailto:${email}`}>{email}</a>
+        <a href={`mailto:${email}`}>
+          <Email>{email}</Email>
+        </a>
       </ContactInfoItem>
     </ProfileDetails>
   </Wrapper>

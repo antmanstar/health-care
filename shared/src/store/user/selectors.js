@@ -221,9 +221,9 @@ export const getFamilyMemberCOBSummary = (state) => {
         last,
         prefix,
         suffix,
-        ...nameMethods
+        ...nameMethods,
       },
-      ...values
+      ...values,
     })
   )
 }
@@ -236,7 +236,7 @@ export const getPCPs = (state) => {
       ...pcp,
       provider_name: {
         ...pcp.provider_name,
-        ...nameMethods
+        ...nameMethods,
       },
       provider_addresses: (
         pcp.provider_addresse ||
@@ -244,8 +244,8 @@ export const getPCPs = (state) => {
         []
       ).map((address) => ({
         ...address,
-        ...addressMethods
-      }))
+        ...addressMethods,
+      })),
     }))
   )
 }
@@ -259,12 +259,12 @@ export const getRepresentative = (state) => {
       ...representative,
       name: {
         ...representative.name,
-        ...nameMethods
+        ...nameMethods,
       },
       address: {
         ...representative.address,
-        ...addressMethods
-      }
+        ...addressMethods,
+      },
     }
   )
 }
@@ -407,26 +407,32 @@ export const getWellnessGoals = (state) => [
 export const getWellnessGoal = ({ id, state }) => ({
   ...(getWellnessGoals(state) || []).find(
     (goal) => Number(goal.wellness_goal_id) === Number(id)
-  )
-})
+  ),
+});
 
 export const getEducationalResources = (state) => ({
-  ...get(state, ['user', 'educationalResources'])
-})
+  ...get(state, ["user", "educationalResources"]),
+});
 
 export const getRewardBenefits = (state) => ({
-  ...get(state, ['user', 'rewardBenefits'])
-})
+  ...get(state, ["user", "rewardBenefits"]),
+});
 
 export const getRewardCategories = (state) => ({
-  ...get(state, ['user', 'rewardCategories'])
-})
+  ...get(state, ["user", "rewardCategories"]),
+});
 
 export const getRegisteringUser = (state) => ({
-  ...get(state, ['user', 'registering'], null)
-})
+  ...get(state, ["user", "registering"], null),
+});
 
-export const isRegisteringUser = (state) => Boolean(getRegisteringUser(state))
+export const isRegisteringUser = (state) => Boolean(getRegisteringUser(state));
 
 export const isVerifiedRegisteringUser = (state) =>
-  isRegisteringUser(state) && Boolean(getRegisteringUser(state).verified)
+  isRegisteringUser(state) && Boolean(getRegisteringUser(state).verified);
+
+export const getScheduledPhoneCallCase = (state) =>
+  get(state, ["user", "scheduledPhoneCallCase"]);
+
+export const getSendMessageCase = (state) =>
+  get(state, ["user", "sendMessageCase"]);

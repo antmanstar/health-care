@@ -6,9 +6,12 @@ import SmallButton from './SmallButton';
 // Article Card used in Article Lists on Desktop ("Care Plan" and "Customer Support" Views)
 
 const Container = styled.div`
-  max-width: 48%;
+  max-width: 100%;
   margin-bottom: 32px;
 
+  @media (min-width: 550px) {
+    max-width: 48%;
+  }
   @media (min-width: 850px) {
     max-width: 32%;
   }

@@ -63,12 +63,14 @@ const SmallText = styled.p`
   margin: 0;
   font-size: 14px;
   font-weight: 400;
+  &.claim-number {
+    font-size: 8px;
+  }
 `;
 
 const Status = styled.h4`
   margin: 0;
-  margin-right: 25px;
-  font-size: 16px;
+  font-size: 12px;
   text-transform: uppercase;
   color: ${props =>
     props.status === 'approved'
@@ -76,6 +78,11 @@ const Status = styled.h4`
       : props.status === 'closed'
       ? props.theme.colors.roles.success
       : props.theme.colors.shades.darkGray};
+
+  @media screen and (min-width: 1200px) {
+    font-size: 16px;
+    margin-right: 25px;
+  }
 `;
 
 const Toggle = styled.div`
@@ -131,10 +138,13 @@ const FlexGroup = styled.div`
   &.claim-status {
     max-width: 310px;
     text-align: left;
-    margin-left: 6px;
     display: flex;
     flex-flow: column wrap;
     align-items: stretch;
+
+    @media screen and (min-width: 1200px) {
+      margin-left: 6px;
+    }
 
     .claim-physician {
       align-self: stretch;
@@ -149,8 +159,11 @@ const FlexGroup = styled.div`
 
 const SubmitFeedback = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+  }
   h4 {
     font-weight: 300;
     margin-right: 16px;
@@ -186,11 +199,60 @@ const ProviderInfo = styled.p`
 
 const EobLink = styled.p`
   margin: 0;
-  text-align: center;
-
+  font-size: 10px;
+  text-align: left;
+  @media screen and (min-width: 1200px) {
+    font-size: 16px;
+  }
   a {
     margin: 0 2px 0 4px;
     color: ${props => props.theme.colors.shades.pinkOrange};
+  }
+`;
+
+const MobileContainer = styled.div`
+  &.content-mobile-text {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .status-and-toggle {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 18px 0 0 0;
+    }
+    @media screen and (min-width: 1200px) {
+      display: none;
+    }
+  }
+`;
+
+const DesktopContainer = styled.div`
+  display: none;
+  @media screen and (min-width: 1200px) {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+
+const ContentSubmitFeedback = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  @media screen and (min-width: 1200px) {
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  .support-button {
+    margin: 9px auto;
+    @media screen and (min-width: 1200px) {
+      margin-right: 0;
+    }
   }
 `;
 
@@ -230,25 +292,48 @@ class Claim extends Component {
     return (
       <Wrapper>
         <ClaimSummary>
-          <InnerWrapper>
-            <Text>{dateOfService}</Text>
-            <SmallText>{`Claim # ${claimNumber}`}</SmallText>
-          </InnerWrapper>
-          <InnerWrapper>
-            <Text>{provider.name}</Text>
-            <SmallText>{provider.practice}</SmallText>
-          </InnerWrapper>
-          <InnerWrapper className="status-and-toggle">
+          <MobileContainer className="content-mobile-text">
+            <div>
+              <Text>{dateOfService}</Text>
+              <SmallText className="claim-number">{`Claim # ${claimNumber}`}</SmallText>
+            </div>
+            <div>
+              <Text>{provider.name}</Text>
+              <SmallText>{provider.practice}</SmallText>
+            </div>
             <Status status={status.toLowerCase()}>{status}</Status>
-            <Toggle onClick={this.handlers.toggleClick}>
-              <p>{visible ? 'Collapse' : 'Expand Details'}</p>
-              {visible ? (
-                <i className="material-icons">keyboard_arrow_down</i>
-              ) : (
-                <i className="material-icons">keyboard_arrow_left</i>
-              )}
-            </Toggle>
-          </InnerWrapper>
+            <InnerWrapper className="status-and-toggle">
+              <Toggle onClick={this.handlers.toggleClick}>
+                <p>{visible ? 'Collapse' : 'Expand Details'}</p>
+                {visible ? (
+                  <i className="material-icons">keyboard_arrow_up</i>
+                ) : (
+                  <i className="material-icons">keyboard_arrow_down</i>
+                )}
+              </Toggle>
+            </InnerWrapper>
+          </MobileContainer>
+          <DesktopContainer>
+            <InnerWrapper>
+              <Text>{dateOfService}</Text>
+              <SmallText>{`Claim # ${claimNumber}`}</SmallText>
+            </InnerWrapper>
+            <InnerWrapper>
+              <Text>{provider.name}</Text>
+              <SmallText>{provider.practice}</SmallText>
+            </InnerWrapper>
+            <InnerWrapper className="status-and-toggle">
+              <Status status={status.toLowerCase()}>{status}</Status>
+              <Toggle onClick={this.handlers.toggleClick}>
+                <p>{visible ? 'Collapse' : 'Expand Details'}</p>
+                {visible ? (
+                  <i className="material-icons">keyboard_arrow_down</i>
+                ) : (
+                  <i className="material-icons">keyboard_arrow_left</i>
+                )}
+              </Toggle>
+            </InnerWrapper>
+          </DesktopContainer>
         </ClaimSummary>
         {visible && (
           <>
@@ -258,10 +343,10 @@ class Claim extends Component {
                 <FlexGroup className="claim-costs">
                   <SmallSectionBackground>
                     <BenefitBreakdown
-                      totalBilled={claimDetail.total_billed}
-                      discounts={claimDetail.total_adjustment}
-                      payment={claimDetail.total_payment_to_provider}
-                      owed={claimDetail.total_member_responsibility}
+                      totalBilled={claimDetail?.total_billed}
+                      discounts={claimDetail?.total_adjustment}
+                      payment={claimDetail?.total_payment_to_provider}
+                      owed={claimDetail?.total_member_responsibility}
                     />
                   </SmallSectionBackground>
                 </FlexGroup>
@@ -291,41 +376,44 @@ class Claim extends Component {
             </Padding16>
             <EditedSectionDivider />
             <Padding16>
-              <SpaceBetween>
+              <ContentSubmitFeedback>
                 <SubmitFeedback>
                   <Text>How do you feel about this claim?</Text>
-                  <FeedbackButton
-                    onClick={() =>
-                      this.handlers.handleFeedbackClick({
-                        feedbackChoice: 'positive',
-                        claimNumber
-                      })
-                    }
-                  >
-                    <img src={images['feedback-positive']} alt="positive response" />
-                  </FeedbackButton>
-                  <FeedbackButton
-                    onClick={() =>
-                      this.handlers.handleFeedbackClick({
-                        feedbackChoice: 'neutral',
-                        claimNumber
-                      })
-                    }
-                  >
-                    <img src={images['feedback-neutral']} alt="neutral response" />
-                  </FeedbackButton>
-                  <FeedbackButton
-                    onClick={() =>
-                      this.handlers.handleFeedbackClick({
-                        feedbackChoice: 'negative',
-                        claimNumber
-                      })
-                    }
-                  >
-                    <img src={images['feedback-negative']} alt="negative response" />
-                  </FeedbackButton>
+                  <div>
+                    <FeedbackButton
+                      onClick={() =>
+                        this.handlers.handleFeedbackClick({
+                          feedbackChoice: 'positive',
+                          claimNumber
+                        })
+                      }
+                    >
+                      <img src={images['feedback-positive']} alt="positive response" />
+                    </FeedbackButton>
+                    <FeedbackButton
+                      onClick={() =>
+                        this.handlers.handleFeedbackClick({
+                          feedbackChoice: 'neutral',
+                          claimNumber
+                        })
+                      }
+                    >
+                      <img src={images['feedback-neutral']} alt="neutral response" />
+                    </FeedbackButton>
+                    <FeedbackButton
+                      onClick={() =>
+                        this.handlers.handleFeedbackClick({
+                          feedbackChoice: 'negative',
+                          claimNumber
+                        })
+                      }
+                    >
+                      <img src={images['feedback-negative']} alt="negative response" />
+                    </FeedbackButton>
+                  </div>
                 </SubmitFeedback>
                 <SmallButton
+                  className="support-button"
                   text="Contact Customer Support"
                   onClick={() =>
                     this.handlers.handleContactCustomerSupportClick({
@@ -335,7 +423,7 @@ class Claim extends Component {
                     })
                   }
                 />
-              </SpaceBetween>
+              </ContentSubmitFeedback>
             </Padding16>
           </>
         )}

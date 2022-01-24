@@ -9,6 +9,10 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import paginate from '../../../utils/pagination';
 import withStoreData from '../../containers/base/withStoreData';
+import ClaimsTotals from '../../presentation/shared/desktop/ClaimsTotals';
+import ActionButtonsContainer from '../../containers/shared/desktop/ActionButtonsContainer';
+import ClaimsHistorySection from '../../presentation/claims/desktop/ClaimsHistorySection';
+import SearchBar from '../../presentation/shared/desktop/SearchBar';
 
 const { fetchClaimsList } = actions;
 const { getClaimsList, getToken, getClaimsListDataFrame } = selectors;
@@ -24,6 +28,7 @@ const FixedHeader = styled.div`
   top: 0;
   right: 0;
   left: 0;
+  z-index: 20;
 `;
 
 const ColoredTrimmedHeader = styled(TrimmedHeader)`
@@ -36,23 +41,29 @@ const Spacer = styled.div`
 `;
 
 const Claims = ({ claimsList, paginator }) => {
-  
   const search = ({ query, dateFrom, dateTo }) => {
     const trimmedQuery = query.trim();
-    fetchClaimsList({ page: 1, query: trimmedQuery, recordsPerPage: paginator.recordsPerPage, dateFrom, dateTo });
-  }
+    fetchClaimsList({
+      page: 1,
+      query: trimmedQuery,
+      recordsPerPage: paginator.recordsPerPage,
+      dateFrom,
+      dateTo
+    });
+  };
 
   return (
     <>
       <FixedHeader>
         <ColoredTrimmedHeader />
         <MobileContentWrapper>
-          <SearchAndFilterBar placeholder="Search Claims" search={search} bigShadow dateButton filterButton />
+          <SearchBar />
         </MobileContentWrapper>
       </FixedHeader>
       <Spacer />
       <MobileContentWrapper>
-        <MobileClaimsList claims={claimsList} />
+        <ClaimsTotals />
+        <ClaimsHistorySection />
       </MobileContentWrapper>
     </>
   );

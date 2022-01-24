@@ -19,7 +19,6 @@ const Wrapper = styled.div`
   background: #fafafa;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   border-bottom: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
-  cursor: pointer;
 
   p {
     line-height: 24px;
@@ -53,7 +52,9 @@ const NewAlert = styled.div`
 
 const Message = React.memo(
   ({ bodyText, buttonText, dateSent, id, isNew, passThroughRef, title, onClick, evryContactInfo }) => (
-    <Wrapper key={id} onClick={onClick}>
+    <Wrapper key={id}
+    //  onClick={onClick}
+     >
       <TitleSection>
         {isNew === true && <NewAlert />}
         <h2>{title}</h2>

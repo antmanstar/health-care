@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
@@ -32,6 +32,21 @@ const {
 const mainBreakPoint = `1200px`;
 const bigScreens = `1388px`;
 
+const PhoneNumber = styled.div`
+  height: 64px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: ${props => props.theme.colors.shades.white};
+  font-size: 16px;
+  font-weight: 300;
+
+  i {
+    margin-right: 8px;
+  }
+`;
+
 const Wrapper = styled.div`
   position: fixed;
   left: 0;
@@ -42,6 +57,8 @@ const Wrapper = styled.div`
   width: calc(100% - 32px);
   transition: all 0.5s;
   z-index: 11;
+
+
   &.on {
     background: ${props => props.theme.gradients.main};
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
@@ -63,7 +80,7 @@ const Wrapper = styled.div`
       margin-right: 30px;
     }
 
-    .center-wrapper-number {
+    ${PhoneNumber} {
       display: none;
     }
   }
@@ -117,28 +134,6 @@ const CenterWrapper = styled.div`
 
   @media ${props => props.theme.device.desktopXL} {
     max-width: 1024px;
-  }
-`;
-
-const PhoneNumber = styled.div`
-  height: 64px;
-  width: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  color: ${props => props.theme.colors.shades.white};
-  font-size: 16px;
-  font-weight: 300;
-
-  i {
-    margin-right: 8px;
-  }
-
-  @media (max-width: ${mainBreakPoint}) {
-    height: auto;
-    p {
-      margin: 0;
-    }
   }
 `;
 
@@ -290,6 +285,36 @@ const Mailbox = styled.button`
   padding: 0;
 `;
 
+const MobileMenuButton = styled.div`
+  i {
+    font-size: 26px;
+    transition: all 0.1s ease-in-out;
+  }
+  &:hover {
+    div,
+    i {
+      transform: scale(1.1);
+    }
+  }
+  
+  display: none;
+  justify-content: center;
+  align-items: center;
+  margin-left: 16px;
+  color: ${props => props.theme.colors.shades.white};
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+
+  @media (max-width: ${mainBreakPoint}) {
+    display: flex;
+  }
+
+`;
+
+
 const MailboxButtonWithBadge = withStoreData(MailboxButton, state => ({
   unread: getUnreadNotifications(state)
 }));
@@ -331,131 +356,114 @@ const NotificationCenterWithData = withStoreData(
   }
 );
 
-class NavBar extends Component {
-  static checkScroll() {
+const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
+  const [clicked, setClicked] = useState(false);
+  const [open, setOpen] = useState();
+  const [scrolled, setScrolled] = useState();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const checkScroll = () => {
     return (window.pageYOffset || document.documentElement.scrollTop) > 28;
   }
 
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    window.addEventListener('scroll', () => handleScroll(), supportsPassive());
 
-    this.state = {
-      clicked: props.clicked || false,
-      open: false
-    };
+    return window.removeEventListener('scroll', handleScroll)
+  }, [])
 
-    this.handlers = {
-      handleScroll: this.handleScroll.bind(this),
-      handleToggleClick: this.handleToggleClick.bind(this),
-      handleSignOut: this.handleSignOut.bind(this),
-      toggleDrawer: this.toggleDrawer.bind(this)
-    };
-  }
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.handlers.handleScroll, supportsPassive());
-    this.handleScroll();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handlers.handleScroll);
-  }
-
-  toggleDrawer = open => () => {
-    this.setState({ open });
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
-  handleScroll() {
-    this.setState({
-      scrolled: NavBar.checkScroll()
-    });
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleScroll = () => {
+    setScrolled(checkScroll());
   }
 
-  handleToggleClick() {
-    this.setState(prevState => ({
-      clicked: !prevState.clicked
-    }));
+  const handleToggleClick = () => {
+    setClicked(!clicked);
   }
 
-  handleSignOut() {
-    const { signOut } = this.props;
+  const handleSignOut = () => {
     signOut();
   }
 
-  render() {
-    const { clicked, open, scrolled } = this.state;
-    const { permanentBg, phoneNumber, isSigningOut } = this.props;
-
-    return (
-      <Wrapper className={permanentBg || scrolled ? 'on' : 'off'}>
-        <InnerWrapper>
-          <LeftWrapper>
-            <RouterLink to="/">
-              <Logo src={logoImg} />
-            </RouterLink>
-          </LeftWrapper>
-          <CenterWrapper>
-            <MainNavigation />
-            {phoneNumber && (
-              <PhoneNumber className="center-wrapper-number">
-                <i className="material-icons">phone</i>
-                <p>{`1-${phoneNumber}`}</p>
-              </PhoneNumber>
+  return (
+    <Wrapper className={permanentBg || scrolled ? 'on' : 'off'}>
+      <InnerWrapper>
+        <LeftWrapper>
+          <RouterLink to="/">
+            <Logo src={logoImg} />
+          </RouterLink>
+        </LeftWrapper>
+        <CenterWrapper>
+          <MainNavigation mobileOpen={mobileMenuOpen} />
+          {phoneNumber && (
+            <PhoneNumber>
+              <i className="material-icons">phone</i>
+              <p>{`1-${phoneNumber}`}</p>
+            </PhoneNumber>
+          )}
+        </CenterWrapper>
+        <RightWrapper>
+          {phoneNumber && (
+            <PhoneNumber className="right-wrapper-number">
+              <i className="material-icons">phone</i>
+              <p>{`1-${phoneNumber}`}</p>
+            </PhoneNumber>
+          )}
+          <Mailbox
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={() => toggleDrawer()}
+          >
+            <MailboxButtonWithBadge />
+          </Mailbox>
+          <AccountMenuDropdown clicked={clicked} onClick={() => handleToggleClick()}>
+            <div>
+              <span className="account-label">My Account</span>
+              <Icon className="material-icons">
+                {clicked ? <span className="close-outline">close</span> : 'account_circle'}
+              </Icon>
+            </div>
+            {clicked ? (
+              <i className="material-icons smaller">close</i>
+            ) : (
+              <i className="material-icons">keyboard_arrow_down</i>
             )}
-          </CenterWrapper>
-          <RightWrapper>
-            {phoneNumber && (
-              <PhoneNumber className="right-wrapper-number">
-                <i className="material-icons">phone</i>
-                <p>{`1-${phoneNumber}`}</p>
-              </PhoneNumber>
-            )}
-            <Mailbox
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handlers.toggleDrawer(true)}
-            >
-              <MailboxButtonWithBadge />
-            </Mailbox>
-            <AccountMenuDropdown clicked={clicked} onClick={this.handlers.handleToggleClick}>
-              <div>
-                <span className="account-label">My Account</span>
-                <Icon className="material-icons">
-                  {clicked ? <span className="close-outline">close</span> : 'account_circle'}
-                </Icon>
-              </div>
-              {clicked ? (
-                <i className="material-icons smaller">close</i>
-              ) : (
-                <i className="material-icons">keyboard_arrow_down</i>
-              )}
-              <DropdownModal show={clicked}>
-                <DropdownLink>
-                  <RouterLink to="/account">Account Settings</RouterLink>
-                </DropdownLink>
-                <DropdownLink>
-                  <RouterLink to="/" onClick={this.handlers.handleSignOut}>
-                    Sign Out
-                  </RouterLink>
-                </DropdownLink>
-              </DropdownModal>
-            </AccountMenuDropdown>
-          </RightWrapper>
-        </InnerWrapper>
-        <SwipeableDrawer
-          open={open}
-          anchor="right"
-          onOpen={this.handlers.toggleDrawer(true)}
-          onClose={this.handlers.toggleDrawer(false)}
-        >
-          <NotificationCenterWithData handleClick={this.handlers.toggleDrawer(false)} />
-        </SwipeableDrawer>
-        {
-          isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
-        }
-      </Wrapper>
-    );
-  }
+            <DropdownModal show={clicked}>
+              <DropdownLink>
+                <RouterLink to="/account">Account Settings</RouterLink>
+              </DropdownLink>
+              <DropdownLink>
+                <RouterLink to="/" onClick={handleSignOut}>
+                  Sign Out
+                </RouterLink>
+              </DropdownLink>
+            </DropdownModal>
+          </AccountMenuDropdown>
+          <MobileMenuButton onClick={() => toggleMobileMenu()}>
+            <i className="material-icons">menu</i>
+          </MobileMenuButton>
+        </RightWrapper>
+      </InnerWrapper>
+      <SwipeableDrawer
+        open={open}
+        anchor="right"
+        onOpen={() => toggleDrawer()}
+        onClose={() => toggleDrawer()}
+      >
+        <NotificationCenterWithData handleClick={() => toggleDrawer()} />
+      </SwipeableDrawer>
+      {
+        isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
+      }
+    </Wrapper>
+  );
 }
 
 NavBar.propTypes = {

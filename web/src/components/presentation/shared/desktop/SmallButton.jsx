@@ -26,8 +26,8 @@ const Button = styled.button`
   }
 `;
 
-const SmallButton = React.memo(({ text, onClick, negative }) => (
-  <Button negative={negative} onClick={onClick}>
+const SmallButton = React.memo(({ className, text, onClick, negative }) => (
+  <Button className={className} negative={negative} onClick={onClick}>
     {text}
   </Button>
 ));

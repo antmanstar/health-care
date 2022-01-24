@@ -32,7 +32,7 @@ const {
   getAddress,
   getCareGuideInfo,
   getCurrentModal,
-  getDependents,
+  getFamilyMembers,
   getEmail,
   getMemberName,
   getModalData,
@@ -100,7 +100,7 @@ const ContactCareGuideModalWithData = withStoreData(
 const ScheduleAppointmentModalWithData = withStoreData(
   ScheduleAppointmentModal,
   state => ({
-    dependents: getDependents(state),
+    dependents: getFamilyMembers(state),
     token: getToken(state)
   }),
   dispatch => ({

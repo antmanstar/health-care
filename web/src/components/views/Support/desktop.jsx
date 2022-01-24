@@ -15,8 +15,22 @@ import paginate from '../../../utils/pagination';
 import withStoreData from '../../containers/base/withStoreData';
 import { Helmet } from 'react-helmet-async';
 
-const { fetchCareGuideInfo, fetchEvryContactInfo, fetchCases, showModal } = actions;
-const { getCareGuideInfo, getCases, getCasesDataFrame, getEvryContactInfo, getToken } = selectors;
+const {
+  fetchCareGuideInfo,
+  fetchEvryContactInfo,
+  fetchCases,
+  showModal,
+  fetchSupportArticles
+} = actions;
+const {
+  getCareGuideInfo,
+  getCases,
+  getCasesDataFrame,
+  getEvryContactInfo,
+  getToken,
+  getSupportArticles,
+  getFAQs
+} = selectors;
 
 const {
   SUBMITTED,
@@ -153,6 +167,52 @@ const Support = () => {
         ...ownProps
       };
     }
+  );
+
+  const SupportArticlesSectionWithData = withStoreData(
+    SupportArticlesSection,
+    state => ({
+      faqs: getFAQs(state),
+      supportArticles: getSupportArticles(state)
+    }),
+    dispatch => ({
+      fetchSupportArticles: ({
+        token,
+        page,
+        recordsPerPage,
+        searchString,
+        orderBy,
+        orderByDesc,
+        supportArticleType
+      }) =>
+        dispatch(
+          fetchSupportArticles({
+            token,
+            page,
+            recordsPerPage,
+            searchString,
+            orderBy,
+            orderByDesc,
+            supportArticleType
+          })
+        )
+    }),
+    ({ token, ...stateProps }, { fetchSupportArticles }, ownProps) => ({
+      fetch: {
+        fetchSupportArticles: () => {
+          fetchSupportArticles({
+            token,
+            page: 1,
+            recordsPerPage: 3,
+            searchString: '',
+            orderBy: 'created_date',
+            orderByDesc: true,
+            supportArticleType: 1
+          });
+        }
+      },
+      shouldFetch: { fetchSupportArticles: isEmpty(stateProps.supportArticles) }
+    })
   );
 
   return (

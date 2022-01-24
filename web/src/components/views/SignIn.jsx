@@ -4,16 +4,16 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import values from 'lodash/values';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Sparse } from '../../layouts';
-import defaultTheme from '../../../style/themes';
-import Button from '../../presentation/shared/desktop/Button';
-import ErrorMessage from '../../presentation/shared/desktop/ErrorMessage';
+import { Sparse } from '../layouts';
+import defaultTheme from '../../style/themes';
+import Button from '../presentation/shared/desktop/Button';
+import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
-import Interpolation from '../../../utils/Interpolation';
-import history from '../../../utils/history';
+import Interpolation from '../../utils/Interpolation';
+import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
-import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
+import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 
 const { authenticate, clearAuthError, clear2FA, verify2FACode } = actions;
 const {

@@ -27,7 +27,11 @@ const {
 } = defaultTheme.components;
 
 const SmallContainer = styled.div`
-  width: 48%;
+  max-width: 100%;
+
+  @media (min-width: 550px) {
+    width: 48%;
+  }
 
   &:first-child {
     margin-bottom: 16px;
@@ -50,10 +54,26 @@ const H3 = styled.h3`
 const ArticleList = styled(SpaceBetween)`
   flex-wrap: wrap;
   margin-bottom: -32px;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+
+  @media (max-width: 549) {
+    flex-direction: column;
+  }
+  @media (min-width: 550) {
+    flex-direction: row;
+  }
 `;
 
 const Description = styled.p`
   margin: 0 0 32px;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const SupportArticlesSection = ({ supportArticles, faqs }) => (
@@ -74,17 +94,27 @@ const SupportArticlesSection = ({ supportArticles, faqs }) => (
           supportArticles.data.map(article => (
             <ArticleCard
               key={article.support_article_id}
-              image="http://lorempixel.com/400/200/sports"
+              image="https://via.placeholder.com/400x200?text=Support+Article+Image"
               title={article.support_article_title}
               desc={truncate(130)(article.support_article_summary)}
             />
           ))
         )}
+        {isEmpty(supportArticles) ? (
+          <Loader />
+        ) : (
+          <ArticleCard
+            key={supportArticles.data[0].support_article_id}
+            image="https://via.placeholder.com/400x200?text=Support+Article+Image"
+            title={supportArticles.data[0].support_article_title}
+            desc={truncate(130)(supportArticles.data[0].support_article_summary)}
+          />
+        )}
       </ArticleList>
     </Container>
     <SectionDivider />
     <Container>
-      <TwoColumnRow>
+      <BottomContainer>
         <SmallContainer>
           <H3>Frequently Asked Questions</H3>
           <LinkList>
@@ -109,7 +139,7 @@ const SupportArticlesSection = ({ supportArticles, faqs }) => (
           </Description>
           <HelpArticleLink text="Visit our Help Center" url="http://www.google.com" />
         </SmallContainer>
-      </TwoColumnRow>
+      </BottomContainer>
     </Container>
   </SectionBackground>
 );

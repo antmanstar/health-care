@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import FilterOptions from './FilterOptions';
@@ -77,9 +77,9 @@ const FilterButton = styled.button`
   border: none;
   border-left: 1px solid
     ${props =>
-    props.bordered
-      ? props.theme.colors.shades.mediumGray
-      : props.theme.colors.shades.nearlyWhite};
+      props.bordered
+        ? props.theme.colors.shades.mediumGray
+        : props.theme.colors.shades.nearlyWhite};
 
   &:last-child {
     border-radius: 0 4px 4px 0;
@@ -91,63 +91,53 @@ const FilterButton = styled.button`
   }
 `;
 
-
 const SearchAndFilterBar = ({ bordered, placeholder, dateButton, filterButton, search }) => {
-
-  const [ query, setQuery ] = useState('');
-  const [ showFilters, setShowFilters ] = useState(false);
+  const [query, setQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleClose = () => {
-    setShowFilters(false)
-  }
+    setShowFilters(false);
+  };
 
   return (
     <>
       <Wrapper bordered={bordered}>
         <Search>
-          <form onSubmit={ (e) => {
-            e.preventDefault();
-            search({query});
-          }}>
-            <i
-              className="material-icons"
-            >
-              search
-            </i>
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              search({ query });
+            }}
+          >
+            <i className="material-icons">search</i>
             <input
               type="text"
               name="search"
               placeholder={placeholder}
               value={query}
               onChange={e => {
-                setQuery( e.target.value )
+                setQuery(e.target.value);
               }}
             />
           </form>
         </Search>
         <FilterButtons>
           {dateButton && (
-            <FilterButton
-              bordered={bordered}
-              onClick={() => setShowFilters(true)}
-            >
+            <FilterButton bordered={bordered} onClick={() => setShowFilters(true)}>
               <i className="material-icons">date_range</i>
             </FilterButton>
           )}
           {filterButton && (
-            <FilterButton
-              bordered={bordered}
-              onClick={() => setShowFilters(true)}
-            >
+            <FilterButton bordered={bordered} onClick={() => setShowFilters(true)}>
               <i className="material-icons">filter_list</i>
             </FilterButton>
           )}
         </FilterButtons>
-        {showFilters && <FilterOptions handleClose={handleClose} search={search} query={query}/>}
+        {showFilters && <FilterOptions handleClose={handleClose} search={search} query={query} />}
       </Wrapper>
     </>
   );
-}
+};
 
 SearchAndFilterBar.propTypes = {
   placeholder: PropTypes.string.isRequired,
@@ -161,7 +151,7 @@ SearchAndFilterBar.propTypes = {
 SearchAndFilterBar.defaultProps = {
   bordered: false,
   bigShadow: false,
-  search: () => { },
+  search: () => {},
   dateButton: false,
   filterButton: false
 };

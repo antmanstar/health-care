@@ -149,8 +149,28 @@ export const createCase = ({ files = [], metadata, token, type }) => ({
     type
   }
 })
-
-export const createClaimFeedbackCase = ({ files, claimNumber, rate, comment, token }) =>
+export const createCase_v2 = ({ storeType, metadata, token, type }) => ({
+  type: storeType,
+  payload: {
+    metadata,
+    token,
+    type
+  }
+})
+export const submitCaseAsComplete = ({ storeType, id, token }) => ({
+  type: storeType,
+  payload: {
+    id,
+    token
+  }
+})
+export const createClaimFeedbackCase = ({
+  files,
+  claimNumber,
+  rate,
+  comment,
+  token
+}) =>
   createCase({
     files,
     metadata: [
@@ -340,13 +360,13 @@ export const createRequestForIdCardCase = ({ files, token }) =>
   })
 
 export const createRequestInformationCase = ({
-  files,
+  //files,
   informationType,
   message,
   token
 }) =>
-  createCase({
-    files,
+  createCase_v2({
+    storeType: types.CREATE_CASE_REQUEST_INFORMATION,
     metadata: [
       {
         name: 'information_type',
@@ -362,6 +382,33 @@ export const createRequestInformationCase = ({
     token,
     type: REQUEST_INFORMATION
   })
+// createCase({
+//   files,
+//   metadata: [
+//     {
+//       name: "information_type",
+//       value: informationType,
+//       value_type: TEXT,
+//     },
+//     {
+//       name: "message",
+//       value: message,
+//       value_type: TEXT,
+//     },
+//   ],
+//   token,
+//   type: REQUEST_INFORMATION,
+// });
+export const completeRequestInformationCase = ({ caseID, token }) => ({
+  type: types.COMPLETE_CASE_REQUEST_INFORMATION,
+  payload: {
+    id: caseID,
+    token
+  }
+})
+export const requestInformationReset = () => ({
+  type: types.REQUEST_INFORMATION_RESET
+})
 
 export const createScheduleAppointmentCase = ({
   appointmentDataTime,
@@ -400,23 +447,23 @@ export const createScheduleAppointmentCase = ({
   })
 
 export const createSchedulePhoneCallCase = ({
-  files,
+  //files,
   phoneNumber,
   reasonForCall,
   scheduleDateTime,
   token
 }) =>
-  createCase({
-    files,
+  createCase_v2({
+    storeType: types.CREATE_CASE_SCHEDULE_PHONE,
     metadata: [
-      {
-        name: 'phone_number',
-        value: phoneNumber,
-        value_type: TEXT
-      },
       {
         name: 'reason_for_call',
         value: reasonForCall,
+        value_type: TEXT
+      },
+      {
+        name: 'phone_number',
+        value: phoneNumber,
         value_type: TEXT
       },
       {
@@ -428,15 +475,47 @@ export const createSchedulePhoneCallCase = ({
     token,
     type: SCHEDULE_PHONE_CALL
   })
+// createCase({
+//   files,
+//   metadata: [
+//     {
+//       name: 'phone_number',
+//       value: phoneNumber,
+//       value_type: TEXT
+//     },
+//     {
+//       name: 'reason_for_call',
+//       value: reasonForCall,
+//       value_type: TEXT
+//     },
+//     {
+//       name: 'schedule_date_time',
+//       value: scheduleDateTime,
+//       value_type: DATE_TIME
+//     }
+//   ],
+//   token,
+//   type: SCHEDULE_PHONE_CALL
+//});
+export const completeScheduledPhoneCallCase = ({ caseID, token }) => ({
+  type: types.COMPLETE_CASE_SCHEDULE_PHONE,
+  payload: {
+    id: caseID,
+    token
+  }
+})
+export const schedulePhoneCallReset = () => ({
+  type: types.SCHEDULE_PHONE_CALL_RESET
+})
 
 export const createSendAMessageToCareCoordinatorCase = ({
-  files,
+  //files,
   message,
   title,
   token
 }) =>
-  createCase({
-    files,
+  createCase_v2({
+    storeType: types.CREATE_CASE_SEND_MESSAGE,
     metadata: [
       {
         name: 'message',
@@ -452,6 +531,35 @@ export const createSendAMessageToCareCoordinatorCase = ({
     token,
     type: SEND_A_MESSAGE_TO_CARE_COORDINATOR
   })
+// createCase({
+//     files,
+//     metadata: [
+//       {
+//         name: "message",
+//         value: message,
+//         value_type: TEXT,
+//       },
+//       {
+//         name: "title",
+//         value: title,
+//         value_type: TEXT,
+//       },
+//     ],
+//     token,
+//     type: SEND_A_MESSAGE_TO_CARE_COORDINATOR,
+//   });
+
+export const completeSendMessageCase = ({ caseID, token }) => ({
+  type: types.COMPLETE_CASE_SEND_MESSAGE,
+  payload: {
+    id: caseID,
+    token
+  }
+})
+
+export const sendMessageReset = () => ({
+  type: types.SEND_MESSAGE_RESET
+})
 
 export const fetchAccountInfo = (token) => ({
   type: types.ACCOUNT_INFO_FETCH,

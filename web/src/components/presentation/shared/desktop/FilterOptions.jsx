@@ -16,6 +16,11 @@ const Wrapper = styled.div`
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   z-index: 100;
+  left: 0;
+  width: 100%;
+  @media screen and (min-width: 1200px) {
+    width: auto;
+  }
 `;
 
 const TransparentScrim = styled(Scrim)`
@@ -58,7 +63,7 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const FilterOptions = ({ handleClose, search, query }) => {
+const FilterOptions = ({ handleClose, search, query, clearData }) => {
   const [dateStart, setDateStart] = useState('');
   const [dateEnd, setDateEnd] = useState('');
   const [clear, setClear] = useState(0);
@@ -75,6 +80,11 @@ const FilterOptions = ({ handleClose, search, query }) => {
     } else {
       setDateEnd(value);
     }
+  };
+
+  const handleFilter = () => {
+    clearData();
+    search({ dateFrom: dateStart, dateTo: dateEnd, query: query });
   };
 
   return (

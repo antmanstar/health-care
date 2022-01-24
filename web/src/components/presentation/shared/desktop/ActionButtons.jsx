@@ -10,9 +10,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
-
+  flex-wrap: wrap;
+  gap: 10px;
   .big-button {
-    width: 32.5%;
+    width: 100%;
+    @media (min-width: 550px) {
+      width: 32.5%;
+    }
   }
 `;
 

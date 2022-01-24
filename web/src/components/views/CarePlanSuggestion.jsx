@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
-import { Sparse } from '../../layouts';
-import OnboardingProgressBar from '../../presentation/registration/desktop/OnboardingProgressBar';
-import CarePlanSuggestionSlide from '../../presentation/registration/desktop/CarePlanSuggestionSlide';
-import { carePlans } from '../../../content';
-import history from '../../../utils/history';
-import Interpolation from '../../../utils/Interpolation';
+import { Sparse } from '../layouts';
+import OnboardingProgressBar from '../presentation/registration/desktop/OnboardingProgressBar';
+import CarePlanSuggestionSlide from '../presentation/registration/desktop/CarePlanSuggestionSlide';
+import { carePlans } from '../../content';
+import history from '../../utils/history';
+import Interpolation from '../../utils/Interpolation';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
-import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
+import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
 
 const { assignCarePlan } = actions;
 const {

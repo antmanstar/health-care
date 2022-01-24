@@ -64,7 +64,11 @@ const ActionButton = styled.button`
   border: none;
   border-radius: 4px;
   box-shadow: 0px 20px 30px rgb(0 0 0 / 15%);
-  margin: 100px 0 50px 0;
+  margin: 25px 0 25px 0;
+
+  @media ${props => props.theme.device.tabletXL} {
+    margin: 100px 0 50px 0;
+  }
 
   &:hover {
     opacity: 0.8;
@@ -85,7 +89,11 @@ const Separator = styled.div`
 
 const Body = styled.div`
   font-size: 16px;
-  padding: 25px 0 50px 0;
+  padding: 0;
+
+  @media ${props => props.theme.device.tabletXL} {
+    padding: 25px 0 50px 0;
+  }
 `;
 
 const VerificationContainer = styled.div`

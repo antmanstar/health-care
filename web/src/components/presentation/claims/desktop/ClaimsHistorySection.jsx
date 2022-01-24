@@ -21,13 +21,7 @@ const { RECORDS_PER_PAGE } = constants;
 
 // Claims History Section on the "Claims" View
 
-const {
-  SectionBackground,
-  SectionDivider,
-  Container,
-  SpaceBetween,
-  LayoutWrapper
-} = defaultTheme.components;
+const { SectionBackground, SectionDivider, SpaceBetween, LayoutWrapper } = defaultTheme.components;
 
 const PaginationWrapper = styled.div`
   position: relative;
@@ -38,13 +32,25 @@ const PaginationWrapper = styled.div`
   text-align: center;
 `;
 
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  @media screen and (min-width: 300px) and (max-width: 1200px) {
+    padding: 11px 11px 9px 7px;
+  }
+`;
+
 const HeaderWrapper = styled(SpaceBetween)`
   flex-direction: column;
   align-items: flex-start;
+  padding: 15px 13px 19px 20px;
 
   @media ${props => props.theme.device.desktop} {
     flex-direction: row;
     align-items: center;
+    paddding: 0;
   }
 `;
 
@@ -85,7 +91,13 @@ class ClaimsHistorySection extends Component {
     const trimmedQuery = data.query.trim();
 
     if (trimmedQuery !== claimsListDataFrame.query) {
-      fetchClaimsList({ page: 1, query: trimmedQuery, recordsPerPage: paginator.recordsPerPage, dateFrom: data.dateFrom, dateTo: data.dateTo });
+      fetchClaimsList({
+        page: 1,
+        query: trimmedQuery,
+        recordsPerPage: paginator.recordsPerPage,
+        dateFrom: data.dateFrom,
+        dateTo: data.dateTo
+      });
     }
   }
 
@@ -114,7 +126,7 @@ class ClaimsHistorySection extends Component {
           <SectionDivider />
           <Container>
             <ClaimsList claims={claimsList} />
-           { pending && <StyledLoadingSpinner type="TailSpin" color = "#00BFFF" /> }
+            {pending && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
           </Container>
         </SectionBackground>
         <PaginationWrapper>
@@ -136,7 +148,7 @@ const mapStateToProps = state => {
     claimsList: getClaimsList(state),
     claimsListDataFrame: getClaimsListDataFrame(state),
     token: getToken(state)
-  }
+  };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -177,8 +189,4 @@ ClaimsHistorySection.defaultProps = {
   paginator: null
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(ClaimsHistorySection);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ClaimsHistorySection);

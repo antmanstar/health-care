@@ -130,7 +130,7 @@ class RewardsSection extends Component {
         <SectionDivider />
         <Container>
           <Header>
-            <Icon src={images['activity-in-circle']} />
+            <Icon src={images["activity-in-circle"]} />
             <div>
               <Title>Activity Items</Title>
               <Description>Complete these activities for extra rewards.</Description>
@@ -148,7 +148,7 @@ class RewardsSection extends Component {
           </Flex>
           <StyledSectionDivider />
           <Header>
-            <Icon src={images['money-in-circle']} />
+            <Icon src={images["money-in-circle"]} />
             <div>
               <Title>Discount Items</Title>
               <Description>

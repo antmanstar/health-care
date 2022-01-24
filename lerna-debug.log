@@ -6,19 +6,16 @@
 0 silly argv   '$0': 'node_modules\\lerna\\cli.js'
 0 silly argv }
 1 notice cli v4.0.0
-2 verbose rootPath D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal
-3 info clean removing D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\assets\node_modules
-4 silly rimrafDir D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\assets\node_modules
-5 info clean removing D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\mobile\node_modules
-6 silly rimrafDir D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\mobile\node_modules
-7 info clean removing D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\shared\node_modules
-8 silly rimrafDir D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\shared\node_modules
-9 info clean removing D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\web\node_modules
-10 silly rimrafDir D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\web\node_modules
-11 verbose rimrafDir removed D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\shared\node_modules
-12 verbose rimrafDir removed D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\mobile\node_modules
-13 error Error: Command failed with exit code 1: C:\Program Files\nodejs\node.exe D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\node_modules\@lerna\rimraf-dir\node_modules\rimraf\bin.js --no-glob D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\web\node_modules\
-13 error     at makeError (D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\node_modules\@lerna\rimraf-dir\node_modules\execa\lib\error.js:60:11)
-13 error     at handlePromise (D:\JKStar\2022 Projects\1_1_22 Invene\New folder\EHG-Member-Portal\node_modules\@lerna\rimraf-dir\node_modules\execa\index.js:118:26)
-13 error     at runMicrotasks (<anonymous>)
-13 error     at processTicksAndRejections (node:internal/process/task_queues:96:5)
+2 verbose rootPath C:\Users\Admin\Documents\GitHub\EHG-Member-Portal
+3 info clean removing C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\assets\node_modules
+4 silly rimrafDir C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\assets\node_modules
+5 info clean removing C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\mobile\node_modules
+6 silly rimrafDir C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\mobile\node_modules
+7 info clean removing C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\shared\node_modules
+8 silly rimrafDir C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\shared\node_modules
+9 info clean removing C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\web\node_modules
+10 silly rimrafDir C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\web\node_modules
+11 error Error: Command failed with exit code 1: C:\Program Files\nodejs\node.exe C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\node_modules\rimraf\bin.js --no-glob C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\shared\node_modules\
+11 error     at makeError (C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\node_modules\execa\lib\error.js:60:11)
+11 error     at handlePromise (C:\Users\Admin\Documents\GitHub\EHG-Member-Portal\node_modules\execa\index.js:118:26)
+11 error     at processTicksAndRejections (node:internal/process/task_queues:96:5)

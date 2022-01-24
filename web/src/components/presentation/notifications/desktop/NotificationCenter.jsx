@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SearchAndFilterBar from '../../shared/desktop/SearchAndFilterBar';
@@ -9,7 +9,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { connect } from 'react-redux';
 
-const { fetchNotifications } = actions;
+const { fetchNotifications, clearNotifications } = actions;
 const { getToken } = selectors;
 
 // DESKTOP: Notification Center Drawer
@@ -96,9 +96,17 @@ const NotificationCenter = ({
   markNotificationsAsRead,
   notifications,
   notificationsDataFrame,
-  fetchNotifications
-}) => (
-  <>
+  fetchNotifications,
+  clearNotifications
+}) => {
+
+  useEffect(() => {
+    return () => {
+      clearNotifications();
+    }
+  }, [])
+
+  return (<>
     <Wrapper>
       <Header>
         <div>
@@ -110,7 +118,7 @@ const NotificationCenter = ({
         </CloseDrawer>
       </Header>
       <SearchWrapper>
-        <SearchAndFilterBar search={fetchNotifications} dateButton filterButton placeholder="Search Messages" />
+        <SearchAndFilterBar search={fetchNotifications} clearData={clearNotifications} dateButton filterButton placeholder="Search Messages" />
       </SearchWrapper>
       <ScrollerWithInfiniteScroll
         fetch={() => {
@@ -132,15 +140,15 @@ const NotificationCenter = ({
               title={message.title}
               id={message.user_notification_id}
               passThroughRef={message.ref}
-              onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
+              // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
             />
           ))}
           {notifications && notifications.pending && <Loader />}
         </MessageListWrapper>
       </ScrollerWithInfiniteScroll>
     </Wrapper>
-  </>
-);
+  </>)
+}
 
 NotificationCenter.propTypes = {
   handleClick: PropTypes.func.isRequired,
@@ -150,7 +158,7 @@ NotificationCenter.propTypes = {
 };
 
 NotificationCenter.defaultProps = {
-  markNotificationsAsRead: () => {},
+  markNotificationsAsRead: () => { },
   notifications: [],
   notificationsDataFrame: {}
 };
@@ -160,12 +168,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchNotifications: args => 
+  fetchNotifications: args =>
     dispatch(fetchNotifications(args)),
+  clearNotifications: () =>
+    dispatch(clearNotifications())
 });
 
-const mergeProps = ({ token, ...stateProps }, { fetchNotifications }, ownProps) => ({
-  fetchNotifications: args => fetchNotifications({token, ...args}),
+const mergeProps = ({ token, ...stateProps }, { fetchNotifications, clearNotifications }, ownProps) => ({
+  fetchNotifications: args => fetchNotifications({ token, ...args }),
+  clearNotifications: () => clearNotifications(),
   ...stateProps,
   ...ownProps
 });

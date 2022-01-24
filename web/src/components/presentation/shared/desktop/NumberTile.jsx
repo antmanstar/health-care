@@ -17,6 +17,9 @@ const Wrapper = styled.div`
   text-align: center;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  @media screen and (min-width: 300px) and (max-width: 1200px) {
+    width: 49%;
+  }
 `;
 
 const Number = styled.h1`

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
+import styled from 'styled-components';
 import NumberTile from './NumberTile';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
@@ -13,7 +14,19 @@ const { INDIVIDUAL } = constants;
 
 // 4 NumberTiles giving claims summary totals
 
-const { LayoutWrapper, SpaceBetween } = defaultTheme.components;
+const { LayoutWrapper } = defaultTheme.components;
+
+const SpaceBetween = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  div {
+    margin-top: 13px;
+    @media screen and (min-width: 1200px) {
+      margin-top: 0;
+    }
+  }
+`;
 
 class ClaimsTotals extends Component {
   componentDidMount() {
@@ -65,8 +78,4 @@ ClaimsTotals.defaultProps = {
   claimsSummary: {}
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(ClaimsTotals);
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(ClaimsTotals);

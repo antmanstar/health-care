@@ -15,7 +15,8 @@ const Search = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: center;
-
+  position: relative;
+  z-index: 10;
   i {
     margin-right: 20px;
     font-size: 24px;

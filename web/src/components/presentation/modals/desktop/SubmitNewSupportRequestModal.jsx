@@ -16,6 +16,7 @@ const {
   Scrim,
   ModalBody,
   ModalButtonsRight,
+  ModalButtonsCenter,
   ModalHeader,
   ModalSectionDivider,
   ModalTitle,
@@ -28,7 +29,12 @@ const SqaushedSpaceBetween = styled(SpaceBetween)`
 `;
 
 const Column = styled.div`
-  width: calc(50% - 8px);
+  width: 100%;
+  margin-left: -16px;
+
+  @media (min-width: 550px) {
+    width: calc(50% - 8px);
+  }
 
   .big-button {
     width: 100%;
@@ -42,8 +48,9 @@ const PhoneNumber = styled.div`
   color: ${props => props.theme.colors.shades.blue};
 
   p {
-    margin: 0 0 0 8px;
+    //margin: 0 0 0 8px;
     font-weight: 400;
+    white-space: nowrap;
   }
 `;
 
@@ -63,7 +70,7 @@ const SubmitNewSupportRequestModal = React.memo(({ phoneNumber, hideModal }) => 
         </SpaceBetween>
       </ModalHeader>
       <ModalBody>
-        <SqaushedSpaceBetween>
+        {/* <SqaushedSpaceBetween>
           <Column>
             <FormLabel>Concierge Care</FormLabel>
             <BigButtonContainer buttonKey="requestInformation" />
@@ -74,13 +81,20 @@ const SubmitNewSupportRequestModal = React.memo(({ phoneNumber, hideModal }) => 
             <BigButtonContainer buttonKey="sendAMessage" />
             <BigButtonContainer buttonKey="schedulePhoneCall" />
           </Column>
-        </SqaushedSpaceBetween>
+        </SqaushedSpaceBetween> */}
+        <ModalButtonsCenter>
+          <Column>
+            <BigButtonContainer buttonKey="requestInformation" />
+            <BigButtonContainer buttonKey="sendAMessage" />
+            <BigButtonContainer buttonKey="schedulePhoneCall" />
+          </Column>
+        </ModalButtonsCenter>
       </ModalBody>
       <ModalSectionDivider />
-      <ModalButtonsRight>
-        <SmallButton text="Submit Request" />
+      <ModalButtonsCenter>
+        {/* <SmallButton text="Submit Request" /> */}
         <SmallButton text="Cancel" negative onClick={hideModal} />
-      </ModalButtonsRight>
+      </ModalButtonsCenter>
     </ModalWrapper>
   </>
 ));

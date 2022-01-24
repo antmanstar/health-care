@@ -13,7 +13,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
 import SessionTimeout from './views/SessionTimeout';
 import { insightsPlugin } from '../insights/microsoft/appInsights';
-import { AppInsightsErrorBoundary } from "@microsoft/applicationinsights-react-js";
+import { AppInsightsErrorBoundary } from '@microsoft/applicationinsights-react-js';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 
 const { isAuthenticated, getCurrentModal } = selectors;
@@ -48,7 +48,8 @@ function renderPage(isAuthenticated, currentModal, store) {
         }
         return null;
       }}
-      appInsights={insightsPlugin}>
+      appInsights={insightsPlugin}
+    >
       <ThemeProvider theme={defaultTheme}>
         <>
           {/*
@@ -92,30 +93,33 @@ function renderPage(isAuthenticated, currentModal, store) {
 }
 
 const Root = ({ isAuthenticated, currentModal, store }) => {
-  const [ pageMayLoad, setPageMayLoad ] = useState(false);
+  const [pageMayLoad, setPageMayLoad] = useState(false);
 
   useEffect(() => {
     let storeState = store.getState();
 
     if (!pageMayLoad && storeState?.user?.auth?.auth_token) {
-      apis.fetchBasicInfo({ token: storeState.user.auth.auth_token }).then(response => {
-        store.dispatch(actions.initializeBasicInfo(response.data));
-        
-        setPageMayLoad(true);
-      }).catch(() => {
-        setPageMayLoad(true);
-      });
+      apis
+        .fetchBasicInfo({ token: storeState.user.auth.auth_token })
+        .then(response => {
+          store.dispatch(actions.initializeBasicInfo(response.data));
+
+          setPageMayLoad(true);
+        })
+        .catch(() => {
+          setPageMayLoad(true);
+        });
     } else {
       setPageMayLoad(true);
     }
-  }, [])
+  }, []);
 
   if (pageMayLoad) {
     return renderPage(isAuthenticated, currentModal, store);
   } else {
     return <div>Loading..</div>;
   }
-} 
+};
 
 Root.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,

@@ -13,6 +13,10 @@ import Pagination from '../../shared/desktop/Pagination';
 const { SectionBackground, Container, SectionDivider, SpaceBetween } = defaultTheme.components;
 
 const InnerWrapper = styled.div`
+  @media (max-width: 549px) {
+    margin-top: 15px;
+  }
+
   & > * {
     display: inline-block;
     margin-left: 15px;
@@ -23,16 +27,34 @@ const PaginationWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   text-align: center;
+`;
+
+const SectionHeaderWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  @media (min-width: 550px) {
+    justify-content: space-between;
+  }
+`;
+
+const SectionHeaderItem = styled.div`
+  width: 100%;
+
+  @media (min-width: 550px) {
+    width: auto;
+  }
 `;
 
 const SupportRequestsSection = ({ paginator, requests, showCompleted, showModal }) => (
   <>
     <SectionBackground>
       <Container>
-        <SpaceBetween>
+        <SectionHeaderWrapper>
           <SectionHeaderWithIcon
             title="Support Requests"
             subTitle="View your pending requests or submit a new one."
@@ -46,7 +68,7 @@ const SupportRequestsSection = ({ paginator, requests, showCompleted, showModal 
               }}
             />
           </InnerWrapper>
-        </SpaceBetween>
+        </SectionHeaderWrapper>
       </Container>
       <SectionDivider />
       <Container>

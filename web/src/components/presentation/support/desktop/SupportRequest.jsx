@@ -43,7 +43,8 @@ const SupportSummary = styled.div`
   display: flex;
   align-items: center;
   padding: 16px;
-  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 const InnerContent = styled.div`
@@ -63,7 +64,11 @@ const InnerContent = styled.div`
   }
 
   &:last-child {
-    margin-left: auto;
+    margin-top: 10px;
+    @media (min-width: 550px) {
+      margin-left: auto;
+      margin-top: 0px;
+    }
   }
 `;
 

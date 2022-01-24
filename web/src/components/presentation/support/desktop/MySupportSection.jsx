@@ -35,6 +35,9 @@ const Description = styled.p`
   font-size: 16px;
   line-height: 20px;
   color: ${props => props.theme.colors.shades.darkGray};
+  @media (max-width: 549px) {
+    font-size: 12px;
+  }
 `;
 
 const SupportProfileWithMarginWrapper = styled.div`
@@ -54,7 +57,11 @@ const TwoColumRowWithBreak = styled(TwoColumnRow)`
     }
   }
 `;
-
+const InfoItem = styled.span`
+  @media (max-width: 549px) {
+    font-size: 12px;
+  }
+`;
 class MySupportSection extends Component {
   constructor(props) {
     super(props);
@@ -90,11 +97,18 @@ class MySupportSection extends Component {
                     <SupportProfile
                       name={`${careGuide.first_name} ${careGuide.last_name}`}
                       roleLabel="Care Guide"
-                      number={`${careGuide.phone.phone_number} (Ext - ${
-                        careGuide.phone.phone_number_extension
-                      })`}
+                      number={`${careGuide.phone.phone_number} ${
+                        careGuide.phone.phone_number_extension &&
+                        careGuide.phone.phone_number_extension.trim().length > 0
+                          ? `(Ext - ${careGuide.phone.phone_number_extension})`
+                          : ''
+                      }`}
                       email={careGuide.email.email_address}
-                      imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
+                      imgSrc={
+                        careGuide.my_image_file_id && careGuide.my_image_file_id.length > 0
+                          ? `` //URL NEEDED
+                          : 'https://randomuser.me/api/portraits/women/58.jpg'
+                      }
                     />
                   </SupportProfileWithMarginWrapper>
                   <Description>
@@ -116,50 +130,48 @@ class MySupportSection extends Component {
                 <>
                   <H3>Evry Health, Inc</H3>
                   <TwoColumnInfoItem>
-                    <span>Customer Support Phone</span>
-                    <span>
+                    <InfoItem>Customer Support Phone</InfoItem>
+                    <InfoItem>
                       <a
                         className="no-link-style"
                         href={`tel:+1${evryContactInfo.phones[0].phone_number.split('-').join('')}`}
                       >
                         {`1-${evryContactInfo.phones[0].phone_number}`}
                       </a>
-                    </span>
+                    </InfoItem>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <span>Customer Support Email</span>
-                    <span>
+                    <InfoItem>Customer Support Email</InfoItem>
+                    <InfoItem>
                       <a href={`mailto:${evryContactInfo.support_email.email_address}`}>
                         {evryContactInfo.support_email.email_address}
                       </a>
-                    </span>
+                    </InfoItem>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <span>Fax Number</span>
-                    <span>
+                    <InfoItem>Fax Number</InfoItem>
+                    <InfoItem>
                       <a
                         className="no-link-style"
                         href={`tel:+1${evryContactInfo.phones[2].phone_number.split('-').join('')}`}
                       >
                         {`1-${evryContactInfo.phones[2].phone_number}`}
                       </a>
-                    </span>
+                    </InfoItem>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <span>Official Website</span>
-                    <span>
+                    <InfoItem>Official Website</InfoItem>
+                    <InfoItem>
                       <a href={`https://${evryContactInfo.website}`}>{evryContactInfo.website}</a>
-                    </span>
+                    </InfoItem>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <span>Mailing Address</span>
-                    <span>
+                    <InfoItem>Mailing Address</InfoItem>
+                    <InfoItem>
                       {evryContactInfo.mailing_address.address1}
                       <br />
-                      {`${evryContactInfo.mailing_address.city}, ${
-                        evryContactInfo.mailing_address.state
-                      } ${evryContactInfo.mailing_address.zip}`}
-                    </span>
+                      {`${evryContactInfo.mailing_address.city}, ${evryContactInfo.mailing_address.state} ${evryContactInfo.mailing_address.zip}`}
+                    </InfoItem>
                   </TwoColumnInfoItem>
                 </>
               )}

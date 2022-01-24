@@ -40,7 +40,7 @@ const ColoredBackground = styled.div`
 `;
 
 const CenterText = styled.div`
-  margin: 32px 0;
+  margin: 16px 0;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -48,6 +48,12 @@ const CenterText = styled.div`
   p {
     max-width: 432px;
     color: ${props => props.theme.colors.shades.mediumGray};
+  }
+
+  a {
+    text-decoration: none;
+    color: ${props => props.theme.colors.shades.pinkOrange};
+    text-decoration: underline;
   }
 `;
 
@@ -62,8 +68,12 @@ const SqaushedSpaceBetween = styled(SpaceBetween)`
 `;
 
 const Column = styled.div`
-  width: calc(50% - 8px);
+  width: 100%;
+  margin-left: -16px;
 
+  @media (min-width: 550px) {
+    width: calc(50% - 8px);
+  }
   .big-button {
     width: 100%;
     margin-bottom: 8px;
@@ -82,10 +92,13 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
             <ColoredBackground />
             <ContactCareGuideProfile
               name={`${careGuide.first_name} ${careGuide.last_name}`}
-              roleLabel="Care Guide"
-              number={`${careGuide.phone.phone_number} (Ext - ${
-                careGuide.phone.phone_number_extension
-              })`}
+              roleLabel="Your Care Guide"
+              number={`${careGuide.phone.phone_number} ${
+                careGuide.phone.phone_number_extension &&
+                careGuide.phone.phone_number_extension.trim().length > 0
+                  ? `(Ext - ${careGuide.phone.phone_number_extension})`
+                  : ''
+              }`}
               email={careGuide.email.email_address}
               imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
             />
@@ -97,7 +110,7 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
         <CenterText>
           <Title>{name ? `Hi ${name.first}, how can I help?` : 'Hi, how can I help?'}</Title>
         </CenterText>
-        <SqaushedSpaceBetween>
+        {/* <SqaushedSpaceBetween>
           <Column>
             <FormLabel>Concierge Care</FormLabel>
             <BigButtonContainer buttonKey="requestInformation" />
@@ -110,7 +123,20 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
             <BigButtonContainer buttonKey="sendAMessage" />
             <BigButtonContainer buttonKey="schedulePhoneCall" />
           </Column>
-        </SqaushedSpaceBetween>
+        </SqaushedSpaceBetween> */}
+        <ModalButtonsCenter>
+          <Column>
+            <BigButtonContainer buttonKey="requestInformation" />
+            <BigButtonContainer buttonKey="sendAMessage" />
+            <BigButtonContainer buttonKey="schedulePhoneCall" />
+          </Column>
+        </ModalButtonsCenter>
+        <CenterText>
+          <p>
+            What all can your Care Coordinator do for you? Visit our Help Center to learn more about{' '}
+            <a href="">Evry's Concierge Care</a>.
+          </p>
+        </CenterText>
       </ModalBody>
       <ModalSectionDivider />
       <ModalButtonsCenter>

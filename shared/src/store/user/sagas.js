@@ -126,6 +126,48 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.CREATE_CASE_SCHEDULE_PHONE,
+        generateFetchWorker,
+        api.createCase_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.COMPLETE_CASE_SCHEDULE_PHONE,
+        generateFetchWorker,
+        api.markCaseAsSubmitComplete
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.CREATE_CASE_SEND_MESSAGE,
+        generateFetchWorker,
+        api.createCase_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.COMPLETE_CASE_SEND_MESSAGE,
+        generateFetchWorker,
+        api.markCaseAsSubmitComplete
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.CREATE_CASE_REQUEST_INFORMATION,
+        generateFetchWorker,
+        api.createCase_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.COMPLETE_CASE_REQUEST_INFORMATION,
+        generateFetchWorker,
+        api.markCaseAsSubmitComplete
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.EDUCATIONAL_RESOURCES_FETCH,
         generateFetchWorker,
         api.fetchEducationalResources
