@@ -130,45 +130,55 @@ const CarePlanSuggestionSlide = ({
   handleAccept,
   handleDecline,
   isAssigningCarePlan
-}) => (
-  <Wrapper>
-    <Options>
-      {carePlanSelection.title === carePlanSuggestion.title ? (
-        <CarePlanBoxBig
-          title={carePlanSuggestion.title}
-          icon={carePlanSuggestion.icon}
-          suggested={true}
-        />
-      ) : (
-        <>
-          <CarePlanBoxBig title={carePlanSelection.title} icon={carePlanSelection.icon} />
-          <BigArrow src={images['big_right_arrow']} />
+}) => {
+  const isSamePlan = carePlanSelection.title === carePlanSuggestion.title ? true : false;
+
+  return (
+    <Wrapper>
+      <Options>
+        {isSamePlan ? (
           <CarePlanBoxBig
             title={carePlanSuggestion.title}
             icon={carePlanSuggestion.icon}
             suggested={true}
           />
-        </>
-      )}
-    </Options>
-    <Information>
-      <Title>{carePlanSuggestion.title}</Title>
-      <Description>{carePlanSuggestion.desc}</Description>
-    </Information>
-    <Buttons>
-      <Button text="Choose Plan" onClick={handleAccept} disabled={isAssigningCarePlan} />
-      <br />
-      <Button
-        type="negative"
-        value="No Thanks"
-        text="No Thanks"
-        onClick={handleDecline}
-        color="red"
-        disabled={isAssigningCarePlan}
-      />
-    </Buttons>
-  </Wrapper>
-);
+        ) : (
+          <>
+            <CarePlanBoxBig title={carePlanSelection.title} icon={carePlanSelection.icon} />
+            <BigArrow src={images['big_right_arrow']} />
+            <CarePlanBoxBig
+              title={carePlanSuggestion.title}
+              icon={carePlanSuggestion.icon}
+              suggested={true}
+            />
+          </>
+        )}
+      </Options>
+      <Information>
+        <Title>{carePlanSuggestion.title}</Title>
+        <Description>{carePlanSuggestion.desc}</Description>
+      </Information>
+      <Buttons>
+        <Button
+          text={isSamePlan ? 'Continue' : 'Choose Plan'}
+          onClick={handleAccept}
+          disabled={isAssigningCarePlan}
+        />
+        <br />
+        {!isSamePlan && (
+          <Button
+            type="negative"
+            value="No Thanks"
+            text="No Thanks"
+            onClick={handleDecline}
+            color="red"
+            disabled={isAssigningCarePlan}
+          />
+        )}
+      </Buttons>
+    </Wrapper>
+  );
+};
 
 CarePlanSuggestionSlide.propTypes = {
   carePlanSelection: PropTypes.shape({}),

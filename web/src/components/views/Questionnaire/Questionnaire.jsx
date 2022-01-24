@@ -27,7 +27,7 @@ const {
 
 const Wrapper = styled.form`
   margin: 40px auto 0px;
-  width: 960px;
+  width: 100%;
   color: ${props => props.theme.colors.shades.blue};
   text-align: center;
 
@@ -42,16 +42,23 @@ const Wrapper = styled.form`
   @media ${props => props.theme.device.tabletXL} {
     width: 100%;
   }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 960px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 960px;
+  }
 `;
 
 const Question = styled.h1`
   margin: 0 auto;
   text-align: center;
-  width: 772px;
+  width: 100%;
 
   @media ${props => props.theme.device.mobile} {
     width: 100%;
-    font-size: 25px;
   }
 
   @media ${props => props.theme.device.tablet} {
@@ -61,20 +68,29 @@ const Question = styled.h1`
   @media ${props => props.theme.device.tabletXL} {
     width: 100%;
   }
+
+  @media ${props => props.theme.device.desktop} {
+    width: 772px;
+  }
+
+  @media ${props => props.theme.device.desktopXL} {
+    width: 772px;
+  }
 `;
 
 const AnswerWrapper = styled.div`
   display: flex;
   justify-content: center;
 `;
+
 const AnswerSet = styled.ol`
   list-style: none;
   margin: 40px auto 0;
   padding: 0;
   text-align: left;
-  width: 452px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  width: 100%;
 
   @media ${props => props.theme.device.mobile} {
     width: 100%;
@@ -95,13 +111,13 @@ const AnswerSet = styled.ol`
   }
 
   @media ${props => props.theme.device.desktop} {
-    width: 50%;
+    width: 100%;
     margin-bottom: 110px;
     justify-content: space-evenly;
   }
 
   @media ${props => props.theme.device.desktopXL} {
-    width: 50%;
+    width: 100%;
     margin-bottom: 110px;
     justify-content: space-evenly;
   }

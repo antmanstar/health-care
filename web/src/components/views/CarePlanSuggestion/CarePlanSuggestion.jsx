@@ -8,6 +8,7 @@ import OnboardingProgressBar from '../../presentation/registration/desktop/Onboa
 import CarePlanSuggestionSlide from '../../presentation/registration/desktop/CarePlanSuggestionSlide';
 import { carePlans } from '../../../content';
 import history from '../../../utils/history';
+import Interpolation from '../../../utils/Interpolation';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
@@ -89,7 +90,10 @@ const CarePlanSuggestion = ({
   return (
     <>
       <Helmet>
-        <title>{reflection.layoutProps.title} - Evry Health</title>
+        <title>
+          {selectedCarePlanId === suggestedCarePlanId ? 'Keep Current Plan' : 'Change Plan?'} - Evry
+          Health
+        </title>
       </Helmet>
       <OnboardingProgressBar progressStep={4} />
       <Wrapper>
@@ -154,7 +158,12 @@ const reflection = {
   component: ConnectedCarePlanSuggestion,
   layout: Sparse,
   layoutProps: {
-    title: 'Change Plan?',
+    title: new Interpolation([
+      state =>
+        getSelectedCarePlanId(state) === getSuggestedCarePlanId(state)
+          ? 'Keep Current Plan'
+          : 'Change Plan?'
+    ]),
     subtitle: 'Based on your selections, we suggest you consider choosing the Heart Health Plan',
     fullWidth: true
   },
