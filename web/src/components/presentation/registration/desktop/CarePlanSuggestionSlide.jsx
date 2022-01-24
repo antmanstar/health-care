@@ -132,6 +132,7 @@ const CarePlanSuggestionSlide = ({
   isAssigningCarePlan
 }) => {
   const isSamePlan = carePlanSelection.title === carePlanSuggestion.title ? true : false;
+  console.log('AAA', isAssigningCarePlan);
 
   return (
     <Wrapper>
@@ -192,8 +193,7 @@ CarePlanSuggestionSlide.defaultProps = {
   carePlanSelection: {},
   carePlanSuggestion: {},
   handleAccept: () => {},
-  handleDecline: () => {},
-  isAssigningCarePlan: true
+  handleDecline: () => {}
 };
 
 export default CarePlanSuggestionSlide;
