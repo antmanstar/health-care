@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import defaultTheme from '../../style/themes';
 import { Helmet } from 'react-helmet-async';
 import CheckCircle from '@evry-member-app/assets/images/vector/check-in-circle.svg';
-import Negative from '@evry-member-app/assets/images/vector/feedback-negative.svg';
+import Danger from '@evry-member-app/assets/images/vector/danger.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import queryString from 'query-string';
 import { Sparse } from '../layouts';
@@ -153,25 +153,50 @@ const EmailVerification = props => {
     );
   }
 
+  function renderVerificationFailureLoggedIn() {
+    return (
+      <>
+        <Body>
+          Click here to resend a new verification link.
+        </Body>
+        <Separator />
+        <Center>
+          <RouterLink to="/">
+            <ActionButton bgColor="#022B40" onClick={handleResend}>Send Link Again</ActionButton>
+          </RouterLink>
+          {resendClicked && <EmailResentAlert>Your email verification has been submitted. Please check your email inbox.</EmailResentAlert>}
+        </Center>
+      </>
+    )
+  }
+
+  function renderVerificationFailureLoggedOut() {
+    return (
+      <>
+        <Body>
+          Click here to login and get a new verification link.
+        </Body>
+        <Separator />
+        <Center>
+          <RouterLink to="/sign-in">
+            <ActionButton bgColor="#022B40">Sign In</ActionButton>
+          </RouterLink>
+        </Center>
+      </>
+    )
+  }
+
 
   function renderVerificationFailure() {
+    const isLoggedIn = props?.token?.length > 0;
+
     return (
       <Container>
-        <FeedbackIcon src={Negative} />
+        <FeedbackIcon src={Danger} />
         <VerificationContainer>
-          <Header>Verification Failure!</Header>
+          <Header>Your email verification link has expired</Header>
           <Separator />
-          <Body>
-            Your email verification link has expired.
-            Click here to resend a new verification link.
-          </Body>
-          <Separator />
-          <Center>
-            <RouterLink to="/">
-              <ActionButton bgColor="#022B40" onClick={handleResend}>Resend</ActionButton>
-              {resendClicked && <EmailResentAlert>Your email verification has been submitted. Please check your email inbox.</EmailResentAlert>}
-            </RouterLink>
-          </Center>
+          {isLoggedIn ? renderVerificationFailureLoggedIn() : renderVerificationFailureLoggedOut()}
         </VerificationContainer>
       </Container>
     );
