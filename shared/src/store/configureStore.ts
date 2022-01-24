@@ -4,9 +4,19 @@ import * as reducers from './reducers';
 import rootSaga from './sagas';
 import { loadState, saveState } from './localStorage';
 import { History, MemoryHistory } from 'history';
+import selectors from './selectors';
 
+function createSaveState(storeState) {
+  return { 
+    user: {
+      auth: {
+        auth_token: selectors.getToken(storeState)
+      }
+    }
+  }
+}
 
-const configureStore = (history: History | MemoryHistory, preloadedState, ...middlewares: Array<() => void>) => {
+export default function configureStore(history: History | MemoryHistory, preloadedState, ...middlewares: Array<() => void>) {
   const sagaMiddleware = createSagaMiddleware({
     context: {
       history
@@ -23,7 +33,7 @@ const configureStore = (history: History | MemoryHistory, preloadedState, ...mid
   );
 
   store.subscribe(() => {
-    saveState(store.getState());
+    saveState(createSaveState(store.getState()));
   });
 
   sagaMiddleware.run(rootSaga);
@@ -38,5 +48,3 @@ const configureStore = (history: History | MemoryHistory, preloadedState, ...mid
 
   return store;
 };
-
-export default configureStore;

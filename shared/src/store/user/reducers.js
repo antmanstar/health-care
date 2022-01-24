@@ -49,6 +49,8 @@ const userReducer = (state = initialState, action) => {
       }
     case types.BASIC_INFO_FETCH_SUCCESS:
       return { ...state, basicInfo: action.payload, payload2FA: {} }
+    case types.INITIALIZE_BASIC_INFO_FETCH:
+      return { ...state, basicInfo: action.payload }
     case types.BENEFIT_COVERAGES_FETCH:
       return { ...state, benefitCoverages: { pending: true } }
     case types.BENEFIT_COVERAGES_FETCH_SUCCESS:

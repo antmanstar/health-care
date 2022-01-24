@@ -484,6 +484,11 @@ export const fetchAvailableSpecialties = (token) => ({
   }
 })
 
+export const initializeBasicInfo = (data) => ({
+  type: types.INITIALIZE_BASIC_INFO_FETCH,
+  payload: data
+})
+
 export const fetchBasicInfo = (token) => ({
   type: types.BASIC_INFO_FETCH,
   payload: {

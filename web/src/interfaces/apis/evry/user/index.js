@@ -171,7 +171,7 @@ export function fetchCases({
   );
 }
 
-export function fetchClaimsSummary({ id, token, type }) {∫
+export function fetchClaimsSummary({ id, token, type }) {
   return axios.post(
     '/api/v1/Member/GetClaimsSummary',
     {

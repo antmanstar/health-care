@@ -136,11 +136,7 @@ function SignIn({
 }) {
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo && !isOnboardingComplete) {
-      if (isOnboardingComplete) {
-        history.push('/');
-      } else {
-        history.push('/onboarding');
-      }
+      history.push('/');
     } else if (authError && authError.data) {
       handleClearAuthError();
     }

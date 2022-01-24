@@ -25,7 +25,7 @@ const rootComponent = (
         <Helmet>
           <title>{title} - Evry Health</title>
         </Helmet>
-        <Root />
+        <Root store={store} />
       </HelmetProvider>
     </Router>
   </Provider>
