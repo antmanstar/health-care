@@ -33,6 +33,11 @@ const CarePlanIcon = styled.img`
   margin-right: 32px;
 `;
 
+const QuestionIcon = styled.img`
+  width: 18px;
+  margin-right: 5px;
+`;
+
 const CarePlanHeader = React.memo(({ carePlan }) => {
   const plan = getCarePlanInfo(carePlan && carePlan.care_plan_id);
 
@@ -50,6 +55,7 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
                 <Description>{plan.description}</Description>
               </div>
             </LeftWrapper>
+            <QuestionIcon src={images['question-mark']} />
           </SpaceBetween>
         )}
       </Container>

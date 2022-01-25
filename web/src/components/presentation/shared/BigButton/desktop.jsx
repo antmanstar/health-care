@@ -10,7 +10,8 @@ const Button = styled.button`
   align-items: center;
   width: auto;
   padding: 19px 16px;
-  background: ${props => props.theme.colors.shades.tealBlue};
+  background: ${props =>
+    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.tealBlue};
   color: ${props => props.theme.colors.shades.white};
   border: none;
   border-radius: 4px;
@@ -30,6 +31,16 @@ const Button = styled.button`
   }
 `;
 
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const ComingText = styled.div`
+  font-size: 12px;
+`;
+
 const Icon = styled.i`
   color: ${props => props.theme.colors.shades.white};
 `;
@@ -38,16 +49,19 @@ const SvgIcon = styled.img`
   height: auto;
 `;
 
-const BigButton = React.memo(({ text, icon, onClick, svgIcon }) => (
-  <Button onClick={onClick} className="big-button">
-    {text}
-    {svgIcon ? (
-      <SvgIcon src={images[icon]} />
-    ) : (
-      <Icon className="material-icons">{icon}</Icon>
-    )}
-  </Button>
-));
+const BigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
+  const isComing = text === 'Update Health Survey';
+
+  return (
+    <Button onClick={onClick} className="big-button" isComing={isComing}>
+      <StyledDiv>
+        {text}
+        {isComing && <ComingText>Coming soon...</ComingText>}
+      </StyledDiv>
+      {svgIcon ? <SvgIcon src={images[icon]} /> : <Icon className="material-icons">{icon}</Icon>}
+    </Button>
+  );
+});
 
 BigButton.propTypes = {
   text: PropTypes.string.isRequired,

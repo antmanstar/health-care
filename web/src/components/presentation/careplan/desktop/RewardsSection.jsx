@@ -45,7 +45,7 @@ const Description = styled.p`
 `;
 
 const StyledSectionDivider = styled(SectionDivider)`
-  margin: 32px 0;
+  margin: 24px 0;
 `;
 
 const Flex = styled.div`
@@ -53,8 +53,6 @@ const Flex = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   width: 100%;
-  padding: 32px 32px 16px;
-  background: #fbfbfb;
   box-sizing: border-box;
 
   > * {
@@ -63,8 +61,21 @@ const Flex = styled.div`
   }
 `;
 
+const DiscountFlex = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 120px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-items: flex-start;
+
+  > * {
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+`;
+
 const Center = styled.div`
-  margin-top: 24px;
   display: flex;
   justify-content: center;
 
@@ -75,9 +86,9 @@ const Center = styled.div`
 
   button {
     padding: 0;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 300;
-    color: ${props => props.theme.colors.shades.pinkOrange};
+    color: ${props => props.theme.colors.shades.lightTealBlue};
     border: none;
     border-radius: 4px;
     outline: none;
@@ -89,6 +100,22 @@ const Center = styled.div`
       text-decoration: underline;
     }
   }
+`;
+
+const ExpandIconWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+
+  div {
+    font-size: 12px;
+    color: ${props => props.theme.colors.shades.gray};
+  }
+`;
+
+const StyledIcon = styled.i`
+  color: ${props => props.theme.colors.shades.white};
 `;
 
 class RewardsSection extends Component {
@@ -118,37 +145,79 @@ class RewardsSection extends Component {
     );
     const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
 
+    const rewards = [
+      {
+        benefit_display_name: 'Meet you Card Guide.',
+        benefit_description:
+          'Schedule a call to meet your personal healthcare concierge. Learn about how we can make your life easier.',
+        benefit_btn_text: 'Contact Care Guide',
+        benefit_earned: 25,
+        benefit_id: 1
+      },
+      {
+        benefit_display_name: 'Check in with a Doctor.',
+        benefit_description:
+          'Get a free check up via Telehealth from right where you are sitting. We’ll even throw in an extra reward for taking the time.',
+        benefit_btn_text: 'Talk to a Doctor',
+        benefit_earned: 25,
+        benefit_id: 2
+      },
+      {
+        benefit_display_name: 'Speak with a Nutritionist.',
+        benefit_description: 'Get a custom nutrition plan that’s right for you. It’s free!',
+        benefit_btn_text: 'Talk to a Nutritionist',
+        benefit_earned: 25,
+        benefit_id: 3
+      },
+      {
+        benefit_display_name: 'Health Survey Coming Soon...',
+        benefit_description:
+          'Soon you can fill out our Health Survey and earn $100! It takes about 15 minutes and will help us better serve you.',
+        benefit_id: 4
+      }
+    ];
+
     return (
       <SectionBackground>
         <Container>
           <SectionHeaderWithIcon
             icon="card_giftcard"
-            title="Earn Rewards"
-            subTitle="We’ve thrown out complicated points systems and all the games. Our Rewards Program is painless and easy to use. Just swipe your Evry Card at the register before paying to apply your discounts. It’s that Simple."
+            title="Rewards"
+            subTitle="Our Rewards Program is very easy to use. Pay with your Evry card at Walmart and get discounts on us."
+            subTitleTail="It’s that Simple."
           />
         </Container>
         <SectionDivider />
         <Container>
-          <Header>
-            <Icon src={images["activity-in-circle"]} />
+          {/* <Header>
+            <Icon src={images['activity-in-circle']} />
             <div>
               <Title>Activity Items</Title>
               <Description>Complete these activities for extra rewards.</Description>
             </div>
-          </Header>
+          </Header> */}
           <Flex>
-            {activityRewards.map(reward => (
+            {rewards.map(reward => (
               <ActivityReward
-                layoutClass="half"
+                layoutClass="reward"
                 key={reward.benefit_id}
                 title={reward.benefit_display_name}
                 description={reward.benefit_description}
+                buttonText={reward.benefit_btn_text}
+                earned={reward.benefit_earned}
               />
             ))}
           </Flex>
           <StyledSectionDivider />
+          <Center>
+            <button type="button" onClick={this.handlers.handleToggleClick}>
+              See More Rewards
+            </button>
+            <ExpandIconWrapper>Open</ExpandIconWrapper>
+          </Center>
+          <StyledSectionDivider />
           <Header>
-            <Icon src={images["money-in-circle"]} />
+            <Icon src={images['money-in-circle']} />
             <div>
               <Title>Discount Items</Title>
               <Description>
@@ -158,36 +227,25 @@ class RewardsSection extends Component {
               </Description>
             </div>
           </Header>
-          {!showFullDiscounts ? (
-            <Flex>
-              <ActivityReward layoutClass="third" title="Sporting Equipment" />
-              <ActivityReward layoutClass="third" title="Nutrition Supplements" />
-              <ActivityReward layoutClass="third" title="Frutis & Vegetables" />
-              <ActivityReward layoutClass="third" title="Home Exercise Equipment" />
-              <ActivityReward layoutClass="third" title="Family Planning Products" />
-              <ActivityReward layoutClass="third" title="Vitamins" />
-              <ActivityReward layoutClass="third" title="Weight Control Products" />
-              <ActivityReward layoutClass="third" title="First Aid Supplies" />
-              <ActivityReward layoutClass="third" title="Feminine Products" />
-            </Flex>
-          ) : (
-            <Flex>
-              {rewardCategories &&
-                Object.values(rewardCategories).map(category => {
-                  const items = discountItems.filter(
-                    item => item.benefit_category_ids[0] === category.category_id
-                  );
-                  if (!isEmpty(items)) {
-                    return <DiscountList title={category.category_name} items={items} />;
-                  }
-                })}
-            </Flex>
-          )}
+          <DiscountFlex>
+            <ActivityReward layoutClass="discount" title="Fresh fruits & vegetables" />
+            <ActivityReward layoutClass="discount" title="Fitness Equipment" />
+            <ActivityReward layoutClass="discount" title="Vitamins & Supplements" />
+            <ActivityReward layoutClass="discount" title="Health Products" />
+            <ActivityReward layoutClass="discount" title="Fresh fruits & vegetables" />
+            <ActivityReward layoutClass="discount" title="Perscription Medication" />
+          </DiscountFlex>
+          <StyledSectionDivider />
           <Center>
             <button type="button" onClick={this.handlers.handleToggleClick}>
-              {showFullDiscounts ? 'Show Less Discount Items' : 'See All Discount Items'}
+              See More Discounts
             </button>
+            <ExpandIconWrapper>
+              <div>Open</div>
+              <StyledIcon className="material-icons">Arrow</StyledIcon>
+            </ExpandIconWrapper>
           </Center>
+          <StyledSectionDivider />
         </Container>
       </SectionBackground>
     );

@@ -1,18 +1,13 @@
 /* eslint-disable no-alert */
 /* eslint-disable class-methods-use-this */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ActionButtons from '../../../presentation/shared/desktop/ActionButtons';
 
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
-class ActionButtonsContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  mapViewToButtons(view) {
+const ActionButtonsContainer = ({ view }) => {
+  const mapViewToButtons = view => {
     const aliases = {
       account: ['updatePassword', 'talkToADoctor', 'contactCareGuide'],
       claims: ['orderClaimsDocuments', 'talkToADoctor', 'contactCareGuide'],
@@ -22,14 +17,9 @@ class ActionButtonsContainer extends Component {
       support: ['replaceMembershipCard', 'submitSupportRequest', 'contactCareGuide']
     }[view];
     return aliases;
-  }
-
-  render() {
-    const { view } = this.props;
-
-    return <ActionButtons buttons={this.mapViewToButtons(view)} />;
-  }
-}
+  };
+  return <ActionButtons buttons={mapViewToButtons(view)} />;
+};
 
 ActionButtonsContainer.propTypes = {
   view: PropTypes.string.isRequired

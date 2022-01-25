@@ -9,6 +9,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 12px;
 `;
 
 const Inline = styled.div`
@@ -37,23 +38,30 @@ const Title = styled.h1`
 const SubTitle = styled.p`
   margin: 0;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 12px;
   margin-right: 10px;
   color: ${props => props.theme.colors.shades.darkGray};
 `;
 
-const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon }) => (
+const SubTitleTail = styled.text`
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+  margin-left: 4px;
+  color: ${props => props.theme.colors.shades.darkGray};
+`;
+
+const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon, subTitleTail }) => (
   <Wrapper>
     <div>
       <Inline>
-        {svgIcon ? (
-          <SvgIcon src={images[icon]} />
-        ) : (
-          <Icon className="material-icons">{icon}</Icon>
-        )}
+        {svgIcon ? <SvgIcon src={images[icon]} /> : <Icon className="material-icons">{icon}</Icon>}
         <Title>{title}</Title>
       </Inline>
-      <SubTitle>{subTitle}</SubTitle>
+      <SubTitle>
+        {subTitle}
+        <SubTitleTail>{subTitleTail}</SubTitleTail>
+      </SubTitle>
     </div>
   </Wrapper>
 ));
@@ -61,6 +69,7 @@ const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon }) =>
 SectionHeaderWithIcon.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
+  subTitleTail: PropTypes.string,
   icon: PropTypes.string.isRequired,
   svgIcon: PropTypes.bool
 };

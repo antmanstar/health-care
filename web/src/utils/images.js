@@ -56,6 +56,7 @@ import mockMapImg from '@evry-member-app/assets/images/raster/mock_map.png';
 import appStoreImg from '@evry-member-app/assets/images/raster/app-store.png';
 import googlePlatImg from '@evry-member-app/assets/images/raster/google-play.png';
 import bigRightArrowImg from '@evry-member-app/assets/images/vector/big_right_arrow.svg';
+import questionImg from '@evry-member-app/assets/images/vector/question.svg';
 
 const images = {
     "activity-in-circle": activityInCircleImg,
@@ -84,6 +85,7 @@ const images = {
     "money-in-circle": moneyInCircleImg,
     "plan-icon-heart": planIconHeartImg,
     "provider-lookup": providerLookupImg,
+    "question-mark": questionImg,
     "rewards-illustration": rewardsIllustrationImg,
     "success-icon": successIconImg,
     "telemedicine-illustration": telemedicineIllustrationImg,
