@@ -135,7 +135,7 @@ function SignIn({
   payload2FA
 }) {
   useEffect(() => {
-    if (isAuthenticated && hasBasicInfo && !isOnboardingComplete) {
+    if (isAuthenticated && hasBasicInfo && isOnboardingComplete) {
       history.push('/');
     } else if (authError && authError.data) {
       handleClearAuthError();

@@ -26,11 +26,20 @@ const userReducer = (state = initialState, action) => {
     case types.ASSIGN_CARE_PLAN_SUCCESS:
       return {
         ...state,
+        basicInfo: {
+          ...state.basicInfo,
+          user_assigned_care_plans: [
+            {
+              care_plan_id: state.onboarding.assignCarePlan.id,
+              care_plan_name: 'test'
+            }
+          ]
+        },
         onboarding: {
           ...state.onboarding,
           assignCarePlan: {
             ...state.onboarding.assignCarePlan,
-            ...action.payload,
+            ...action.payload
           },
           isAssigningCarePlan: false
         }
@@ -42,7 +51,7 @@ const userReducer = (state = initialState, action) => {
           ...state.onboarding,
           assignCarePlan: {
             ...state.onboarding.assignCarePlan,
-            error: action.payload,
+            error: action.payload
           },
           isAssigningCarePlan: false
         }
@@ -56,30 +65,30 @@ const userReducer = (state = initialState, action) => {
     case types.BENEFIT_COVERAGES_FETCH_SUCCESS:
       return { ...state, benefitCoverages: action.payload }
     case types.CARE_GUIDE_FETCH_SUCCESS:
-      return { ...state, careGuideInfo: action.payload };
+      return { ...state, careGuideInfo: action.payload }
     case types.CARE_GUIDE_FETCH_FAILURE:
       return {
         ...state,
         careGuideInfo: {
-          first_name: "Nicole",
-          middle_name: "",
-          last_name: "Stevens",
-          suffix: "",
-          prefix: "",
-          title: "Care Guide",
-          user_id: "",
-          my_image_file_id: "",
+          first_name: 'Nicole',
+          middle_name: '',
+          last_name: 'Stevens',
+          suffix: '',
+          prefix: '',
+          title: 'Care Guide',
+          user_id: '',
+          my_image_file_id: '',
           phone: {
-            phone_type: "",
-            phone_number: "(214)567-8796",
-            phone_number_extension: "",
+            phone_type: '',
+            phone_number: '(214)567-8796',
+            phone_number_extension: ''
           },
           email: {
-            email_address: "nstevens@evryhealth.com",
+            email_address: 'nstevens@evryhealth.com'
           },
-          error: action.error.response.data.messages,
-        },
-      };
+          error: action.error.response.data.messages
+        }
+      }
     case types.CARE_PLAN_FETCH_SUCCESS:
       return { ...state, carePlan: action.payload }
     case types.CASES_FETCH:
@@ -142,109 +151,109 @@ const userReducer = (state = initialState, action) => {
     case types.CREATE_CASE_SUCCESS:
       return { ...state, createCase: action.payload, sendingFeedback: true }
     case types.CREATE_CASE_FAILURE:
-      return { ...state, createCase: { error: action.error } };
+      return { ...state, createCase: { error: action.error } }
     case types.CREATE_CASE_SCHEDULE_PHONE_SUCCESS:
       return {
         ...state,
-        scheduledPhoneCallCase: { status: "OPEN", id: action.payload.id },
-      };
+        scheduledPhoneCallCase: { status: 'OPEN', id: action.payload.id }
+      }
     case types.CREATE_CASE_SCHEDULE_PHONE_FAILURE:
       return {
         ...state,
         scheduledPhoneCallCase: {
-          status: "ERROR-CREATING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-CREATING',
+          message: action.payload.messages
+        }
+      }
     case types.COMPLETE_CASE_SCHEDULE_PHONE_SUCCESS:
       return {
         ...state,
         scheduledPhoneCallCase: {
           ...state.scheduledPhoneCallCase,
-          status: "COMPLETE",
-        },
-      };
+          status: 'COMPLETE'
+        }
+      }
     case types.COMPLETE_CASE_SCHEDULE_PHONE_FAILURE:
       return {
         ...state,
         scheduledPhoneCallCase: {
-          status: "ERROR-COMPLETING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-COMPLETING',
+          message: action.payload.messages
+        }
+      }
     case types.SCHEDULE_PHONE_CALL_RESET:
       return {
         ...state,
-        scheduledPhoneCallCase: { status: null, id: null },
-      };
+        scheduledPhoneCallCase: { status: null, id: null }
+      }
     case types.CREATE_CASE_SEND_MESSAGE_SUCCESS:
       return {
         ...state,
-        sendMessageCase: { status: "OPEN", id: action.payload.id },
-      };
+        sendMessageCase: { status: 'OPEN', id: action.payload.id }
+      }
     case types.CREATE_CASE_SEND_MESSAGE_FAILURE:
       return {
         ...state,
         sendMessageCase: {
-          status: "ERROR-CREATING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-CREATING',
+          message: action.payload.messages
+        }
+      }
     case types.COMPLETE_CASE_SEND_MESSAGE_SUCCESS:
       return {
         ...state,
         sendMessageCase: {
           ...state.sendMessageCase,
-          status: "COMPLETE",
-        },
-      };
+          status: 'COMPLETE'
+        }
+      }
     case types.COMPLETE_CASE_SEND_MESSAGE_FAILURE:
       return {
         ...state,
         sendMessageCase: {
-          status: "ERROR-COMPLETING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-COMPLETING',
+          message: action.payload.messages
+        }
+      }
     case types.SEND_MESSAGE_RESET:
       return {
         ...state,
-        sendMessageCase: { status: null, id: null },
-      };
+        sendMessageCase: { status: null, id: null }
+      }
     case types.CREATE_CASE_REQUEST_INFORMATION_SUCCESS:
       return {
         ...state,
-        requestInformationCase: { status: "OPEN", id: action.payload.id },
-      };
+        requestInformationCase: { status: 'OPEN', id: action.payload.id }
+      }
     case types.CREATE_CASE_REQUEST_INFORMATION_FAILURE:
       return {
         ...state,
         requestInformationCase: {
-          status: "ERROR-CREATING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-CREATING',
+          message: action.payload.messages
+        }
+      }
     case types.COMPLETE_CASE_REQUEST_INFORMATION_SUCCESS:
       return {
         ...state,
         requestInformationCase: {
           ...state.requestInformationCase,
-          status: "COMPLETE",
-        },
-      };
+          status: 'COMPLETE'
+        }
+      }
     case types.COMPLETE_CASE_REQUEST_INFORMATION_FAILURE:
       return {
         ...state,
         requestInformationCase: {
-          status: "ERROR-COMPLETING",
-          message: action.payload.messages,
-        },
-      };
+          status: 'ERROR-COMPLETING',
+          message: action.payload.messages
+        }
+      }
     case types.REQUEST_INFORMATION_RESET:
       return {
         ...state,
-        requestInformationCase: { status: null, id: null },
-      };
+        requestInformationCase: { status: null, id: null }
+      }
     case types.EVRY_CONTACT_FETCH_SUCCESS:
       return { ...state, evryContactInfo: action.payload }
     case types.EDUCATIONAL_RESOURCES_FETCH_SUCCESS:
@@ -311,7 +320,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         onboarding: {
           ...state.onboarding,
-          carePlanSelection: { id: action.payload.id },
+          carePlanSelection: { id: action.payload.id }
         },
         isChoosingCarePlan: true
       }
@@ -320,7 +329,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         onboarding: {
           ...state.onboarding,
-          questionnaire: action.payload,
+          questionnaire: action.payload
         },
         isChoosingCarePlan: false
       }
@@ -381,10 +390,10 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         notifications: {
-          ...get(state, ["notifications"], {}),
+          ...get(state, ['notifications'], {}),
           request: {
             query: action.payload.query,
-            read: action.payload.read,
+            read: action.payload.read
           },
           pending: true
         }
@@ -406,12 +415,12 @@ const userReducer = (state = initialState, action) => {
           ...state.basicInfo,
           email_verified: true
         },
-        emailVerificationChallengeStatus: "success"
+        emailVerificationChallengeStatus: 'success'
       }
     case types.EMAIL_VERIFY_CHALLENGE_FAILURE:
       return {
         ...state,
-        emailVerificationChallengeStatus: "failure"
+        emailVerificationChallengeStatus: 'failure'
       }
     case types.REGISTER:
       return {
@@ -447,7 +456,7 @@ const userReducer = (state = initialState, action) => {
         }
       }
     case types.SIGN_IN:
-      return { ...state, isSigningIn: true, isSignedIn: false };
+      return { ...state, isSigningIn: true, isSignedIn: false }
     case types.SIGN_IN_SUCCESS:
     case types.TWO_FACTOR_CODE_VERIFY_SUCCESS:
       return {
@@ -467,7 +476,7 @@ const userReducer = (state = initialState, action) => {
         auth: { error: action.error.response.data.messages }
       }
     case types.SIGN_OUT:
-      return { ...state, isSigningOut: true };
+      return { ...state, isSigningOut: true }
     case types.SIGN_OUT_SUCCESS:
     case types.SIGN_OUT_FAILURE:
       return { ...state, auth: {}, isSigningOut: false }
