@@ -211,7 +211,7 @@ function Register({
       <FormWrapper>
         <Title>Find your membership.</Title>
         <SectionDivider />
-        <form autoComplete="off">
+        <form autoComplete="false">
           <EditedTwoColumnRow>
             <SmallContainer>
               <Label htmlFor="memberId">Enter your Member ID.</Label>

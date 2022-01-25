@@ -219,7 +219,7 @@ function SignIn({
           <Title>Authenticate your account</Title>
           <SectionDivider />
           <Body>Please check your phone for the authentication code.</Body>
-          <form autoComplete="off" onSubmit={submit2FA}>
+          <form autoComplete="false" onSubmit={submit2FA}>
             <input type="hidden" value={payload2FA.two_way_factor_token} name="twoFactorToken" />
             <input type="hidden" value={payload2FA.email_address} name="email" />
             <EnterCode>Enter Code</EnterCode>
@@ -267,7 +267,12 @@ function SignIn({
             </EditedTwoColumnRow>
             <SectionDivider />
             <ButtonWrapper>
-              <Button buttonType="submit" value="Sign In" text="Sign In" />
+              <Button
+                buttonType="submit"
+                value="Sign In"
+                text="Sign In"
+                disabled={isSigningIn || isSubmitting2FA}
+              />
             </ButtonWrapper>
           </form>
         </FormWrapper>
