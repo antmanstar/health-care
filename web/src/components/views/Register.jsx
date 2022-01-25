@@ -186,7 +186,8 @@ function Register({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
     verifyEligibilityIdAndSSN({ eligibilityId: memberId, last4SSN: ssn });
   };
 
@@ -210,7 +211,7 @@ function Register({
       <FormWrapper>
         <Title>Find your membership.</Title>
         <SectionDivider />
-        <form autoComplete="false">
+        <form autoComplete="off">
           <EditedTwoColumnRow>
             <SmallContainer>
               <Label htmlFor="memberId">Enter your Member ID.</Label>
@@ -224,6 +225,7 @@ function Register({
                 id="memberId"
                 placeholder="Example: EVR19238400032"
                 onChange={handleChangeMemberId}
+                autoComplete="false"
               />
             </SmallContainer>
             <SmallContainer>
