@@ -87,7 +87,7 @@ class ChooseCarePlan extends Component {
         </Helmet>
         <OnboardingProgressBar progressStep={2} />
         <Wrapper>
-          <CarePlanSelectionSlideWithData />
+          <CarePlanSelectionSlideWithData isChoosingCarePlan={isChoosingCarePlan} />
           {isChoosingCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </Wrapper>
       </>

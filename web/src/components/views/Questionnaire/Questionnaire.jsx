@@ -390,6 +390,7 @@ class Questionnaire extends Component {
         </Wrapper>
         <OnboardWrapper>
           <OnboardingControls
+            isSavingQuestionnaire={isSavingQuestionnaire}
             isQuestionAnswered={this.isQuestionAnswered()}
             currentStep={currentQuestion}
             maxSteps={this.props.questionnaire.questions.length}

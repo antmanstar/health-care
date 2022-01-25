@@ -361,8 +361,8 @@ class Claim extends Component {
                         <br />
                         {provider.phoneNumber ||
                           (claimDetail &&
-                            claimDetail.provider_phones &&
-                            claimDetail.provider_phones[0].phone_number)}
+                            claimDetail?.provider_phones &&
+                            claimDetail?.provider_phones[0]?.phone_number)}
                       </ProviderInfo>
                     </Padding16>
                   </SmallSectionBackground>

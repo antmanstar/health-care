@@ -30,8 +30,33 @@ const {
 // TODO: 2FA code should be abstracted out and used / shared between mobile/desktop
 
 const { LayoutWrapper, Input, TwoColumnRow, SectionDivider } = defaultTheme.components;
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: auto auto 0;
+  padding: 16px 0 0 0;
+  box-sizing: border-box;
+  border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+
+  @media ${defaultTheme.device.tablet} {
+    border-top: none;
+  }
+
+  @media ${defaultTheme.device.desktopXL} {
+    border-top: none;
+  }
+`;
+const FormWrapper = styled.div`
+  width: 100%;
+`;
 
 const SmallContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 16px;
   @media ${props => props.theme.device.tablet} {
@@ -41,6 +66,10 @@ const SmallContainer = styled.div`
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  > .push-down {
+    margin-top: auto;
   }
 `;
 
@@ -83,28 +112,45 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   width: 100%;
   padding-top: 32px;
+  margin-top: 39px;
 `;
 
 const GoToRegistration = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 80px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  text-align: center;
   align-items: center;
 
   p {
     margin: 0;
     margin-right: 8px;
     color: ${props => props.theme.colors.shades.gray};
+    font-size: 20px;
   }
 
   a {
     margin: 0;
     color: ${props => props.theme.colors.shades.pinkOrange};
+    font-size: 20px;
   }
 `;
 
+const BottomSectionDivider = styled.div`
+  padding: 16px 0;
+  height: fit-content;
+  width: 100%;
+`;
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
+  width: 100%;
+  max-height: 120px;
+`;
+const DividerWrapper = styled.div`
+  @media ${props => props.theme.device.tabletXL} {
+    display: none;
+  }
 `;
 
 const Body = styled.div`
@@ -120,6 +166,7 @@ const EnterCode = styled.div`
 
 const WideButton = styled(Button)`
   width: 200px;
+  margin-top: 56px;
 `;
 
 function SignIn({
@@ -163,12 +210,12 @@ function SignIn({
   }
 
   return (
-    <LayoutWrapper>
+    <Wrapper>
       <Helmet>
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       {payload2FA && payload2FA.two_way_factor_challenge_required ? (
-        <>
+        <FormWrapper>
           <Title>Authenticate your account</Title>
           <SectionDivider />
           <Body>Please check your phone for the authentication code.</Body>
@@ -182,23 +229,16 @@ function SignIn({
               name="idCode"
               placeholder={`Code Sent To ${payload2FA.two_way_factor_sent_to}`}
             />
-            {renderAuthError()}
             <ButtonWrapper>
               <WideButton buttonType="submit" value="Submit" text="Submit" />
             </ButtonWrapper>
           </form>
-          <GoToRegistration>
-            <RouterLink to="/" onClick={handleClear2FA}>
-              Back To Sign In
-            </RouterLink>
-          </GoToRegistration>
-          {isSubmitting2FA && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-        </>
+        </FormWrapper>
       ) : (
-        <>
+        <FormWrapper>
           <Title>Sign In</Title>
           <SectionDivider />
-          <form autoComplete="false" onSubmit={handleSubmit}>
+          <form autoComplete="off" onSubmit={handleSubmit}>
             <EditedTwoColumnRow>
               <SmallContainer>
                 <Label htmlFor="email">Email Address</Label>
@@ -227,18 +267,36 @@ function SignIn({
             </EditedTwoColumnRow>
             <SectionDivider />
             <ButtonWrapper>
-              <Button buttonType="submit" value="Sign In" text="Sign In" />
+              <Button
+                buttonType="submit"
+                value="Sign In"
+                text="Sign In"
+                disabled={isSigningIn || isSubmitting2FA}
+              />
             </ButtonWrapper>
           </form>
-          {renderAuthError()}
-        </>
+        </FormWrapper>
       )}
-      <GoToRegistration>
-        <p>Don&apos;t have an account yet?</p>
-        <RouterLink to="/register">Register your account</RouterLink>
-      </GoToRegistration>
-      {isSigningIn && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-    </LayoutWrapper>
+      {renderAuthError()}
+      <BottomSectionDivider>
+        <DividerWrapper>
+          <SectionDivider />
+        </DividerWrapper>
+        {payload2FA && payload2FA.two_way_factor_challenge_required ? (
+          <GoToRegistration>
+            <RouterLink to="/" onClick={handleClear2FA}>
+              Back To Sign In
+            </RouterLink>
+          </GoToRegistration>
+        ) : (
+          <GoToRegistration>
+            <p>Don&apos;t have an account yet?</p>
+            <RouterLink to="/register">Register your account</RouterLink>
+          </GoToRegistration>
+        )}
+      </BottomSectionDivider>
+      {(isSigningIn || isSubmitting2FA) && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+    </Wrapper>
   );
 }
 

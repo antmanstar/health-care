@@ -8,6 +8,7 @@ import {
   put,
   select,
   take,
+  takeEvery,
   takeLatest
 } from 'redux-saga/effects'
 import {
@@ -100,7 +101,7 @@ export default function* watcherSaga() {
         api.checkEmailAddress
       )
     ),
-    takeLatest(
+    takeEvery(
       ...takeAllBundler(
         types.CLAIM_DETAIL_FETCH,
         generateFetchWorker,
@@ -353,7 +354,7 @@ export function* authSaga() {
       )
     }
 
-    const action = yield take([types.SIGN_OUT, types.SIGN_IN_FAILURE])
+    const action = yield take([types.SIGN_OUT, types.SIGN_IN_FAILURE, types.CLEAR_2FA])
 
     if (action.type === types.SIGN_OUT) {
       if (authTask) {
@@ -384,8 +385,8 @@ function* successfulAuthWorkerSaga(action) {
     })
     yield take(types.BASIC_INFO_FETCH_SUCCESS)
 
-    const history = yield getContext('history');
-    yield history.push('/');
+    const history = yield getContext('history')
+    yield history.push('/')
   }
 }
 
