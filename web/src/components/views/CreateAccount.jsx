@@ -186,7 +186,7 @@ function CreateAccount({
     <LayoutWrapper>
       <Title>Create your online profile.</Title>
       <SectionDivider />
-      <form autoComplete="false">
+      <form autoComplete="off">
         <EditedTwoColumnRow>
           <SmallContainer>
             <Label htmlFor="email">Email Address</Label>
@@ -233,7 +233,6 @@ function CreateAccount({
             <Input
               type={showPassword ? 'text' : 'password'}
               value={password}
-              autoComplete="off"
               name="password"
               id="password"
               tabindex="1"
