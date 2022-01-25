@@ -140,6 +140,7 @@ const BottomSectionDivider = styled.div`
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
+  max-height: 120px;
 `;
 const DividerWrapper = styled.div`
   @media ${props => props.theme.device.tabletXL} {
@@ -186,8 +187,7 @@ function Register({
     }
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = () => {
     verifyEligibilityIdAndSSN({ eligibilityId: memberId, last4SSN: ssn });
   };
 
@@ -225,7 +225,6 @@ function Register({
                 id="memberId"
                 placeholder="Example: EVR19238400032"
                 onChange={handleChangeMemberId}
-                autoComplete="false"
               />
             </SmallContainer>
             <SmallContainer>
