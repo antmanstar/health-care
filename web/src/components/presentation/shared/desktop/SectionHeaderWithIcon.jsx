@@ -48,7 +48,7 @@ const SubTitleTail = styled.text`
   font-weight: 700;
   font-size: 16px;
   margin-left: 4px;
-  color: ${props => props.theme.colors.shades.darkGray};
+  color: ${props => props.theme.colors.shades.blue};
 `;
 
 const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon, subTitleTail }) => (

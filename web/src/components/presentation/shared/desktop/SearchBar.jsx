@@ -28,7 +28,7 @@ const Search = styled.div`
     background: none;
     color: ${props => props.theme.colors.shades.blue};
     caret-color: ${props => props.theme.colors.shades.pinkOrange};
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 300;
     border: none;
 

@@ -49,7 +49,6 @@ const Earned = styled.div`
 `;
 
 const Icon = styled.div`
-  margin-top: -8px;
   background: ${props => props.theme.colors.roles.success};
   width: 10px;
   height: 8px;
@@ -61,10 +60,10 @@ const Title = styled.h3`
   width: 100%;
   margin: 0 0 8px;
   font-size: 16px;
-  color: ${props =>
-    props.layoutClass === 'reward'
-      ? props.theme.colors.shades.blue
-      : props.theme.colors.shades.darkGray};
+  color: ${props => props.theme.colors.shades.darkGray};
+  &.reward {
+    color: ${props => props.theme.colors.shades.blue};
+  }
 `;
 
 const Description = styled.p`
@@ -108,7 +107,7 @@ const ActivityReward = React.memo(({ title, description, layoutClass, buttonText
           <Earned>{earned ? `Earn $${earned}` : ''}</Earned>
           <InfoWrapper>
             <div>
-              <Title>{title}</Title>
+              <Title className={layoutClass}>{title}</Title>
               {description && <Description>{description}</Description>}
             </div>
           </InfoWrapper>
@@ -128,14 +127,13 @@ const ActivityReward = React.memo(({ title, description, layoutClass, buttonText
 ActivityReward.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
-  type: PropTypes.string,
+  layoutClass: PropTypes.string,
   buttonText: PropTypes.string,
   earned: PropTypes.number
 };
 
 ActivityReward.defaultProps = {
-  description: null,
-  layoutClass: ''
+  description: null
 };
 
 export default ActivityReward;
