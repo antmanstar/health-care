@@ -90,6 +90,7 @@ class CarePlanSelectionSlide extends Component {
               handleCarePlanSelection(activePlan.id);
             }
           }}
+          disabled={this.props.isChoosingCarePlan}
         />
       </>
     );
@@ -97,7 +98,8 @@ class CarePlanSelectionSlide extends Component {
 }
 
 CarePlanSelectionSlide.propTypes = {
-  handleCarePlanSelection: PropTypes.func.isRequired
+  handleCarePlanSelection: PropTypes.func.isRequired,
+  isChoosingCarePlan: PropTypes.bool
 };
 
 export default CarePlanSelectionSlide;

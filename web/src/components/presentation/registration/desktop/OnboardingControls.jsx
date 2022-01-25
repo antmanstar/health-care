@@ -59,33 +59,51 @@ const SmallButton = styled.button`
   &:focus {
     outline: none;
   }
+
+  &: disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 `;
 
 const OnboardingControls = React.memo(
-  ({ handleNextFunction, handlePrevFunction, currentStep, maxSteps, isQuestionAnswered }) => (
-    <Wrapper>
-      <ButtonWrapper>
-        <SmallButton
-          onClick={handleNextFunction}
-          disabled={isQuestionAnswered !== undefined ? !isQuestionAnswered : undefined}
-          type="button"
-        >
-          NEXT
-        </SmallButton>
-      </ButtonWrapper>
-      <ProgressWrapper>
-        <SectionDivider />
-        <ProgressDots currentStep={currentStep} maxSteps={maxSteps} />
-      </ProgressWrapper>
-    </Wrapper>
-  )
+  ({
+    handleNextFunction,
+    handlePrevFunction,
+    currentStep,
+    maxSteps,
+    isQuestionAnswered,
+    isSavingQuestionnaire
+  }) => {
+    return (
+      <Wrapper>
+        <ButtonWrapper>
+          <SmallButton
+            onClick={handleNextFunction}
+            disabled={
+              (isQuestionAnswered !== undefined ? !isQuestionAnswered : undefined) ||
+              isSavingQuestionnaire
+            }
+            type="button"
+          >
+            NEXT
+          </SmallButton>
+        </ButtonWrapper>
+        <ProgressWrapper>
+          <SectionDivider />
+          <ProgressDots currentStep={currentStep} maxSteps={maxSteps} />
+        </ProgressWrapper>
+      </Wrapper>
+    );
+  }
 );
 
 OnboardingControls.propTypes = {
   handleNextFunction: PropTypes.func.isRequired,
   handlePrevFunction: PropTypes.func.isRequired,
   maxSteps: PropTypes.number.isRequired,
-  currentStep: PropTypes.number
+  currentStep: PropTypes.number,
+  isSavingQuestionnaire: PropTypes.bool
 };
 
 OnboardingControls.defaultProps = {
