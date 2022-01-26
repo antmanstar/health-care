@@ -46,6 +46,10 @@ const Description = styled.p`
 
 const StyledSectionDivider = styled(SectionDivider)`
   margin: 24px 0;
+
+  &.discount {
+    margin: 12px 0 24px 0;
+  }
 `;
 
 const Flex = styled.div`
@@ -130,11 +134,16 @@ class RewardsSection extends Component {
     };
 
     this.handlers = {
-      handleToggleClick: this.handleToggleClick.bind(this)
+      handleRewardsToggleClick: this.handleRewardsToggleClick.bind(this),
+      handleDiscountsToggleClick: this.handleDiscountsToggleClick.bind(this)
     };
   }
 
-  handleToggleClick() {
+  handleRewardsToggleClick() {
+    console.log('Rewards Click');
+  }
+
+  handleDiscountsToggleClick() {
     this.setState(prevState => ({
       showFullDiscounts: !prevState.showFullDiscounts
     }));
@@ -181,7 +190,7 @@ class RewardsSection extends Component {
           </Flex>
           <StyledSectionDivider />
           <Center>
-            <button type="button" onClick={this.handlers.handleToggleClick}>
+            <button type="button" onClick={this.handlers.handleRewardsToggleClick}>
               {!showFullDiscounts ? 'See More Rewards' : 'See Less Rewards'}
             </button>
             <ExpandIconWrapper onClick={this.handlers.handleToggleClick}>
@@ -225,12 +234,12 @@ class RewardsSection extends Component {
                 })}
             </Flex>
           )}
-          <StyledSectionDivider />
+          <StyledSectionDivider className="discount" />
           <Center>
-            <button type="button" onClick={this.handlers.handleToggleClick}>
+            <button type="button" onClick={this.handlers.handleDiscountsToggleClick}>
               {!showFullDiscounts ? 'See More Discounts' : 'See Less Discounts'}
             </button>
-            <ExpandIconWrapper onClick={this.handlers.handleToggleClick}>
+            <ExpandIconWrapper onClick={this.handlers.handleDiscountsToggleClick}>
               <div>{!showFullDiscounts ? 'Open' : 'Collaspe'}</div>
               <StyledIcon className="material-icons">
                 {showFullDiscounts ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}

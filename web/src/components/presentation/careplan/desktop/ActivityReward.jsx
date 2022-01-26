@@ -11,9 +11,10 @@ const Wrapper = styled.div`
 
   &.reward {
     width: calc(50% - 10px);
-    background: #fbfbfb;
+    background: #fafafa;
     flex-direction: column;
     padding: 16px 16px 32px 32px;
+    border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
     @media ${props => props.theme.device.tabletXL} {
       width: calc(50% - 16px);
     }

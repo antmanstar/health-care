@@ -33,13 +33,15 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
 
   const goals = organizeGoals(wellnessGoals);
 
+  console.log('GOALS', goals);
+
   return (
     <SectionBackground>
       <Container>
         <SectionHeaderWithIcon
           icon="meet-goals"
           title="Meet Your Goals"
-          subTitle="We have partnered with these amazing wellness programs to provide you discounted or FREE access to the best resources."
+          subTitle="We have partnered with amazing programs to provide the best resources at a discount."
           svgIcon
         />
       </Container>
@@ -59,6 +61,8 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                       title={program.wellness_goal_name}
                       desc={program.wellness_goal_description}
                       actionText="Sign up for this program"
+                      icon="apple-blue"
+                      color="blue"
                     />
                   ))}
                 </TwoColumnRow>

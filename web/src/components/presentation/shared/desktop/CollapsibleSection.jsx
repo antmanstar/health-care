@@ -50,6 +50,7 @@ const Toggle = styled.div`
   p {
     display: none;
     margin: 0;
+    font-size: 12px;
   }
 
   @media ${props => props.theme.device.tablet} {
