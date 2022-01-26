@@ -15,6 +15,9 @@ const Wrapper = styled.div`
     flex-direction: column;
     padding: 16px 16px 32px 32px;
     border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+    @media ${props => props.theme.device_up.tablet} {
+      width: 100%;
+    }
     @media ${props => props.theme.device.tabletXL} {
       width: calc(50% - 16px);
     }
@@ -27,6 +30,9 @@ const Wrapper = styled.div`
     }
     align-items: center;
     padding: 0px 0px 0px 32px;
+    @media ${props => props.theme.device_up.tablet} {
+      width: 100%;
+    }
   }
 
   @media ${props => props.theme.device.tabletXL} {

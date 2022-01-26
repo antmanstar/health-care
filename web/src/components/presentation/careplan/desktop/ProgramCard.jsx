@@ -10,6 +10,10 @@ const Wrapper = styled.div`
   width: 48%;
   border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   border-radius: 6px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    width: 90%;
+  }
 `;
 
 const Container = styled.div`

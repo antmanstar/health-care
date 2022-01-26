@@ -11,11 +11,19 @@ const Wrapper = styled.div`
   justify-content: space-between;
   margin-bottom: 16px;
   flex-wrap: wrap;
-  gap: 10px;
+
   .big-button {
-    width: 100%;
-    @media (min-width: 550px) {
-      width: 32.5%;
+    width: 32.5%;
+    @media screen and (max-width: 660px) {
+      width: 49.4%;
+      gap: 10px;
+      text-align: left;
+      margin-top: 5px;
+      min-height: 80px;
+
+      &:last-child {
+        width: 100%;
+      }
     }
   }
 `;

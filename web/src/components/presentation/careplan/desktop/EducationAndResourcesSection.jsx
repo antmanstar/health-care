@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -6,6 +6,7 @@ import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import ArticleCard from '../../shared/desktop/ArticleCard';
 import Loader from '../../shared/Loader/Loader';
 import truncate from '../../../../utils/string';
+import getWidth from '../../../../utils/getWidth';
 
 // Education & Resources Section found on the "Care Plan" View.
 // TODO: Pass props through to SectionHeaders and ArticleCards
@@ -48,7 +49,17 @@ const SubTitle = styled.p`
 `;
 
 const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
-  console.log('ER', educationalResources);
+  const width = getWidth();
+  const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
+
+  useEffect(() => {
+    width > 768 && setCollapsed(false);
+  }, [width]);  
+
+  const handelHeaderToggleClick = () => {
+    setCollapsed(!collapsed);
+  }
+
   return (
     <SectionBackground>
       <Container>
@@ -56,38 +67,44 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
           icon="library_books"
           title="Education & Resources"
           subTitle="Explore our list of articles and learning materials specifically curated for you."
+          onClick={handelHeaderToggleClick}
+          collapsed={collapsed}
         />
       </Container>
       <SectionDivider />
-      <Container>
-        {!educationalResources ? (
-          <Loader />
-        ) : (
-          <ArticleList>
-            {Object.values(educationalResources).map(resource => (
-              <ArticleCard
-                key={resource.educational_resource_id}
-                image={resource.title_image_file_id}
-                title={resource.educational_resource_title}
-                desc={truncate(130)(resource.educational_resource_summary)}
-                link={resource.educational_resource_content}
-                buttonLabel="Read More"
-              />
-            ))}
-          </ArticleList>
-        )}
-      </Container>
-      <SectionDivider />
-      <Container>
-        <Title>Further Reading</Title>
-        <SubTitle>
-          {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
-          <span style={{ display: 'inherit' }}>
-            {`Check out our `}
-            <a href="www.google.com">Help Center</a>
-          </span>
-        </SubTitle>
-      </Container>
+      {!collapsed && (
+        <>
+          <Container>
+            {!educationalResources ? (
+              <Loader />
+            ) : (
+              <ArticleList>
+                {Object.values(educationalResources).map(resource => (
+                  <ArticleCard
+                    key={resource.educational_resource_id}
+                    image={resource.title_image_file_id}
+                    title={resource.educational_resource_title}
+                    desc={truncate(130)(resource.educational_resource_summary)}
+                    link={resource.educational_resource_content}
+                    buttonLabel="Read More"
+                  />
+                ))}
+              </ArticleList>
+            )}
+          </Container>
+          <SectionDivider />
+          <Container>
+            <Title>Further Reading</Title>
+            <SubTitle>
+              {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
+              <span style={{ display: 'inherit' }}>
+                {`Check out our `}
+                <a href="www.google.com">Help Center</a>
+              </span>
+            </SubTitle>
+          </Container>
+        </>
+      )}
     </SectionBackground>
   );
 });

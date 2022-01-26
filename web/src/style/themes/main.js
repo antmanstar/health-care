@@ -6,6 +6,8 @@ import { style as sharedStyles } from '@evry-member-app/shared'
 
 // in px units
 const breakpointSizes = {
+  mobileXS: '0' /* smallest phones like galaxy fold */,
+  mobileSM: '320px' /* small phones */,
   mobile: '414px' /* newest large phones */,
   tablet: '768px' /* tablet */,
   tabletXL: '900px',
@@ -21,6 +23,16 @@ const device = {
   desktopXL: `(min-width: ${breakpointSizes.desktopXL})`
 };
 
+const device_up = {
+  mobileXS: `(max-width: ${breakpointSizes.mobileXS})`,
+  mobileSM: `(max-width: ${breakpointSizes.mobileSM})`,
+  mobile: `(max-width: ${breakpointSizes.mobile})`,
+  tablet: `(max-width: ${breakpointSizes.tablet})`,
+  tabletXL: `(max-width: ${breakpointSizes.tabletXL})`,
+  desktop: `(max-width: ${breakpointSizes.desktop})`,
+  desktopXL: `(max-width: ${breakpointSizes.desktopXL})`
+};
+
 const { colors, gradients, components } = sharedStyles.themes.main;
 
 // Assembling the theme
@@ -29,6 +41,7 @@ const theme = {
   breakpointSizes,
   colors,
   device,
+  device_up,
   gradients,
   components: {
     GlobalStyle: createGlobalStyle`
@@ -39,7 +52,7 @@ const theme = {
 
       body {
         background: ${props =>
-          props.theme.colors.shades.darkTealBlue}; /* gradient won't work reliably on body el */
+        props.theme.colors.shades.darkTealBlue}; /* gradient won't work reliably on body el */
         font-family: 'Roboto', sans-serif;
         margin: 0;
         padding: 0;

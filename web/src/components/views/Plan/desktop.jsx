@@ -129,7 +129,7 @@ const reflection = {
   component: Plan,
   layout: Standard,
   layoutProps: {
-    title: 'My Plan'
+    title: 'My Care Plan'
   },
   route: '/plan',
   forAuthorized: true

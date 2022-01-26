@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
@@ -51,32 +51,54 @@ const SubTitleTail = styled.text`
   color: ${props => props.theme.colors.shades.blue};
 `;
 
-const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon, subTitleTail }) => (
-  <Wrapper>
-    <div>
-      <Inline>
-        {svgIcon ? <SvgIcon src={images[icon]} /> : <Icon className="material-icons">{icon}</Icon>}
-        <Title>{title}</Title>
-      </Inline>
-      <SubTitle>
-        {subTitle}
-        <SubTitleTail>{subTitleTail}</SubTitleTail>
-      </SubTitle>
-    </div>
-  </Wrapper>
-));
+const CollaspeIcon = styled.i`
+  color: ${props => props.theme.colors.shades.blue};
+  @media ${props => props.theme.device.tablet} {
+    display: none;
+  }
+  cursor: pointer;
+`;
+
+const SectionHeaderWithIcon = React.memo(
+  ({ title, subTitle, icon, svgIcon, subTitleTail, collapsed, onClick }) => {
+    return (
+      <Wrapper>
+        <div>
+          <Inline>
+            {svgIcon ? (
+              <SvgIcon src={images[icon]} />
+            ) : (
+              <Icon className="material-icons">{icon}</Icon>
+            )}
+            <Title>{title}</Title>
+          </Inline>
+          <SubTitle>
+            {subTitle}
+            <SubTitleTail>{subTitleTail}</SubTitleTail>
+          </SubTitle>
+        </div>
+        <CollaspeIcon className="material-icons" onClick={onClick}>
+          {!collapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+        </CollaspeIcon>
+      </Wrapper>
+    );
+  }
+);
 
 SectionHeaderWithIcon.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
   subTitleTail: PropTypes.string,
   icon: PropTypes.string.isRequired,
-  svgIcon: PropTypes.bool
+  svgIcon: PropTypes.bool,
+  collapsed: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 SectionHeaderWithIcon.defaultProps = {
   subTitle: '',
-  svgIcon: false
+  svgIcon: false,
+  collapsed: false
 };
 
 export default SectionHeaderWithIcon;
