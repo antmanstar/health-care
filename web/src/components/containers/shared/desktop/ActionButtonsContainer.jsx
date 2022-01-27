@@ -18,7 +18,7 @@ const ActionButtonsContainer = ({ view }) => {
     }[view];
     return aliases;
   };
-  return <ActionButtons buttons={mapViewToButtons(view)} />;
+  return <ActionButtons buttons={mapViewToButtons(view)} view={view} />;
 };
 
 ActionButtonsContainer.propTypes = {

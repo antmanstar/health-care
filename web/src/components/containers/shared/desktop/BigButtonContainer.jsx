@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import history from '../../../../utils/history';
 import BigButton from '../../../presentation/shared/BigButton';
+import PlanBigButton from '../../../presentation/shared/PlanBigButton';
 import buttonData from '../../../../common/button-data';
 import actions from '@evry-member-app/shared/store/actions';
 
@@ -104,13 +105,23 @@ class BigButtonContainer extends Component {
   }
 
   render() {
-    const { buttonKey } = this.props;
-    return (
+    const { buttonKey, view } = this.props;
+
+    return view === 'plans' ? (
+      <PlanBigButton
+        text={buttonData[buttonKey].text}
+        icon={buttonData[buttonKey].icon}
+        svgIcon={buttonData[buttonKey].svgIcon}
+        onClick={this.extractClickFunction(buttonData[buttonKey].onClick)}
+        view={view}
+      />
+    ) : (
       <BigButton
         text={buttonData[buttonKey].text}
         icon={buttonData[buttonKey].icon}
         svgIcon={buttonData[buttonKey].svgIcon}
         onClick={this.extractClickFunction(buttonData[buttonKey].onClick)}
+        view={view}
       />
     );
   }
@@ -118,7 +129,8 @@ class BigButtonContainer extends Component {
 
 BigButtonContainer.propTypes = {
   buttonKey: PropTypes.string.isRequired,
-  showModal: PropTypes.func.isRequired
+  showModal: PropTypes.func.isRequired,
+  view: PropTypes.string
 };
 
 const mapDispatchToProps = dispatch => ({

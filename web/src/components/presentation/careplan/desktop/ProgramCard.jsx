@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   min-height: 140px;
 
   @media ${props => props.theme.device_up.tablet} {
-    width: 80%;
+    width: 100%;
   }
 `;
 
