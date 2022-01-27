@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import images from '../../../../utils/images';
+import { ellipsis } from 'polished';
 
 // Partnered Program Card for "Meet you goals" section on the "Care Plan" View.
 
@@ -64,6 +65,8 @@ const Description = styled.p`
   font-weight: 300;
   font-size: 12px;
   color: ${props => props.theme.colors.shades.gray};
+  ${ellipsis(undefined, 2)};
+  min-height: 34px;
   @media ${props => props.theme.device_up.tablet} {
     font-size: 10px;
   }

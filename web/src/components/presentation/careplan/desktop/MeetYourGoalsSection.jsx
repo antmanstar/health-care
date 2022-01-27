@@ -124,7 +124,12 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                         ))}
                       </TwoColumnRow>
                     ) : (
-                      <Carousel withoutControls={true}>
+                      <Carousel
+                        withoutControls={true}
+                        cellSpacing={16}
+                        slideWidth={0.8}
+                        scrollMode="page"
+                      >
                         {goal.programs.map(program => (
                           <ProgramCard
                             key={program.wellness_goal_id}
