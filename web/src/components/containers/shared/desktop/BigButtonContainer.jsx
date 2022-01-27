@@ -127,7 +127,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(BigButtonContainer);
+export default connect(null, mapDispatchToProps)(BigButtonContainer);

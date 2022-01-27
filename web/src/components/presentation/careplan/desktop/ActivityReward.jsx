@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   border-radius: 4px;
   margin-bottom: 10px;
+  position: relative;
 
   &.reward {
     width: calc(50% - 10px);
@@ -17,6 +18,7 @@ const Wrapper = styled.div`
     border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
     @media ${props => props.theme.device_up.tablet} {
       width: 100%;
+      padding: 12px;
     }
     @media ${props => props.theme.device.tabletXL} {
       width: calc(50% - 16px);
@@ -44,6 +46,9 @@ const InfoWrapper = styled.div`
   width: 100%;
   display: flex;
   margin-bottom: 16px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin-bottom: 0px;
+  }
 `;
 
 const Earned = styled.div`
@@ -53,14 +58,19 @@ const Earned = styled.div`
   font-weight: 700;
   color: ${props => props.theme.colors.shades.pinkOrange};
   height: 16px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    position: absolute;
+    right: 12px;
+  }
 `;
 
 const Icon = styled.div`
   background: ${props => props.theme.colors.roles.success};
-  width: 10px;
+  width: 8px;
   height: 8px;
   border-radius: 4px;
-  margin-right: 32px;
+  margin-right: 26px;
 `;
 
 const Title = styled.h3`
@@ -80,6 +90,12 @@ const Description = styled.p`
   font-weight: 300;
   font-family: 'Roboto';
   color: ${props => props.theme.colors.shades.darkGray};
+
+  &.reward {
+    @media ${props => props.theme.device_up.tablet} {
+      display: none;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -101,6 +117,10 @@ const Button = styled.button`
   font-family: 'Roboto';
   margin-top: 12px;
 
+  @media ${props => props.theme.device_up.tablet} {
+    margin-top: 0px;
+  }
+
   &:hover {
     background: #1c4c66;
   }
@@ -115,7 +135,7 @@ const ActivityReward = React.memo(({ title, description, layoutClass, buttonText
           <InfoWrapper>
             <div>
               <Title className={layoutClass}>{title}</Title>
-              {description && <Description>{description}</Description>}
+              {description && <Description className={layoutClass}>{description}</Description>}
             </div>
           </InfoWrapper>
           {buttonText && <Button>{buttonText}</Button>}
@@ -123,8 +143,10 @@ const ActivityReward = React.memo(({ title, description, layoutClass, buttonText
       )}
       {layoutClass === 'discount' && (
         <Wrapper className={layoutClass}>
-          <Icon />
-          <Description>{title}</Description>
+          <div>
+            <Icon />
+          </div>
+          <Description className={layoutClass}>{title}</Description>
         </Wrapper>
       )}
     </>

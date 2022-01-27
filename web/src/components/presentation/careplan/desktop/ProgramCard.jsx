@@ -10,14 +10,18 @@ const Wrapper = styled.div`
   width: 48%;
   border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   border-radius: 6px;
+  min-height: 140px;
 
   @media ${props => props.theme.device_up.tablet} {
-    width: 90%;
+    width: 80%;
   }
 `;
 
 const Container = styled.div`
   padding: 16px;
+  @media ${props => props.theme.device_up.tablet} {
+    padding: 12px 12px 12px 8px;
+  }
 `;
 
 const TitleSection = styled.div`
@@ -25,11 +29,18 @@ const TitleSection = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin-bottom: 4px;
+  }
 `;
 
 const Icon = styled.img`
   height: 24px;
   margin-right: 16px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin-right: 5px;
+    height: 20px;
+  }
 `;
 
 const Title = styled.h1`
@@ -53,6 +64,9 @@ const Description = styled.p`
   font-weight: 300;
   font-size: 12px;
   color: ${props => props.theme.colors.shades.gray};
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 10px;
+  }
 `;
 
 const Button = styled.button`
@@ -67,6 +81,7 @@ const Button = styled.button`
   cursor: pointer;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   &:hover {
     opacity: 0.7;

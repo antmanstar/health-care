@@ -21,14 +21,14 @@ const TitleWrapper = styled(SpaceBetween)`
 
 const Title = styled.h1`
   margin: 0;
-  font-size: 18px;
-  font-weight: 500;
-  margin-right: 16px;
+  font-size: 15px;
+  font-weight: 300;
+  margin-right: 15px;
+  max-width: 186px;
   color: ${props => props.theme.colors.shades.blue};
 
   @media ${props => props.theme.device.tablet} {
     font-size: 24px;
-    font-weight: 300;
   }
 `;
 

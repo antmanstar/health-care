@@ -10,6 +10,10 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-left: 12px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    margin-left: 0px;
+  }
 `;
 
 const Inline = styled.div`
@@ -33,6 +37,9 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 24px;
   color: ${props => props.theme.colors.shades.blue};
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 16px;
+  }
 `;
 
 const SubTitle = styled.p`
@@ -41,6 +48,10 @@ const SubTitle = styled.p`
   font-size: 12px;
   margin-right: 10px;
   color: ${props => props.theme.colors.shades.darkGray};
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 13px;
+    color: ${props => props.theme.colors.shades.gray};
+  }
 `;
 
 const SubTitleTail = styled.text`
@@ -92,7 +103,7 @@ SectionHeaderWithIcon.propTypes = {
   icon: PropTypes.string.isRequired,
   svgIcon: PropTypes.bool,
   collapsed: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func
 };
 
 SectionHeaderWithIcon.defaultProps = {

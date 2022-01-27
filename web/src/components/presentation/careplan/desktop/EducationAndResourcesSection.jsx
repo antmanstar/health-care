@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -13,6 +13,18 @@ import getWidth from '../../../../utils/getWidth';
 // WAITING: Jong still needs to provide endpoints for this
 
 const { SectionBackground, Container, SectionDivider, SpaceBetween } = defaultTheme.components;
+
+const StyledSectionBackground = styled(SectionBackground)`
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 0 auto 16px;
+  }
+`;
+
+const StyledContainer = styled(Container)`
+  @media ${props => props.theme.device_up.tablet} {
+    padding: 20px;
+  }
+`;
 
 const ArticleList = styled(SpaceBetween)`
   flex-wrap: wrap;
@@ -54,15 +66,15 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
 
   useEffect(() => {
     width > 768 && setCollapsed(false);
-  }, [width]);  
+  }, [width]);
 
   const handelHeaderToggleClick = () => {
     setCollapsed(!collapsed);
-  }
+  };
 
   return (
-    <SectionBackground>
-      <Container>
+    <StyledSectionBackground>
+      <StyledContainer>
         <SectionHeaderWithIcon
           icon="library_books"
           title="Education & Resources"
@@ -70,11 +82,11 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
           onClick={handelHeaderToggleClick}
           collapsed={collapsed}
         />
-      </Container>
+      </StyledContainer>
       <SectionDivider />
       {!collapsed && (
         <>
-          <Container>
+          <StyledContainer>
             {!educationalResources ? (
               <Loader />
             ) : (
@@ -91,9 +103,9 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                 ))}
               </ArticleList>
             )}
-          </Container>
+          </StyledContainer>
           <SectionDivider />
-          <Container>
+          <StyledContainer>
             <Title>Further Reading</Title>
             <SubTitle>
               {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
@@ -102,10 +114,10 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                 <a href="www.google.com">Help Center</a>
               </span>
             </SubTitle>
-          </Container>
+          </StyledContainer>
         </>
       )}
-    </SectionBackground>
+    </StyledSectionBackground>
   );
 });
 

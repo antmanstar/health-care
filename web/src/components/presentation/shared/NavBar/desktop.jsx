@@ -58,7 +58,6 @@ const Wrapper = styled.div`
   transition: all 0.5s;
   z-index: 11;
 
-
   &.on {
     background: ${props => props.theme.gradients.main};
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
@@ -73,7 +72,7 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: ${mainBreakPoint}) {
-    padding: 0;
+    padding: 0 0 16px 0;
     width: 100%;
     .right-wrapper-number {
       display: flex;
@@ -296,7 +295,7 @@ const MobileMenuButton = styled.div`
       transform: scale(1.1);
     }
   }
-  
+
   display: none;
   justify-content: center;
   align-items: center;
@@ -311,9 +310,7 @@ const MobileMenuButton = styled.div`
   @media (max-width: ${mainBreakPoint}) {
     display: flex;
   }
-
 `;
-
 
 const MailboxButtonWithBadge = withStoreData(MailboxButton, state => ({
   unread: getUnreadNotifications(state)
@@ -340,8 +337,8 @@ const NotificationCenterWithData = withStoreData(
     return {
       fetch,
       markNotificationsAsRead: ({ ids = [], ...args }) => {
-        let uniqueIds = [... new Set(ids.concat(notificationsMarkedQueue))].map(String)
-        markNotificationsAsRead({ ids: [uniqueIds], token, ...args })
+        let uniqueIds = [...new Set(ids.concat(notificationsMarkedQueue))].map(String);
+        markNotificationsAsRead({ ids: [uniqueIds], token, ...args });
       },
       notifications:
         notifications &&
@@ -364,13 +361,13 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
 
   const checkScroll = () => {
     return (window.pageYOffset || document.documentElement.scrollTop) > 28;
-  }
+  };
 
   useEffect(() => {
     window.addEventListener('scroll', () => handleScroll(), supportsPassive());
 
-    return window.removeEventListener('scroll', handleScroll)
-  }, [])
+    return window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -382,15 +379,15 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
 
   const handleScroll = () => {
     setScrolled(checkScroll());
-  }
+  };
 
   const handleToggleClick = () => {
     setClicked(!clicked);
-  }
+  };
 
   const handleSignOut = () => {
     signOut();
-  }
+  };
 
   return (
     <Wrapper className={permanentBg || scrolled ? 'on' : 'off'}>
@@ -416,11 +413,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
               <p>{`1-${phoneNumber}`}</p>
             </PhoneNumber>
           )}
-          <Mailbox
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={() => toggleDrawer()}
-          >
+          <Mailbox color="inherit" aria-label="Open drawer" onClick={() => toggleDrawer()}>
             <MailboxButtonWithBadge />
           </Mailbox>
           <AccountMenuDropdown clicked={clicked} onClick={() => handleToggleClick()}>
@@ -459,12 +452,10 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
       >
         <NotificationCenterWithData handleClick={() => toggleDrawer()} />
       </SwipeableDrawer>
-      {
-        isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
-      }
+      {isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
-}
+};
 
 NavBar.propTypes = {
   clicked: PropTypes.bool,
@@ -496,10 +487,6 @@ const mergeProps = ({ token, ...stateProps }, { signOut }, ownProps) => ({
   ...ownProps
 });
 
-const ConnectedNavBar = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(NavBar);
+const ConnectedNavBar = connect(mapStateToProps, mapDispatchToProps, mergeProps)(NavBar);
 
 export default withRouter(ConnectedNavBar);

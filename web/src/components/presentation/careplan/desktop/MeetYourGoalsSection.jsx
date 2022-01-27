@@ -8,30 +8,49 @@ import ProgramCard from './ProgramCard';
 import Loader from '../../shared/Loader/Loader';
 import getWidth from '../../../../utils/getWidth';
 import styled from 'styled-components';
-
-import { CarouselProvider, Slider, Slide } from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
+import Carousel from 'nuka-carousel';
 
 // Meet Your Goals Section found on "Care Plan" View.
 // TODO: Programs need icons, colors, and urls (for onClick)
 
-const StyledCarouselProvider = styled(CarouselProvider)`
-  position: relative;
-  width: 100%;
-`;
+const { SectionBackground, Container, SectionDivider, TwoColumnRow } = defaultTheme.components;
 
-const StyledSlider = styled(Slider)`
-  min-height: 180px;
-  &:first-child {
-    will-change: unset;
+const StyledSectionBackground = styled(SectionBackground)`
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 0 auto 16px;
   }
 `;
 
-const { SectionBackground, Container, SectionDivider, TwoColumnRow } = defaultTheme.components;
+const StyledContainer = styled(Container)`
+  @media ${props => props.theme.device_up.tablet} {
+    padding: 20px;
+  }
+`;
+
+// const StyledCarouselProvider = styled(CarouselProvider)`
+//   position: relative;
+// `;
+
+// const StyledSlider = styled(Slider)`
+//   &:first-child {
+//     will-change: unset;
+//   }
+//   .carousel__slider-tray-wrap--horizontal {
+//     > div:first-child {
+//       display: flex;
+
+//       > div {
+//         padding-bottom: 0px !important;
+//         width: ${props => `${getWidth() * 0.8}px !important`};
+//       }
+//     }
+//   }
+// `;
 
 const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
   useEffect(() => {
     width > 768 && setCollapsed(false);
@@ -60,18 +79,26 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
     setCollapsed(!collapsed);
   };
 
+  const setActiveIndex = newIndex => {
+    setActiveSlideIndex(newIndex);
+  };
+
   return (
-    <SectionBackground>
-      <Container>
+    <StyledSectionBackground>
+      <StyledContainer>
         <SectionHeaderWithIcon
           icon="meet-goals"
           title="Meet Your Goals"
-          subTitle="We have partnered with amazing programs to provide the best resources at a discount."
+          subTitle={
+            width > 768
+              ? 'We have partnered with amazing programs to provide the best resources at a discount.'
+              : 'Free & Discounted health programs.'
+          }
           svgIcon
           onClick={handelHeaderToggleClick}
           collapsed={collapsed}
         />
-      </Container>
+      </StyledContainer>
       {!collapsed && (
         <>
           {!goals ? (
@@ -80,7 +107,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
             goals.map(goal => (
               <React.Fragment key={goal.sectionTitle}>
                 <SectionDivider />
-                <Container>
+                <StyledContainer>
                   <CollapsibleSection title={goal.sectionTitle} visible>
                     {width > 768 ? (
                       <TwoColumnRow>
@@ -92,40 +119,33 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             actionText="Sign up for this program"
                             icon="apple-blue"
                             color="blue"
+                            onClick={() => console.log('ONCLICK')}
                           />
                         ))}
                       </TwoColumnRow>
                     ) : (
-                      <StyledCarouselProvider
-                        naturalSlideWidth={width - 30}
-                        naturalSlideHeight={140}
-                        totalSlides={goal.programs.length}
-                        visibleSlides={2}
-                      >
-                        <StyledSlider>
-                          {goal.programs.map((program, index) => (
-                            <Slide index={index} key={index}>
-                              <ProgramCard
-                                key={program.wellness_goal_id}
-                                title={program.wellness_goal_name}
-                                desc={program.wellness_goal_description}
-                                actionText="Sign up for this program"
-                                icon="apple-blue"
-                                color="blue"
-                              />
-                            </Slide>
-                          ))}
-                        </StyledSlider>
-                      </StyledCarouselProvider>
+                      <Carousel withoutControls={true}>
+                        {goal.programs.map(program => (
+                          <ProgramCard
+                            key={program.wellness_goal_id}
+                            title={program.wellness_goal_name}
+                            desc={program.wellness_goal_description}
+                            actionText="Sign up for this program"
+                            icon="apple-blue"
+                            color="blue"
+                            onClick={() => console.log('ONCLICK')}
+                          />
+                        ))}
+                      </Carousel>
                     )}
                   </CollapsibleSection>
-                </Container>
+                </StyledContainer>
               </React.Fragment>
             ))
           )}
         </>
       )}
-    </SectionBackground>
+    </StyledSectionBackground>
   );
 });
 

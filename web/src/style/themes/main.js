@@ -89,6 +89,7 @@ const theme = {
         padding-left: 3%;
         @media ${device.desktop} {
           padding: 0;
+          padding-bottom: 20px;
           width: 100%;
         }
       }

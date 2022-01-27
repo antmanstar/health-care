@@ -13,6 +13,19 @@ import getWidth from '../../../../utils/getWidth';
 
 const { SectionBackground, Container, SectionDivider } = defaultTheme.components;
 
+const StyledSectionBackground = styled(SectionBackground)`
+  padding-bottom: 24px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 0 auto 16px;
+  }
+`;
+
+const StyledContainer = styled(Container)`
+  @media ${props => props.theme.device_up.tablet} {
+    padding: 20px 20px 12px 20px;
+  }
+`;
+
 const Header = styled.div`
   display: flex;
   align-items: center;
@@ -47,9 +60,9 @@ const Description = styled.p`
 
 const StyledSectionDivider = styled(SectionDivider)`
   margin: 24px 0;
-
-  &.discount {
-    margin: 12px 0 24px 0;
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 16px 0;
+    border-bottom-color: ${props => props.theme.colors.shades.border};
   }
 `;
 
@@ -140,6 +153,7 @@ const StyledIcon = styled.i`
 const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   const width = getWidth();
   const [showFullDiscounts, setShowFullDiscounts] = useState(false);
+  const [showFullRewards, setShowFullRewards] = useState(false);
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
 
   useEffect(() => {
@@ -163,28 +177,25 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
 
   return (
-    <SectionBackground>
-      <Container>
+    <StyledSectionBackground>
+      <StyledContainer>
         <SectionHeaderWithIcon
           icon="card_giftcard"
           title="Rewards"
-          subTitle="Our Rewards Program is very easy to use. Pay with your Evry card at Walmart and get discounts on us."
-          subTitleTail="It’s that Simple."
+          subTitle={
+            width > 768
+              ? 'Our Rewards Program is very easy to use. Pay with your Evry card at Walmart and get discounts on us.'
+              : 'Learn about our simple rewards system.'
+          }
+          subTitleTail={width > 768 ? 'It’s that Simple.' : ''}
           onClick={handelHeaderToggleClick}
           collapsed={collapsed}
         />
-      </Container>
+      </StyledContainer>
       {!collapsed && (
         <>
           <SectionDivider />
-          <Container>
-            {/* <Header>
-          <Icon src={images['activity-in-circle']} />
-          <div>
-            <Title>Activity Items</Title>
-            <Description>Complete these activities for extra rewards.</Description>
-          </div>
-        </Header> */}
+          <StyledContainer>
             <Flex>
               {activityRewards.map(reward => (
                 <ActivityReward
@@ -197,19 +208,27 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                 />
               ))}
             </Flex>
-            <StyledSectionDivider />
-            <Center>
-              <button type="button" onClick={handleRewardsToggleClick}>
-                {!showFullDiscounts ? 'See More Rewards' : 'See Less Rewards'}
-              </button>
+          </StyledContainer>
+          <StyledSectionDivider />
+          <Center>
+            <button type="button" onClick={handleRewardsToggleClick}>
+              {width <= 768
+                ? 'See More'
+                : !showFullRewards
+                ? 'See More Rewards'
+                : 'See Less Rewards'}
+            </button>
+            {width > 768 && (
               <ExpandIconWrapper onClick={handleRewardsToggleClick}>
-                <div>{!showFullDiscounts ? 'Open' : 'Collaspe'}</div>
+                <div>{!showFullRewards ? 'Open' : 'Collaspe'}</div>
                 <StyledIcon className="material-icons">
-                  {showFullDiscounts ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+                  {showFullRewards ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
                 </StyledIcon>
               </ExpandIconWrapper>
-            </Center>
-            <StyledSectionDivider />
+            )}
+          </Center>
+          <StyledSectionDivider />
+          <StyledContainer>
             <Header>
               <Icon src={images['money-in-circle']} />
               <div>
@@ -223,12 +242,16 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
             </Header>
             {!showFullDiscounts ? (
               <DiscountFlex>
-                <ActivityReward layoutClass="discount" title="Fresh fruits & vegetables" />
-                <ActivityReward layoutClass="discount" title="Fitness Equipment" />
-                <ActivityReward layoutClass="discount" title="Vitamins & Supplements" />
-                <ActivityReward layoutClass="discount" title="Health Products" />
-                <ActivityReward layoutClass="discount" title="Fresh fruits & vegetables" />
-                <ActivityReward layoutClass="discount" title="Perscription Medication" />
+                {[
+                  'Fresh fruits & vegetables',
+                  'Fitness Equipment',
+                  'Vitamins & Supplements',
+                  'Health Products',
+                  'Fresh fruits & vegetables',
+                  'Perscription Medication'
+                ].map((item, index) => {
+                  return <ActivityReward layoutClass="discount" title={item} key={index} />;
+                })}
               </DiscountFlex>
             ) : (
               <Flex>
@@ -238,27 +261,39 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                       item => item.benefit_category_ids[0] === category.category_id
                     );
                     if (!isEmpty(items)) {
-                      return <DiscountList title={category.category_name} items={items} />;
+                      return (
+                        <DiscountList
+                          title={category.category_name}
+                          items={items}
+                          key={category.category_id}
+                        />
+                      );
                     }
                   })}
               </Flex>
             )}
-            <StyledSectionDivider className="discount" />
-            <Center>
-              <button type="button" onClick={handleDiscountsToggleClick}>
-                {!showFullDiscounts ? 'See More Discounts' : 'See Less Discounts'}
-              </button>
+          </StyledContainer>
+          <StyledSectionDivider className="discount" />
+          <Center>
+            <button type="button" onClick={handleDiscountsToggleClick}>
+              {width <= 768
+                ? 'See More'
+                : !showFullDiscounts
+                ? 'See More Discounts'
+                : 'See Less Discounts'}
+            </button>
+            {width > 768 && (
               <ExpandIconWrapper onClick={handleDiscountsToggleClick}>
                 <div>{!showFullDiscounts ? 'Open' : 'Collaspe'}</div>
                 <StyledIcon className="material-icons">
                   {showFullDiscounts ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
                 </StyledIcon>
               </ExpandIconWrapper>
-            </Center>
-          </Container>
+            )}
+          </Center>
         </>
       )}
-    </SectionBackground>
+    </StyledSectionBackground>
   );
 };
 

@@ -28,12 +28,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const ActionButtons = React.memo(({ buttons }) => (
-  <Wrapper>
-    {buttons &&
-      buttons.map((buttonKey, key) => <BigButtonContainer key={key} buttonKey={buttonKey} />)}
-  </Wrapper>
-));
+const ActionButtons = React.memo(({ buttons }) => {
+  return (
+    <Wrapper>
+      {buttons &&
+        buttons.map((buttonKey, key) => <BigButtonContainer key={key} buttonKey={buttonKey} />)}
+    </Wrapper>
+  );
+});
 
 ActionButtons.propTypes = {
   buttons: PropTypes.arrayOf(PropTypes.string).isRequired
