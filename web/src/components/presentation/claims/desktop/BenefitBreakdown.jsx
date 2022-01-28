@@ -59,14 +59,14 @@ const BenefitBreakdown = ({ totalBilled, discounts, payment, owed }) => (
         <FlexLeft>
           <Regular>Discounts & Reductions</Regular>
         </FlexLeft>
-        <Bold green>{`$${discounts}`}</Bold>
+        <Bold green>{`${discounts != '0.00' ? '-' : ''} $${discounts}`}</Bold>
       </SpaceBetween>
     </Padding16>
     <SectionDivider />
     <Padding16>
       <SpaceBetween>
         <Regular>Evry&apos;s Payment</Regular>
-        <Bold green>{`$${payment}`}</Bold>
+        <Bold green>{`${payment != '0.00' ? '-' : ''} $${payment}`}</Bold>
       </SpaceBetween>
     </Padding16>
     <SectionDivider />

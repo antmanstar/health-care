@@ -6,6 +6,7 @@ import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
+import constants from '@evry-member-app/shared/constants';
 // MODAL - Send a Message
 
 const {
@@ -23,10 +24,15 @@ const {
 const {
   createSendAMessageToCareCoordinatorCase,
   sendMessageReset,
-  completeSendMessageCase
+  completeSendMessageCase,
+  showModal,
+  setModalData,
+  fetchCases
 } = actions;
 
 const { getToken, getSendMessageCase } = selectors;
+
+const { SUBMITTED, CREATED, ON_HOLD, ESCALATED } = constants;
 
 const FormError = styled.p`
   color: ${props => props.theme.colors.shades.pinkOrange};
@@ -50,7 +56,6 @@ class SendAMessageModal extends Component {
       handleSubmit: this.handleSubmit.bind(this)
     };
   }
-
   handleChange(event) {
     const stateObject = {};
     stateObject[event.target.name] = event.target.value;
@@ -83,6 +88,7 @@ class SendAMessageModal extends Component {
 
   componentDidMount() {
     this.props.resetCase();
+    console.log(this.props.token);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -98,7 +104,13 @@ class SendAMessageModal extends Component {
       prevProps.sendMessageCase.status === 'OPEN' &&
       this.props.sendMessageCase.status === 'COMPLETE'
     ) {
-      this.props.hideModal();
+      this.props.fetchCases(this.props.token);
+      this.props.setModalData({
+        type: 'SUCCESS',
+        title: 'Submitted!',
+        message: "Great! We'll get to work on that and send you confirmation once complete."
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
     }
   }
 
@@ -178,6 +190,22 @@ const mapDispatchToProps = dispatch => ({
   },
   completeCase: (caseID, token) => {
     dispatch(completeSendMessageCase({ caseID, token }));
+  },
+  setModalData: modalData => {
+    dispatch(setModalData(modalData));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  },
+  fetchCases: token => {
+    dispatch(
+      fetchCases({
+        direction: undefined,
+        orderBy: undefined,
+        statuses: [SUBMITTED, CREATED, ON_HOLD, ESCALATED],
+        token
+      })
+    );
   }
 });
 

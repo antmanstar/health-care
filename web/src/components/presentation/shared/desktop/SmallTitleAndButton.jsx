@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SmallButton from './SmallButton';
-
+import defaultTheme from '../../../../style/themes';
 // This is the Title/Button combo for smaller sections
 
 const Wrapper = styled.div`
@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  @media (max-width: 549px) {
+  @media not ${defaultTheme.device.mobile} {
     h3 {
       color: ${props => props.theme.colors.shades.blue};
       font-size: 16px;
@@ -20,7 +20,7 @@ const Wrapper = styled.div`
     }
   }
 
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.mobile} {
     h3 {
       color: ${props => props.theme.colors.shades.blue};
       font-size: 24px;

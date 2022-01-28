@@ -27,7 +27,11 @@ const Center = styled.div`
   margin-top: 24px;
   display: flex;
   justify-content: center;
-
+  align-items: center;
+  flex-direction: column;
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+  }
   p {
     margin: 0 4px 0 0;
     color: ${props => props.theme.colors.shades.gray};

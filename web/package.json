@@ -63,7 +63,8 @@
     "styled-components": "^5.3.3",
     "uuid": "^3.3.2",
     "zxcvbn": "^4.4.2",
-    "react-tooltip": "^4.2.21"
+    "react-tooltip": "^4.2.21",
+    "google-map-react": "^2.1.10"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

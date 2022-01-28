@@ -11,3 +11,7 @@ export const getViewIcon = state => get(state, ['app', 'view', 'icon']);
 export const getViewSubtitle = state => get(state, ['app', 'view', 'subtitle']);
 export const getViewTitle = state => get(state, ['app', 'view', 'title']);
 export const getSupportRequestContent = state => get(state, ['app', 'supportRequestContent']);
+export const getProviderSearchData = state => get(state, ['app', 'providerSearch']);
+export const getProviderSearchQuery = state => get(state, ['app', 'providerSearch', 'query']);
+export const getProviderSearchLocation = state => get(state, ['app', 'providerSearch', 'location']);
+export const getLocationData = state => get(state, ['app', 'geoLocation']);

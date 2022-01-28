@@ -17,7 +17,7 @@ export default {
     svgIcon: false
   },
   replaceMembershipCard: {
-    text: 'Replace Membership card',
+    text: 'Replace Membership Card',
     icon: 'white_icons/card',
     onClick: 'replaceCardClick'
   },

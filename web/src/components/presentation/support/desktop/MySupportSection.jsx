@@ -17,7 +17,7 @@ const { SectionBackground, Container, SectionDivider, TwoColumnRow } = defaultTh
 const SmallContainer = styled.div`
   width: 100%;
 
-  @media (min-width: 920px) {
+  @media ${defaultTheme.device.tablet} {
     width: 48%;
   }
 `;
@@ -32,11 +32,11 @@ const H3 = styled.h3`
 const Description = styled.p`
   margin: 25px 0;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 12px;
   line-height: 20px;
   color: ${props => props.theme.colors.shades.darkGray};
-  @media (max-width: 549px) {
-    font-size: 12px;
+  @media ${defaultTheme.device.mobile} {
+    font-size: 16px;
   }
 `;
 
@@ -50,16 +50,41 @@ const TwoColumRowWithBreak = styled(TwoColumnRow)`
   & > *:first-child {
     margin-bottom: 32px;
   }
-  @media ${defaultTheme.device.tabletXL} {
+  @media ${defaultTheme.device.tablet} {
     flex-direction: row;
     & > *:first-child {
       margin-bottom: 0;
     }
   }
 `;
-const InfoItem = styled.span`
-  @media (max-width: 549px) {
-    font-size: 12px;
+const InfoItemRight = styled.span`
+  text-align: right;
+  font-size: 12px;
+  @media ${defaultTheme.device.mobile} {
+    font-size: 16px;
+  }
+`;
+const InfoItemLeft = styled.span`
+  text-align: left;
+  font-size: 12px;
+  @media ${defaultTheme.device.mobile} {
+    font-size: 16px;
+  }
+`;
+
+const ButtonLink = styled.button`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: ${props => props.theme.colors.shades.nearlyWhite};
+  color: ${props => props.theme.colors.shades.darkGray};
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  &:hover {
+    background: #ececec;
+    cursor: pointer;
   }
 `;
 class MySupportSection extends Component {
@@ -68,12 +93,17 @@ class MySupportSection extends Component {
     this.state = {};
 
     this.handlers = {
-      handleContactCareGuideClick: this.handleContactCareGuideClick.bind(this)
+      handleContactCareGuideClick: this.handleContactCareGuideClick.bind(this),
+      handleConciergeCareClick: this.handleConciergeCareClick.bind(this)
     };
   }
 
   handleContactCareGuideClick = () => {
     this.props.showModal('CONTACT_CARE_GUIDE');
+  };
+
+  handleConciergeCareClick = () => {
+    this.props.showModal('CONCIERGE_CARE');
   };
 
   render() {
@@ -117,9 +147,12 @@ class MySupportSection extends Component {
                     appointment, or just want to follow up on a claim, we are here to help.
                   </Description>
                   <HelpArticleLink
-                    text="Learn more about Concierce Care"
-                    url="http://www.google.com"
+                    text="Learn more about Concierge Care"
+                    url="https://www.evryhealth.com/meet-your-care-team"
                   />
+                  {/* <ButtonLink onClick={this.handlers.handleConciergeCareClick}>
+                    Learn more about Concierge Care
+                  </ButtonLink> */}
                 </>
               )}
             </SmallContainer>
@@ -130,48 +163,48 @@ class MySupportSection extends Component {
                 <>
                   <H3>Evry Health, Inc</H3>
                   <TwoColumnInfoItem>
-                    <InfoItem>Customer Support Phone</InfoItem>
-                    <InfoItem>
+                    <InfoItemLeft>Customer Support Phone</InfoItemLeft>
+                    <InfoItemRight>
                       <a
                         className="no-link-style"
                         href={`tel:+1${evryContactInfo.phones[0].phone_number.split('-').join('')}`}
                       >
                         {`1-${evryContactInfo.phones[0].phone_number}`}
                       </a>
-                    </InfoItem>
+                    </InfoItemRight>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <InfoItem>Customer Support Email</InfoItem>
-                    <InfoItem>
+                    <InfoItemLeft>Customer Support Email</InfoItemLeft>
+                    <InfoItemRight>
                       <a href={`mailto:${evryContactInfo.support_email.email_address}`}>
                         {evryContactInfo.support_email.email_address}
                       </a>
-                    </InfoItem>
+                    </InfoItemRight>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <InfoItem>Fax Number</InfoItem>
-                    <InfoItem>
+                    <InfoItemLeft>Fax Number</InfoItemLeft>
+                    <InfoItemRight>
                       <a
                         className="no-link-style"
                         href={`tel:+1${evryContactInfo.phones[2].phone_number.split('-').join('')}`}
                       >
                         {`1-${evryContactInfo.phones[2].phone_number}`}
                       </a>
-                    </InfoItem>
+                    </InfoItemRight>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <InfoItem>Official Website</InfoItem>
-                    <InfoItem>
+                    <InfoItemLeft>Official Website</InfoItemLeft>
+                    <InfoItemRight>
                       <a href={`https://${evryContactInfo.website}`}>{evryContactInfo.website}</a>
-                    </InfoItem>
+                    </InfoItemRight>
                   </TwoColumnInfoItem>
                   <TwoColumnInfoItem>
-                    <InfoItem>Mailing Address</InfoItem>
-                    <InfoItem>
+                    <InfoItemLeft>Mailing Address</InfoItemLeft>
+                    <InfoItemRight>
                       {evryContactInfo.mailing_address.address1}
                       <br />
                       {`${evryContactInfo.mailing_address.city}, ${evryContactInfo.mailing_address.state} ${evryContactInfo.mailing_address.zip}`}
-                    </InfoItem>
+                    </InfoItemRight>
                   </TwoColumnInfoItem>
                 </>
               )}

@@ -80,6 +80,7 @@ class MyInformationSection extends Component {
       representative,
       contactPreferences
     } = this.props;
+
     return (
       <SectionBackground>
         <Container>
@@ -110,15 +111,15 @@ class MyInformationSection extends Component {
                 buttonText="Update"
                 onClick={this.handlers.handleContactPreferencesClick}
               />
-              <ContactPreference text="Paperless" toggle={contactPreferences.paperless} />
-              <ContactPreference text="Receive Emails" toggle={contactPreferences.receive_emails} />
+              <ContactPreference text="Paperless" toggledOn={contactPreferences.paperless} />
+              <ContactPreference text="Receive Emails" toggledOn={contactPreferences.receive_emails} />
               <ContactPreference
                 text="Receive Text Messages"
-                toggle={contactPreferences.receive_text_messages}
+                toggledOn={contactPreferences.receive_text_messages}
               />
               <ContactPreference
                 text="Receive Phone Calls"
-                toggle={contactPreferences.receive_phone_calls}
+                toggledOn={contactPreferences.receive_phone_calls}
               />
             </SmallContainer>
           </WrapContainer>

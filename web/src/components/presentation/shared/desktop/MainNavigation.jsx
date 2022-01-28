@@ -134,12 +134,12 @@ const DropdownModal = styled.ul`
   position: absolute;
   top: 85%;
   left: 0;
-  padding: 16px 32px;
+  padding: 16px 16px;
   list-style: none;
   background: white;
   border-radius: 4px;
   width: 215%;
-  min-width: 210px;
+  min-width: 230px;
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
 
   &:hover {
@@ -176,7 +176,7 @@ const DropDownItem = styled(Link)`
   align-items: center;
 
   img {
-    margin-right: 24px;
+    margin-right: 12px;
     width: 16px;
   }
 `;
@@ -228,21 +228,33 @@ const MainNavigation = ({mobileOpen}) => {
         Member Tools
         <DropdownModal>
           <DropDownItem>
-            <img src={images["provider-lookup"]} alt="Provider Lookup" />
+            <img src={images['provider-lookup']} alt="Provider Lookup" />
             <DropDownLink to="/provider-lookup" activeClassName="active">
               Provider Lookup
             </DropDownLink>
           </DropDownItem>
           <DropDownItem>
-            <img src={images["formulary"]} alt="Prescription Formulary" />
+            <img src={images['formulary']} alt="Prescription Formulary" />
             <DropDownLink to="https://www.google.com" activeClassName="active">
               Prescription Formulary
             </DropDownLink>
           </DropDownItem>
           <DropDownItem>
-            <img src={images["expense-calculator"]} alt="Expense Calculator" />
+            <img src={images['expense-calculator']} alt="Expense Calculator" />
             <DropDownLink to="https://www.google.com" activeClassName="active">
               Expense Calculator
+            </DropDownLink>
+          </DropDownItem>
+          <DropDownItem>
+            <img src={images['local-pharmacy-black']} alt="Pharmacy Lookup" />
+            <DropDownLink to="https://www.google.com" activeClassName="active">
+              Pharmacy Lookup
+            </DropDownLink>
+          </DropDownItem>
+          <DropDownItem>
+            <img src={images['medical-services-black']} alt="Out-of-Area Provider Lookup" />
+            <DropDownLink to="https://www.google.com" activeClassName="active">
+              Out-of-Area Provider Lookup
             </DropDownLink>
           </DropDownItem>
         </DropdownModal>

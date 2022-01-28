@@ -63,15 +63,18 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const FilterOptions = ({ handleClose, search, query, clearData }) => {
-  const [dateStart, setDateStart] = useState('');
-  const [dateEnd, setDateEnd] = useState('');
+const FilterOptions = ({ handleClose, search, query, request, clearData }) => {
+  const { dateFrom, dateTo } = request;
+  const [dateStart, setDateStart] = useState(dateFrom != undefined ? new Date(dateFrom) : '');
+  const [dateEnd, setDateEnd] = useState(dateTo != undefined ? new Date(dateTo) : '');
   const [clear, setClear] = useState(0);
 
   const handleClear = () => {
     setDateStart(null);
     setDateEnd(null);
     setClear(clear + 1);
+    handleClose();
+    search({ dateFrom: null, dateTo: null, query: query });
   };
 
   const handleDateChange = (value, type) => {
@@ -83,8 +86,18 @@ const FilterOptions = ({ handleClose, search, query, clearData }) => {
   };
 
   const handleFilter = () => {
-    clearData();
-    search({ dateFrom: dateStart, dateTo: dateEnd, query: query });
+    if (clearData) {
+      clearData();
+      search({ dateFrom: dateStart, dateTo: dateEnd, query: query });
+      handleClose();
+    } else {
+      search({
+        dateFrom: dateStart,
+        dateTo: dateEnd ? dateEnd : Moment(new Date()).format('YYYY-MM-DD'),
+        query: query
+      });
+      handleClose();
+    }
   };
 
   return (
@@ -106,28 +119,21 @@ const FilterOptions = ({ handleClose, search, query, clearData }) => {
               changeCallback={handleDateChange}
               inputName="date-start"
               clear={clear}
+              chosenDate={dateStart}
             />
             <DatePicker
               placeholder="Choose End Date"
               changeCallback={handleDateChange}
               inputName="date-end"
               clear={clear}
+              chosenDate={dateEnd}
             />
           </EditedSpaceBetween>
         </Container>
         <SectionDivider />
         <Container>
           <ButtonWrapper>
-            <SmallButton
-              text="Apply Filters"
-              onClick={() =>
-                search({
-                  dateFrom: dateStart,
-                  dateTo: dateEnd ? dateEnd : Moment(new Date()).format('YYYY-MM-DD'),
-                  query: query
-                })
-              }
-            />
+            <SmallButton text="Apply Filters" onClick={() => handleFilter()} />
             <SmallButton text="Clear Filters" onClick={() => handleClear()} negative />
           </ButtonWrapper>
         </Container>

@@ -29,7 +29,7 @@ const LeftGroup = styled.div`
 `;
 
 const HelpArticleLink = React.memo(({ text, url }) => (
-  <Wrapper href={url}>
+  <Wrapper href={url} target="_blank">
     <LeftGroup>
       <i className="material-icons">info_outline</i>
       <p>{text}</p>

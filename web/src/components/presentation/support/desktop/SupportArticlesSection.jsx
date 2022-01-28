@@ -29,7 +29,7 @@ const {
 const SmallContainer = styled.div`
   max-width: 100%;
 
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.tablet} {
     width: 48%;
   }
 
@@ -54,14 +54,14 @@ const H3 = styled.h3`
 const ArticleList = styled(SpaceBetween)`
   flex-wrap: wrap;
   margin-bottom: -32px;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: center;
   gap: 10px;
 
-  @media (max-width: 549) {
+  @media not ${defaultTheme.device.tablet} {
     flex-direction: column;
   }
-  @media (min-width: 550) {
+  @media ${defaultTheme.device.tablet} {
     flex-direction: row;
   }
 `;
@@ -72,8 +72,12 @@ const Description = styled.p`
 
 const BottomContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
+  justify-content: center;
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+  }
 `;
 
 const SupportArticlesSection = ({ supportArticles, faqs }) => (

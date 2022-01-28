@@ -334,6 +334,7 @@ const NotificationCenterWithData = withStoreData(
     ownProps
   ) => {
     const fetch = args => fetchNotifications({ token, ...args });
+
     return {
       fetch,
       markNotificationsAsRead: ({ ids = [], ...args }) => {
@@ -347,6 +348,7 @@ const NotificationCenterWithData = withStoreData(
           ...notification
         })),
       notificationsDataFrame: elasticDataFrame(notificationsDataFrame, fetch),
+      isPending: notificationsDataFrame?.pending,
       shouldFetch: () => true,
       ...ownProps
     };

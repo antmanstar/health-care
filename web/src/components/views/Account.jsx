@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
-import defaultTheme from '../../../style/themes';
-import { Standard } from '../../layouts';
-import MyInformationSection from '../../presentation/account/desktop/MyInformationSection';
-import CoordinationOfBenefitsSection from '../../presentation/account/desktop/CoordinationOfBenefitsSection';
-import ActionButtonsContainer from '../../containers/shared/desktop/ActionButtonsContainer';
+import defaultTheme from '../../style/themes';
+import { Standard } from '../layouts';
+import MyInformationSection from '../presentation/account/desktop/MyInformationSection';
+import CoordinationOfBenefitsSection from '../presentation/account/desktop/CoordinationOfBenefitsSection';
+import ActionButtonsContainer from '../containers/shared/desktop/ActionButtonsContainer';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
-import withStoreData from '../../containers/base/withStoreData';
+import withStoreData from '../containers/base/withStoreData';
 import { Helmet } from 'react-helmet-async';
 
 

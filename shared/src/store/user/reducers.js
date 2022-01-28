@@ -115,6 +115,17 @@ const userReducer = (state = initialState, action) => {
         }
       }
     case types.CLAIMS_LIST_FETCH:
+      const { query, dateFrom, dateTo } = action.payload
+      return {
+        ...state,
+        claimsList: { request: { query, dateFrom, dateTo }, pending: true }
+      }
+    case types.CLAIMS_LIST_FETCH_SUCCESS:
+      return {
+        ...state,
+        claimsList: { ...state.claimsList, ...action.payload, pending: false }
+      }
+    case types.CLEAR_AUTH:
       return {
         ...state,
         claimsList: { request: { query: action.payload.query }, pending: true }
@@ -249,10 +260,50 @@ const userReducer = (state = initialState, action) => {
           message: action.payload.messages
         }
       }
+
+    case types.CREATE_CASE_REQUEST_MAILED_CARD_SUCCESS:
+      return {
+        ...state,
+        requestMailedCardCase: {
+          status: 'OPEN',
+          id: action.payload.id
+        }
+      }
+    case types.CREATE_CASE_REQUEST_MAILED_CARD_FAILURE:
+      console.log(action);
+      return {
+        ...state,
+        requestMailedCardCase: {
+          status: 'ERROR-CREATING',
+          messages: (action.payload ? action.payload.messages : ['An error has occured.'])
+        }
+      }
+    case types.COMPLETE_CASE_REQUEST_MAILED_CARD_SUCCESS:
+      return {
+        ...state,
+        requestMailedCardCase: {
+          ...state.requestMailedCardCase,
+          status: 'COMPLETE'
+        }
+      }
+    case types.COMPLETE_CASE_REQUEST_MAILED_CARD_FAILURE:
+      return {
+        ...state,
+        requestMailedCardCase: {
+          status: 'ERROR-COMPLETING',
+          messages: action.payload.messages
+        }
+      }
+
     case types.REQUEST_INFORMATION_RESET:
       return {
         ...state,
         requestInformationCase: { status: null, id: null }
+      }
+    case types.REQUEST_MAILED_CARD_RESET:
+      return {
+        ...state,
+        requestMailedCardCase: { status: null, id: null }
       }
     case types.EVRY_CONTACT_FETCH_SUCCESS:
       return { ...state, evryContactInfo: action.payload }
@@ -393,7 +444,9 @@ const userReducer = (state = initialState, action) => {
           ...get(state, ['notifications'], {}),
           request: {
             query: action.payload.query,
-            read: action.payload.read
+            read: action.payload.read,
+            dateFrom: action.payload.dateFrom,
+            dateTo: action.payload.dateTo
           },
           pending: true
         }
@@ -404,8 +457,18 @@ const userReducer = (state = initialState, action) => {
         notifications: {
           ...state.notifications,
           ...action.payload,
-          data: [...action.payload.data],
+          data: [
+            ...get(state, ['notifications', 'data'], []),
+            ...action.payload.data
+          ],
           pending: false
+        }
+      }
+    case types.NOTIFICATIONS_CLEAR:
+      return {
+        ...state,
+        notifications: {
+          data: []
         }
       }
     case types.EMAIL_VERIFY_CHALLENGE_SUCCESS:
@@ -453,6 +516,19 @@ const userReducer = (state = initialState, action) => {
         register: {
           error: action.error?.response?.data?.messages,
           isRegisteringElegibility: false
+        }
+      }
+    case types.UPDATE_CONTACT_PREFERENCES:
+      return {
+        ...state,
+        accountInfo: {
+          ...state.accountInfo,
+          contact_preferences: {
+            paperless: action.payload.paperless,
+            receive_emails: action.payload.receive_emails,
+            receive_text_messages: action.payload.receive_text_messages,
+            receive_phone_calls: action.payload.receive_phone_calls
+          }
         }
       }
     case types.SIGN_IN:

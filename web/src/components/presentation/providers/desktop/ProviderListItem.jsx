@@ -5,7 +5,6 @@ import ProviderProfile from './ProviderProfile';
 // Provider Lookup List Item
 
 const Wrapper = styled.div`
-  width: 100%;
   margin: 0 0 8px;
   padding: 24px 32px;
   background: white;
@@ -15,26 +14,47 @@ const Wrapper = styled.div`
   border-radius: 4px;
   box-sizing: border-box;
   cursor: pointer;
+  border-color: ${props => (props.hovered ? props.theme.colors.shades.pinkOrange : 'none')};
 
   &:hover {
     border-color: ${props => props.theme.colors.shades.blue};
   }
 `;
 
-const ProviderListItem = React.memo(() => (
-  <Wrapper>
-    <ProviderProfile
-      name="Jacob Jefferson, M.D."
-      distance="0.8"
-      practiceName="Clearstone Family Medicine"
-      address="2310 Spring Valley Rd. Plano, TX 75023"
-      phone="469-345-9284"
-      npiNumber="123456789"
-      network="Evry Premier Network"
-      specialties={['Family Medicine']}
-      languages={['English']}
-    />
-  </Wrapper>
-));
+const ProviderListItem = React.memo(
+  ({
+    name,
+    distance,
+    practiceName,
+    address,
+    phone,
+    npiNumber,
+    specialties,
+    onClick,
+    hoveredCardId,
+    id,
+    setHoveredPinId
+  }) => {
+    return (
+      <Wrapper
+        onClick={onClick}
+        hovered={id === hoveredCardId ? true : false}
+        onMouseEnter={() => setHoveredPinId(id)}
+        onMouseLeave={() => setHoveredPinId(null)}
+      >
+        <ProviderProfile
+          id={id}
+          name={name}
+          distance={distance}
+          practiceName={practiceName}
+          address={address}
+          phone={phone}
+          npiNumber={npiNumber}
+          specialties={specialties}
+        />
+      </Wrapper>
+    );
+  }
+);
 
 export default ProviderListItem;

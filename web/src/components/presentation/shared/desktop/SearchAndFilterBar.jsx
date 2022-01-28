@@ -36,7 +36,6 @@ const Search = styled.div`
   i {
     margin-right: 14px;
     color: ${props => props.theme.colors.shades.blue};
-    cursor: pointer;
   }
 
   input {
@@ -89,14 +88,33 @@ const FilterButton = styled.button`
     background: ${props => props.theme.colors.shades.nearlyWhite};
     cursor: pointer;
   }
+  .calendar-red {
+    color: #f9423a;
+  }
 `;
 
-const SearchAndFilterBar = ({ bordered, placeholder, dateButton, filterButton, search }) => {
+const SearchAndFilterBar = ({
+  bordered,
+  placeholder,
+  dateButton,
+  filterButton,
+  search,
+  request,
+  clearData
+}) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
   const handleClose = () => {
     setShowFilters(false);
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      if (clearData) clearData();
+      setQuery(e.target.value);
+      search({ query: query });
+    }
   };
 
   return (
@@ -118,13 +136,14 @@ const SearchAndFilterBar = ({ bordered, placeholder, dateButton, filterButton, s
               onChange={e => {
                 setQuery(e.target.value);
               }}
+              onKeyDown={e => handleKeyDown(e)}
             />
           </form>
         </Search>
         <FilterButtons>
           {dateButton && (
             <FilterButton bordered={bordered} onClick={() => setShowFilters(true)}>
-              <i className="material-icons">date_range</i>
+              <i className={`material-icons ${showFilters ? 'calendar-red' : ''}`}>date_range</i>
             </FilterButton>
           )}
           {filterButton && (
@@ -133,7 +152,15 @@ const SearchAndFilterBar = ({ bordered, placeholder, dateButton, filterButton, s
             </FilterButton>
           )}
         </FilterButtons>
-        {showFilters && <FilterOptions handleClose={handleClose} search={search} query={query} />}
+        {showFilters && (
+          <FilterOptions
+            handleClose={handleClose}
+            request={request}
+            search={search}
+            query={query}
+            clearData={clearData}
+          />
+        )}
       </Wrapper>
     </>
   );

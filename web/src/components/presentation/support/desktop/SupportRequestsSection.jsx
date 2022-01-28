@@ -1,12 +1,14 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SupportRequestList from './SupportRequestList';
 import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import SmallButton from '../../shared/desktop/SmallButton';
 import Pagination from '../../shared/desktop/Pagination';
+import Loader from '../../shared/Loader/Loader';
 
 // This is the Support Requests Section
 
@@ -72,7 +74,11 @@ const SupportRequestsSection = ({ paginator, requests, showCompleted, showModal 
       </Container>
       <SectionDivider />
       <Container>
-        <SupportRequestList showCompleted={showCompleted} list={requests} />
+        {isEmpty(requests) ? (
+          <Loader />
+        ) : (
+          <SupportRequestList showCompleted={showCompleted} list={requests} />
+        )}
       </Container>
     </SectionBackground>
     <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>

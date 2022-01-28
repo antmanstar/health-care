@@ -69,14 +69,17 @@ const Column = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
 
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+  }
   & div {
     flex: 1 1 auto;
-    @media (min-width: 550px) {
+    @media ${defaultTheme.device.mobile} {
       flex: 1 1 0;
     }
   }
@@ -102,7 +105,7 @@ const RequestNewMembershipCardModal = React.memo(({ hideModal, phoneNumber }) =>
         </SpaceBetween>
       </ModalHeader>
       <ModalBody>
-        <p>
+        {/* <p>
           <Span>You always have a digital card available through our mobile app.&nbsp;</Span>
           You can also download a new temporary card to print yourself or request a new one be sent
           to you.
@@ -114,9 +117,8 @@ const RequestNewMembershipCardModal = React.memo(({ hideModal, phoneNumber }) =>
         <LINK href="http://www.google.com">
           <img src={images['google-play']} alt="Evry Android App" />
         </LINK>
-        {/* TODO: Add URLs to the proper app store locations */}
-
-        <FormLabel>Get your New Membership Card</FormLabel>
+        
+        <FormLabel>Get your New Membership Card</FormLabel> */}
         {/* <SpaceBetween>
           <Column>
             <BigButtonContainer buttonKey="downloadMembershipCard" />

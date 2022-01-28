@@ -2,19 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SmallButton from './SmallButton';
+import defaultTheme from '../../../../style/themes';
 
 // Article Card used in Article Lists on Desktop ("Care Plan" and "Customer Support" Views)
 
 const Container = styled.div`
+  position: relative;
+  max-width: 100%;
   margin-bottom: 32px;
-  width: 32%;
-
-  @media ${props => props.theme.device_up.tablet} {
-    width: 48%;
+  flex-grow: 1;
+  @media ${defaultTheme.device.mobile} {
+    max-width: 300px;
   }
-
-  @media ${props => props.theme.device_up.mobile} {
-    width: 96%;
+  @media ${defaultTheme.device.tablet} {
+    max-width: 50%;
+  }
+  @media ${defaultTheme.device.tabletXL} {
+    max-width: 32%;
+  }
+  button:last-child {
+    position: absolute;
+    bottom: -16px;
   }
 `;
 

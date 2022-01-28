@@ -13,7 +13,7 @@ const { SpaceBetween } = defaultTheme.components;
 
 const Wrapper = styled.div`
   margin: -48px -48px 0;
-  padding: 0 48px;
+  padding: 8px 48px;
   font-size: 16px;
   line-height: 56px;
   background: ${props =>

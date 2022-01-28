@@ -556,9 +556,39 @@ export const completeSendMessageCase = ({ caseID, token }) => ({
     token
   }
 })
+export const submitProviderFeedbackCase = ({ metadata, token, type }) => ({
+  type: types.CREATE_CASE,
+  payload: {
+    metadata,
+    token,
+    type
+  }
+})
 
 export const sendMessageReset = () => ({
   type: types.SEND_MESSAGE_RESET
+})
+
+export const createRequestMailedCardCase = ({ token }) => {
+  console.log(token)
+  return createCase_v2({
+    storeType: types.CREATE_CASE_REQUEST_MAILED_CARD,
+    metadata: [],
+    token,
+    type: ID_CARD_REQUEST
+  })
+}
+
+export const completeRequestMailedCardCase = ({ caseID, token }) => ({
+  type: types.COMPLETE_CASE_REQUEST_MAILED_CARD,
+  payload: {
+    id: caseID,
+    token
+  }
+})
+
+export const requestMailedCardReset = () => ({
+  type: types.REQUEST_MAILED_CARD_RESET
 })
 
 export const fetchAccountInfo = (token) => ({
@@ -773,6 +803,11 @@ export const fetchWellnessGoals = (token) => ({
   }
 })
 
+export const clearNotifications = () => ({
+  type: types.NOTIFICATIONS_CLEAR,
+  payload: {}
+})
+
 export const fetchNotifications = ({
   direction,
   orderBy,
@@ -969,4 +1004,9 @@ export const verify2FACode = (email, code, token) => ({
 export const initRegister = () => ({
   type: types.ELEGIBILITY_ID_SSN_VERIFY_FAILURE,
   error: {}
+})
+
+export const updateContactPreferences = (payload) => ({
+  type: types.UPDATE_CONTACT_PREFERENCES,
+  payload
 })

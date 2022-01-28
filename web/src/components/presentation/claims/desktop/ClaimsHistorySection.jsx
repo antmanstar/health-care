@@ -13,10 +13,10 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import paginate from '../../../../utils/pagination';
 import constants from '@evry-member-app/shared/constants';
-import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 const { fetchClaimsList, showModal } = actions;
-const { getClaimsList, getClaimsListDataFrame, getToken, getClaimLoading } = selectors;
+const { getClaimsList, getClaimsListDataFrame, getToken, getClaimLoading, getRequest } = selectors;
 const { RECORDS_PER_PAGE } = constants;
 
 // Claims History Section on the "Claims" View
@@ -102,7 +102,7 @@ class ClaimsHistorySection extends Component {
   }
 
   render() {
-    const { claimsList, paginator, pending } = this.props;
+    const { claimsList, paginator, pending, request } = this.props;
     return (
       <LayoutWrapper>
         <SectionBackground>
@@ -118,6 +118,7 @@ class ClaimsHistorySection extends Component {
                   bordered
                   search={this.handlers.search}
                   placeholder="Search Claims"
+                  request={request}
                   dateButton
                 />
               </SearchWrapper>
@@ -126,13 +127,13 @@ class ClaimsHistorySection extends Component {
           <SectionDivider />
           <Container>
             <ClaimsList claims={claimsList} />
-            {pending && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+            {pending && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
           </Container>
         </SectionBackground>
         <PaginationWrapper>
           <PostSectionNote
             text="Have a question about a pending claim?"
-            linkText="Contact your Care Guide"
+            linkText="Contact Customer Support"
             handleClick={this.handlers.contactCareGuideClick}
           />
           {paginator && <Pagination paginator={paginator} />}
@@ -147,7 +148,8 @@ const mapStateToProps = state => {
     pending: getClaimLoading(state),
     claimsList: getClaimsList(state),
     claimsListDataFrame: getClaimsListDataFrame(state),
-    token: getToken(state)
+    token: getToken(state),
+    request: getRequest(state)
   };
 };
 

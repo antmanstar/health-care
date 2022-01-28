@@ -19,7 +19,10 @@ import UpdatePasswordModal from '../../../presentation/modals/desktop/UpdatePass
 import UpdatePersonalInformationModal from '../../../presentation/modals/desktop/UpdatePersonalInformationModal';
 import UpdateSecurityQuestionsModal from '../../../presentation/modals/desktop/UpdateSecurityQuestionsModal';
 import UploadDocumentModal from '../../../presentation/modals/desktop/UploadDocumentModal';
+import SubmissionResponseModal from '../../../presentation/modals/desktop/SubmissionResponseModal';
 import UpdateContactPreferences from '../../../presentation/modals/desktop/UpdateContactPreferences';
+import RequestMailedCardModal from '../../../presentation/modals/desktop/RequestMailedCardModal';
+import ConciergeCareModal from '../../../presentation/modals/desktop/ConciergeCareModal';
 import withStoreData from '../../base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import constants from '@evry-member-app/shared/constants';
@@ -172,6 +175,15 @@ const ModalContainer = props => {
 
     case 'UPLOAD_DOCUMENT':
       return <UploadDocumentModal {...props} />;
+
+    case 'SUBMISSION_RESPONSE':
+      return <SubmissionResponseModal {...props} />;
+
+    case 'REQUEST_MAILED_CARD':
+      return <RequestMailedCardModal {...props} />;
+
+    case 'CONCIERGE_CARE':
+      return <ConciergeCareModal {...props} />;
 
     default:
       return null;

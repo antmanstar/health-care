@@ -71,9 +71,13 @@ const Column = styled.div`
   width: 100%;
   margin-left: -16px;
 
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.mobile} {
+    width: calc(75% - 8px);
+  }
+  @media ${defaultTheme.device.tablet} {
     width: calc(50% - 8px);
   }
+
   .big-button {
     width: 100%;
     margin-bottom: 8px;

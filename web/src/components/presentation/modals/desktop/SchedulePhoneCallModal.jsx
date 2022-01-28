@@ -9,6 +9,7 @@ import TimePicker from '../../shared/desktop/TimePicker';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import Select from '../../shared/desktop/Select';
+import constants from '@evry-member-app/shared/constants';
 // MODAL - Schedule a Phone Call
 
 const {
@@ -27,9 +28,14 @@ const {
 const {
   createSchedulePhoneCallCase,
   schedulePhoneCallReset,
-  completeScheduledPhoneCallCase
+  completeScheduledPhoneCallCase,
+  showModal,
+  setModalData,
+  fetchCases
 } = actions;
 const { getToken, getScheduledPhoneCallCase } = selectors;
+
+const { SUBMITTED, CREATED, ON_HOLD, ESCALATED } = constants;
 
 const SqaushedSpaceBetween = styled(SpaceBetween)`
   margin-bottom: -8px;
@@ -39,11 +45,25 @@ const FormError = styled.div`
   color: ${props => props.theme.colors.shades.pinkOrange};
 `;
 
-const Column = styled.div`
+const DateTimeContainer = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+
   width: 100%;
+
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+    gap: 10px;
+  }
+`;
+const Equalizer = styled.div`
+  flex-grow: 1;
+  width: 100%;
+
+  @media ${defaultTheme.device.tablet} {
+    width: 48%;
+  }
 `;
 
 const includeTimes = [
@@ -116,7 +136,13 @@ class SchedulePhoneCallModal extends Component {
       prevProps.scheduledPhoneCallCase.status === 'OPEN' &&
       this.props.scheduledPhoneCallCase.status === 'COMPLETE'
     ) {
-      this.props.hideModal();
+      this.props.fetchCases(this.props.token);
+      this.props.setModalData({
+        type: 'SUCCESS',
+        title: 'Submitted!',
+        message: "Great! We'll get to work on that and send you confirmation once complete."
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
     }
   }
 
@@ -145,6 +171,7 @@ class SchedulePhoneCallModal extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { reason, phoneNumber, date, time } = event.target.elements;
+    console.log(date);
     let errors = [];
     if (reason.value.trim().length === 0) {
       errors.push('*There must be a reason.');
@@ -218,7 +245,7 @@ class SchedulePhoneCallModal extends Component {
                 onChange={this.handlers.handleChange}
               />
               {phoneNumberInput}
-              <SqaushedSpaceBetween>
+              {/* <SqaushedSpaceBetween>
                 <ModalHalfColumn>
                   <DatePicker
                     inputName="date"
@@ -227,6 +254,7 @@ class SchedulePhoneCallModal extends Component {
                     filterDate={this.handlers.filterDate}
                     minDateChoice={minDate}
                     maxDateChoice={maxDate}
+                    useCustomInput={true}
                   />
                 </ModalHalfColumn>
                 <ModalHalfColumn>
@@ -236,19 +264,27 @@ class SchedulePhoneCallModal extends Component {
                     changeCallback={this.handlers.handleTimeChange}
                   />
                 </ModalHalfColumn>
-              </SqaushedSpaceBetween>
-              {/* <Column>
-                <DatePicker
-                  inputName="dateTime"
-                  chosenDate={dateTime}
-                  changeCallback={this.handlers.handleDateTimeChange}
-                  showTimeSelect={true}
-                  filterDate={this.handlers.filterDate}
-                  minDateChoice={minDate}
-                  maxDateChoice={maxDate}
-                  includeTimes={includeTimes}
-                />
-              </Column> */}
+              </SqaushedSpaceBetween> */}
+              <DateTimeContainer>
+                <Equalizer>
+                  <DatePicker
+                    inputName="date"
+                    chosenDate={date}
+                    changeCallback={this.handlers.handleDateChange}
+                    filterDate={this.handlers.filterDate}
+                    minDateChoice={minDate}
+                    maxDateChoice={maxDate}
+                    useCustomInput={true}
+                  />
+                </Equalizer>
+                <Equalizer>
+                  <TimePicker
+                    inputName="time"
+                    chosenDate={time}
+                    changeCallback={this.handlers.handleTimeChange}
+                  />
+                </Equalizer>
+              </DateTimeContainer>
               {this.state.errorMessages &&
                 this.state.errorMessages.map(message => (
                   <FormError key={message}>{message}</FormError>
@@ -307,6 +343,22 @@ const mapDispatchToProps = dispatch => ({
   },
   completeScheduledPhoneCallCase: (caseID, token) => {
     dispatch(completeScheduledPhoneCallCase({ caseID, token }));
+  },
+  setModalData: modalData => {
+    dispatch(setModalData(modalData));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  },
+  fetchCases: token => {
+    dispatch(
+      fetchCases({
+        direction: undefined,
+        orderBy: undefined,
+        statuses: [SUBMITTED, CREATED, ON_HOLD, ESCALATED],
+        token
+      })
+    );
   }
 });
 

@@ -169,6 +169,20 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.CREATE_CASE_REQUEST_MAILED_CARD,
+        generateFetchWorker,
+        api.createCase_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.COMPLETE_CASE_REQUEST_MAILED_CARD,
+        generateFetchWorker,
+        api.markCaseAsSubmitComplete
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.EDUCATIONAL_RESOURCES_FETCH,
         generateFetchWorker,
         api.fetchEducationalResources
@@ -332,6 +346,13 @@ export default function* watcherSaga() {
         types.WELLNESS_GOALS_FETCH,
         generateFetchWorker,
         api.fetchWellnessGoals
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.UPDATE_CONTACT_PREFERENCES,
+        generateFetchWorker,
+        api.updateContactPreferences
       )
     )
   ])

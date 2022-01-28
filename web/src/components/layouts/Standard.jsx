@@ -21,7 +21,7 @@ const MainSection = styled.div`
 `;
 
 const Standard = props => {
-  const { title, children } = props;
+  const { title, searchBar, children } = props;
 
   return (
     <>
@@ -30,7 +30,7 @@ const Standard = props => {
         <ViewTitle title={title} memberId="EVR123456789" groupId="123456" />
       </Header>
       <MainSection className="standard-desktop-section">
-        <SearchBar />
+        {searchBar ? searchBar : <SearchBar />}
         {children}
       </MainSection>
       <Footer />

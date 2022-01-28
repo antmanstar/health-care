@@ -9,8 +9,6 @@ const { getSupportPhoneNumber } = selectors;
 
 // Colored Modal Header
 
-const { SpaceBetween } = defaultTheme.components;
-
 const Wrapper = styled.div`
   margin: -48px -48px 0;
   padding: 0 48px;
@@ -21,6 +19,13 @@ const Wrapper = styled.div`
   border-radius: 4px 4px 0 0;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1);
 `;
+
+const SpaceBetween = styled.div`
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 
 const Title = styled.p`
   margin: 0;

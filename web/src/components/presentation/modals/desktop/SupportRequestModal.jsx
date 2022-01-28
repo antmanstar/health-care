@@ -37,6 +37,28 @@ const Column = styled.div`
   }
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+  }
+  & div {
+    flex: 1 1 auto;
+    @media ${defaultTheme.device.mobile} {
+      flex: 1 1 0;
+    }
+  }
+
+  .big-button {
+    width: 100%;
+  }
+`;
+
 const SupportRequestModal = React.memo(({ modalData, hideModal }) => (
   <>
     <Scrim onClick={hideModal} />
@@ -55,14 +77,22 @@ const SupportRequestModal = React.memo(({ modalData, hideModal }) => (
       </ModalBody>
       <ModalSectionDivider />
       <FormLabel>Contact Customer Support</FormLabel>
-      <SpaceBetween>
+      {/* <SpaceBetween>
         <Column>
           <BigButtonContainer buttonKey="sendAMessage" />
         </Column>
         <Column>
           <BigButtonContainer buttonKey="schedulePhoneCall" />
         </Column>
-      </SpaceBetween>
+      </SpaceBetween> */}
+      <ButtonContainer>
+        <div>
+          <BigButtonContainer buttonKey="sendAMessage" />
+        </div>
+        <div>
+          <BigButtonContainer buttonKey="schedulePhoneCall" />
+        </div>
+      </ButtonContainer>
       <ModalSectionDivider />
       <ButtonsCenter>
         <SmallButton negative text="Cancel" onClick={hideModal} />

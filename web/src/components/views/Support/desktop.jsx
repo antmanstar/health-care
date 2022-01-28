@@ -223,7 +223,7 @@ const Support = () => {
       <LayoutWrapper>
         <ActionButtonsContainer view="support" />
         <MySupportSectionWithData />
-        <SupportArticlesSection />
+        {/* <SupportArticlesSection /> */}
         <SupportRequestsSectionWithData />
         <InnerWrapper />
       </LayoutWrapper>

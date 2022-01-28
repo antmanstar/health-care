@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+import defaultTheme from '../../../../style/themes';
 // Desktop Support Profile
 
 const Wrapper = styled.div`
@@ -30,10 +30,10 @@ const ProfilePic = styled.div`
 const Name = styled.h3`
   margin-bottom: 4px;
   font-weight: 400;
-  @media (max-width: 549px) {
+  @media not ${defaultTheme.device.mobile} {
     font-size: 15px;
   }
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.mobile} {
     font-size: 24px;
   }
 `;
@@ -43,10 +43,10 @@ const Role = styled.h4`
   font-size: 16px;
   font-weight: 300;
   color: ${props => props.theme.colors.shades.pinkOrange};
-  @media (max-width: 549px) {
+  @media not ${defaultTheme.device.mobile} {
     font-size: 12px;
   }
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.mobile} {
     font-size: 16px;
   }
 `;
@@ -62,19 +62,20 @@ const ContactInfoItem = styled.div`
     &:hover {
       text-decoration: underline;
     }
-    @media (max-width: 549px) {
+    @media not ${defaultTheme.device.mobile} {
       font-size: 10x;
     }
   }
 `;
 const Email = styled.span`
-  @media (max-width: 549px) {
-    font-size: 10px;
+  font-size: 10px;
+  @media ${defaultTheme.device.mobile} {
+    font-size: 16px;
   }
 `;
 
 const PhoneNumber = styled.span`
-  @media (max-width: 549px) {
+  @media not ${defaultTheme.device.mobile} {
     font-size: 10px;
   }
 `;
@@ -82,7 +83,7 @@ const PhoneNumber = styled.span`
 const Icon = styled.i`
   margin-right: 8px;
   color: ${props => props.theme.colors.shades.blue};
-  @media (max-width: 549px) {
+  @media not ${defaultTheme.device.mobile} {
     font-size: 18px;
   }
 `;

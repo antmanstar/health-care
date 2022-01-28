@@ -11,19 +11,39 @@ const { DateWrapper, DateWrapperIcon } = defaultTheme.components;
 const DatePickerWrapper = styled.div`
   display: flex;
   position: relative;
+  margin-bottom: 8px;
 
   input {
     border: none;
     height: 50px;
   }
 
-  i {
+  & input.date-picker-input {
+    border: none;
+    height: 50px;
+    width: 100%;
+    padding-left: 16px;
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #00263a;
+    font-family: 'Roboto';
+    box-sizing: border-box;
+  }
+
+  & i {
     position: absolute;
-    right: 0;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
     color: #02324c;
   }
+`;
+
+const MiddleManWrapper = styled.div`
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const DateTimePicker = ({
@@ -37,10 +57,41 @@ const DateTimePicker = ({
   clear,
   filterDate,
   showTimeSelect,
-  includeTimes
+  includeTimes,
+  useCustomInput
 }) => {
   //const [ startDate, setStartDate ] = useState(new Date());
   const [dateSelected, setDateSelected] = useState(chosenDate);
+
+  const ExampleCustomInput = forwardRef(
+    (
+      //props,
+      { value, onClick, placeholder, onBlur, onChange, onFocus, onKeyDown, className, name },
+      ref
+    ) => {
+      //console.log(props);
+      return (
+        <>
+          <input
+            onClick={onClick}
+            ref={ref}
+            placeholder={placeholder}
+            value={value}
+            onBlur={onBlur}
+            onChange={onChange}
+            onFocus={onFocus}
+            onKeyDown={onKeyDown}
+            className={className}
+            name={name}
+          />
+        </>
+        // <CustomInput onClick={onClick} ref={ref} placeholder={placeholder}>
+        //   {value}
+        //   <DateWrapperIcon className="material-icons">date_range</DateWrapperIcon>
+        // </CustomInput>
+      );
+    }
+  );
 
   useEffect(() => {
     setDateSelected(null);
@@ -80,6 +131,7 @@ const DateTimePicker = ({
         timeFormat="hh:mm aa"
         dateFormat={showTimeSelect ? 'M/dd/yyyy hh:mm aa' : 'MM/dd/yyyy'}
         includeTimes={includeTimes}
+        customInput={<ExampleCustomInput className="date-picker-input" />}
       />
       <DateWrapperIcon className="material-icons">date_range</DateWrapperIcon>
     </DatePickerWrapper>

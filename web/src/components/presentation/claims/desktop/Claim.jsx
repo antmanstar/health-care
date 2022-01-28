@@ -8,6 +8,7 @@ import SmallButton from '../../shared/desktop/SmallButton';
 import BenefitBreakdown from './BenefitBreakdown';
 import actions from '@evry-member-app/shared/store/actions';
 import images from '../../../../utils/images';
+import numberFormat from '../../../../utils/numberFormat';
 
 const { setModalData, showModal } = actions;
 
@@ -343,10 +344,10 @@ class Claim extends Component {
                 <FlexGroup className="claim-costs">
                   <SmallSectionBackground>
                     <BenefitBreakdown
-                      totalBilled={claimDetail?.total_billed}
-                      discounts={claimDetail?.total_adjustment}
-                      payment={claimDetail?.total_payment_to_provider}
-                      owed={claimDetail?.total_member_responsibility}
+                      totalBilled={numberFormat(claimDetail?.total_billed)}
+                      discounts={numberFormat(claimDetail?.total_adjustment)}
+                      payment={numberFormat(claimDetail?.total_payment_to_provider)}
+                      owed={numberFormat(claimDetail?.total_member_responsibility)}
                     />
                   </SmallSectionBackground>
                 </FlexGroup>

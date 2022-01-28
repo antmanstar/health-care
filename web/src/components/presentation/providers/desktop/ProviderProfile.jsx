@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import ProviderTag from './ProviderTag';
+import images from '../../../../utils/images';
 
 // Provider Profile for use in "Provider Lookup" View
 
@@ -59,46 +60,56 @@ const Tags = styled.div`
   }
 `;
 
+const PinWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PinLabel = styled.label`
+  position: absolute;
+  margin-bottom: 6px;
+  z-index: 1;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+`;
+
+const Pin = styled.img`
+  transform: scale(0.8);
+`;
+
 const ProviderProfile = React.memo(
-  ({
-    name,
-    distance,
-    practiceName,
-    address,
-    phone,
-    npiNumber,
-    network,
-    specialties,
-    languages
-  }) => (
-    <Wrapper>
-      <MarginBottom>
-        <SpaceBetween>
-          <h3>{name}</h3>
-          <Location>
-            <p>{`${distance} miles`}</p>
-            <i className="material-icons">location_on</i>
-          </Location>
-        </SpaceBetween>
-      </MarginBottom>
-      <ProviderContactInfo>
-        {practiceName}
-        <br />
-        {address}
-        <br />
-        {phone}
-      </ProviderContactInfo>
-      <ProviderContactInfo>{`NPI: ${npiNumber} | ${network}`}</ProviderContactInfo>
-      <Tags>
-        {specialties.map(specialty => (
-          <ProviderTag specialty text={specialty} />
-        ))}
-        {languages.map(language => (
-          <ProviderTag text={language} />
-        ))}
-      </Tags>
-    </Wrapper>
-  )
+  ({ name, distance, practiceName, address, phone, npiNumber, specialties, id }) => {
+    return (
+      <Wrapper>
+        <MarginBottom>
+          <SpaceBetween>
+            <h3>{name !== '' ? name : practiceName}</h3>
+            <Location>
+              <p>{`${distance} miles`}</p>
+              <PinWrapper>
+                <PinLabel>{id + 1}</PinLabel>
+                <Pin src={images[`location_pin`]} />
+              </PinWrapper>
+            </Location>
+          </SpaceBetween>
+        </MarginBottom>
+        <ProviderContactInfo>
+          {name !== '' ? practiceName : undefined}
+          {address}
+          <br />
+          {phone}
+        </ProviderContactInfo>
+        <ProviderContactInfo>{`NPI: ${npiNumber}`}</ProviderContactInfo>
+        <Tags>
+          {specialties?.map(specialty => (
+            <ProviderTag specialty text={specialty} />
+          ))}
+        </Tags>
+      </Wrapper>
+    );
+  }
 );
 
 ProviderProfile.propTypes = {

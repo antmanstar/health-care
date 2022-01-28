@@ -24,18 +24,18 @@ export default function paginate(dataFrame, fetch) {
     next: () => {
       if (dataFrame.has_next_page) {
         fetch({
+          ...dataFrame.request,
           page: dataFrame.current_page + 1,
           recordsPerPage: dataFrame.records_per_page,
-          ...dataFrame.request
         });
       }
     },
     prev: () => {
       if (dataFrame.has_previous_page) {
         fetch({
+          ...dataFrame.request,
           page: dataFrame.current_page - 1,
           recordsPerPage: dataFrame.records_per_page,
-          ...dataFrame.request
         });
       }
     }

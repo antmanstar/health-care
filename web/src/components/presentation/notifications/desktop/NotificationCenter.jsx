@@ -10,7 +10,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { connect } from 'react-redux';
 
 const { fetchNotifications, clearNotifications } = actions;
-const { getToken } = selectors;
+const { getToken, getNotificationsFilters } = selectors;
 
 // DESKTOP: Notification Center Drawer
 // TODO: API should supply messages
@@ -19,9 +19,12 @@ const { getToken } = selectors;
 
 const Wrapper = styled.div`
   position: relative;
-  width: 512px;
+  width: 500px;
   background: ${props => props.theme.colors.shades.white};
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const Header = styled.div`
@@ -89,6 +92,15 @@ const CloseDrawer = styled.button`
   }
 `;
 
+const FilterLabel = styled.div`
+  display: flex;
+  margin-top: -10px;
+  padding: 0 10px 10px 10px;
+  font-weight: bold;
+  font-size: 18px;
+  color: ${props => props.theme.colors.shades.blue};
+`;
+
 const ScrollerWithInfiniteScroll = withInfiniteScroll(Scroller);
 
 const NotificationCenter = ({
@@ -97,58 +109,84 @@ const NotificationCenter = ({
   notifications,
   notificationsDataFrame,
   fetchNotifications,
-  clearNotifications
+  clearNotifications,
+  notificationsFilters,
+  isPending
 }) => {
-
   useEffect(() => {
     return () => {
       clearNotifications();
-    }
-  }, [])
+    };
+  }, []);
 
-  return (<>
-    <Wrapper>
-      <Header>
-        <div>
-          <i className="material-icons">inbox</i>
-          <h2>Notification Center</h2>
-        </div>
-        <CloseDrawer onClick={handleClick} color="inherit" aria-label="Close drawer">
-          <i className="material-icons">close</i>
-        </CloseDrawer>
-      </Header>
-      <SearchWrapper>
-        <SearchAndFilterBar search={fetchNotifications} clearData={clearNotifications} dateButton filterButton placeholder="Search Messages" />
-      </SearchWrapper>
-      <ScrollerWithInfiniteScroll
-        fetch={() => {
-          notificationsDataFrame.next();
-        }}
-        isLoading={notificationsDataFrame.pending}
-        list={notifications}
-        whenItemVisible={({ user_notification_id: id }) => {
-          markNotificationsAsRead({ ids: [id] });
-        }}
-      >
-        <MessageListWrapper>
-          {notifications.map(message => (
-            <Message
-              bodyText={message.body}
-              buttonText="Contact Customer Support"
-              dateSent={`${new Date(message.utc_date)}`}
-              isNew={!message.is_read}
-              title={message.title}
-              id={message.user_notification_id}
-              passThroughRef={message.ref}
-              // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
-            />
-          ))}
-          {notifications && notifications.pending && <Loader />}
-        </MessageListWrapper>
-      </ScrollerWithInfiniteScroll>
-    </Wrapper>
-  </>)
-}
+  const getNotificationModalMessage = () => {
+    let searchQuery = notificationsFilters?.query;
+    let dateFrom = notificationsFilters?.dateFrom;
+    let dateTo = notificationsFilters?.dateTo;
+    let filterMessage;
+
+    if (searchQuery && dateFrom && dateTo)
+      filterMessage = `Filters - Search: ${searchQuery} | From: ${dateFrom} - ${dateTo}`;
+    else if (searchQuery) filterMessage = `Filter - Search: ${searchQuery}`;
+    else if (dateFrom && dateTo) filterMessage = `Filter - From: ${dateFrom} - ${dateTo}`;
+
+    return filterMessage;
+  };
+
+  return (
+    <>
+      <Wrapper>
+        <Header>
+          <div>
+            <i className="material-icons">inbox</i>
+            <h2>Notification Center</h2>
+          </div>
+          <CloseDrawer onClick={handleClick} color="inherit" aria-label="Close drawer">
+            <i className="material-icons">close</i>
+          </CloseDrawer>
+        </Header>
+        <SearchWrapper>
+          <SearchAndFilterBar
+            request={{ dateFrom: undefined, dateTo: undefined }}
+            search={fetchNotifications}
+            clearData={clearNotifications}
+            dateButton
+            placeholder="Search Messages"
+          />
+        </SearchWrapper>
+        <ScrollerWithInfiniteScroll
+          fetch={() => {
+            notificationsDataFrame.next();
+          }}
+          isLoading={isPending}
+          list={notifications}
+          whenItemVisible={({ user_notification_id: id }) => {
+            markNotificationsAsRead({ ids: [id] });
+          }}
+        >
+          {getNotificationModalMessage() && (
+            <FilterLabel>{getNotificationModalMessage()}</FilterLabel>
+          )}
+          <MessageListWrapper>
+            {notifications.map(message => (
+              <Message
+                bodyText={message.body}
+                buttonText="Contact Customer Support"
+                dateSent={`${new Date(message.utc_date)}`}
+                isNew={!message.is_read}
+                title={message.title}
+                id={message.user_notification_id}
+                passThroughRef={message.ref}
+                // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
+              />
+            ))}
+            {notifications && notifications.pending && <Loader />}
+          </MessageListWrapper>
+        </ScrollerWithInfiniteScroll>
+      </Wrapper>
+    </>
+  );
+};
 
 NotificationCenter.propTypes = {
   handleClick: PropTypes.func.isRequired,
@@ -158,23 +196,26 @@ NotificationCenter.propTypes = {
 };
 
 NotificationCenter.defaultProps = {
-  markNotificationsAsRead: () => { },
+  markNotificationsAsRead: () => {},
   notifications: [],
   notificationsDataFrame: {}
 };
 
 const mapStateToProps = state => ({
   token: getToken(state),
+  notificationsFilters: getNotificationsFilters(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchNotifications: args =>
-    dispatch(fetchNotifications(args)),
-  clearNotifications: () =>
-    dispatch(clearNotifications())
+  fetchNotifications: args => dispatch(fetchNotifications(args)),
+  clearNotifications: () => dispatch(clearNotifications())
 });
 
-const mergeProps = ({ token, ...stateProps }, { fetchNotifications, clearNotifications }, ownProps) => ({
+const mergeProps = (
+  { token, ...stateProps },
+  { fetchNotifications, clearNotifications },
+  ownProps
+) => ({
   fetchNotifications: args => fetchNotifications({ token, ...args }),
   clearNotifications: () => clearNotifications(),
   ...stateProps,

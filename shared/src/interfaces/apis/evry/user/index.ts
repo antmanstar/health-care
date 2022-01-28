@@ -717,3 +717,21 @@ export function verifyEmailChallenge({ emailAddress, verificationCode }) {
     }
   )
 }
+
+export function updateContactPreferences({ token, paperless, receive_emails, receive_text_messages, receive_phone_calls }) {
+  return axios.post(
+    '/api/v1/Member/UpdateContactPreferences',
+    {
+      "paperless": paperless,
+      "receive_emails": receive_emails,
+      "receive_text_messages": receive_text_messages,
+      "receive_phone_calls": receive_phone_calls
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}

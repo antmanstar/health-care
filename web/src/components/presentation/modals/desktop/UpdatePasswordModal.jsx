@@ -36,6 +36,10 @@ class UpdateYourPasswordModal extends Component {
     this.setState(stateObject);
   }
 
+  submitModal = e => {
+    
+  }
+
   render() {
     const { oldPassword, newPassword, confirmPassword } = this.state;
     const { hideModal } = this.props;
@@ -72,7 +76,7 @@ class UpdateYourPasswordModal extends Component {
           </ModalBody>
           <ModalSectionDivider />
           <ModalButtonsRight>
-            <SmallButton text="Submit Changes" />
+            <SmallButton text="Submit Changes" onClick={this.submitModal} />
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsRight>
         </ModalWrapper>

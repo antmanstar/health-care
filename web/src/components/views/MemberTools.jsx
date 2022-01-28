@@ -52,6 +52,22 @@ const MemberTools = () => (
           svgIcon
         />
       </StyledLink>
+      <StyledLink to="/">
+        <MobileBigButton
+          title="Pharmacy Lookup"
+          subtitle="Find pharmacy location."
+          icon="local-pharmacy-black"
+          svgIcon
+        />
+      </StyledLink>
+      <StyledLink to="/">
+        <MobileBigButton
+          title="Out-of-Area Provider Lookup"
+          subtitle="Find a provider on a map."
+          icon="medical-services-black"
+          svgIcon
+        />
+      </StyledLink>
     </MobileContentWrapper>
   </>
 );

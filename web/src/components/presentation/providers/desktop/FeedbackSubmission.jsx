@@ -76,19 +76,19 @@ const FeedbackSubmission = React.memo(({ type, choice, handleClick, claimNumber 
         className={choice === 'positive' && 'active'}
         onClick={() => handleClick('positive')}
       >
-        <img src={images["feedback-positive"]} alt="positive response" />
+        <img src={images['feedback-positive']} alt="positive response" />
       </FeedbackButton>
       <FeedbackButton
         className={choice === 'neutral' && 'active'}
         onClick={() => handleClick('neutral')}
       >
-        <img src={images["feedback-neutral"]} alt="neutral response" />
+        <img src={images['feedback-neutral']} alt="neutral response" />
       </FeedbackButton>
       <FeedbackButton
         className={choice === 'negative' && 'active'}
         onClick={() => handleClick('negative')}
       >
-        <img src={images["feedback-negative"]} alt="negative response" />
+        <img src={images['feedback-negative']} alt="negative response" />
       </FeedbackButton>
     </Buttons>
   </>

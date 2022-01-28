@@ -32,7 +32,7 @@ const Column = styled.div`
   width: 100%;
   margin-left: -16px;
 
-  @media (min-width: 550px) {
+  @media ${defaultTheme.device.tablet} {
     width: calc(50% - 8px);
   }
 

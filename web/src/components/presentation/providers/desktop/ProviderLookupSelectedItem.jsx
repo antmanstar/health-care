@@ -1,55 +1,110 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import defaultTheme from '../../../../style/themes';
 import ProviderProfile from './ProviderProfile';
-import Button from '../../shared/desktop/Button';
 import actions from '@evry-member-app/shared/store/actions';
 import images from '../../../../utils/images';
+import selectors from '@evry-member-app/shared/store/selectors';
+import GoogleMap from 'google-map-react';
+import { PopOver } from '../../shared/desktop/PopOver';
 
-const { setModalData, showModal } = actions;
-
-// Map & Info for the Selected Item in the Provider Lookup Results List
-// TODO: Use real provider data and tidy up
+const { setModalData, showModal, providerSearchQueryClear } = actions;
+const { getProviderSearchLocation } = selectors;
 
 const { SectionDivider, FormLabel } = defaultTheme.components;
 
 const Wrapper = styled.div`
-  width: 463px;
+  flex: 48%;
   margin-bottom: 8px;
+`;
+
+const SelectedItemWrapper = styled.div`
+  padding: 15px;
   background: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   outline: none;
-  border-radius: 4px;
-  box-sizing: border-box;
+  border-radius: 0 0 4px 4px;
 `;
 
-const Map = styled.img`
-  height: 292px;
+const MapWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 400px;
   width: 100%;
-  border-radius: 4px 4px 0 0;
-  object-fit: cover;
+`;
+
+const MapSearchButton = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${props => props.theme.colors.shades.white};
+  color: ${props => props.theme.colors.shades.black};
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 300;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    background: #eeeeee;
+  }
 `;
 
 const Padding = styled.div`
   padding: 16px 32px;
 `;
 
-const EditedFormLabel = styled(FormLabel)`
-  margin-top: 0;
+const WarningLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: orange;
+  gap: 10px;
 `;
 
-const ButtonWrapper = styled.div`
-  padding: 16px 32px;
+const PinWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 
-  button {
-    width: 100%;
-    font-size: 14px;
-    @media ${props => props.theme.device.desktop} {
-      font-size: 16px;
+  &:hover {
+    ${PinLabel} {
+      z-index: 3;
     }
+  }
+
+  &:hover {
+    ${Pin} {
+      z-index: 2;
+    }
+  }
+`;
+
+const PinLabel = styled.label`
+  z-index: ${props => (props.hover ? '3' : '1')};
+  position: absolute;
+  top: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: grab;
+`;
+
+const Pin = styled.img`
+  filter: ${props => (props.hover ? 'brightness(0)' : 'none')};
+  z-index: ${props => (props.hover ? '2' : '0')};
+  &:hover {
+    filter: brightness(0);
   }
 `;
 
@@ -111,117 +166,237 @@ const FeedbackButton = styled.button`
   }
 `;
 
-class ProviderLookupSelectedItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-    this.handlers = {
-      handleFeedbackClick: this.handleFeedbackClick.bind(this)
-    };
-  }
+const EditedFormLabel = styled(FormLabel)`
+  margin-top: 0;
+`;
 
-  handleFeedbackClick = data => {
-    this.props.setModalData(data);
-    this.props.showModal('SUBMIT_PROVIDER_FEEDBACK');
+const ProviderLookupSelectedItem = ({
+  setModalData,
+  showModal,
+  name,
+  distance,
+  practiceName,
+  address,
+  phone,
+  npiNumber,
+  specialties,
+  geoData,
+  providerData,
+  setHoveredCardId,
+  hoveredPinId,
+  id,
+  setBoundary,
+  currentLocation,
+  providerSearchQueryClear
+}) => {
+  const [userLocation, setUserLocation] = useState();
+  const boundary = useRef();
+  const [profile, setProfile] = useState();
+
+  const defaultMapProps = {
+    center: {
+      lat: 32.0023,
+      lng: -102.13496
+    },
+    zoom: 14
   };
 
-  render() {
-    return (
-      <Wrapper>
-        <Map src={images["mock_map"]} />
-        <Padding>
-          <ProviderProfile
-            name="Jacob Jefferson, M.D."
-            distance="0.8"
-            practiceName="Clearstone Family Medicine"
-            address="2310 Spring Valley Rd. Plano, TX 75023"
-            phone="469-345-9284"
-            npiNumber="123456789"
-            network="Evry Premier Network"
-            specialties={['Family Medicine']}
-            languages={['English']}
-          />
-        </Padding>
-        <Padding>
-          <EditedFormLabel>How do you feel about this provider?</EditedFormLabel>
-          <Buttons>
-            <FeedbackButton
-              onClick={() =>
-                this.handlers.handleFeedbackClick({
-                  feedbackChoice: 'positive',
-                  provider: {
-                    name: 'Jacob Jefferson, M.D.',
-                    distance: '0.8',
-                    practiceName: 'Clearstone Family Medicine',
-                    address: '2310 Spring Valley Rd. Plano, TX 75023',
-                    phone: '469-345-9284',
-                    npiNumber: '123456789',
-                    network: 'Evry Premier Network',
-                    specialties: ['Family Medicine'],
-                    languages: ['English']
-                  }
-                })
-              }
-            >
-              <img src={images["feedback-positive"]} alt="positive response" />
-            </FeedbackButton>
-            <FeedbackButton
-              onClick={() =>
-                this.handlers.handleFeedbackClick({
-                  feedbackChoice: 'neutral',
-                  provider: {
-                    name: 'Jacob Jefferson, M.D.',
-                    distance: '0.8',
-                    practiceName: 'Clearstone Family Medicine',
-                    address: '2310 Spring Valley Rd. Plano, TX 75023',
-                    phone: '469-345-9284',
-                    npiNumber: '123456789',
-                    network: 'Evry Premier Network',
-                    specialties: ['Family Medicine'],
-                    languages: ['English']
-                  }
-                })
-              }
-            >
-              <img src={images["feedback-neutral"]} alt="neutral response" />
-            </FeedbackButton>
-            <FeedbackButton
-              onClick={() =>
-                this.handlers.handleFeedbackClick({
-                  feedbackChoice: 'negative',
-                  provider: {
-                    name: 'Jacob Jefferson, M.D.',
-                    distance: '0.8',
-                    practiceName: 'Clearstone Family Medicine',
-                    address: '2310 Spring Valley Rd. Plano, TX 75023',
-                    phone: '469-345-9284',
-                    npiNumber: '123456789',
-                    network: 'Evry Premier Network',
-                    specialties: ['Family Medicine'],
-                    languages: ['English']
-                  }
-                })
-              }
-            >
-              <img src={images["feedback-negative"]} alt="negative response" />
-            </FeedbackButton>
-          </Buttons>
-        </Padding>
-        <SectionDivider />
-        <ButtonWrapper>
-          <Button text="Schedule an Appointment" />
-        </ButtonWrapper>
-      </Wrapper>
+  const getBounds = map => {
+    let neLat = map
+      .getBounds()
+      .getNorthEast()
+      .lat();
+    let neLng = map
+      .getBounds()
+      .getNorthEast()
+      .lng();
+    let swLat = map
+      .getBounds()
+      .getSouthWest()
+      .lat();
+    let swLng = map
+      .getBounds()
+      .getSouthWest()
+      .lng();
+    return {
+      sw: { lat: swLat, lng: swLng },
+      ne: { lat: neLat, lng: neLng }
+    };
+  };
+
+  useEffect(() => {
+    return providerSearchQueryClear();
+  }, []);
+
+  useEffect(() => {
+    setProfile({ name, distance, practiceName, address, phone, npiNumber, specialties, id });
+  }, [name, distance, practiceName, address, phone, npiNumber, specialties, id]);
+
+  useEffect(() => {
+    setUserLocation({ lat: geoData?.latitude, lng: geoData?.longitude });
+  }, [geoData]);
+
+  useEffect(() => {
+    setUserLocation({ lat: currentLocation?.lat, lng: currentLocation?.lng });
+  }, [currentLocation]);
+
+  const bindResizeListener = (map, maps) => {
+    maps.event.addListener(map, 'idle', () => {
+      boundary.current = getBounds(map);
+    });
+    setBoundary(getBounds(map));
+  };
+
+  const handleSearchArea = () => {
+    setBoundary(boundary.current);
+  };
+
+  const handleApiLoaded = (map, maps) => {
+    bindResizeListener(map, maps);
+  };
+
+  const handleMarkerClick = id => {
+    let chosenProvider = providerData[id];
+    setProfile({
+      name: chosenProvider.name,
+      distance: chosenProvider.distance,
+      practiceName: chosenProvider.practiceName,
+      address: chosenProvider.address,
+      phone: chosenProvider.phone,
+      npiNumber: chosenProvider.npiNumber,
+      specialties: chosenProvider.specialties,
+      id: id
+    });
+  };
+  const handleMarkerHover = id => {
+    setHoveredCardId(id);
+  };
+
+  const handleMarkerLeave = id => {
+    setHoveredCardId(null);
+  };
+
+  const handleFeedbackClick = data => {
+    setModalData(data);
+    showModal('SUBMIT_PROVIDER_FEEDBACK');
+  };
+
+  const LocationPin = props => {
+    let hover = props.id === hoveredPinId ? true : false;
+    let title =
+      providerData[props.id].name !== ''
+        ? providerData[props.id].name
+        : providerData[props.id].practiceName;
+
+    const content = (
+      <>
+        <span>{title}</span> <br />
+        {providerData[props.id].address} <br />
+        {providerData[props.id].phone}
+      </>
     );
-  }
-}
+    return (
+      <PopOver content={content}>
+        <PinWrapper>
+          <PinLabel hover={hover}>{props.label}</PinLabel>
+          <Pin hover={hover} src={images[`location_pin`]} />
+        </PinWrapper>
+      </PopOver>
+    );
+  };
+
+  return (
+    <Wrapper>
+      <MapWrapper>
+        <MapSearchButton onClick={() => handleSearchArea()}>Search area</MapSearchButton>
+        <GoogleMap
+          bootstrapURLKeys={{ key: 'AIzaSyAunkg9QcyS0CdUNmxqCONgqnxc2ewsvEo' }}
+          center={userLocation?.lat !== undefined ? userLocation : defaultMapProps.center}
+          defaultZoom={defaultMapProps.zoom}
+          yesIWantToUseGoogleMapApiInternals
+          onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
+          onChildClick={id => handleMarkerClick(id)}
+          onChildMouseEnter={id => handleMarkerHover(id)}
+          onChildMouseLeave={id => handleMarkerLeave(id)}
+        >
+          {providerData.map((provider, i) => {
+            return (
+              <LocationPin
+                lat={provider.location.lat}
+                lng={provider.location.lng}
+                label={i + 1}
+                id={i}
+              />
+            );
+          })}
+        </GoogleMap>
+      </MapWrapper>
+      <SelectedItemWrapper>
+        {providerData.length !== 0 ? (
+          <>
+            <ProviderProfile {...profile} />
+            <Padding>
+              <EditedFormLabel>How do you feel about this provider?</EditedFormLabel>
+              <Buttons>
+                <FeedbackButton
+                  onClick={() =>
+                    handleFeedbackClick({
+                      feedbackChoice: 'positive',
+                      provider: { ...providerData[id], id: id }
+                    })
+                  }
+                >
+                  <img src={images['feedback-positive']} alt="positive response" />
+                </FeedbackButton>
+                <FeedbackButton
+                  onClick={() =>
+                    handleFeedbackClick({
+                      feedbackChoice: 'neutral',
+                      provider: { ...providerData[id], id: id }
+                    })
+                  }
+                >
+                  <img src={images['feedback-neutral']} alt="neutral response" />
+                </FeedbackButton>
+                <FeedbackButton
+                  onClick={() =>
+                    handleFeedbackClick({
+                      feedbackChoice: 'negative',
+                      provider: { ...providerData[id], id: id }
+                    })
+                  }
+                >
+                  <img src={images['feedback-negative']} alt="negative response" />
+                </FeedbackButton>
+              </Buttons>
+            </Padding>
+          </>
+        ) : (
+          <Padding>
+            <WarningLabel>
+              <i className="material-icons">warning</i>
+              No providers found, please search another area.
+            </WarningLabel>
+          </Padding>
+        )}
+      </SelectedItemWrapper>
+    </Wrapper>
+  );
+};
 
 ProviderLookupSelectedItem.propTypes = {
   showModal: PropTypes.func.isRequired,
   setModalData: PropTypes.func.isRequired
 };
 
+const mapStateToProps = state => ({
+  currentLocation: getProviderSearchLocation(state)
+});
+
 const mapDispatchToProps = dispatch => ({
+  providerSearchQueryClear: () => {
+    dispatch(providerSearchQueryClear());
+  },
   setModalData: data => {
     dispatch(setModalData(data));
   },
@@ -230,7 +405,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(ProviderLookupSelectedItem);
+export default connect(mapStateToProps, mapDispatchToProps)(ProviderLookupSelectedItem);

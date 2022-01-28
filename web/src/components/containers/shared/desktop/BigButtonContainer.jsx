@@ -52,7 +52,7 @@ class BigButtonContainer extends Component {
   }
 
   requestMembershipCardClick() {
-    alert('Request Membership Card');
+    this.props.showModal('REQUEST_MAILED_CARD');
   }
 
   scheduleAppointmentClick() {

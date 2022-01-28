@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
 import ContactPreference from '../../shared/desktop/ContactPreference';
 import SmallButton from '../../shared/desktop/SmallButton';
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
+import actions from '@evry-member-app/shared/store/actions';
+import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 
 // MODAL - Update Your Contact Preferences
 // TODO: Need intial state from contact pref data .. then need to send new state back
@@ -37,6 +41,18 @@ class UpdateContactPreferences extends Component {
       [key]: !prevState[key]
     }));
   };
+
+  submitChanges = () => {
+    this.props.handleSubmit({
+      token: this.props.token,
+      paperless: this.state.paperless,
+      receive_emails: this.state.email,
+      receive_text_messages: this.state.text,
+      receive_phone_calls: this.state.call
+    });
+
+    this.props.hideModal();
+  }
 
   render() {
     const { paperless, email, text, call } = this.state;
@@ -73,7 +89,7 @@ class UpdateContactPreferences extends Component {
           </ModalBody>
           <ModalSectionDivider />
           <ModalButtonsRight>
-            <SmallButton text="Submit Changes" />
+            <SmallButton text="Submit Changes" onClick={this.submitChanges} />
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsRight>
         </ModalWrapper>
@@ -86,4 +102,14 @@ UpdateContactPreferences.propTypes = {
   hideModal: PropTypes.func.isRequired
 };
 
-export default UpdateContactPreferences;
+const mapStateToProps = state => ({
+  token: selectors.getToken(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleSubmit: payload => {
+    dispatch(actions.updateContactPreferences(payload));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateContactPreferences);
