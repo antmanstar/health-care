@@ -150,18 +150,7 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
           </StyledContainer>
           <SectionDivider />
           <StyledContainer>
-            {width > 768 ? (
-              <>
-                <Title>Further Reading</Title>
-                <SubTitle>
-                  {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
-                  <span style={{ display: 'inherit' }}>
-                    {`Check out our `}
-                    <a href="www.google.com">Help Center</a>
-                  </span>
-                </SubTitle>
-              </>
-            ) : (
+            {width <= 768 && (
               <>
                 <Center>
                   <button type="button" onClick={handleResourcesToggleClick}>
@@ -170,6 +159,14 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                 </Center>
               </>
             )}
+            <Title>Further Reading</Title>
+            <SubTitle>
+              {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
+              <span style={{ display: 'inherit' }}>
+                {`Check out our `}
+                <a href="www.google.com">Help Center</a>
+              </span>
+            </SubTitle>
           </StyledContainer>
         </>
       )}
