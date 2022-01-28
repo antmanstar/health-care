@@ -140,6 +140,7 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                         desc={truncate(130)(resource.educational_resource_summary)}
                         link={resource.educational_resource_content}
                         buttonLabel="Read More"
+                        view="plans"
                       />
                     );
                   }

@@ -24,6 +24,20 @@ const Container = styled.div`
     position: absolute;
     bottom: -16px;
   }
+
+  &.plans {
+    margin-bottom: 32px;
+    width: 32%;
+    position: unset;
+    flex-grow: unset;
+    max-width: unset;
+    @media ${defaultTheme.device_up.tablet} {
+      width: 48%;
+    }
+    @media ${defaultTheme.device_up.mobile} {
+      width: 96%;
+    }
+  }
 `;
 
 const Thumbnail = styled.img`
@@ -46,8 +60,8 @@ const Description = styled.p`
   color: ${props => props.theme.colors.shades.darkGray};
 `;
 
-const ArticleCard = React.memo(({ image, title, desc, buttonLabel, link }) => (
-  <Container>
+const ArticleCard = React.memo(({ image, title, desc, buttonLabel, link, view }) => (
+  <Container className={view}>
     <Thumbnail src={image} />
     <Title>{title}</Title>
     <Description>{desc}</Description>
@@ -65,7 +79,8 @@ ArticleCard.propTypes = {
   title: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   buttonLabel: PropTypes.string,
-  link: PropTypes.string.isRequired
+  link: PropTypes.string.isRequired,
+  view: PropTypes.string
 };
 
 ArticleCard.defaultProps = {
