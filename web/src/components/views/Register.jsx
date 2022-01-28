@@ -148,9 +148,7 @@ const DividerWrapper = styled.div`
   }
 `;
 const BottomText = styled.p`
-  @media ${props => props.theme.device.tabletXL} {
-    font-size: 20px;
-  }
+  font-size: 20px;
 `;
 
 function Register({

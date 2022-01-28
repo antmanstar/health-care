@@ -101,6 +101,11 @@ const PasswordRecovery = styled.div`
   font-size: 14px;
   text-align: right;
 
+  @media ${defaultTheme.device_up.mobile} {
+    text-align: center;
+    margin-top: px;
+  }
+
   a {
     color: ${props => props.theme.colors.shades.pinkOrange};
     text-decoration: none;
@@ -122,6 +127,7 @@ const GoToRegistration = styled.div`
   margin-top: 20px;
   text-align: center;
   align-items: center;
+  flex-direction: column;
 
   p {
     margin: 0;
@@ -133,7 +139,6 @@ const GoToRegistration = styled.div`
   a {
     margin: 0;
     color: ${props => props.theme.colors.shades.pinkOrange};
-    font-size: 20px;
   }
 `;
 
@@ -142,6 +147,7 @@ const BottomSectionDivider = styled.div`
   height: fit-content;
   width: 100%;
 `;
+
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
@@ -167,6 +173,10 @@ const EnterCode = styled.div`
 const WideButton = styled(Button)`
   width: 200px;
   margin-top: 56px;
+`;
+
+const BottomText = styled.p`
+  font-size: 20px;
 `;
 
 function SignIn({
@@ -290,7 +300,7 @@ function SignIn({
           </GoToRegistration>
         ) : (
           <GoToRegistration>
-            <p>Don&apos;t have an account yet?</p>
+            <BottomText>Don&apos;t have an account yet?</BottomText>
             <RouterLink to="/register">Register your account</RouterLink>
           </GoToRegistration>
         )}
