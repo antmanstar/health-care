@@ -6,14 +6,15 @@ import SmallButton from './SmallButton';
 // Article Card used in Article Lists on Desktop ("Care Plan" and "Customer Support" Views)
 
 const Container = styled.div`
-  max-width: 100%;
   margin-bottom: 32px;
+  width: 32%;
 
-  @media (min-width: 550px) {
-    max-width: 48%;
+  @media ${props => props.theme.device_up.tablet} {
+    width: 48%;
   }
-  @media (min-width: 850px) {
-    max-width: 32%;
+
+  @media ${props => props.theme.device_up.mobile} {
+    width: 96%;
   }
 `;
 
@@ -52,7 +53,7 @@ const ArticleCard = React.memo(({ image, title, desc, buttonLabel, link }) => (
 ));
 
 ArticleCard.propTypes = {
-  image: PropTypes.string.isRequired,
+  image: PropTypes.string,
   title: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   buttonLabel: PropTypes.string,

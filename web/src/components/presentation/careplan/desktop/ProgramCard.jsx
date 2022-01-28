@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import images from '../../../../utils/images';
 import { ellipsis } from 'polished';
+import getWidth from '../../../../utils/getWidth';
 
 // Partnered Program Card for "Meet you goals" section on the "Care Plan" View.
 
@@ -49,6 +50,7 @@ const Title = styled.h1`
   font-weight: 500;
   font-size: 16px;
   color: ${props => props.theme.colors.shades.blue};
+  ${({ width }) => ellipsis(`${width}px`)}
 `;
 
 const Avatar = styled.div`
@@ -102,24 +104,27 @@ const StyledIcon = styled.i`
   font-weight: 500;
 `;
 
-const ProgramCard = React.memo(({ icon, title, desc, actionText, onClick, color }) => (
-  <Wrapper>
-    <Container>
-      <TitleSection>
-        <Avatar>
-          {icon && <Icon src={images[icon]} />}
-          <Title>{title}</Title>
-        </Avatar>
-        <QuestionIcon src={images['question-mark']} />
-      </TitleSection>
-      <Description>{desc}</Description>
-    </Container>
-    <Button color={color} onClick={onClick}>
-      {actionText}
-      <StyledIcon className="material-icons">keyboard_arrow_right</StyledIcon>
-    </Button>
-  </Wrapper>
-));
+const ProgramCard = React.memo(({ icon, title, desc, actionText, onClick, color }) => {
+  const width = getWidth();
+  return (
+    <Wrapper>
+      <Container>
+        <TitleSection>
+          <Avatar>
+            {icon && <Icon src={images[icon]} />}
+            <Title width={width - 50}>{title}</Title>
+          </Avatar>
+          <QuestionIcon src={images['question-mark']} />
+        </TitleSection>
+        <Description>{desc}</Description>
+      </Container>
+      <Button color={color} onClick={onClick}>
+        {actionText}
+        <StyledIcon className="material-icons">keyboard_arrow_right</StyledIcon>
+      </Button>
+    </Wrapper>
+  );
+});
 
 ProgramCard.propTypes = {
   icon: PropTypes.string,

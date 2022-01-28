@@ -30,6 +30,11 @@ const ArticleList = styled(SpaceBetween)`
   flex-wrap: wrap;
   margin-bottom: -32px;
 
+  @media ${props => props.theme.device_up.mobile} {
+    justify-content: center;
+    flex-direction: column;
+  }
+
   ::after {
     content: '';
     flex: 0 0 32%;
@@ -60,16 +65,49 @@ const SubTitle = styled.p`
   }
 `;
 
+const Center = styled.div`
+  display: flex;
+  justify-content: center;
+
+  p {
+    margin: 0 4px 0 0;
+    color: ${props => props.theme.colors.shades.gray};
+  }
+
+  button {
+    padding: 0;
+    font-size: 12px;
+    font-weight: 300;
+    color: ${props => props.theme.colors.shades.lightTealBlue};
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    background: none;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+`;
+
 const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
+  const [showFullResources, setShowFullResources] = useState(false);
 
   useEffect(() => {
     width > 768 && setCollapsed(false);
+    setShowFullResources(width > 768);
   }, [width]);
 
   const handelHeaderToggleClick = () => {
     setCollapsed(!collapsed);
+  };
+
+  const handleResourcesToggleClick = () => {
+    setShowFullResources(!showFullResources);
   };
 
   return (
@@ -91,29 +129,46 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
               <Loader />
             ) : (
               <ArticleList>
-                {Object.values(educationalResources).map(resource => (
-                  <ArticleCard
-                    key={resource.educational_resource_id}
-                    image={resource.title_image_file_id}
-                    title={resource.educational_resource_title}
-                    desc={truncate(130)(resource.educational_resource_summary)}
-                    link={resource.educational_resource_content}
-                    buttonLabel="Read More"
-                  />
-                ))}
+                {Object.values(educationalResources).map((resource, index) => {
+                  let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
+                  if (return_cond) {
+                    return (
+                      <ArticleCard
+                        key={resource.educational_resource_id}
+                        image={resource.title_image_file_id}
+                        title={resource.educational_resource_title}
+                        desc={truncate(130)(resource.educational_resource_summary)}
+                        link={resource.educational_resource_content}
+                        buttonLabel="Read More"
+                      />
+                    );
+                  }
+                })}
               </ArticleList>
             )}
           </StyledContainer>
           <SectionDivider />
           <StyledContainer>
-            <Title>Further Reading</Title>
-            <SubTitle>
-              {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
-              <span style={{ display: 'inherit' }}>
-                {`Check out our `}
-                <a href="www.google.com">Help Center</a>
-              </span>
-            </SubTitle>
+            {width > 768 ? (
+              <>
+                <Title>Further Reading</Title>
+                <SubTitle>
+                  {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
+                  <span style={{ display: 'inherit' }}>
+                    {`Check out our `}
+                    <a href="www.google.com">Help Center</a>
+                  </span>
+                </SubTitle>
+              </>
+            ) : (
+              <>
+                <Center>
+                  <button type="button" onClick={handleResourcesToggleClick}>
+                    {!showFullResources ? 'See More' : 'See Less'}
+                  </button>
+                </Center>
+              </>
+            )}
           </StyledContainer>
         </>
       )}
