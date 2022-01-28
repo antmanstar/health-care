@@ -132,7 +132,6 @@ const CarePlanSuggestionSlide = ({
   isAssigningCarePlan
 }) => {
   const isSamePlan = carePlanSelection.title === carePlanSuggestion.title ? true : false;
-  console.log('AAA', isAssigningCarePlan);
 
   return (
     <Wrapper>

@@ -49,7 +49,7 @@ const SvgIcon = styled.img`
   height: auto;
 `;
 
-const BigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
+const PlanBigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
   const isComing = text === 'Update Health Survey';
 
   return (
@@ -63,16 +63,16 @@ const BigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
   );
 });
 
-BigButton.propTypes = {
+PlanBigButton.propTypes = {
   text: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   svgIcon: PropTypes.bool
 };
 
-BigButton.defaultProps = {
+PlanBigButton.defaultProps = {
   onClick: null,
   svgIcon: true
 };
 
-export default BigButton;
+export default PlanBigButton;

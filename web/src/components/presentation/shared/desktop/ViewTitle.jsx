@@ -25,6 +25,17 @@ const Wrapper = styled.div`
     padding-top: 108px;
   }
 
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 24px;
+  }
+
+  @media (max-width: 320px) {
+    align-items: center;
+    margin-left: 0px;
+  }
+
   @media ${props => props.theme.device.desktopXL} {
     max-width: 1024px;
   }
@@ -47,11 +58,26 @@ const MemberNumbers = styled.div`
   text-align: right;
   font-weight: 300;
 
+  @media (max-width: 600px) {
+    text-align: left;
+    font-size: 12px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+
   > div {
     margin-left: 32px;
 
+    @media (max-width: 600px) {
+      margin-left: 0;
+    }
+
     &:last-child {
       font-weight: 700;
+
+      @media (max-width: 600px) {
+        margin-left: 10px;
+      }
     }
 
     > p {

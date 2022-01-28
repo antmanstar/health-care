@@ -120,7 +120,8 @@ const ConnectedPlan = withRouter(
       shouldFetch: isEmpty(carePlan),
       carePlan,
       setTitles: () => {
-        const planData = getCarePlanInfo(carePlan.care_plan_id);
+        // const planData = getCarePlanInfo(carePlan && carePlan.care_plan_id);
+        const planData = getCarePlanInfo(1);
         setTitles({
           icon: planData.image,
           description: planData.description,

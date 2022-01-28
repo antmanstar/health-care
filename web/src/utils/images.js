@@ -56,6 +56,9 @@ import mockMapImg from '@evry-member-app/assets/images/raster/mock_map.png';
 import appStoreImg from '@evry-member-app/assets/images/raster/app-store.png';
 import googlePlatImg from '@evry-member-app/assets/images/raster/google-play.png';
 import bigRightArrowImg from '@evry-member-app/assets/images/vector/big_right_arrow.svg';
+import questionImg from '@evry-member-app/assets/images/vector/question.svg';
+import meetGoalsImg from '@evry-member-app/assets/images/vector/meet-goals.svg';
+import appleBlueImg from '@evry-member-app/assets/images/vector/apple-blue.svg';
 
 const images = {
     "activity-in-circle": activityInCircleImg,
@@ -79,11 +82,13 @@ const images = {
     "google-play": googlePlatImg,
     "health-assessment": healthAssessmentImg,
     "heart-health-active": heartHealthActiveImg, "heart-health-blue": heartHealthBlueImg, "heart-health": heartHealthImg,
+    "meet-goals": meetGoalsImg,
     "member-card": memberCardImg,
     "mock_map": mockMapImg,
     "money-in-circle": moneyInCircleImg,
     "plan-icon-heart": planIconHeartImg,
     "provider-lookup": providerLookupImg,
+    "question-mark": questionImg,
     "rewards-illustration": rewardsIllustrationImg,
     "success-icon": successIconImg,
     "telemedicine-illustration": telemedicineIllustrationImg,
@@ -109,6 +114,7 @@ const images = {
     //"question_answer": questionAnswerImg
     //"search": searchImg,
     //"verified_user": verifiedUserImg,
+    "apple-blue": appleBlueImg
 };
 
 export default images;

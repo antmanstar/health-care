@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
@@ -9,6 +9,11 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 12px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    margin-left: 0px;
+  }
 `;
 
 const Inline = styled.div`
@@ -32,42 +37,79 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 24px;
   color: ${props => props.theme.colors.shades.blue};
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 16px;
+  }
 `;
 
 const SubTitle = styled.p`
   margin: 0;
   font-weight: 300;
-  font-size: 16px;
+  font-size: 12px;
   margin-right: 10px;
   color: ${props => props.theme.colors.shades.darkGray};
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 13px;
+    color: ${props => props.theme.colors.shades.gray};
+  }
 `;
 
-const SectionHeaderWithIcon = React.memo(({ title, subTitle, icon, svgIcon }) => (
-  <Wrapper>
-    <div>
-      <Inline>
-        {svgIcon ? (
-          <SvgIcon src={images[icon]} />
-        ) : (
-          <Icon className="material-icons">{icon}</Icon>
-        )}
-        <Title>{title}</Title>
-      </Inline>
-      <SubTitle>{subTitle}</SubTitle>
-    </div>
-  </Wrapper>
-));
+const SubTitleTail = styled.text`
+  margin: 0;
+  font-weight: 700;
+  font-size: 16px;
+  margin-left: 4px;
+  color: ${props => props.theme.colors.shades.blue};
+`;
+
+const CollaspeIcon = styled.i`
+  color: ${props => props.theme.colors.shades.blue};
+  @media ${props => props.theme.device.tablet} {
+    display: none;
+  }
+  cursor: pointer;
+`;
+
+const SectionHeaderWithIcon = React.memo(
+  ({ title, subTitle, icon, svgIcon, subTitleTail, collapsed, onClick }) => {
+    return (
+      <Wrapper>
+        <div>
+          <Inline>
+            {svgIcon ? (
+              <SvgIcon src={images[icon]} />
+            ) : (
+              <Icon className="material-icons">{icon}</Icon>
+            )}
+            <Title>{title}</Title>
+          </Inline>
+          <SubTitle>
+            {subTitle}
+            <SubTitleTail>{subTitleTail}</SubTitleTail>
+          </SubTitle>
+        </div>
+        <CollaspeIcon className="material-icons" onClick={onClick}>
+          {!collapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+        </CollaspeIcon>
+      </Wrapper>
+    );
+  }
+);
 
 SectionHeaderWithIcon.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
+  subTitleTail: PropTypes.string,
   icon: PropTypes.string.isRequired,
-  svgIcon: PropTypes.bool
+  svgIcon: PropTypes.bool,
+  collapsed: PropTypes.bool.isRequired,
+  onClick: PropTypes.func
 };
 
 SectionHeaderWithIcon.defaultProps = {
   subTitle: '',
-  svgIcon: false
+  svgIcon: false,
+  collapsed: false
 };
 
 export default SectionHeaderWithIcon;

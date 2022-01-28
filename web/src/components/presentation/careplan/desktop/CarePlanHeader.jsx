@@ -9,6 +9,17 @@ import images from '../../../../utils/images';
 // DESKTOP: Care Plan Icon, Title, and Subtitle on Care Plan View
 
 const { SectionBackground, Container, SpaceBetween } = defaultTheme.components;
+const StyledSectionBackground = styled(SectionBackground)`
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 0 auto 16px;
+  }
+`;
+
+const StyledContainer = styled(Container)`
+  @media ${props => props.theme.device_up.tablet} {
+    padding: 38px 20px 28px 10px;
+  }
+`;
 
 const LeftWrapper = styled.div`
   display: flex;
@@ -27,18 +38,31 @@ const Description = styled.p`
   font-weight: 300;
   font-size: 16px;
   color: ${props => props.theme.colors.shades.darkGray};
+
+  @media ${props => props.theme.device_up.tablet} {
+    font-size: 12px;
+    font-weight: 300;
+  }
 `;
 
 const CarePlanIcon = styled.img`
   margin-right: 32px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin-right: 8px;
+  }
+`;
+
+const QuestionIcon = styled.img`
+  width: 18px;
+  margin-right: 5px;
 `;
 
 const CarePlanHeader = React.memo(({ carePlan }) => {
   const plan = getCarePlanInfo(carePlan && carePlan.care_plan_id);
 
   return (
-    <SectionBackground>
-      <Container>
+    <StyledSectionBackground>
+      <StyledContainer>
         {!plan ? (
           <Loader />
         ) : (
@@ -50,10 +74,11 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
                 <Description>{plan.description}</Description>
               </div>
             </LeftWrapper>
+            <QuestionIcon src={images['question-mark']} />
           </SpaceBetween>
         )}
-      </Container>
-    </SectionBackground>
+      </StyledContainer>
+    </StyledSectionBackground>
   );
 });
 

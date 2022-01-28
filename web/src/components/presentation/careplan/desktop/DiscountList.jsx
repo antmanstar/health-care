@@ -45,12 +45,12 @@ const DiscountList = React.memo(({ title, items }) => (
     <List>
       {items &&
         items.map(item => (
-          <>
+          <div key={item.id}>
             <li>
               <Icon className="material-icons">check</Icon>
               {item.benefit_name}
             </li>
-          </>
+          </div>
         ))}
     </List>
   </Wrapper>

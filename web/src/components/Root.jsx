@@ -60,7 +60,8 @@ function renderPage(isAuthenticated, currentModal, store) {
             path="/"
             exact
             render={() => {
-              const landing = isClientMobile() ? '/dashboard' : '/plan';
+              // const landing = isClientMobile() ? '/dashboard' : '/plan';
+              const landing = '/plan';
               return <Redirect to={isAuthenticated ? landing : '/sign-in'} />;
             }}
           />
