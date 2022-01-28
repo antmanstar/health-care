@@ -35,13 +35,13 @@ const ContactPreference = React.memo(({ toggledOn, text, handleClick }) => (
     {handleClick ? (
       <button type="button" onClick={handleClick}>
         <img
-          src={toggledOn ? images["toggle-on"] : images["toggle-off"]}
+          src={toggledOn ? images["toggle-on-blue"] : images["toggle-off"]}
           alt={toggledOn ? 'toggled on' : 'toggled off'}
         />
       </button>
     ) : (
       <img
-        src={toggledOn ? images["toggle-on"] : images["toggle-off"]}
+        src={toggledOn ? images["toggle-on-blue"] : images["toggle-off"]}
         alt={toggledOn ? 'toggled on' : 'toggled off'}
       />
     )}

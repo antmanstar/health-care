@@ -91,12 +91,13 @@ const ProviderLookup = ({
   }, []);
 
   useEffect(() => {
-    fetchGeoLocation({
-      address1: convertAddress(address),
-      city: address.city,
-      state: address.state,
-      zip: address.zip
-    });
+    if (!address.isEmpty())
+      fetchGeoLocation({
+        address1: convertAddress(address),
+        city: address.city,
+        state: address.state,
+        zip: address.zip
+      });
   }, [address.isEmpty()]);
 
   useEffect(() => {

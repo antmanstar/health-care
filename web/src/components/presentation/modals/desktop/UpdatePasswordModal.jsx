@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
+import actions from '@evry-member-app/shared/store/actions';
+import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import ErrorMessage from '../../shared/desktop/ErrorMessage';
+
 // MODAL - Update Your Password
 
 const {
@@ -22,7 +28,8 @@ class UpdateYourPasswordModal extends Component {
     this.state = {
       oldPassword: '',
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      errors: []
     };
 
     this.handlers = {
@@ -36,8 +43,21 @@ class UpdateYourPasswordModal extends Component {
     this.setState(stateObject);
   }
 
+  handleChangeResponse = response => {
+    if (response.data.result) {
+      this.props.hideModal();
+    } else {
+      this.setState({ errors: response.data.error });
+    }
+  }
+
   submitModal = e => {
-    
+    apis.passwordChange({
+      token: this.props.token,
+      oldPassword: this.state.oldPassword,
+      newPassword: this.state.newPassword,
+      newPasswordConfirm: this.state.confirmPassword
+    }).then(handleChangeResponse);
   }
 
   render() {
@@ -79,6 +99,7 @@ class UpdateYourPasswordModal extends Component {
             <SmallButton text="Submit Changes" onClick={this.submitModal} />
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsRight>
+          {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
         </ModalWrapper>
       </>
     );
@@ -89,4 +110,14 @@ UpdateYourPasswordModal.propTypes = {
   hideModal: PropTypes.func.isRequired
 };
 
-export default UpdateYourPasswordModal;
+const mapStateToProps = state => ({
+  token: selectors.getToken(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  // handleSubmit: payload => {
+  //   dispatch(actions.updateContactPreferences(payload));
+  // }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateYourPasswordModal);

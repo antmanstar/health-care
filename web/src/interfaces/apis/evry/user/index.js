@@ -258,7 +258,7 @@ export function fetchFamilyMemberCOB({ token }) {
 }
 
 export function fetchFamilyMemberCOBSummary({ token }) {
-  return axios.get('/api/v1/Member/GetFamilyMemberCOBSummary', {
+  return axios.post('/api/v1/Member/GetFamilyMemberCOBSummary', { ids: [] }, {
     headers: {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`

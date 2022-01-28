@@ -22,6 +22,7 @@ class CoordinationOfBenefitsSection extends Component {
 
   render() {
     const { familyMembers } = this.props;
+    
     return (
       <SectionBackground>
         <Container>

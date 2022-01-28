@@ -10,6 +10,7 @@ import InfoItem from '../../shared/desktop/InfoItem';
 import ContactPreference from '../../shared/desktop/ContactPreference';
 import HelpArticleLink from '../../shared/desktop/HelpArticleLink';
 import actions from '@evry-member-app/shared/store/actions';
+import history from '../../../../utils/history';
 
 const { showModal } = actions;
 
@@ -70,6 +71,10 @@ class MyInformationSection extends Component {
     this.props.showModal('APPOINT_REPRESENTATIVE');
   }
 
+  handlePCPClick = () => {
+    history.push('/provider-lookup');
+  }
+
   render() {
     const {
       name,
@@ -125,7 +130,8 @@ class MyInformationSection extends Component {
           </WrapContainer>
           <WrapContainer>
             <SmallContainer>
-              <SmallTitleAndButton text="Primary Care Physician" buttonText="Change" />
+              <SmallTitleAndButton text="Primary Care Physician" buttonText="Change" onClick={this.handlePCPClick} />
+              
               {pcps && pcps.length > 0 && (
                 <>
                   <AppointedIndividualName>{`${pcps[0].provider_name}`}</AppointedIndividualName>

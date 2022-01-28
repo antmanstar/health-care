@@ -7,6 +7,7 @@ const PopOverContent = styled.div`
   visibility: hidden;
   position: absolute;
   top: ${props => (props.top ? props.top : '-45px')};
+  right: ${props => (props.right ? props.right : 'auto')};
   background-color: white;
   padding: 0.7rem;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -35,9 +36,9 @@ const PopOverWrapper = styled.div`
   }
 `;
 
-export const PopOver = ({ content, top, children }) => (
+export const PopOver = ({ content, top, right, children }) => (
   <PopOverWrapper>
-    <PopOverContent top={top}>
+    <PopOverContent top={top} right={right}>
       <PopOverDetail>{content}</PopOverDetail>
     </PopOverContent>
     {children}

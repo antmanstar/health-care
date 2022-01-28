@@ -225,7 +225,7 @@ const ProviderSearchBar = React.memo(({ providerSearchQuery, token, geoLocationS
               <i className="material-icons">navigation</i>
             </FilterButton>
           </PopOver>
-          <PopOver content={'Filter providers'} top="-30px">
+          <PopOver content={'Filter providers'} top="-30px" right={'2px'}>
             <FilterButton onClick={() => setFilterModal(!filterModal)}>
               <i className="material-icons">filter_list</i>
             </FilterButton>

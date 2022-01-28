@@ -47,6 +47,7 @@ import telemedicineIllustrationImg from '@evry-member-app/assets/images/vector/t
 import rewardsIllustrationImg from '@evry-member-app/assets/images/vector/rewards-illustration.svg';
 //import bigRightArrowImg from '@evry-member-app/assets/images/vector/big_right_arrow.svg';
 import toggleOnImg from '@evry-member-app/assets/images/vector/toggle-on.svg';
+import toggleOnBlueImg from '@evry-member-app/assets/images/vector/toggle-on-blue.svg';
 import toggleOffImg from '@evry-member-app/assets/images/vector/toggle-off.svg';
 import providerLookupImg from '@evry-member-app/assets/images/vector/provider-lookup.svg';
 import formularyImg from '@evry-member-app/assets/images/vector/formulary.svg';
@@ -99,6 +100,7 @@ const images = {
   'telemedicine-illustration': telemedicineIllustrationImg,
   'toggle-off': toggleOffImg,
   'toggle-on': toggleOnImg,
+  "toggle-on-blue": toggleOnBlueImg,
   'wellness-and-fitness-active': wellnessFitnessActiveImg,
   'wellness-and-fitness-blue': wellnessFitnessBlueImg,
   'wellness-and-fitness': wellnessFitnessImg,

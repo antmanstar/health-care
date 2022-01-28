@@ -291,12 +291,12 @@ export function fetchFamilyMemberCOB({ token }: TokenOnly) {
 }
 
 export function fetchFamilyMemberCOBSummary({ token }: TokenOnly) {
-  return axios.get("/api/v1/Member/GetFamilyMemberCOBSummary", {
+  return axios.post('/api/v1/Member/GetFamilyMemberCOBSummary', { ids: [] }, {
     headers: {
       'Content-Type': 'application/json-patch+json',
       Authorization: `Bearer ${token}`
     }
-  })
+  });
 }
 
 export function fetchFAQs({
@@ -734,4 +734,21 @@ export function updateContactPreferences({ token, paperless, receive_emails, rec
       }
     }
   );
+}
+
+export function passwordChange({ token, oldPassword, newPassword, newPasswordConfirm }) {
+  return axios.post(
+    '/api/v1/Member/PasswordChange',
+    {
+      "old_password": oldPassword,
+      "new_password": newPassword,
+      "new_password_confirm": newPasswordConfirm
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
 }

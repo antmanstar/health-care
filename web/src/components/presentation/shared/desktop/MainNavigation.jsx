@@ -16,13 +16,13 @@ const Navigation = styled.ul`
   list-style: none;
 
   @media (max-width: ${mainBreakPoint}) {
-    max-width: ${props => props.mobileOpen ? '300px': '0'};
+    max-width: ${props => (props.mobileOpen ? '300px' : '0')};
     box-shadow: 0px 0px 50px #232931;
     position: fixed;
     right: 0px;
     align-items: flex-start;
     background: #022b41;
-    height:100%;
+    height: 100%;
     flex-direction: column;
     transition: max-width 0.3s ease-in;
   }
@@ -126,7 +126,6 @@ const Dropdown = styled(Link)`
       line-height: unset;
     }
   }
-
 `;
 
 const DropdownModal = styled.ul`
@@ -163,10 +162,9 @@ const DropdownModal = styled.ul`
     width: auto;
     min-width: 0;
     box-shadow: unset;
-    padding: 10px 0 0 0 ;
+    padding: 10px 0 0 0;
     background: none;
   }
-
 `;
 
 const DropDownItem = styled(Link)`
@@ -196,7 +194,7 @@ const DropDownLink = styled(NavLink)`
   }
 `;
 
-const MainNavigation = ({mobileOpen}) => {
+const MainNavigation = ({ mobileOpen }) => {
   return (
     <Navigation mobileOpen={mobileOpen}>
       <NavItem>
@@ -247,13 +245,19 @@ const MainNavigation = ({mobileOpen}) => {
           </DropDownItem>
           <DropDownItem>
             <img src={images['local-pharmacy-black']} alt="Pharmacy Lookup" />
-            <DropDownLink to="https://www.google.com" activeClassName="active">
+            <DropDownLink
+              to="https://magellanrx.com/member/external/commercial/common/doc/en-us/MRx_Pharmacy_Network_List.pdf"
+              activeClassName="active"
+            >
               Pharmacy Lookup
             </DropDownLink>
           </DropDownItem>
           <DropDownItem>
             <img src={images['medical-services-black']} alt="Out-of-Area Provider Lookup" />
-            <DropDownLink to="https://www.google.com" activeClassName="active">
+            <DropDownLink
+              to="https://multiplan.com/webcenter/portal/ProviderSearch"
+              activeClassName="active"
+            >
               Out-of-Area Provider Lookup
             </DropDownLink>
           </DropDownItem>
@@ -261,7 +265,6 @@ const MainNavigation = ({mobileOpen}) => {
       </Dropdown>
     </Navigation>
   );
-}
-
+};
 
 export default MainNavigation;
