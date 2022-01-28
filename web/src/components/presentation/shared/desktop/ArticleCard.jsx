@@ -37,6 +37,10 @@ const Container = styled.div`
     @media ${defaultTheme.device_up.mobile} {
       width: 96%;
     }
+    button:last-child {
+      position: unset;
+      bottom: unset;
+    }
   }
 `;
 
