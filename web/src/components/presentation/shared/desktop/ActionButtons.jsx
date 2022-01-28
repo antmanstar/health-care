@@ -8,10 +8,11 @@ import defaultTheme from '../../../../style/themes';
 const Wrapper = styled.div`
   margin: auto;
   display: flex;
-  justify-content: center;
+  justify-content: ${props => (props.view === 'plans' ? 'space-between' : 'center')};
   margin-bottom: 16px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: ${props => (props.view === 'plans' ? '0px' : '10px')};
+
   @media ${defaultTheme.device.tablet} {
     gap: 0px;
     justify-content: space-between;
@@ -25,11 +26,25 @@ const Wrapper = styled.div`
       width: 32.5%;
     }
   }
+
+  .plan-big-button {
+    width: 32.5%;
+    @media screen and (max-width: 660px) {
+      width: 49.4%;
+      gap: 10px;
+      text-align: left;
+      margin-top: 5px;
+      min-height: 80px;
+      &:last-child {
+        width: 100%;
+      }
+    }
+  }
 `;
 
 const ActionButtons = React.memo(({ buttons, view }) => {
   return (
-    <Wrapper>
+    <Wrapper view={view}>
       {buttons &&
         buttons.map((buttonKey, key) => (
           <BigButtonContainer key={key} buttonKey={buttonKey} view={view} />

@@ -53,7 +53,7 @@ const PlanBigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
   const isComing = text === 'Update Health Survey';
 
   return (
-    <Button onClick={onClick} className="big-button" isComing={isComing}>
+    <Button onClick={onClick} className="plan-big-button" isComing={isComing}>
       <StyledDiv>
         {text}
         {isComing && <ComingText>Coming soon...</ComingText>}
