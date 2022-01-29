@@ -1,39 +1,49 @@
+import constants from '@evry-member-app/shared/constants';
+
+const {
+  BONE_AND_JOINT_HEALTH_PLAN_ID,
+  CANCER_TREATMENT_PLAN_ID,
+  HEALTH_AND_WELLNESS_PLAN_ID,
+  HEART_HEALTH_PLAN_ID,
+  WOMENS_HEALTH_PLAN_ID
+} = constants;
+
 const getCarePlanInfo = planId => {
   switch (planId) {
-    case 1:
+    case HEART_HEALTH_PLAN_ID:
       return {
         title: 'Heart & Lung Health',
         description:
           'This Care Plan focuses on controling blood pressure, weight, cholesterol, and much more.',
-        image: 'plan-icon-heart'
+        image: 'heart-health'
       };
-    case 2:
+    case HEALTH_AND_WELLNESS_PLAN_ID:
       return {
-        title: 'Heart & Lung Health',
+        title: 'Wellness & Fitness',
         description:
-          'This Care Plan focuses on controling blood pressure, weight, cholesterol, and much more.',
-        image: 'plan-icon-heart'
+          'I am healthy and want to stay healthy.',
+        image: 'wellness-and-fitness'
       };
-    case 3:
+    case BONE_AND_JOINT_HEALTH_PLAN_ID:
       return {
-        title: 'Heart & Lung Health',
+        title: 'Bone & Joint Health',
         description:
-          'This Care Plan focuses on controling blood pressure, weight, cholesterol, and much more.',
-        image: 'plan-icon-heart'
+          'I frequently have bone or joint pain and would like to find good ways of dealing with that.',
+        image: 'bone-and-joint-health'
       };
-    case 4:
+    case CANCER_TREATMENT_PLAN_ID:
       return {
-        title: 'Heart & Lung Health',
+        title: 'Cancer Treatment',
         description:
-          'This Care Plan focuses on controling blood pressure, weight, cholesterol, and much more.',
-        image: 'plan-icon-heart'
+          'I am a cancer survivor or have recently been diagnosed with cancer.',
+        image: 'cancer-treatment'
       };
-    case 5:
+    case WOMENS_HEALTH_PLAN_ID:
       return {
-        title: 'Heart & Lung Health',
+        title: "Women's Health",
         description:
-          'This Care Plan focuses on controling blood pressure, weight, cholesterol, and much more.',
-        image: 'plan-icon-heart'
+          'I am planning on becoming pregnant or I am currently pregnant.',
+        image: 'womens-health'
       };
 
     default:

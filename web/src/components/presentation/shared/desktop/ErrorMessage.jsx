@@ -48,7 +48,7 @@ const convertMsg2Redable = msg => {
       return 'Your social security number must be 4 digits.';
     case 'The password field is required.':
       return 'Password is required.';
-    case 'The field password must be a string with a minimum length of 4 and a maximum length of 64.':
+    case 'The field password must be a string with a minimum length of 8 and a maximum length of 64.':
       return 'Password must be between 8 and 64 characters.';
     case 'The email_address field is required.':
       return 'Email is required.';
@@ -66,8 +66,12 @@ const convertMsg2Redable = msg => {
 };
 const ErrorMessage = React.memo(({ message }) => {
   const [msgs, setMsgs] = useState(
-    message?.map(text => convertMsg2Redable(text)).filter(item => item.length > 0)
+    message
+      ?.map(text => convertMsg2Redable(text))
+      .filter(item => item.length > 0 && !item.includes('password_confirm'))
   );
+
+  console.log('MSG', message, msgs);
 
   return (
     <Wrapper>

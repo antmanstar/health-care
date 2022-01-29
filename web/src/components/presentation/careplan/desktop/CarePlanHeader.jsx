@@ -46,6 +46,8 @@ const Description = styled.p`
 `;
 
 const CarePlanIcon = styled.img`
+  width: 50px;
+  height: 50px;
   margin-right: 32px;
   @media ${props => props.theme.device_up.tablet} {
     margin-right: 8px;
@@ -68,7 +70,7 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
         ) : (
           <SpaceBetween>
             <LeftWrapper>
-              <CarePlanIcon src={images[plan.image]} />
+              <CarePlanIcon src={images[`${plan.image}-blue`]} />
               <div>
                 <Title>{plan.title}</Title>
                 <Description>{plan.description}</Description>

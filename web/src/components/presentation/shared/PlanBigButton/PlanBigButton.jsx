@@ -18,7 +18,6 @@ const Button = styled.button`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   font-weight: 300;
   font-size: 14px;
-  cursor: pointer;
   outline: none;
 
   &:hover {
@@ -29,6 +28,9 @@ const Button = styled.button`
     font-size: 16px;
     padding: 19px 32px;
   }
+
+  pointer-events: ${props => (props.isComing ? 'none' : 'auto')};
+  cursor: ${props => (props.isComing ? 'not-allowed' : 'pointer')};
 `;
 
 const StyledDiv = styled.div`

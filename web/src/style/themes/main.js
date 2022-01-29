@@ -58,6 +58,21 @@ const theme = {
         padding: 0;
         box-sizing: border-box;
         font-weight: 300;
+
+
+        ::-webkit-scrollbar {
+          width: 5px;
+        }
+        ::-webkit-scrollbar-button {
+            background: #ccc
+        }
+        ::-webkit-scrollbar-track-piece {
+            background: #888
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #eee;
+            border-radius: 2px;
+        }​
         
         color: ${props => props.theme.colors.shades.darkGray};
         p {

@@ -148,9 +148,7 @@ const DividerWrapper = styled.div`
   }
 `;
 const BottomText = styled.p`
-  @media ${props => props.theme.device.tabletXL} {
-    font-size: 20px;
-  }
+  font-size: 20px;
 `;
 
 function Register({
@@ -187,7 +185,8 @@ function Register({
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = e => {
+    e.preventDefault();
     verifyEligibilityIdAndSSN({ eligibilityId: memberId, last4SSN: ssn });
   };
 
@@ -211,7 +210,7 @@ function Register({
       <FormWrapper>
         <Title>Find your membership.</Title>
         <SectionDivider />
-        <form autoComplete="false">
+        <form autoComplete="off" onSubmit={handleSubmit}>
           <EditedTwoColumnRow>
             <SmallContainer>
               <Label htmlFor="memberId">Enter your Member ID.</Label>
