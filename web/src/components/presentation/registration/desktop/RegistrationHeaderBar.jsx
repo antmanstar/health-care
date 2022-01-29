@@ -32,8 +32,8 @@ const Wrapper = styled.div`
   }
 
   @media ${props => props.theme.device.desktop} {
-    z-index: unset;
-    background: unset;
+    z-index: 1;
+    background: linear-gradient(90deg, #02283c, #022f48);
   }
 `;
 
