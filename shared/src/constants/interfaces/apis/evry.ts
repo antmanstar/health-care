@@ -45,6 +45,6 @@ export const CLOSED = 5
 
 export const HEALTH_AND_WELLNESS_PLAN_ID = 5
 export const HEART_HEALTH_PLAN_ID = 1
-export const BONE_AND_JOINT_HEALTH_PLAN_ID = 4
+export const BONE_AND_JOINT_HEALTH_PLAN_ID = 2
 export const CANCER_TREATMENT_PLAN_ID = 3
 export const WOMENS_HEALTH_PLAN_ID = 4
