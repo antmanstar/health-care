@@ -110,7 +110,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                 <StyledContainer>
                   <CollapsibleSection title={goal.sectionTitle} visible>
                     {width > 768 ? (
-                      <TwoColumnRow>
+                      <TwoColumnRow style={{ 'flex-wrap': 'wrap' }}>
                         {goal.programs.map(program => (
                           <ProgramCard
                             key={program.wellness_goal_id}

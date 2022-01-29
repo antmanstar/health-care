@@ -24,7 +24,7 @@ const Title = styled.h1`
   font-size: 15px;
   font-weight: 300;
   margin-right: 15px;
-  max-width: 186px;
+  // max-width: 186px;
   color: ${props => props.theme.colors.shades.blue};
 
   @media ${props => props.theme.device.tablet} {

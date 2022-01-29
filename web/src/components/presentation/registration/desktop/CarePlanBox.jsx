@@ -22,7 +22,6 @@ const Wrapper = styled.button`
     width: 178px;
   }
 
-  &:hover,
   &.active {
     background: ${props => props.theme.gradients.main};
     border: none;
@@ -30,8 +29,17 @@ const Wrapper = styled.button`
     color: ${props => props.theme.colors.shades.white};
   }
 
-  &:hover #icon {
-    filter: brightness(100%);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: ${props => props.theme.gradients.main};
+      border: none;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      color: ${props => props.theme.colors.shades.white};
+    }
+
+    &:hover #icon {
+      filter: brightness(100%);
+    }
   }
 `;
 
