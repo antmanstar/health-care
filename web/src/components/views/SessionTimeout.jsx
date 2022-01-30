@@ -8,31 +8,34 @@ import styled, { withTheme } from 'styled-components';
 import Button from '../presentation/shared/desktop/Button';
 
 const WarningText = styled.div`
+  display: flex;
+  flex-wrap: wrap;
   font-size: 1.4em;
+  justify-content: center;
+`;
+
+const LineBreak = styled.div`
+  padding: 15px;
+  width: 100%;
 `;
 
 const WarningTime = styled.span`
   color: ${props => props.theme.colors.shades.pinkRed};
+  font-weight: bold;
+  font-size: 2.4em;
 `;
 
 const { signOut } = actions;
 const { getToken } = selectors;
 
-const SessionTimeout = (props) => {
-  const [ isOpen, setOpen ] = useState(undefined);
+const SessionTimeout = props => {
+  const inactivityLimit = 30;
+  const warningInterval = 120000;
+  const [isOpen, setOpen] = useState();
+  const [counter, setCounter] = useState();
   const events = ['click', 'load', 'scroll'];
-  const inactivityLimit = 900000;
-  const warningInterval = 30000;
 
-  const {
-    Scrim,
-    ModalBody,
-    ModalButtonsRight,
-    ModalHeader,
-    ModalSectionDivider,
-    ModalTitle,
-    ModalWrapper
-  } = props.theme.components;
+  const { Scrim, ModalBody, ModalHeader, ModalTitle, ModalWrapper } = props.theme.components;
 
   const handleClose = () => {
     setOpen(false);
@@ -43,47 +46,51 @@ const SessionTimeout = (props) => {
     signOut(token);
   };
 
-  const expirationTimeout = useRef(null);
-  const setExpirationTimeout = () => {
-    expirationTimeout.current = setTimeout(() => {
-      handleSignOut();
-    }, inactivityLimit);
-  };
-
   const warningTimeout = useRef(null);
   const setWarningTimeout = () => {
     warningTimeout.current = setTimeout(() => {
       setOpen(true);
-    }, inactivityLimit - warningInterval);
+    }, warningInterval);
   };
 
+  useEffect(() => {
+    if (isOpen) setCounter(inactivityLimit);
+    clearTimeout(inactivityTimeout.current);
+  }, [isOpen]);
+
+  const inactivityTimeout = useRef(null);
+  React.useEffect(() => {
+    if (counter > 0) inactivityTimeout.current = setTimeout(() => setCounter(counter - 1), 1000);
+    else if (counter === 0) {
+      handleSignOut();
+    }
+  }, [counter]);
+
   const setTimeouts = () => {
-    setExpirationTimeout();
     setWarningTimeout();
   };
 
   const clearTimeouts = () => {
-    clearTimeout(expirationTimeout.current);
     clearTimeout(warningTimeout.current);
-  }
+  };
+
+  const resetTimeouts = () => {
+    clearTimeouts();
+    setTimeouts();
+  };
 
   useEffect(() => {
-    const resetTimeouts = () => {
-      clearTimeouts();
-      setTimeouts();
-    }
-  
-    events.forEach((event) => {
+    events.forEach(event => {
       window.addEventListener(event, resetTimeouts);
     });
 
     setTimeouts();
 
     return () => {
-      events.forEach((event) => {
+      events.forEach(event => {
         window.removeEventListener(event, resetTimeouts);
       });
-  
+
       clearTimeouts();
     };
   }, []);
@@ -91,6 +98,13 @@ const SessionTimeout = (props) => {
   if (!isOpen) {
     return null;
   }
+
+  const renderTimeMinSec = () => {
+    let minutes = Math.floor(counter / 60);
+    let seconds = counter - minutes * 60;
+
+    return `${minutes}:${seconds}`;
+  };
 
   return (
     <>
@@ -101,18 +115,17 @@ const SessionTimeout = (props) => {
         </ModalHeader>
         <ModalBody>
           <WarningText>
-            If not, we will log you out in
-            <WarningTime>{warningInterval / 1000} seconds</WarningTime>.
+            <div>For your security you will be signed out in:</div>
+            <LineBreak />
+            <WarningTime>{renderTimeMinSec()}</WarningTime>
+            <LineBreak />
+            <Button text="I'd like to stay" onClick={() => handleClose()} />
           </WarningText>
         </ModalBody>
-        <ModalSectionDivider />
-        <ModalButtonsRight>
-          <Button text="Dismiss" onClick={() => handleClose()} />
-        </ModalButtonsRight>
       </ModalWrapper>
     </>
   );
-}
+};
 
 SessionTimeout.propTypes = {
   theme: PropTypes.shape({}),
