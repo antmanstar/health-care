@@ -32,7 +32,7 @@ const {
 
 const { LayoutWrapper } = defaultTheme.components;
 
-const Plan = () => {
+const Plan = React.memo(({}) => {
   const CarePlanHeaderWithData = withStoreData(
     CarePlanHeader,
     state => ({
@@ -123,7 +123,7 @@ const Plan = () => {
       </LayoutWrapper>
     </>
   );
-};
+});
 
 const reflection = {
   component: Plan,

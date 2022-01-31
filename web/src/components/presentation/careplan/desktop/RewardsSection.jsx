@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 import defaultTheme from '../../../../style/themes';
 import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import ActivityReward from './ActivityReward';
+import DiscountItem from './DiscountItem';
 import DiscountList from './DiscountList';
 import images from '../../../../utils/images';
 import getWidth from '../../../../utils/getWidth';
@@ -69,17 +70,13 @@ const StyledSectionDivider = styled(SectionDivider)`
 const Flex = styled.div`
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
   width: 100%;
   box-sizing: border-box;
+  flex-direction: column;
 
   > * {
     box-sizing: border-box;
     margin-bottom: 16px;
-  }
-
-  @media ${props => props.theme.device_up.tablet} {
-    flex-direction: column;
   }
 `;
 
@@ -165,7 +162,7 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   };
 
   const handleRewardsToggleClick = () => {
-    console.log('Rewards Click');
+    setShowFullRewards(!showFullRewards);
   };
 
   const handleDiscountsToggleClick = () => {
@@ -184,10 +181,9 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           title="Rewards"
           subTitle={
             width > 768
-              ? 'Our Rewards Program is very easy to use. Pay with your Evry card at Walmart and get discounts on us.'
+              ? 'Your new Evry Care Plan Rewards are easy to use. The list below will update throughout the year with simple things you can do to earn cash on your Evry Spending Card that you can spend at thousands of retailers nationwide.'
               : 'Learn about our simple rewards system.'
           }
-          subTitleTail={width > 768 ? 'It’s that Simple.' : ''}
           onClick={handelHeaderToggleClick}
           collapsed={collapsed}
         />
@@ -197,19 +193,24 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           <SectionDivider />
           <StyledContainer>
             <Flex>
-              {activityRewards.map(reward => (
-                <ActivityReward
-                  layoutClass="reward"
-                  key={reward.benefit_id}
-                  title={reward.benefit_display_name}
-                  description={reward.benefit_description}
-                  buttonText="Contact Care Guide"
-                  earned={reward.benefit_amount}
-                />
-              ))}
+              {activityRewards.map((reward, index) => {
+                let return_cond = (!showFullRewards && index < 3) || showFullRewards; // if the flag showFullRewards = true, show all rewards, else return only 3 rewards
+                if (return_cond)
+                  return (
+                    <ActivityReward
+                      key={reward.benefit_id}
+                      id={reward.benefit_id}
+                      title={reward.benefit_display_name}
+                      description={reward.benefit_description}
+                      buttonText={reward.benefit_cta}
+                      earned={reward.benefit_amount}
+                      date={reward.benefit_effective_date}
+                    />
+                  );
+              })}
             </Flex>
           </StyledContainer>
-          <StyledSectionDivider />
+          <StyledSectionDivider style={{ 'margin-top': 0 }} />
           <Center>
             <button type="button" onClick={handleRewardsToggleClick}>
               {width <= 768
@@ -250,7 +251,7 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                   'Fresh fruits & vegetables',
                   'Perscription Medication'
                 ].map((item, index) => {
-                  return <ActivityReward layoutClass="discount" title={item} key={index} />;
+                  return <DiscountItem title={item} key={index} />;
                 })}
               </DiscountFlex>
             ) : (

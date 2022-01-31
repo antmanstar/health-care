@@ -131,7 +131,7 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
               <ArticleList>
                 {Object.values(educationalResources).map((resource, index) => {
                   let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
-                  if (return_cond) {
+                  if (return_cond)
                     return (
                       <ArticleCard
                         key={resource.educational_resource_id}
@@ -143,7 +143,6 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                         view="plans"
                       />
                     );
-                  }
                 })}
               </ArticleList>
             )}
