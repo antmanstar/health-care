@@ -18,7 +18,8 @@ const colors = {
     darkGray: '#4a4a4b',
     black: '#252526',
     lightTealBlue: '#003c5c',
-    border: '#c4c4c4'
+    border: '#c4c4c4',
+    lightGray: '#f3f3f3'
   },
   // TODO: replace usage of colors.shades.shadeName
   // with an appropriate colors.roles.roleName, when

@@ -109,6 +109,10 @@ const Plan = React.memo(({}) => {
       ...ownProps
     })
   );
+
+  const handleClick = () => {
+    console.log('HANDLE CLICK');
+  };
   return (
     <>
       <Helmet>
