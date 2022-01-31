@@ -54,14 +54,6 @@ const SubTitle = styled.p`
   }
 `;
 
-const SubTitleTail = styled.text`
-  margin: 0;
-  font-weight: 700;
-  font-size: 16px;
-  margin-left: 4px;
-  color: ${props => props.theme.colors.shades.blue};
-`;
-
 const CollaspeIcon = styled.i`
   color: ${props => props.theme.colors.shades.blue};
   @media ${props => props.theme.device.tablet} {
@@ -71,7 +63,7 @@ const CollaspeIcon = styled.i`
 `;
 
 const SectionHeaderWithIcon = React.memo(
-  ({ title, subTitle, icon, svgIcon, subTitleTail, collapsed, onClick }) => {
+  ({ title, subTitle, icon, svgIcon, collapsed, onClick }) => {
     return (
       <Wrapper>
         <div>
@@ -83,10 +75,7 @@ const SectionHeaderWithIcon = React.memo(
             )}
             <Title>{title}</Title>
           </Inline>
-          <SubTitle>
-            {subTitle}
-            <SubTitleTail>{subTitleTail}</SubTitleTail>
-          </SubTitle>
+          <SubTitle>{subTitle}</SubTitle>
         </div>
         <CollaspeIcon className="material-icons" onClick={onClick}>
           {!collapsed ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
@@ -99,7 +88,6 @@ const SectionHeaderWithIcon = React.memo(
 SectionHeaderWithIcon.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
-  subTitleTail: PropTypes.string,
   icon: PropTypes.string.isRequired,
   svgIcon: PropTypes.bool,
   collapsed: PropTypes.bool.isRequired,

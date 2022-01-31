@@ -27,30 +27,12 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-// const StyledCarouselProvider = styled(CarouselProvider)`
-//   position: relative;
-// `;
-
-// const StyledSlider = styled(Slider)`
-//   &:first-child {
-//     will-change: unset;
-//   }
-//   .carousel__slider-tray-wrap--horizontal {
-//     > div:first-child {
-//       display: flex;
-
-//       > div {
-//         padding-bottom: 0px !important;
-//         width: ${props => `${getWidth() * 0.8}px !important`};
-//       }
-//     }
-//   }
-// `;
-
 const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+
+  console.log('Data', wellnessGoals);
 
   useEffect(() => {
     width > 768 && setCollapsed(false);
@@ -84,7 +66,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
   };
 
   return (
-    <StyledSectionBackground>
+    <StyledSectionBackground id="meetyourgoals">
       <StyledContainer>
         <SectionHeaderWithIcon
           icon="meet-goals"
@@ -110,7 +92,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                 <StyledContainer>
                   <CollapsibleSection title={goal.sectionTitle} visible>
                     {width > 768 ? (
-                      <TwoColumnRow style={{ 'flex-wrap': 'wrap' }}>
+                      <TwoColumnRow style={{ flexWrap: 'wrap' }}>
                         {goal.programs.map(program => (
                           <ProgramCard
                             key={program.wellness_goal_id}
@@ -119,7 +101,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             actionText="Sign up for this program"
                             icon="apple-blue"
                             color="blue"
-                            onClick={() => console.log('ONCLICK')}
+                            onClick={() => window.open('https://www.omadahealth.com')}
                           />
                         ))}
                       </TwoColumnRow>
@@ -138,7 +120,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             actionText="Sign up for this program"
                             icon="apple-blue"
                             color="blue"
-                            onClick={() => console.log('ONCLICK')}
+                            onClick={() => window.open('https://www.omadahealth.com')}
                           />
                         ))}
                       </Carousel>

@@ -9,78 +9,36 @@ const Wrapper = styled.div`
   border-radius: 4px;
   margin-bottom: 10px;
   position: relative;
-
-  &.reward {
-    width: calc(50% - 10px);
-    background: #fafafa;
-    flex-direction: column;
-    padding: 16px 16px 32px 32px;
-    border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
-    @media ${props => props.theme.device_up.tablet} {
-      width: 100%;
-      padding: 12px;
-    }
-    @media ${props => props.theme.device.tabletXL} {
-      width: calc(50% - 16px);
-    }
-  }
-  &.discount {
-    width: 33%;
-    background: white;
-    flex-direction: row @media ${props => props.theme.device.tabletXL} {
-      width: calc(33.33% - 16px);
-    }
-    align-items: center;
-    padding: 0px 0px 0px 32px;
-    @media ${props => props.theme.device_up.tablet} {
-      width: 100%;
-    }
+  width: 100%;
+  background: #fafafa;
+  padding: 16px 32px;
+  border: 1px solid
+    ${props =>
+      props.isBecome ? props.theme.colors.roles.success : props.theme.colors.shades.nearlyWhite};
+  justify-content: space-between;
+  margin- @media ${props => props.theme.device_up.tablet} {
+    padding: 12px;
   }
 
-  @media ${props => props.theme.device.tabletXL} {
+  @media ${props => props.theme.device_up.desktop} {
     margin-bottom: 0;
   }
 `;
 
 const InfoWrapper = styled.div`
-  width: 100%;
   display: flex;
-  margin-bottom: 16px;
+  margin: 8px 30px 8px 0px;
+  flex-direction: column;
   @media ${props => props.theme.device_up.tablet} {
-    margin-bottom: 0px;
+    margin: 0;
   }
-`;
-
-const Earned = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  font-size: 12px;
-  font-weight: 700;
-  color: ${props => props.theme.colors.shades.pinkOrange};
-  height: 16px;
-
-  @media ${props => props.theme.device_up.tablet} {
-    position: absolute;
-    right: 12px;
-  }
-`;
-
-const Icon = styled.div`
-  background: ${props => props.theme.colors.roles.success};
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  margin-right: 26px;
 `;
 
 const Title = styled.h3`
   width: 100%;
   margin: 0 0 8px;
   font-size: 16px;
-  color: ${props => props.theme.colors.shades.darkGray};
-  &.reward {
-    color: ${props => props.theme.colors.shades.blue};
-  }
+  color: ${props => props.theme.colors.shades.blue};
 `;
 
 const Description = styled.p`
@@ -91,10 +49,8 @@ const Description = styled.p`
   font-family: 'Roboto';
   color: ${props => props.theme.colors.shades.darkGray};
 
-  &.reward {
-    @media ${props => props.theme.device_up.tablet} {
-      display: none;
-    }
+  @media ${props => props.theme.device_up.tablet} {
+    display: none;
   }
 `;
 
@@ -103,10 +59,10 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   width: 160px;
-  height: 25px;
   padding-top: 5px;
   padding-bottom: 5px;
-  background: ${props => props.theme.colors.shades.tealBlue};
+  background: ${props =>
+    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.tealBlue};
   color: ${props => props.theme.colors.shades.white};
   border: none;
   border-radius: 4px;
@@ -116,6 +72,8 @@ const Button = styled.button`
   outline: none;
   font-family: 'Roboto';
   margin-top: 12px;
+  flex-direction: column;
+  pointer-events: ${props => (props.isComing ? 'none' : 'unset')};
 
   @media ${props => props.theme.device_up.tablet} {
     margin-top: 0px;
@@ -126,39 +84,92 @@ const Button = styled.button`
   }
 `;
 
-const ActivityReward = React.memo(({ title, description, layoutClass, buttonText, earned }) => {
+const Earned = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 16px;
+  min-width: ${props => (props.isBecome ? '120px' : '60px')};
+  margin-top: ${props => (props.isBecome ? '16px' : '0')};
+  color: ${props =>
+    props.isBecome ? props.theme.colors.roles.success : props.theme.colors.shades.pinkOrange};
+
+  @media ${props => props.theme.device_up.tablet} {
+    flex-direction: column;
+    justify-content: center;
+    height: ${props => (props.isBecome ? 'auto' : '16px')};
+    margin-top: 0;
+    min-width: 60px;
+  }
+`;
+
+const EarnedText = styled.div`
+  font-size: 12px;
+  font-weight: bold;
+`;
+
+const IconWrapper = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  border: 3px solid ${props => props.theme.colors.roles.success};
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  @media ${props => props.theme.device_up.tablet} {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+`;
+
+const ActivityReward = React.memo(({ title, description, buttonText, earned, date, id }) => {
+  const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583012'
+  const isComing =
+    date !== null && new Date(date) > new Date() ? false : id == '583016' ? false : true;
+
+  const handleOnClick = e => {
+    if ((e.target.id = '583016')) {
+      const element = document.getElementById('meetyourgoals');
+      const y = element.getBoundingClientRect().top + window.pageYOffset - 65;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    } else console.log('OnClick');
+  };
+
   return (
-    <>
-      {layoutClass === 'reward' && (
-        <Wrapper className={layoutClass}>
-          <Earned>{earned ? `Earn $${earned}` : ''}</Earned>
-          <InfoWrapper>
-            <div>
-              <Title className={layoutClass}>{title}</Title>
-              {description && <Description className={layoutClass}>{description}</Description>}
-            </div>
-          </InfoWrapper>
-          {buttonText && <Button>{buttonText}</Button>}
-        </Wrapper>
-      )}
-      {layoutClass === 'discount' && (
-        <Wrapper className={layoutClass}>
-          <div>
-            <Icon />
-          </div>
-          <Description className={layoutClass}>{title}</Description>
-        </Wrapper>
-      )}
-    </>
+    <Wrapper isBecome={isBecomeAnEvryMember}>
+      <InfoWrapper>
+        <div>
+          <Title>{title}</Title>
+          {description && <Description>{description}</Description>}
+        </div>
+        {buttonText && (
+          <Button isComing={isComing} onClick={handleOnClick} id={id}>
+            {buttonText}
+            {isComing && <span>Coming Soon...</span>}
+          </Button>
+        )}
+      </InfoWrapper>
+      <Earned isBecome={isBecomeAnEvryMember}>
+        <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>
+        {isBecomeAnEvryMember && (
+          <IconWrapper>
+            <i className="material-icons">check</i>
+          </IconWrapper>
+        )}
+      </Earned>
+    </Wrapper>
   );
 });
 
 ActivityReward.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string,
-  layoutClass: PropTypes.string,
   buttonText: PropTypes.string,
-  earned: PropTypes.number
+  earned: PropTypes.number,
+  date: PropTypes.string,
+  id: PropTypes.string.isRequired
 };
 
 ActivityReward.defaultProps = {
