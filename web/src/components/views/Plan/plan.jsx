@@ -103,7 +103,7 @@ const Plan = React.memo(({}) => {
         dispatchProps.fetchRewardBenefits(stateProps.token);
         dispatchProps.fetchRewardCategories(stateProps.token);
       },
-      shouldFetch: isEmpty(stateProps.rewardBenefits) || isEmpty(stateProps.fetchRewardCategories),
+      shouldFetch: isEmpty(stateProps.rewardBenefits) || isEmpty(stateProps.rewardCategories),
       rewardBenefits: stateProps.rewardBenefits,
       rewardCategories: stateProps.rewardCategories,
       ...ownProps

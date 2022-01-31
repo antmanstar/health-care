@@ -31,12 +31,14 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-
-  console.log('Data', wellnessGoals);
-
+  const [goals, setGoals] = useState([]);
   useEffect(() => {
     width > 768 && setCollapsed(false);
   }, [width]);
+
+  useEffect(() => {
+    setGoals(organizeGoals(wellnessGoals));
+  }, [wellnessGoals]);
 
   const organizeGoals = goals => {
     const newGoals = Object.values(goals).reduce((acc, goal) => {
@@ -55,8 +57,8 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
 
     return newGoals;
   };
-  const goals = organizeGoals(wellnessGoals);
-
+  // const goals = organizeGoals(wellnessGoals);
+  // console.log('orgainzed goals ', goals);
   const handelHeaderToggleClick = () => {
     setCollapsed(!collapsed);
   };
