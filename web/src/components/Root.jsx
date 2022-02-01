@@ -7,7 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import AuthorizedRoute from './containers/auth/shared/AuthorizedRoute';
 import defaultTheme from '../style/themes';
 import views from './views';
-import { isClientMobile } from '../utils/browser';
+import Page404 from './views/Page404';
 import ModalContainer from './containers/shared/desktop/ModalContainer';
 import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
@@ -60,9 +60,7 @@ function renderPage(isAuthenticated, currentModal, store) {
             path="/"
             exact
             render={() => {
-              // const landing = isClientMobile() ? '/dashboard' : '/plan';
-              const landing = '/plan';
-              return <Redirect to={isAuthenticated ? landing : '/sign-in'} />;
+              return <Redirect to={isAuthenticated ? '/plan' : '/sign-in'} />;
             }}
           />
           {layouts &&
@@ -85,6 +83,7 @@ function renderPage(isAuthenticated, currentModal, store) {
                 )}
               />
             ))}
+          <Route component={Page404} />
           {isAuthenticated && <SessionTimeout />}
           <ModalContainer currentModal={currentModal} />
         </>
