@@ -23,6 +23,7 @@ import SubmissionResponseModal from '../../../presentation/modals/desktop/Submis
 import UpdateContactPreferences from '../../../presentation/modals/desktop/UpdateContactPreferences';
 import RequestMailedCardModal from '../../../presentation/modals/desktop/RequestMailedCardModal';
 import ConciergeCareModal from '../../../presentation/modals/desktop/ConciergeCareModal';
+import Error500Modal from '../../../presentation/modals/desktop/Error500Modal';
 import withStoreData from '../../base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import constants from '@evry-member-app/shared/constants';
@@ -184,6 +185,9 @@ const ModalContainer = props => {
 
     case 'CONCIERGE_CARE':
       return <ConciergeCareModal {...props} />;
+
+    case 'ERROR_500':
+      return <Error500Modal {...props} />;
 
     default:
       return null;

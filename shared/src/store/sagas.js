@@ -2,7 +2,8 @@ import { all, call, put, select } from 'redux-saga/effects'
 import app from './app/sagas'
 import user from './user/sagas'
 import { isAuthenticated } from './user/selectors'
-import { clearAuth } from './user/actions'
+import { clearAuth, showError } from './user/actions'
+import { showModal } from './app/actions'
 
 const allSagas = [app, user]
 
@@ -25,7 +26,10 @@ export const generateFetchWorker = (type, fetch) =>
       yield put({ type: `${type}_FAILURE`, error })
       if (response.status === 401 && (yield select(isAuthenticated))) {
         yield put(clearAuth('Signed out automatically'))
+      } else if (response.status === 500) {
+        yield put(showModal('ERROR_500'))
       }
+      console.log('ERR', error)
       return error
     }
   }
