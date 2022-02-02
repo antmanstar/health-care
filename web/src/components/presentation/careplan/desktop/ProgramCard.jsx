@@ -13,9 +13,11 @@ const Wrapper = styled.div`
   border: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
   border-radius: 6px;
   min-height: 140px;
+  margin-bottom: 36px;
 
   @media ${props => props.theme.device_up.tablet} {
     width: 100%;
+    magin-bottom: unset;
   }
 `;
 
@@ -45,12 +47,27 @@ const Icon = styled.img`
   }
 `;
 
+const Svg = styled.div`
+  height: 24px;
+  margin-right: 16px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    margin-right: 5px;
+    height: 20px;
+    svg {
+      max-width: 50px;
+      width: 100% !important;
+      height: 20px;
+    }
+  }
+`;
+
 const Title = styled.h1`
   margin: 0 auto 0 0;
   font-weight: 500;
   font-size: 16px;
   color: ${props => props.theme.colors.shades.blue};
-  ${({ width }) => ellipsis(`${width}px`)}
+  ${({ width }) => ellipsis(`${0.5 * width}px`)}
 `;
 
 const Avatar = styled.div`
@@ -104,14 +121,16 @@ const StyledIcon = styled.i`
   font-weight: 500;
 `;
 
-const ProgramCard = React.memo(({ icon, title, desc, actionText, onClick, color }) => {
+const ProgramCard = React.memo(({ icon, icon_type, title, desc, actionText, onClick, color }) => {
+  console.log('ICON', icon_type, title);
   const width = getWidth();
   return (
     <Wrapper>
       <Container>
         <TitleSection>
           <Avatar>
-            {icon && <Icon src={images[icon]} />}
+            {icon && icon_type == 2 && <Icon src={`data:image/png;base64, ${icon}`} />}
+            {icon && icon_type == 3 && <Svg dangerouslySetInnerHTML={{ __html: icon }}></Svg>}
             <Title width={width - 50}>{title}</Title>
           </Avatar>
           <QuestionIcon src={images['question-mark']} />
@@ -128,6 +147,7 @@ const ProgramCard = React.memo(({ icon, title, desc, actionText, onClick, color 
 
 ProgramCard.propTypes = {
   icon: PropTypes.string,
+  icon_type: PropTypes.number,
   title: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   actionText: PropTypes.string.isRequired,

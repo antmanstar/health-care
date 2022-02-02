@@ -123,77 +123,43 @@ const AnswerSet = styled.ol`
   }
 `;
 
-const Answer = styled.li`
+const Answer = styled.div`
   margin: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  &,
-  & * {
-    cursor: pointer;
-  }
+  border: 0px solid #bbbcbc;
+  box-sizing: border-box;
+  background: #f4f4f4;
+  border-radius: 4px;
+  height: 48px;
+  width: 128px;
+
+  cursor: pointer;
 
   & label {
-    height: 48px;
-    position: relative;
-    vertical-align: middle;
+    cursor: pointer !important;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 
-    @media ${props => props.theme.device.desktop} {
-      left: -50px;
+    &.active {
+      color: white;
     }
+
+    caret-color: rgba(0, 0, 0, 0);
   }
 
-  & label::before,
-  & label::after {
-    position: absolute;
-  }
-  & label::before {
-    border: 0px solid #bbbcbc;
-    box-sizing: border-box;
-    background: #f4f4f4;
-    border-radius: 4px;
-    content: '';
-    display: inline-block;
-    height: 48px;
-    left: -50px;
-    top: -16px;
-    width: 128px;
-    margin-right: 16px;
-  }
-  &.active label {
-    color: #ffffff;
-  }
-
-  & label:hover::before,
-  &.active label:hover::before {
-    border-color: ${props => props.theme.colors.shades.pinkOrange};
-  }
-  &.active label::before {
-    background-color: ${props => props.theme.colors.shades.pinkOrange};
+  &.active {
+    background: ${props => props.theme.colors.shades.pinkOrange};
     border: none;
-  }
-
-  & label::after {
-    content: '';
-    display: none;
-    height: 8px;
-    left: 9px;
-    top: -2px;
-    transform: rotate(-45deg);
-    width: 12px;
-  }
-  &.active label::after {
-    display: inline-block;
   }
 
   & input {
     display: none;
-  }
-
-  @media ${props => props.theme.device.desktop} {
-    margin-left: 90px;
-  }
-
-  @media ${props => props.theme.device.desktopXL} {
-    margin-left: 90px;
   }
 `;
 
@@ -208,7 +174,6 @@ const OnboardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
-// ChooseCarePlan
 
 class Questionnaire extends Component {
   constructor(props) {
@@ -340,7 +305,12 @@ class Questionnaire extends Component {
                     }
                     key={answer.question_selection_id}
                   >
-                    <label htmlFor={answer.question_selection_id}>
+                    <label
+                      className={
+                        selectedAnswers.includes(answer.question_selection_id) ? 'active' : ''
+                      }
+                      htmlFor={answer.question_selection_id}
+                    >
                       <InputWrapper>
                         <input
                           type="checkbox"

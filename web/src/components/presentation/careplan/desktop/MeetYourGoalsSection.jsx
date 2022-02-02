@@ -28,6 +28,7 @@ const StyledContainer = styled(Container)`
 `;
 
 const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
+  // console.log('wellnessGoals', wellnessGoals);
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -57,8 +58,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
 
     return newGoals;
   };
-  // const goals = organizeGoals(wellnessGoals);
-  // console.log('orgainzed goals ', goals);
+
   const handelHeaderToggleClick = () => {
     setCollapsed(!collapsed);
   };
@@ -101,9 +101,10 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             title={program.wellness_goal_name}
                             desc={program.wellness_goal_description}
                             actionText="Sign up for this program"
-                            icon="apple-blue"
-                            color="blue"
-                            onClick={() => window.open('https://www.omadahealth.com')}
+                            icon={program.wellness_goal_icon}
+                            icon_type={program.wellness_goal_icon_type}
+                            color={`#${program.wellness_goal_color}`}
+                            onClick={() => window.open(program.wellness_goal_resources[0].value)}
                           />
                         ))}
                       </TwoColumnRow>
@@ -120,9 +121,10 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             title={program.wellness_goal_name}
                             desc={program.wellness_goal_description}
                             actionText="Sign up for this program"
-                            icon="apple-blue"
-                            color="blue"
-                            onClick={() => window.open('https://www.omadahealth.com')}
+                            icon={program.wellness_goal_icon}
+                            icon_type={program.wellness_goal_icon_type}
+                            color={`#${program.wellness_goal_color}`}
+                            onClick={() => window.open(program.wellness_goal_resources[0].value)}
                           />
                         ))}
                       </Carousel>
