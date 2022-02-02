@@ -2,6 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import isEmpty from 'lodash/isEmpty';
@@ -239,16 +240,13 @@ class Questionnaire extends Component {
   }
 
   getAllQuestions() {
-    const {
-      questionnaire: { questions }
-    } = this.props;
-    return questions;
+    return this.props.questionnaire?.questions;
   }
 
   getCurrentQuestion() {
     const questions = this.getAllQuestions();
     const { currentQuestion } = this.state;
-    return questions.find(question => question.question_order === currentQuestion);
+    return questions?.find(question => question.question_order === currentQuestion);
   }
 
   forwardToSuggestion() {
@@ -317,6 +315,9 @@ class Questionnaire extends Component {
     const { isSavingQuestionnaire } = this.props;
     const { currentQuestion } = this.state;
     const question = this.getCurrentQuestion();
+    if (!question) {
+      return <Redirect to="/" />;
+    }
     const answers = question.question_selections;
     const selectedAnswers = this.state.answers
       .filter(answer => answer.questionId === question.question_id)
