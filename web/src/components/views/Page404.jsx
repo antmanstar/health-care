@@ -25,10 +25,10 @@ const InnerContentHeader = styled.div`
   }
   @media ${defaultTheme.device_up.tablet} {
     justify-content: center;
-    height: 250px;
+    height: 300px;
   }
   @media ${defaultTheme.device_up.mobile} {
-    height: 170px;
+    height: 250px;
   }
 `;
 
@@ -208,7 +208,7 @@ const Page404 = () => (
           </MailInfo>
         </ContactInfo>
         <HorizontalDivider />
-        <StyledButton text="back" onClick={() => window.location.back()} />
+        <StyledButton text="back" onClick={() => window.history.back()} />
       </InnerContentBody>
     </StyledWrapper>
   </>
@@ -216,11 +216,9 @@ const Page404 = () => (
 
 const reflection = {
   component: Page404,
-  layout: Standard,
   layoutProps: {
     title: '404 Page found'
-  },
-  route: '/404'
+  }
 };
 
 export default Page404;
