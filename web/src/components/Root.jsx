@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import pathToRegexp from 'path-to-regexp';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,7 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import AuthorizedRoute from './containers/auth/shared/AuthorizedRoute';
 import defaultTheme from '../style/themes';
 import views from './views';
-import { isClientMobile } from '../utils/browser';
+import Page404 from './views/Page404';
 import ModalContainer from './containers/shared/desktop/ModalContainer';
 import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
@@ -56,35 +56,40 @@ function renderPage(isAuthenticated, currentModal, store) {
             Fragment is necessary b/c ThemeProvider can only accept a single child component
           */}
           <GlobalStyle />
-          <Route
-            path="/"
-            exact
-            render={() => {
-              // const landing = isClientMobile() ? '/dashboard' : '/plan';
-              const landing = '/plan';
-              return <Redirect to={isAuthenticated ? landing : '/sign-in'} />;
-            }}
-          />
-          {layouts &&
-            layouts.map(({ component: Layout, routes, views }) => (
-              <Route
-                key={`(${routes.join('|')})`}
-                path={routes}
-                render={({ match }) => (
-                  <Layout
-                    {...(views.find(view => pathToRegexp(view.route).exec(match.url)) || {})
-                      .layoutProps}
-                  >
-                    {views.map(view => {
-                      const ViewRoute = view.forAuthorized ? AuthorizedRoute : Route;
-                      return (
-                        <ViewRoute key={view.route} path={view.route} component={view.component} />
-                      );
-                    })}
-                  </Layout>
-                )}
-              />
-            ))}
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <Redirect to={isAuthenticated ? '/plan' : '/sign-in'} />;
+              }}
+            />
+            {layouts &&
+              layouts.map(({ component: Layout, routes, views }) => (
+                <Route
+                  key={`(${routes.join('|')})`}
+                  path={routes}
+                  render={({ match }) => (
+                    <Layout
+                      {...(views.find(view => pathToRegexp(view.route).exec(match.url)) || {})
+                        .layoutProps}
+                    >
+                      {views.map(view => {
+                        const ViewRoute = view.forAuthorized ? AuthorizedRoute : Route;
+                        return (
+                          <ViewRoute
+                            key={view.route}
+                            path={view.route}
+                            component={view.component}
+                          />
+                        );
+                      })}
+                    </Layout>
+                  )}
+                />
+              ))}
+            <Route component={Page404} />
+          </Switch>
           {isAuthenticated && <SessionTimeout />}
           <ModalContainer currentModal={currentModal} />
         </>
