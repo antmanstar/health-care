@@ -570,7 +570,6 @@ export const sendMessageReset = () => ({
 })
 
 export const createRequestMailedCardCase = ({ token }) => {
-  console.log(token)
   return createCase_v2({
     storeType: types.CREATE_CASE_REQUEST_MAILED_CARD,
     metadata: [],

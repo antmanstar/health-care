@@ -122,7 +122,6 @@ const StyledIcon = styled.i`
 `;
 
 const ProgramCard = React.memo(({ icon, icon_type, title, desc, actionText, onClick, color }) => {
-  console.log('ICON', icon_type, title);
   const width = getWidth();
   return (
     <Wrapper>
