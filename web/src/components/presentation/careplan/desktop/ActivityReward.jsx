@@ -31,6 +31,7 @@ const InfoWrapper = styled.div`
   flex-direction: column;
   @media ${props => props.theme.device_up.tablet} {
     margin: 0;
+    align-items: flex-start;
   }
 `;
 
@@ -54,36 +55,6 @@ const Description = styled.p`
   }
 `;
 
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 160px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background: ${props =>
-    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.tealBlue};
-  color: ${props => props.theme.colors.shades.white};
-  border: none;
-  border-radius: 4px;
-  font-weight: 300;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
-  font-family: 'Roboto';
-  margin-top: 12px;
-  flex-direction: column;
-  pointer-events: ${props => (props.isComing ? 'none' : 'unset')};
-
-  @media ${props => props.theme.device_up.tablet} {
-    margin-top: 0px;
-  }
-
-  &:hover {
-    background: #1c4c66;
-  }
-`;
-
 const Earned = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -101,11 +72,62 @@ const Earned = styled.div`
     margin-top: 0;
     min-width: 60px;
   }
+
+  @media ${props => props.theme.device_up.mobile} {
+    margin-left: 10px;
+  }
 `;
 
 const EarnedText = styled.div`
   font-size: 12px;
   font-weight: bold;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    flex-direction: column;
+  }
+`;
+
+const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 160px;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: ${props =>
+    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.tealBlue};
+  color: ${props => props.theme.colors.shades.white};
+  border: none;
+  border-radius: 4px;
+  font-weight: 300;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  font-family: 'Roboto';
+  flex-direction: column;
+  margin-right: 18px;
+  pointer-events: ${props => (props.isComing ? 'none' : 'unset')};
+
+  @media ${props => props.theme.device_up.tablet} {
+    margin: 0;
+  }
+
+  &:hover {
+    background: #1c4c66;
+  }
+`;
+
+const ComingText = styled.div`
+  color: ${props => props.theme.colors.shades.darkGray};
+  font-weight: bold;
+  text-align: center;
 `;
 
 const IconWrapper = styled.div`
@@ -126,11 +148,10 @@ const IconWrapper = styled.div`
 
 const ActivityReward = React.memo(({ title, description, buttonText, earned, date, id }) => {
   const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583012'
-  const isComing =
-    date !== null && new Date(date) > new Date() ? false : id == '583016' ? false : true;
+  const isComing = date === null || new Date(date) < new Date() ? false : true;
 
   const handleOnClick = e => {
-    if ((e.target.id = '583016')) {
+    if ((e.target.id = '583282')) {
       const element = document.getElementById('meetyourgoals');
       const y = element.getBoundingClientRect().top + window.pageYOffset - 65;
       window.scrollTo({ top: y, behavior: 'smooth' });
@@ -144,12 +165,14 @@ const ActivityReward = React.memo(({ title, description, buttonText, earned, dat
           <Title>{title}</Title>
           {description && <Description>{description}</Description>}
         </div>
-        {buttonText && (
-          <Button isComing={isComing} onClick={handleOnClick} id={id}>
-            {buttonText}
-            {isComing && <span>Coming Soon...</span>}
-          </Button>
-        )}
+        <ButtonWrapper>
+          {buttonText && (
+            <Button isComing={isComing} onClick={handleOnClick} id={id}>
+              {buttonText}
+            </Button>
+          )}
+          {isComing && <ComingText>Coming Soon...</ComingText>}
+        </ButtonWrapper>
       </InfoWrapper>
       <Earned isBecome={isBecomeAnEvryMember}>
         <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>

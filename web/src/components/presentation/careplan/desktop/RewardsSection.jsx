@@ -83,7 +83,7 @@ const Flex = styled.div`
 const DiscountFlex = styled.div`
   display: flex;
   flex-direction: column;
-  height: 120px;
+  height: ${props => `${(props.length / 3) * 52}px`};
   flex-wrap: wrap;
   box-sizing: border-box;
   align-items: flex-start;
@@ -171,7 +171,16 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
 
   const activityRewards = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 1);
 
-  const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
+  const discountItems = !showFullDiscounts
+    ? [
+        'Fresh fruits & vegetables',
+        'Fitness Equipment',
+        'Vitamins & Supplements',
+        'Health Products',
+        'Fresh fruits & vegetables',
+        'Perscription Medication'
+      ]
+    : Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
 
   return (
     <StyledSectionBackground>
@@ -241,38 +250,16 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                 </Description>
               </div>
             </Header>
-            {!showFullDiscounts ? (
-              <DiscountFlex>
-                {[
-                  'Fresh fruits & vegetables',
-                  'Fitness Equipment',
-                  'Vitamins & Supplements',
-                  'Health Products',
-                  'Fresh fruits & vegetables',
-                  'Perscription Medication'
-                ].map((item, index) => {
-                  return <DiscountItem title={item} key={index} />;
-                })}
-              </DiscountFlex>
-            ) : (
-              <Flex>
-                {rewardCategories &&
-                  Object.values(rewardCategories).map(category => {
-                    const items = discountItems.filter(
-                      item => item.benefit_category_ids[0] === category.category_id
-                    );
-                    if (!isEmpty(items)) {
-                      return (
-                        <DiscountList
-                          title={category.category_name}
-                          items={items}
-                          key={category.category_id}
-                        />
-                      );
-                    }
-                  })}
-              </Flex>
-            )}
+            <DiscountFlex length={discountItems.length}>
+              {discountItems.map((item, index) => {
+                return (
+                  <DiscountItem
+                    title={!showFullDiscounts ? item : item.benefit_display_name}
+                    key={index}
+                  />
+                );
+              })}
+            </DiscountFlex>
           </StyledContainer>
           <StyledSectionDivider className="discount" />
           <Center>

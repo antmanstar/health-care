@@ -27,6 +27,14 @@ const StyledContainer = styled(Container)`
   }
 `;
 
+const StyledCarousel = styled(Carousel)`
+  .slider-slide {
+    :focus {
+      outline: none;
+    }
+  }
+`;
+
 const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
   // console.log('wellnessGoals', wellnessGoals);
   const width = getWidth();
@@ -100,7 +108,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             key={program.wellness_goal_id}
                             title={program.wellness_goal_name}
                             desc={program.wellness_goal_description}
-                            actionText="Sign up for this program"
+                            actionText="Enroll in Program"
                             icon={program.wellness_goal_icon}
                             icon_type={program.wellness_goal_icon_type}
                             color={`#${program.wellness_goal_color}`}
@@ -109,7 +117,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                         ))}
                       </TwoColumnRow>
                     ) : (
-                      <Carousel
+                      <StyledCarousel
                         withoutControls={true}
                         cellSpacing={16}
                         slideWidth={0.8}
@@ -120,14 +128,14 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
                             key={program.wellness_goal_id}
                             title={program.wellness_goal_name}
                             desc={program.wellness_goal_description}
-                            actionText="Sign up for this program"
+                            actionText="Enroll in Program"
                             icon={program.wellness_goal_icon}
                             icon_type={program.wellness_goal_icon_type}
                             color={`#${program.wellness_goal_color}`}
                             onClick={() => window.open(program.wellness_goal_resources[0].value)}
                           />
                         ))}
-                      </Carousel>
+                      </StyledCarousel>
                     )}
                   </CollapsibleSection>
                 </StyledContainer>

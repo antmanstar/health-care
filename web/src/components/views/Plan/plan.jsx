@@ -29,7 +29,6 @@ const {
 } = selectors;
 
 // DESKTOP: Care Plan View
-
 const { LayoutWrapper } = defaultTheme.components;
 
 const Plan = React.memo(({}) => {

@@ -43,13 +43,28 @@ const HeaderWrapper = styled.div`
   @media (max-width: 847px) {
     max-width: 700px;
   }
+  @media ${defaultTheme.device_up.tablet} {
+    max-width: 500px;
+  }
+  @media ${defaultTheme.device_up.mobile} {
+    justify-content: center;
+    max-width: 300px;
+    margin-top: 50px;
+  }
 `;
 
 const LogoWrapper = styled.div`
   display: flex;
   width: 100%;
-  @media ${defaultTheme.device_up.tablet} {
-    justify-content: center;
+`;
+
+const LogoImg = styled.img`
+  width: 180px;
+  height: 46px;
+
+  @media ${defaultTheme.device_up.mobile} {
+    width: 125px;
+    height: 33px;
   }
 `;
 
@@ -68,14 +83,14 @@ const Title = styled.div`
   }
 
   @media ${defaultTheme.device_up.tablet} {
-    font-size: 100px;
+    font-size: 90px;
     line-height: 120px;
-    justify-content: center;
   }
 
   @media ${defaultTheme.device_up.mobile} {
     font-size: 50px;
     line-height: 60px;
+    margin-bottom: 0px;
   }
 `;
 
@@ -90,17 +105,27 @@ const InnerContentBody = styled.div`
   @media ${defaultTheme.device_up.tablet} {
     margin-left: 0px;
   }
+  @media ${defaultTheme.device_up.mobile} {
+    margin-top: 33px;
+  }
 `;
 
 const Content = styled.div`
   font-size: 35px;
   font-weight: 300;
+  padding-left: 40px;
+  padding-right: 70px;
+
   color: ${defaultTheme.colors.shades.darkGray};
   @media (max-width: 847px) {
     font-size: 24px;
   }
-  @media ${defaultTheme.device_up.tablet} {
-    text-align: center;
+  @media (max-width: 847px) {
+    font-size: 25px;
+  }
+  @media ${defaultTheme.device_up.mobile} {
+    font-size: 15px;
+    max-width: 255px;
   }
 `;
 
@@ -111,15 +136,21 @@ const ContactInfo = styled.div`
   align-items: center;
   font-size: 25px;
   font-weight: 400;
+  padding-left: 40px;
+  padding-right: 70px;
   color: ${defaultTheme.colors.shades.blue};
 
   @media ${defaultTheme.device_up.tablet} {
+    font-size: 20px;
+  }
+
+  @media (max-width: 530px) {
     flex-direction: column;
-    justfiy-content: center;
+    align-items: flex-start;
   }
 
   @media ${defaultTheme.device_up.mobile} {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -127,7 +158,7 @@ const PhoneInfo = styled.div`
   align-items: center;
   display: flex;
 
-  @media ${defaultTheme.device_up.tablet} {
+  @media ${defaultTheme.device_up.mobile} {
     min-width: 210px;
   }
 `;
@@ -138,7 +169,7 @@ const VerticalDivider = styled.div`
   height: 28px;
   margin: auto 20px;
 
-  @media ${defaultTheme.device_up.tablet} {
+  @media (max-width: 530px) {
     display: none;
   }
 `;
@@ -158,11 +189,21 @@ const StyeldIcon = styled.i`
   margin-right: 5px;
 `;
 
+const InnerFooter = styled.div`
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+  max-width: 847px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
 const HorizontalDivider = styled.div`
   height: 1px;
   background: #bbbcbc;
-  width: 100%;
-  margin: 64px auto 40px auto;
+  width: calc(100% - 20px);
+  margin: 64px auto 40px 10px;
 `;
 
 const StyledButton = styled(SmallButton)`
@@ -186,7 +227,7 @@ const Page404 = () => (
       <InnerContentHeader>
         <HeaderWrapper>
           <LogoWrapper>
-            <img src={logoImg} alt="Evry Healthcare" style={{ width: '180px', height: '46px' }} />
+            <LogoImg src={logoImg} alt="Evry Healthcare" />
           </LogoWrapper>
           <Title>404 Error</Title>
         </HeaderWrapper>
@@ -207,9 +248,11 @@ const Page404 = () => (
             support@evryhealth.com
           </MailInfo>
         </ContactInfo>
+      </InnerContentBody>
+      <InnerFooter>
         <HorizontalDivider />
         <StyledButton text="back" onClick={() => window.history.back()} />
-      </InnerContentBody>
+      </InnerFooter>
     </StyledWrapper>
   </>
 );

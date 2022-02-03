@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -79,16 +79,34 @@ const QuestionIcon = styled.img`
   width: 12px;
 `;
 
+const ExpandableWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Description = styled.p`
   margin: 0;
   font-weight: 300;
   font-size: 12px;
   color: ${props => props.theme.colors.shades.gray};
-  ${ellipsis(undefined, 2)};
   min-height: 34px;
+
   @media ${props => props.theme.device_up.tablet} {
     font-size: 10px;
   }
+
+  &.collapsed {
+    ${ellipsis(undefined, 3)};
+  }
+`;
+
+const Link = styled.a`
+  margin-top: 4px;
+  color: ${props => props.theme.colors.shades.tealBlue};
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: underline;
 `;
 
 const Button = styled.button`
@@ -123,6 +141,17 @@ const StyledIcon = styled.i`
 
 const ProgramCard = React.memo(({ icon, icon_type, title, desc, actionText, onClick, color }) => {
   const width = getWidth();
+  const [expanded, setExpanded] = useState(false);
+
+  const handleClick = () => {
+    setExpanded(!expanded);
+
+    // to cover the limitation of nuka-carousel - 'size changing of each slide inside carousel never been reflected until window resize'
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 0);
+  };
+
   return (
     <Wrapper>
       <Container>
@@ -134,7 +163,10 @@ const ProgramCard = React.memo(({ icon, icon_type, title, desc, actionText, onCl
           </Avatar>
           <QuestionIcon src={images['question-mark']} />
         </TitleSection>
-        <Description>{desc}</Description>
+        <ExpandableWrapper>
+          <Description className={expanded ? '' : 'collapsed'}>{desc}</Description>
+          <Link onClick={handleClick}>{expanded ? 'Read Less' : 'Read More'}</Link>
+        </ExpandableWrapper>
       </Container>
       <Button color={color} onClick={onClick}>
         {actionText}

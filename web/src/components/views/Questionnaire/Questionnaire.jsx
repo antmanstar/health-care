@@ -192,7 +192,7 @@ const Questionnaire = () => {
   const saveResult = sv_data => dispatch(saveQuestionnaire(sv_data));
 
   // constants
-  const questions = questionnaire && questionnaire.questions;
+  const questions = questionnaire?.questions;
   if (!questions) {
     return <Redirect to="/" />;
   }
@@ -279,7 +279,7 @@ const Questionnaire = () => {
 
   const handlePrevFunction = () => {
     const newIndex = currentQuestionIndex - 1;
-    newIndex != -1 ? setCurrentQuestionIndex(newIndex) : setCurrentQuestionIndex(0);
+    newIndex != 0 ? setCurrentQuestionIndex(newIndex) : setCurrentQuestionIndex(1);
   };
 
   const handleClick = (e, answer) => {
