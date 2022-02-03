@@ -110,9 +110,6 @@ const Plan = React.memo(({}) => {
     })
   );
 
-  const handleClick = () => {
-    console.log('HANDLE CLICK');
-  };
   return (
     <>
       <Helmet>

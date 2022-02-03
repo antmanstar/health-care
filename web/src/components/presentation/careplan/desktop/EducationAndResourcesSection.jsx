@@ -93,6 +93,7 @@ const Center = styled.div`
 `;
 
 const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
+  console.log(educationalResources);
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
   const [showFullResources, setShowFullResources] = useState(false);

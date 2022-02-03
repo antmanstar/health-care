@@ -502,13 +502,13 @@ const userReducer = (state = initialState, action) => {
         },
         action.payload.two_way_factor_challenge_required
           ? {
-              payload2FA: action.payload
-            }
+            payload2FA: action.payload
+          }
           : {
-              isSigningIn: false,
-              isSignedIn: true,
-              auth: action.payload
-            }
+            isSigningIn: false,
+            isSignedIn: true,
+            auth: action.payload
+          }
       )
     case types.REGISTER_FAILURE:
       return {

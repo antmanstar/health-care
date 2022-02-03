@@ -172,6 +172,7 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   const activityRewards = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 1);
 
   const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
+  console.log('rewardCategories', rewardCategories);
 
   return (
     <StyledSectionBackground>

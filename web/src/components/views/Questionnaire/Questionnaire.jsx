@@ -1,7 +1,5 @@
-/* eslint no-shadow: ["error", { "allow": ["answer", "answers", "currentQuestion", "question", "saveQuestionnaire"] }] */
-/* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -16,6 +14,7 @@ import history from '../../../utils/history';
 import { Helmet } from 'react-helmet-async';
 import moment from 'moment';
 import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
+import { useEffect } from 'react';
 
 const { saveQuestionnaire } = actions;
 const {
@@ -124,77 +123,43 @@ const AnswerSet = styled.ol`
   }
 `;
 
-const Answer = styled.li`
+const Answer = styled.div`
   margin: 16px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  &,
-  & * {
-    cursor: pointer;
-  }
+  border: 0px solid #bbbcbc;
+  box-sizing: border-box;
+  background: #f4f4f4;
+  border-radius: 4px;
+  height: 48px;
+  width: 128px;
+
+  cursor: pointer;
 
   & label {
-    height: 48px;
-    position: relative;
-    vertical-align: middle;
+    cursor: pointer !important;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 
-    @media ${props => props.theme.device.desktop} {
-      left: -50px;
+    &.active {
+      color: white;
     }
+
+    caret-color: rgba(0, 0, 0, 0);
   }
 
-  & label::before,
-  & label::after {
-    position: absolute;
-  }
-  & label::before {
-    border: 0px solid #bbbcbc;
-    box-sizing: border-box;
-    background: #f4f4f4;
-    border-radius: 4px;
-    content: '';
-    display: inline-block;
-    height: 48px;
-    left: -50px;
-    top: -16px;
-    width: 128px;
-    margin-right: 16px;
-  }
-  &.active label {
-    color: #ffffff;
-  }
-
-  & label:hover::before,
-  &.active label:hover::before {
-    border-color: ${props => props.theme.colors.shades.pinkOrange};
-  }
-  &.active label::before {
-    background-color: ${props => props.theme.colors.shades.pinkOrange};
+  &.active {
+    background: ${props => props.theme.colors.shades.pinkOrange};
     border: none;
-  }
-
-  & label::after {
-    content: '';
-    display: none;
-    height: 8px;
-    left: 9px;
-    top: -2px;
-    transform: rotate(-45deg);
-    width: 12px;
-  }
-  &.active label::after {
-    display: inline-block;
   }
 
   & input {
     display: none;
-  }
-
-  @media ${props => props.theme.device.desktop} {
-    margin-left: 90px;
-  }
-
-  @media ${props => props.theme.device.desktopXL} {
-    margin-left: 90px;
   }
 `;
 
@@ -209,93 +174,79 @@ const OnboardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
-// ChooseCarePlan
 
-class Questionnaire extends Component {
-  constructor(props) {
-    super(props);
+const Questionnaire = () => {
+  // states
+  const [userAnswers, setUserAnswers] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+  const dispatch = useDispatch();
 
-    this.state = {
-      answers: [],
-      currentQuestion: 1
-    };
+  // selectors
+  const carePlanSuggestion = useSelector(getCarePlanSuggestion);
+  const questionnaire = useSelector(getQuestionnaire);
+  const isQuestionnaireCompleted = useSelector(isQuestionnaireComplete);
+  const isSavingQuestion = useSelector(isSavingQuestionnaire);
+  const token = useSelector(getToken);
+
+  // dispatch
+  const saveResult = sv_data => dispatch(saveQuestionnaire(sv_data));
+
+  // constants
+  const questions = questionnaire && questionnaire.questions;
+  if (!questions) {
+    return <Redirect to="/" />;
   }
+  const current_question = questions.find(
+    question => question.question_order === currentQuestionIndex
+  );
+  const answers = current_question.question_selections;
+  const selectedAnswers = userAnswers
+    .filter(answer => answer.questionId === current_question.question_id)
+    .map(answer => answer.questionSelectionId);
 
-  componentDidMount() {
-    this.forwardToSuggestion();
-  }
+  useEffect(() => {
+    forwardToSuggestion();
+  }, [isSavingQuestion]);
 
-  componentDidUpdate() {
-    this.forwardToSuggestion();
-  }
-
-  getCarePlanSuggestion() {
-    const { carePlanSuggestion } = this.props;
-    return carePlanSuggestion;
-  }
-
-  getAllAnswers() {
-    const { answers } = this.state;
-    return answers;
-  }
-
-  getAllQuestions() {
-    return this.props.questionnaire?.questions;
-  }
-
-  getCurrentQuestion() {
-    const questions = this.getAllQuestions();
-    const { currentQuestion } = this.state;
-    return questions?.find(question => question.question_order === currentQuestion);
-  }
-
-  forwardToSuggestion() {
-    const { isQuestionnaireComplete } = this.props;
-    const carePlanSuggestion = this.getCarePlanSuggestion();
-    if (!isEmpty(carePlanSuggestion) || isQuestionnaireComplete) {
+  const forwardToSuggestion = () => {
+    if (!isEmpty(carePlanSuggestion) || isQuestionnaireCompleted) {
       history.push('/change-plan');
     }
-  }
+  };
 
-  areAllQuestionsAnswered() {
-    const answers = this.getAllAnswers();
-    const questions = this.getAllQuestions();
+  const areAllQuestionsAnswered = () => {
     return questions.reduce(
       (prev, question) =>
-        prev && Boolean(answers.find(answer => question.question_id === answer.questionId)),
+        prev &&
+        Boolean(userAnswers.find(userAnswer => question.question_id === userAnswer.questionId)),
       true
     );
-  }
+  };
 
-  isQuestionAnswered() {
-    const { currentQuestion } = this.state;
-    let currentAnswer = undefined;
+  const isQuestionAnswered = () => {
+    return userAnswers && userAnswers[currentQuestionIndex - 1] ? true : false;
+  };
 
-    if (this.state.answers !== undefined) currentAnswer = this.state.answers[currentQuestion - 1];
+  const submitAnswers = () => {
+    const sv_questionnaire = cloneDeep(questionnaire);
 
-    if (currentAnswer) {
-      return true;
-    }
-
-    return false;
-  }
-
-  submitAnswers() {
-    const { saveQuestionnaire } = this.props;
-    const { answers } = this.state;
-    const questionnaire = cloneDeep(this.props.questionnaire);
-
-    answers.forEach(answer => {
-      const question = questionnaire.questions.find(
-        question => question.question_id === answer.questionId
+    userAnswers.forEach(userAnswer => {
+      // question
+      const question = sv_questionnaire.questions.find(
+        question => question.question_id === userAnswer.questionId
       );
+
+      // question answer
       const questionAnswer = question.question_selections.find(
-        selection => selection.question_selection_id === answer.questionSelectionId
-      );
-      const questionPreviousAnswer = question.question_selections.find(
-        selection => selection.question_selection_id !== answer.questionSelectionId
+        selection => selection.question_selection_id === userAnswer.questionSelectionId
       );
 
+      // prev question answer
+      const questionPreviousAnswer = question.question_selections.find(
+        selection => selection.question_selection_id !== userAnswer.questionSelectionId
+      );
+
+      // set changes
       questionPreviousAnswer.question_selection_answer.length = 0;
       questionAnswer.question_selection_answer.length = 0;
       questionAnswer.question_selection_answer[0] = {
@@ -306,170 +257,119 @@ class Questionnaire extends Component {
       };
     });
 
-    questionnaire.completion_date_utc = moment.utc().format();
+    // adding timestamp to new one
+    sv_questionnaire.completion_date_utc = moment.utc().format();
 
-    saveQuestionnaire({ questionnaire });
-  }
+    // save new one
+    saveResult({ questionnaire: sv_questionnaire, token });
+  };
 
-  render() {
-    const { isSavingQuestionnaire } = this.props;
-    const { currentQuestion } = this.state;
-    const question = this.getCurrentQuestion();
-    if (!question) {
-      return <Redirect to="/" />;
+  // handlers
+  const handleNextFunction = () => {
+    const newIndex = currentQuestionIndex + 1;
+    if (areAllQuestionsAnswered()) {
+      submitAnswers();
+      setCurrentQuestionIndex(1);
+    } else {
+      newIndex <= questions.length
+        ? setCurrentQuestionIndex(newIndex)
+        : setCurrentQuestionIndex(currentQuestionIndex);
     }
-    const answers = question.question_selections;
-    const selectedAnswers = this.state.answers
-      .filter(answer => answer.questionId === question.question_id)
-      .map(answer => answer.questionSelectionId);
+  };
 
-    return (
-      <>
-        <Helmet>
-          <title>{reflection.layoutProps.title} - Evry Health</title>
-        </Helmet>
-        <OnboardingProgressBar progressStep={3} />
-        <Wrapper>
-          <Question>{question.question}</Question>
-          <AnswerWrapper>
-            <AnswerSet>
-              {answers &&
-                answers.map(answer => (
-                  <Answer
+  const handlePrevFunction = () => {
+    const newIndex = currentQuestionIndex - 1;
+    newIndex != -1 ? setCurrentQuestionIndex(newIndex) : setCurrentQuestionIndex(0);
+  };
+
+  const handleClick = (e, answer) => {
+    e.stopPropagation();
+    const filtered = userAnswers.filter(
+      userAnswer => answer.question_selection_id === userAnswer.questionSelectionId
+    );
+    !isEmpty(filtered)
+      ? setUserAnswers([
+          ...userAnswers.filter(
+            userAnswer => userAnswer.questionId !== current_question.question_id
+          )
+        ])
+      : setUserAnswers([
+          ...userAnswers.filter(
+            userAnswer => userAnswer.questionId !== current_question.question_id
+          ),
+          {
+            questionId: current_question.question_id,
+            questionSelectionId: answer.question_selection_id
+          }
+        ]);
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>{reflection.layoutProps.title} - Evry Health</title>
+      </Helmet>
+      <OnboardingProgressBar progressStep={3} />
+      <Wrapper>
+        <Question>{current_question.question}</Question>
+        <AnswerWrapper>
+          <AnswerSet>
+            {answers &&
+              answers.map(answer => (
+                <Answer
+                  className={selectedAnswers.includes(answer.question_selection_id) ? 'active' : ''}
+                  key={answer.question_selection_id}
+                >
+                  <label
                     className={
                       selectedAnswers.includes(answer.question_selection_id) ? 'active' : ''
                     }
-                    key={answer.question_selection_id}
+                    htmlFor={answer.question_selection_id}
                   >
-                    <label htmlFor={answer.question_selection_id}>
-                      <InputWrapper>
-                        <input
-                          type="checkbox"
-                          id={answer.question_selection_id}
-                          onClick={e => {
-                            e.stopPropagation();
-                            this.setState(prevState => {
-                              const { answers } = prevState;
-                              if (
-                                !isEmpty(
-                                  answers.filter(
-                                    answerToTest =>
-                                      answer.question_selection_id ===
-                                      answerToTest.questionSelectionId
-                                  )
-                                )
-                              ) {
-                                return {
-                                  answers: [
-                                    ...answers.filter(
-                                      answer => answer.questionId !== question.question_id
-                                    )
-                                  ]
-                                };
-                              }
-                              return {
-                                answers: [
-                                  ...answers.filter(
-                                    answer => answer.questionId !== question.question_id
-                                  ),
-                                  {
-                                    questionId: question.question_id,
-                                    questionSelectionId: answer.question_selection_id
-                                  }
-                                ]
-                              };
-                            });
-                          }}
-                        />
-                      </InputWrapper>
-                      {answer.selection}
-                    </label>
-                  </Answer>
-                ))}
-            </AnswerSet>
-          </AnswerWrapper>
-        </Wrapper>
-        <OnboardWrapper>
-          <OnboardingControls
-            isSavingQuestionnaire={isSavingQuestionnaire}
-            isQuestionAnswered={this.isQuestionAnswered()}
-            currentStep={currentQuestion}
-            maxSteps={this.props.questionnaire.questions.length}
-            handleNextFunction={() => {
-              this.setState((prevState, props) => {
-                const { currentQuestion } = prevState;
-                const newQuestion = currentQuestion + 1;
-                const questions = this.getAllQuestions();
-
-                if (newQuestion <= questions.length) {
-                  return {
-                    currentQuestion: newQuestion
-                  };
-                }
-
-                if (this.areAllQuestionsAnswered()) {
-                  this.submitAnswers();
-                }
-
-                return {};
-              });
-            }}
-            handlePrevFunction={() => {
-              this.setState(prevState => ({
-                currentQuestion: prevState.currentQuestion - 1
-              }));
-            }}
-          />
-          {isSavingQuestionnaire && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-        </OnboardWrapper>
-      </>
-    );
-  }
-}
+                    <InputWrapper>
+                      <input
+                        type="checkbox"
+                        id={answer.question_selection_id}
+                        onClick={e => handleClick(e, answer)}
+                      />
+                    </InputWrapper>
+                    {answer.selection}
+                  </label>
+                </Answer>
+              ))}
+          </AnswerSet>
+        </AnswerWrapper>
+      </Wrapper>
+      <OnboardWrapper>
+        <OnboardingControls
+          isSavingQuestionnaire={isSavingQuestion}
+          isQuestionAnswered={isQuestionAnswered()}
+          currentStep={currentQuestionIndex}
+          maxSteps={questions.length}
+          handleNextFunction={handleNextFunction}
+          handlePrevFunction={handlePrevFunction}
+        />
+        {isSavingQuestion && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      </OnboardWrapper>
+    </>
+  );
+};
 
 Questionnaire.propTypes = {
   questionnaire: PropTypes.shape({
     questions: PropTypes.arrayOf(PropTypes.shape({}))
   }),
-  saveQuestionnaire: PropTypes.func
+  saveResult: PropTypes.func
 };
 
 Questionnaire.defaultProps = {
   questionnaire: {},
-  isQuestionnaireComplete: false,
-  saveQuestionnaire: () => {}
+  isQuestionnaireCompleted: false,
+  saveResult: () => {}
 };
 
-const mapStateToProps = state => ({
-  carePlanSuggestion: getCarePlanSuggestion(state),
-  questionnaire: getQuestionnaire(state),
-  isQuestionnaireComplete: isQuestionnaireComplete(state),
-  isSavingQuestionnaire: isSavingQuestionnaire(state),
-  token: getToken(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-  saveQuestionnaire: args => dispatch(saveQuestionnaire(args))
-});
-
-const mergeProps = ({ token, ...stateProps }, { saveQuestionnaire }, ownProps) => ({
-  saveQuestionnaire: ({ questionnaire }) =>
-    saveQuestionnaire({
-      questionnaire,
-      token
-    }),
-  ...stateProps,
-  ...ownProps
-});
-
-const ConnectedQuestionnaire = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
-)(Questionnaire);
-
 const reflection = {
-  component: ConnectedQuestionnaire,
+  component: Questionnaire,
   layout: Sparse,
   layoutProps: {
     title: "Let's get some info",

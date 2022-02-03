@@ -30,7 +30,6 @@ export const generateFetchWorker = (type, fetch) =>
       else if (response.status === 401 && (yield select(isAuthenticated))) {
         yield put(clearAuth('Signed out automatically'))
       }
-      console.log('ERR', error)
       return error
     }
   }
