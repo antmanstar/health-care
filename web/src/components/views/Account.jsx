@@ -11,7 +11,6 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import withStoreData from '../containers/base/withStoreData';
 import { Helmet } from 'react-helmet-async';
 
-
 const { fetchAccountInfo, fetchFamilyMemberCOBSummary } = actions;
 const {
   getAccountInfo,
@@ -84,7 +83,7 @@ const Account = () => (
       <title>{reflection.layoutProps.title} - Evry Health</title>
     </Helmet>
     <LayoutWrapper>
-      <ActionButtonsContainer view="account" />
+      <ActionButtonsContainer type="headerButtons" view="account" />
       <MyInformationSectionWithData />
       <CoordinationOfBenefitsSectionWithData />
     </LayoutWrapper>

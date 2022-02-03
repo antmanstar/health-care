@@ -19,7 +19,7 @@ export default function paginate(dataFrame, fetch) {
       return dataFrame && dataFrame.total_records;
     },
     goTo: page => {
-      fetch({ page, recordsPerPage: dataFrame.records_per_page, ...dataFrame.request });
+      fetch({ ...dataFrame.request, page, recordsPerPage: dataFrame.records_per_page });
     },
     next: () => {
       if (dataFrame.has_next_page) {

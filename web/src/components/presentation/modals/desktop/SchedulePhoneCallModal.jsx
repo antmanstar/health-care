@@ -10,6 +10,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import Select from '../../shared/desktop/Select';
 import constants from '@evry-member-app/shared/constants';
+import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
 // MODAL - Schedule a Phone Call
 
 const {
@@ -103,7 +104,9 @@ class SchedulePhoneCallModal extends Component {
       date: null,
       time: null,
       dateTime: null,
-      errorMessages: null
+      errorMessages: null,
+      showLoader: false,
+      isSubmitting: false
     };
 
     this.handlers = {
@@ -130,17 +133,30 @@ class SchedulePhoneCallModal extends Component {
         this.props.scheduledPhoneCallCase.id,
         this.props.token
       );
-    }
-    if (
+    } else if (
       prevProps.scheduledPhoneCallCase &&
       prevProps.scheduledPhoneCallCase.status === 'OPEN' &&
       this.props.scheduledPhoneCallCase.status === 'COMPLETE'
     ) {
+      this.setState({ isSubmitting: false });
       this.props.fetchCases(this.props.token);
       this.props.setModalData({
         type: 'SUCCESS',
         title: 'Submitted!',
-        message: "Great! We'll get to work on that and send you confirmation once complete."
+        message: "Great! We'll get to work on that and send you a confirmation once complete."
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
+    } else if (
+      prevProps.scheduledPhoneCallCase &&
+      prevProps.scheduledPhoneCallCase.status === 'OPEN' &&
+      this.props.scheduledPhoneCallCase.status.includes('ERROR')
+    ) {
+      this.setState({ isSubmitting: false });
+      this.props.fetchCases(this.props.token);
+      this.props.setModalData({
+        type: 'ERROR',
+        title: 'Error',
+        message: 'Something went wrong. Please try again or give us a call!'
       });
       this.props.showModal('SUBMISSION_RESPONSE');
     }
@@ -155,10 +171,12 @@ class SchedulePhoneCallModal extends Component {
   handleDateChange(value) {
     this.setState({ date: value });
   }
+
   handleDateTimeChange(value) {
     console.log(value);
     this.setState({ dateTime: value });
   }
+  
   handleTimeChange(value) {
     this.setState({ time: value });
   }
@@ -170,8 +188,8 @@ class SchedulePhoneCallModal extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.setState({ isSubmitting: true });
     const { reason, phoneNumber, date, time } = event.target.elements;
-    console.log(date);
     let errors = [];
     if (reason.value.trim().length === 0) {
       errors.push('*There must be a reason.');
@@ -188,14 +206,16 @@ class SchedulePhoneCallModal extends Component {
 
     if (errors.length > 0) {
       this.setState({ errorMessages: errors });
+      this.setState({ isSubmitting: false });
       return;
     }
+    this.setState({ showLoader: true });
     this.props.createCase(event, this.props.token);
     //this.props.hideModal();
   }
 
   render() {
-    const { notice, reason, phoneNumber, date, time, dateTime } = this.state;
+    const { notice, reason, phoneNumber, date, time, isSubmitting } = this.state;
     const { hideModal, accountInfo } = this.props;
     const minDate = new Date();
     const maxDate = new Date();
@@ -292,10 +312,11 @@ class SchedulePhoneCallModal extends Component {
             </ModalBody>
             <ModalSectionDivider />
             <ModalButtonsRight>
-              <SmallButton buttonType="submit" text="Submit Request" />
-              <SmallButton text="Cancel" negative onClick={hideModal} />
+              <SmallButton buttonType="submit" text="Submit Request" disabled={isSubmitting} />
+              <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
+          {this.state.showLoader && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </ModalWrapper>
       </>
     );

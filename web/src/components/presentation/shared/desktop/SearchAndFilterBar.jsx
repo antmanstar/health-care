@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import FilterOptions from './FilterOptions';
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
 
 // Small Search Bar with Date & Filter Buttons
+
+const { getNotificationsFilters } = selectors;
 
 const Wrapper = styled.div`
   position: relative;
@@ -27,11 +31,9 @@ const Wrapper = styled.div`
 `;
 
 const Search = styled.div`
-  form {
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
+  display: flex;
+  align-items: center;
+  width: 100%;
 
   i {
     margin-right: 14px;
@@ -100,20 +102,25 @@ const SearchAndFilterBar = ({
   filterButton,
   search,
   request,
-  clearData
+  clearData,
+  notificationsFilters,
+  type
 }) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-
   const handleClose = () => {
     setShowFilters(false);
   };
 
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
-      if (clearData) clearData();
       setQuery(e.target.value);
-      search({ query: query });
+      if (type === 'notifications') {
+        clearData();
+        let dateFrom = notificationsFilters?.dateFrom;
+        let dateTo = notificationsFilters?.dateTo;
+        search({ dateFrom: dateFrom, dateTo: dateTo, query: query });
+      } else search({ query: query });
     }
   };
 
@@ -121,24 +128,17 @@ const SearchAndFilterBar = ({
     <>
       <Wrapper bordered={bordered}>
         <Search>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              search({ query });
+          <i className="material-icons">search</i>
+          <input
+            type="text"
+            name="search"
+            placeholder={placeholder}
+            value={query}
+            onChange={e => {
+              setQuery(e.target.value);
             }}
-          >
-            <i className="material-icons">search</i>
-            <input
-              type="text"
-              name="search"
-              placeholder={placeholder}
-              value={query}
-              onChange={e => {
-                setQuery(e.target.value);
-              }}
-              onKeyDown={e => handleKeyDown(e)}
-            />
-          </form>
+            onKeyDown={e => handleKeyDown(e)}
+          />
         </Search>
         <FilterButtons>
           {dateButton && (
@@ -155,10 +155,11 @@ const SearchAndFilterBar = ({
         {showFilters && (
           <FilterOptions
             handleClose={handleClose}
-            request={request}
+            request={request || {}}
             search={search}
             query={query}
             clearData={clearData}
+            type={type}
           />
         )}
       </Wrapper>
@@ -183,4 +184,10 @@ SearchAndFilterBar.defaultProps = {
   filterButton: false
 };
 
-export default SearchAndFilterBar;
+const mapStateToProps = state => ({
+  notificationsFilters: getNotificationsFilters(state)
+});
+
+const ConnectedSearchAndFilterBar = connect(mapStateToProps)(SearchAndFilterBar);
+
+export default ConnectedSearchAndFilterBar;

@@ -52,7 +52,8 @@ const UpdatePersonalInformationModalWithData = withStoreData(
     address: getAddress(state),
     email: getEmail(state),
     foundCases: foundCases(state),
-    name: getMemberName(state)
+    name: getMemberName(state),
+    authToken: getToken(state),
   }),
   dispatch => ({
     fetchAccountInfo: token => dispatch(fetchAccountInfo(token)),

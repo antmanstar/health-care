@@ -51,11 +51,9 @@ const SvgIcon = styled.img`
   height: auto;
 `;
 
-const PlanBigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
-  const isComing = text === 'Update Health Survey';
-
+const HeaderBigButton = React.memo(({ text, icon, onClick, svgIcon, isComing }) => {
   return (
-    <Button onClick={onClick} className="plan-big-button" isComing={isComing}>
+    <Button onClick={onClick} className="header-big-button" isComing={isComing}>
       <StyledDiv>
         {text}
         {isComing && <ComingText>Coming soon...</ComingText>}
@@ -65,16 +63,16 @@ const PlanBigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
   );
 });
 
-PlanBigButton.propTypes = {
+HeaderBigButton.propTypes = {
   text: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   svgIcon: PropTypes.bool
 };
 
-PlanBigButton.defaultProps = {
+HeaderBigButton.defaultProps = {
   onClick: null,
   svgIcon: true
 };
 
-export default PlanBigButton;
+export default HeaderBigButton;

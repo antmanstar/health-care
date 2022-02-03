@@ -194,6 +194,21 @@ const DropDownLink = styled(NavLink)`
   }
 `;
 
+const DropDownLinkExternal = styled.a`
+  text-decoration: none;
+  text-shadow: none;
+  line-height: 2.2rem;
+  display: block;
+  color: ${props => props.theme.colors.shades.blue};
+  &:hover,
+  &.active {
+    color: ${props => props.theme.colors.shades.pinkOrange};
+  }
+  @media (max-width: ${mainBreakPoint}) {
+    color: ${props => props.theme.colors.shades.white};
+  }
+`;
+
 const MainNavigation = ({ mobileOpen }) => {
   return (
     <Navigation mobileOpen={mobileOpen}>
@@ -231,7 +246,7 @@ const MainNavigation = ({ mobileOpen }) => {
               Provider Lookup
             </DropDownLink>
           </DropDownItem>
-          <DropDownItem>
+          {/* <DropDownItem>
             <img src={images['formulary']} alt="Prescription Formulary" />
             <DropDownLink to="https://www.google.com" activeClassName="active">
               Prescription Formulary
@@ -242,24 +257,25 @@ const MainNavigation = ({ mobileOpen }) => {
             <DropDownLink to="https://www.google.com" activeClassName="active">
               Expense Calculator
             </DropDownLink>
-          </DropDownItem>
+          </DropDownItem> */}
           <DropDownItem>
             <img src={images['local-pharmacy-black']} alt="Pharmacy Lookup" />
-            <DropDownLink
-              to="https://magellanrx.com/member/external/commercial/common/doc/en-us/MRx_Pharmacy_Network_List.pdf"
-              activeClassName="active"
+            <DropDownLinkExternal
+              href="https://magellanrx.com/member/external/commercial/common/doc/en-us/MRx_Pharmacy_Network_List.pdf"
+              target="_blank"
             >
               Pharmacy Lookup
-            </DropDownLink>
+            </DropDownLinkExternal>
           </DropDownItem>
           <DropDownItem>
             <img src={images['medical-services-black']} alt="Out-of-Area Provider Lookup" />
-            <DropDownLink
-              to="https://multiplan.com/webcenter/portal/ProviderSearch"
-              activeClassName="active"
+            <DropDownLinkExternal
+              href="https://multiplan.com/webcenter/portal/ProviderSearch"
+              //className="active"
+              target="_blank"
             >
               Out-of-Area Provider Lookup
-            </DropDownLink>
+            </DropDownLinkExternal>
           </DropDownItem>
         </DropdownModal>
       </Dropdown>

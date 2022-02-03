@@ -52,7 +52,7 @@ const Documents = () => {
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <LayoutWrapper>
-        <ActionButtonsContainer view="documents" />
+        <ActionButtonsContainer type="headerButtons" view="documents" />
         <MyMembershipSectionWithData />
         <MyDocumentsSection />
       </LayoutWrapper>

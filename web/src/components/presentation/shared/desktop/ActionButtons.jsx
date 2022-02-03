@@ -8,10 +8,10 @@ import defaultTheme from '../../../../style/themes';
 const Wrapper = styled.div`
   margin: auto;
   display: flex;
-  justify-content: ${props => (props.view === 'plans' ? 'space-between' : 'center')};
+  justify-content: ${props => (props.type === 'headerButtons' ? 'space-between' : 'center')};
   margin-bottom: 16px;
   flex-wrap: wrap;
-  gap: ${props => (props.view === 'plans' ? '0px' : '10px')};
+  gap: ${props => (props.view === 'plans' ? '0px' : '4px')};
 
   @media ${defaultTheme.device.tablet} {
     gap: 0px;
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
     }
   }
 
-  .plan-big-button {
+  .header-big-button {
     width: 32.5%;
     @media screen and (max-width: 660px) {
       width: 49.4%;
@@ -42,12 +42,12 @@ const Wrapper = styled.div`
   }
 `;
 
-const ActionButtons = React.memo(({ buttons, view }) => {
+const ActionButtons = React.memo(({ buttons, view, type }) => {
   return (
-    <Wrapper view={view}>
+    <Wrapper view={view} type={type}>
       {buttons &&
         buttons.map((buttonKey, key) => (
-          <BigButtonContainer key={key} buttonKey={buttonKey} view={view} />
+          <BigButtonContainer key={key} buttonKey={buttonKey} view={view} type={type} />
         ))}
     </Wrapper>
   );

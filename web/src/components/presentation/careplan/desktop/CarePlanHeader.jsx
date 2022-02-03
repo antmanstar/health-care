@@ -70,7 +70,7 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
         ) : (
           <SpaceBetween>
             <LeftWrapper>
-              <CarePlanIcon src={images[`${plan.image}-blue`]} />
+              <CarePlanIcon src={images[`${plan.image}-orange`]} />
               <div>
                 <Title>{plan.title}</Title>
                 <Description>{plan.description}</Description>

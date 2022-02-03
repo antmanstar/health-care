@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Mobile } from '../layouts';
 import defaultTheme from '../../style/themes';
 import { Sparse } from '../layouts';
 import { Helmet } from 'react-helmet-async';
@@ -8,6 +7,7 @@ import { Helmet } from 'react-helmet-async';
 import { connect } from 'react-redux';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
+import MessageAlert from "./MessageAlert";
 
 const { LayoutWrapper, MobileContentWrapper } = defaultTheme.components;
 
@@ -31,9 +31,10 @@ const ActionButton = styled.button`
   border-radius: 4px;
   box-shadow: 0px 20px 30px rgb(0 0 0 / 15%);
   margin: 25px 0 25px 0;
+  max-width: 250px;
 
   @media ${props => props.theme.device.tabletXL} {
-    margin: 100px 0 50px 0;
+    margin: 25px 0 25px 0;
   }
 
   &:hover {
@@ -60,7 +61,7 @@ const Body = styled.div`
 
   @media ${props => props.theme.device.tabletXL} {
     width: 60%;
-    padding: 25px 0 50px 0;
+    padding: 10px 0 10px 0;
   }
 `;
 
@@ -70,17 +71,10 @@ const VerificationContainer = styled.div`
 `;
 
 const Center = styled.div`
-  align-self: center;
-  max-width: 250px;
-  width: 100%;
-`;
-
-const EmailResentAlert = styled.div`
-  text-align: center;
-  color: #8ED081;
-  font-size: 16px;
-  font-weight: 500;
-  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ContentWrapper = styled.div`
@@ -115,7 +109,7 @@ const EmailVerificationSent = props => {
             <Separator />
             <Center>
               <ActionButton onClick={handleResend}>Send Link</ActionButton>
-              {buttonClicked && <EmailResentAlert>Your email verification has been submitted. Please check your email inbox.</EmailResentAlert>}
+              {buttonClicked && <MessageAlert>Your email verification has been submitted. Please check your email inbox.</MessageAlert>}
             </Center>
           </VerificationContainer>
         </Container>

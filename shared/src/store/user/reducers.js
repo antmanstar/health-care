@@ -95,6 +95,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         cases: {
+          status: 'QUERYING',
           request: {
             query: action.payload.query,
             statuses: action.payload.statuses,
@@ -103,7 +104,10 @@ const userReducer = (state = initialState, action) => {
         }
       }
     case types.CASES_FETCH_SUCCESS:
-      return { ...state, cases: { ...state.cases, ...action.payload } }
+      return {
+        ...state,
+        cases: { ...state.cases, ...action.payload, status: 'COMPLETE' }
+      }
     case types.CLAIMS_SUMMARY_FETCH_SUCCESS:
       return { ...state, claimsSummary: action.payload }
     case types.CLAIM_DETAIL_FETCH_SUCCESS:
@@ -270,12 +274,13 @@ const userReducer = (state = initialState, action) => {
         }
       }
     case types.CREATE_CASE_REQUEST_MAILED_CARD_FAILURE:
-      console.log(action);
       return {
         ...state,
         requestMailedCardCase: {
           status: 'ERROR-CREATING',
-          messages: (action.payload ? action.payload.messages : ['An error has occured.'])
+          messages: action.payload
+            ? action.payload.messages
+            : ['An error has occured.']
         }
       }
     case types.COMPLETE_CASE_REQUEST_MAILED_CARD_SUCCESS:
@@ -384,6 +389,9 @@ const userReducer = (state = initialState, action) => {
         },
         isChoosingCarePlan: false
       }
+    case types.SAVE_PASSWORD_RESET_SUCCESS:
+    case types.INITIATE_PASSWORD_RESET_SUCCESS:
+      return { ...state, auth: { error: [] } }
     case types.INITIATE_PASSWORD_RESET_FAILURE:
     case types.SAVE_PASSWORD_RESET_FAILURE:
       return { ...state, auth: { error: action.error.response.data.messages } }
@@ -502,13 +510,13 @@ const userReducer = (state = initialState, action) => {
         },
         action.payload.two_way_factor_challenge_required
           ? {
-            payload2FA: action.payload
-          }
+              payload2FA: action.payload
+            }
           : {
-            isSigningIn: false,
-            isSignedIn: true,
-            auth: action.payload
-          }
+              isSigningIn: false,
+              isSignedIn: true,
+              auth: action.payload
+            }
       )
     case types.REGISTER_FAILURE:
       return {
@@ -531,14 +539,14 @@ const userReducer = (state = initialState, action) => {
           }
         }
       }
+    case types.TWO_FACTOR_CODE_VERIFY:
     case types.SIGN_IN:
-      return { ...state, isSigningIn: true, isSignedIn: false }
+      return { ...state, isSigningIn: true }
     case types.SIGN_IN_SUCCESS:
     case types.TWO_FACTOR_CODE_VERIFY_SUCCESS:
       return {
         ...state,
         isSigningIn: false,
-        isSignedIn: true,
         auth: action.payload
       }
     case types.SIGN_IN_TWO_FACTOR_REQUEST:
@@ -548,7 +556,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         isSigningIn: false,
-        isSignedIn: false,
         auth: { error: action.error.response.data.messages }
       }
     case types.SIGN_OUT:
@@ -556,6 +563,10 @@ const userReducer = (state = initialState, action) => {
     case types.SIGN_OUT_SUCCESS:
     case types.SIGN_OUT_FAILURE:
       return { ...state, auth: {}, isSigningOut: false }
+    case types.SESSION_TIMED_OUT:
+      return { ...state, sessionTimedOut: true }
+    case types.CLEAR_SESSION_TIMED_OUT:
+      return { ...state, sessionTimedOut: false }
     case types.UNSET:
       return null
     case types.INITIALIZE:

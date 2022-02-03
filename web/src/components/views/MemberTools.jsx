@@ -21,6 +21,16 @@ const StyledLink = styled(RouterLink)`
     text-decoration: none;
   }
 `;
+const StyledLinkExternal = styled.a`
+  &,
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
+`;
 
 const MemberTools = () => (
   <>
@@ -36,7 +46,7 @@ const MemberTools = () => (
           svgIcon
         />
       </StyledLink>
-      <StyledLink to="/">
+      {/* <StyledLink to="/">
         <MobileBigButton
           title="Prescription Formulary"
           subtitle="Find prescriptions and see costs."
@@ -51,23 +61,23 @@ const MemberTools = () => (
           icon="expense-calculator"
           svgIcon
         />
-      </StyledLink>
-      <StyledLink to="/">
+      </StyledLink> */}
+      <StyledLinkExternal to="https://magellanrx.com/member/external/commercial/common/doc/en-us/MRx_Pharmacy_Network_List.pdf">
         <MobileBigButton
           title="Pharmacy Lookup"
           subtitle="Find pharmacy location."
           icon="local-pharmacy-black"
           svgIcon
         />
-      </StyledLink>
-      <StyledLink to="/">
+      </StyledLinkExternal>
+      <StyledLinkExternal to="https://multiplan.com/webcenter/portal/ProviderSearch">
         <MobileBigButton
           title="Out-of-Area Provider Lookup"
-          subtitle="Find a provider on a map."
+          subtitle="Find a provider."
           icon="medical-services-black"
           svgIcon
         />
-      </StyledLink>
+      </StyledLinkExternal>
     </MobileContentWrapper>
   </>
 );

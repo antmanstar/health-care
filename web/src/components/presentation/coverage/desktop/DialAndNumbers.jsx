@@ -14,7 +14,8 @@ const Container = styled.div`
   width: 33.33%;
   text-align: center;
 
-  @media ${props => props.theme.device.tabletXL} {
+  @media (max-width: 900px) {
+    width: 100%;
     flex-direction: row;
     text-align: left;
   }

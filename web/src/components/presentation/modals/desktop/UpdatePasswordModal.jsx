@@ -51,13 +51,17 @@ class UpdateYourPasswordModal extends Component {
     }
   }
 
+  handleErrors = response => {
+    this.setState({ errors: response.response.data.messages });
+  }
+
   submitModal = e => {
     apis.passwordChange({
       token: this.props.token,
       oldPassword: this.state.oldPassword,
       newPassword: this.state.newPassword,
       newPasswordConfirm: this.state.confirmPassword
-    }).then(handleChangeResponse);
+    }).then(this.props.hideModal).catch(this.handleErrors);
   }
 
   render() {

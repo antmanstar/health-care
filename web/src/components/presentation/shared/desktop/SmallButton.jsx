@@ -24,10 +24,14 @@ const Button = styled.button`
     background: ${props => (props.negative ? props.theme.colors.roles.danger : '#1C4C66')};
     color: ${props => props.theme.colors.shades.white};
   }
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
 `;
 
-const SmallButton = React.memo(({ className, text, onClick, negative }) => (
-  <Button className={className} negative={negative} onClick={onClick}>
+const SmallButton = React.memo(({ className, text, onClick, negative, disabled }) => (
+  <Button className={className} negative={negative} onClick={onClick} disabled={disabled}>
     {text}
   </Button>
 ));

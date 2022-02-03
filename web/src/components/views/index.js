@@ -32,6 +32,7 @@ import DownloadForms, { reflection as downloadFormsReflection } from './Download
 import MemberTools, { reflection as memberToolsReflection } from './MemberTools';
 import HealthAssessment, { reflection as healthAssessmentReflection } from './HealthAssessment';
 import PasswordReset, { reflection as passwordResetReflection } from './PasswordReset';
+import PasswordResetSuccess, { reflection as passwordResetSuccessReflection } from './PasswordResetSuccess';
 import UpdatePassword, { reflection as updatePasswordReflection } from './UpdatePassword';
 import UpdateSecurityQuestions, {
   reflection as updateSecurityQuestionsReflection,
@@ -76,6 +77,7 @@ const reflections = [
   memberToolsReflection,
   onboardingReflection,
   passwordResetReflection,
+  passwordResetSuccessReflection,
   personalInformationReflection,
   planReflection,
   providerReflection,
@@ -119,6 +121,7 @@ export {
   MemberTools,
   Onboarding,
   PasswordReset,
+  PasswordResetSuccess,
   PersonalInformation,
   Plan,
   ProviderLookup,

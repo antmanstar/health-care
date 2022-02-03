@@ -59,25 +59,27 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const SupportRequestModal = React.memo(({ modalData, hideModal }) => (
-  <>
-    <Scrim onClick={hideModal} />
-    <ModalWrapper>
-      <ColoredModalHeader
-        status={modalData.status === 'actionRequired' ? 'action required' : modalData.status}
-        phoneNumber="1-800-234-4482"
-      />
-      <ModalBody>
-        <SupportRequestTitle requestNumber={modalData.requestNumber} title={modalData.title} />
-        <p>
-          {modalData.status === 'action required'
-            ? 'Please contact us below regarding this request.'
-            : 'If you have questions or concerns, please contact customer support below.'}
-        </p>
-      </ModalBody>
-      <ModalSectionDivider />
-      <FormLabel>Contact Customer Support</FormLabel>
-      {/* <SpaceBetween>
+const SupportRequestModal = React.memo(({ modalData, hideModal }) => {
+  console.log(modalData);
+  return (
+    <>
+      <Scrim onClick={hideModal} />
+      <ModalWrapper>
+        <ColoredModalHeader
+          status={modalData.status === 'actionRequired' ? 'action required' : modalData.status}
+          phoneNumber="1-800-234-4482"
+        />
+        <ModalBody>
+          <SupportRequestTitle requestNumber={modalData.requestNumber} title={modalData.title} />
+          <p>
+            {modalData.status === 'action required'
+              ? 'Please contact us below regarding this request.'
+              : 'If you have questions or concerns, please contact customer support below.'}
+          </p>
+        </ModalBody>
+        <ModalSectionDivider />
+        <FormLabel>Contact Customer Support</FormLabel>
+        {/* <SpaceBetween>
         <Column>
           <BigButtonContainer buttonKey="sendAMessage" />
         </Column>
@@ -85,21 +87,22 @@ const SupportRequestModal = React.memo(({ modalData, hideModal }) => (
           <BigButtonContainer buttonKey="schedulePhoneCall" />
         </Column>
       </SpaceBetween> */}
-      <ButtonContainer>
-        <div>
-          <BigButtonContainer buttonKey="sendAMessage" />
-        </div>
-        <div>
-          <BigButtonContainer buttonKey="schedulePhoneCall" />
-        </div>
-      </ButtonContainer>
-      <ModalSectionDivider />
-      <ButtonsCenter>
-        <SmallButton negative text="Cancel" onClick={hideModal} />
-      </ButtonsCenter>
-    </ModalWrapper>
-  </>
-));
+        <ButtonContainer>
+          <div>
+            <BigButtonContainer buttonKey="sendAMessage" />
+          </div>
+          <div>
+            <BigButtonContainer buttonKey="schedulePhoneCall" />
+          </div>
+        </ButtonContainer>
+        <ModalSectionDivider />
+        <ButtonsCenter>
+          <SmallButton negative text="Cancel" onClick={hideModal} />
+        </ButtonsCenter>
+      </ModalWrapper>
+    </>
+  );
+});
 
 SupportRequestModal.propTypes = {
   modalData: PropTypes.shape({}).isRequired,

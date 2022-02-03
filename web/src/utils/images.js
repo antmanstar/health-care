@@ -1,17 +1,22 @@
 import boneAndJoinActiveImg from '@evry-member-app/assets/images/vector/bone-and-joint-health-active.svg';
 import boneAndJoinBlueImg from '@evry-member-app/assets/images/vector/bone-and-joint-health-blue.svg';
+import boneAndJoinOrangeImg from '@evry-member-app/assets/images/vector/bone-and-joint-health-orange.svg';
 import boneAndJoinImg from '@evry-member-app/assets/images/vector/bone-and-joint-health.svg';
 import cancerTreatmentActiveImg from '@evry-member-app/assets/images/vector/cancer-treatment-active.svg';
 import cancerTreatmentBlueImg from '@evry-member-app/assets/images/vector/cancer-treatment-blue.svg';
+import cancerTreatmentOrangeImg from '@evry-member-app/assets/images/vector/cancer-treatment-orange.svg';
 import cancerTreatmentImg from '@evry-member-app/assets/images/vector/cancer-treatment.svg';
 import heartHealthActiveImg from '@evry-member-app/assets/images/vector/heart-health-active.svg';
 import heartHealthBlueImg from '@evry-member-app/assets/images/vector/heart-health-blue.svg';
+import heartHealthOrangeImg from '@evry-member-app/assets/images/vector/heart-health-orange.svg';
 import heartHealthImg from '@evry-member-app/assets/images/vector/heart-health.svg';
 import wellnessFitnessActiveImg from '@evry-member-app/assets/images/vector/wellness-and-fitness-active.svg';
 import wellnessFitnessBlueImg from '@evry-member-app/assets/images/vector/wellness-and-fitness-blue.svg';
+import wellnessFitnessOrangeImg from '@evry-member-app/assets/images/vector/wellness-and-fitness-orange.svg';
 import wellnessFitnessImg from '@evry-member-app/assets/images/vector/wellness-and-fitness.svg';
 import womensHealthActiveImg from '@evry-member-app/assets/images/vector/womens-health-active.svg';
 import womensHealthBlueImg from '@evry-member-app/assets/images/vector/womens-health-blue.svg';
+import womensHealthOrangeImg from '@evry-member-app/assets/images/vector/womens-health-orange.svg';
 import womensHealthImg from '@evry-member-app/assets/images/vector/womens-health.svg';
 import careGuideImg from '@evry-member-app/assets/images/vector/white_icons/care-guide.svg';
 //import getAppImg from '@evry-member-app/assets/images/vector/get_app.svg';
@@ -71,8 +76,10 @@ const images = {
   'bone-and-joint-health': boneAndJoinImg,
   'bone-and-joint-health-active': boneAndJoinActiveImg,
   'bone-and-joint-health-blue': boneAndJoinBlueImg,
+  'bone-and-joint-health-orange': boneAndJoinOrangeImg,
   'cancer-treatment': cancerTreatmentImg,
   'cancer-treatment-blue': cancerTreatmentBlueImg,
+  'cancer-treatment-orange': cancerTreatmentOrangeImg,
   'cancer-treatment-active': cancerTreatmentActiveImg,
   'care-guides-illustration': careGuidesIllustrationImg,
   'care-plan-illustration': carePlanIllustrationImg,
@@ -100,9 +107,10 @@ const images = {
   'telemedicine-illustration': telemedicineIllustrationImg,
   'toggle-off': toggleOffImg,
   'toggle-on': toggleOnImg,
-  "toggle-on-blue": toggleOnBlueImg,
+  'toggle-on-blue': toggleOnBlueImg,
   'wellness-and-fitness-active': wellnessFitnessActiveImg,
   'wellness-and-fitness-blue': wellnessFitnessBlueImg,
+  'wellness-and-fitness-orange': wellnessFitnessOrangeImg,
   'wellness-and-fitness': wellnessFitnessImg,
   'white_icons/card': cardImg,
   'white_icons/care-guide': careGuideImg,
@@ -111,8 +119,10 @@ const images = {
   'white_icons/pencil': pencilImg,
   'womens-health-active': womensHealthActiveImg,
   'womens-health-blue': womensHealthBlueImg,
+  'womens-health-orange': womensHealthOrangeImg,
   'womens-health': womensHealthImg,
   big_right_arrow: bigRightArrowImg,
+  location_pin: locationPinImg,
   //"access_time": accessTimeImg,
   //"chat": chatImg,
   //"description": descriptionImg,
@@ -120,7 +130,7 @@ const images = {
   //"filter": filterImg,
   //"get_app": getAppImg,
   //"library_books": libraryBooksImg,
-  //"location_pin": locationPinImg,
+
   //"lock": lockImg,
   //"question_answer": questionAnswerImg
   //"search": searchImg,

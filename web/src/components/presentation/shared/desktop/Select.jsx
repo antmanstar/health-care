@@ -84,9 +84,9 @@ const Icon = styled.img`
   transform: translateY(-50%);
 `;
 
-const Select = React.memo(({ name, placeholder, icon, children, onChange, mobile }) => (
+const Select = React.memo(({ name, placeholder, icon, children, onChange, value, mobile }) => (
   <Wrapper>
-    <StyledSelect className={mobile && 'mobile'} name={name} onChange={onChange}>
+    <StyledSelect className={mobile && 'mobile'} name={name} value={value} onChange={onChange}>
       <option value="" selected disabled hidden>
         {placeholder}
       </option>

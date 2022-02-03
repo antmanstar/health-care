@@ -22,35 +22,22 @@ const {
 } = defaultTheme.components;
 
 const Wrapper = styled(ModalWrapper)`
-  max-width: 993px;
+  max-width: 560px;
   max-height: calc(100vh - 32px);
   overflow-y: scroll;
 `;
 
-const FormSpaceBetween = styled(SpaceBetween)`
-  align-items: flex-start;
+const Container = styled(SpaceBetween)`
+  align-items: normal;
+  flex-direction: column;
 
   &:last-child {
     margin-bottom: -16px;
   }
 `;
 
-const Column = styled.div`
-  min-width: 432px;
-
-  &:first-child {
-    margin-right: 16px;
-  }
-  &:last-child {
-    margin-left: 16px;
-  }
-`;
-
-const VerticalDivider = styled.div`
-  align-self: stretch;
-  width: 1px;
-  min-height: 100%;
-  background: ${props => props.theme.colors.shades.nearlyWhite};
+const Row = styled.div`
+  
 `;
 
 const LockedNote = styled.div`
@@ -75,13 +62,6 @@ const LockedNote = styled.div`
 
   p {
     color: ${props => props.theme.colors.shades.darkGray};
-  }
-`;
-
-const Notice = styled.p`
-  span {
-    font-weight: 500;
-    color: ${props => props.theme.colors.shades.blue};
   }
 `;
 
@@ -142,23 +122,19 @@ class UpdateCoordinationOfBenefitsModal extends Component {
   render() {
     const { medicare, otherInsurance, maxDate, minDate } = this.state;
     const { hideModal, locked, modalData } = this.props;
+
+    let whoseName = modalData ? `${modalData.name.first} ${modalData.name.last}'s` : "";
+
     return (
       <>
         <Scrim onClick={hideModal} />
         <Wrapper>
           <ModalHeader>
             <SpaceBetween>
-              <ModalTitle>Update Coordination of Benefits</ModalTitle>
+              <ModalTitle>{`Update ${whoseName} Coordination of Benefits`}</ModalTitle>
             </SpaceBetween>
           </ModalHeader>
           <ModalBody>
-            {modalData && (
-              <Notice>
-                {`You are updating info for `}
-                <span>{`${modalData.name.first} ${modalData.name.last}`}</span>
-                {`.`}
-              </Notice>
-            )}
             {locked ? (
               <LockedNote>
                 <div>
@@ -172,15 +148,14 @@ class UpdateCoordinationOfBenefitsModal extends Component {
               </LockedNote>
             ) : (
               <>
-                <FormSpaceBetween>
-                  <Column>
+                <Container>
+                  <Row>
                     <MedicareModalSection
                       handleChange={this.handlers.handleMedicareStateChange}
                       data={medicare}
                     />
-                  </Column>
-                  <VerticalDivider />
-                  <Column>
+                  </Row>
+                  <Row>
                     <OtherInsuranceModalSection
                       data={otherInsurance}
                       handleChange={this.handlers.handleOtherInsuranceStateChange}
@@ -188,8 +163,8 @@ class UpdateCoordinationOfBenefitsModal extends Component {
                       minDate={minDate}
                       maxDate={maxDate}
                     />
-                  </Column>
-                </FormSpaceBetween>
+                  </Row>
+                </Container>
               </>
             )}
           </ModalBody>

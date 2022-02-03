@@ -12,6 +12,8 @@ import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import actions from '@evry-member-app/shared/store/actions';
 import selector from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
+import MessageAlert from "./MessageAlert";
+import history from '../../utils/history';
 
 const { getAuthError } = selector;
 const { initiatePasswordReset, savePasswordReset, clearAuthError } = actions;
@@ -26,7 +28,18 @@ const SmallContainer = styled.div`
   width: 100%;
 
   &:last-child {
+    margin-left: 0;
     margin-bottom: 0;
+  }
+`;
+
+const WrapperContainer = styled(SmallContainer)`
+  &:last-child {
+    margin-left: 0;
+
+    @media ${props => props.theme.device.tabletXL} {
+      margin-left: 50px;
+    }
   }
 `;
 
@@ -103,6 +116,16 @@ const WideButton = styled(Button)`
   width: 200px;
 `;
 
+const BottomText = styled.span`
+  font-size: 20px;
+`;
+
+const TextLabel = styled.div`
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-left: 3px;
+`;
+
 class DesktopPasswordReset extends Component {
   constructor(props) {
     super(props);
@@ -147,96 +170,114 @@ class DesktopPasswordReset extends Component {
     return authError ? <ErrorMessage message={authError} /> : null;
   }
 
-  render() {
+  renderEnterNewPassword() {
     const { location, authError } = this.props;
-    const { initiatePasswordResetSubmission, resetPasswordSubmission, password } = this.state;
+    const { resetPasswordSubmission, password } = this.state;
     const queryParams = queryString.parse(location.search);
 
     return (
-      <LayoutWrapper>
-        <Helmet>
-          <title>{reflection.layoutProps.title} - Evry Health</title>
-        </Helmet>
+      <>
+        <Title>Enter a new password.</Title>
+        <SectionDivider />
+        <form autoComplete="false" onSubmit={this.handlers.handleResetSubmission}>
+          <EditedTwoColumnRow>
+            <WrapperContainer>
+              <input type="hidden" value={queryParams.token} name="token" />
+              <input type="hidden" value={queryParams.email} name="email" />
+              <TextLabel>New Password</TextLabel>
+              <Input
+                type="password"
+                autoComplete="off"
+                name="newPassword"
+                onChange={this.handlers.handleChange}
+                placeholder="New Password"
+                value={password}
+              />
+              <PasswordStrengthMeter password={password} />
+            </WrapperContainer>
+            <WrapperContainer>
+              <TextLabel>Confirm Password</TextLabel>
+              <Input
+                type="password"
+                placeholder="Confirm New Password"
+                autoComplete="off"
+                name="newPasswordConfirm"
+              />
+            </WrapperContainer>
+          </EditedTwoColumnRow>
+          <ButtonWrapper>
+            <WideButton
+              buttonType="submit"
+              value="Done"
+              text="Done"
+            />
+          </ButtonWrapper>
+        </form>
+        {this.renderAuthError()}
+      </>
+    );
+  }
+
+  renderResetPassword() {
+    const { authError } = this.props;
+    const { initiatePasswordResetSubmission } = this.state;
+
+    return (
+      <>
         <Title>Forgot Password?</Title>
         <Body>
           After pressing the button below, please check your email for the password reset link.
           If you haven't got it, you can use the button below to send it again.
         </Body>
         <SectionDivider />
-        {queryParams.token ? (
-          <>
-            <form autoComplete="false" onSubmit={this.handlers.handleResetSubmission}>
-              <EditedTwoColumnRow>
-                <SmallContainer>
-                  <input type="hidden" value={queryParams.token} name="token" />
-                  <input type="hidden" value={queryParams.email} name="email" />
-                  <Input
-                    type="password"
-                    autoComplete="off"
-                    name="newPassword"
-                    onChange={this.handlers.handleChange}
-                    placeholder="New Password"
-                    value={password}
-                  />
-                  <PasswordStrengthMeter password={password} />
-                </SmallContainer>
-                <SmallContainer>
-                  <Input
-                    type="password"
-                    placeholder="Confirm New Password"
-                    autoComplete="off"
-                    name="newPasswordConfirm"
-                  />
-                </SmallContainer>
-              </EditedTwoColumnRow>
-              <ButtonWrapper>
-                <Button
-                  buttonType="submit"
-                  value="Complete Password Reset"
-                  text="Complete Password Reset"
-                />
-              </ButtonWrapper>
-            </form>
-            {this.renderAuthError()}
-            {resetPasswordSubmission && authError && authError.length === 0 && (
-              <Copy>
-                Your password has been reset.
-                <RouterLink to="/sign-in">Go back to Sign in.</RouterLink>
-              </Copy>
-            )}
-          </>
-        ) : (
-          <>
-            <form autoComplete="false" onSubmit={this.handlers.handleInitialSubmission}>
-              <EditedTwoColumnRow>
-                <SmallContainer className="center">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    autoComplete="username"
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="example@domain.com"
-                  />
-                </SmallContainer>
-              </EditedTwoColumnRow>
-              <ButtonWrapper>
-                <WideButton buttonType="submit" value="Send Link" text="Send Link" />
-              </ButtonWrapper>
-            </form>
-            {this.renderAuthError()}
-            {initiatePasswordResetSubmission && authError && authError.length === 0 && (
-              <Copy>Your email reset has been submitted. Please check your email inbox.</Copy>
-            )}
-          </>
+        <form autoComplete="false" onSubmit={this.handlers.handleInitialSubmission}>
+          <EditedTwoColumnRow>
+            <SmallContainer className="center">
+              <Label htmlFor="email">Email Address</Label>
+              <Input
+                autoComplete="username"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="example@domain.com"
+              />
+            </SmallContainer>
+          </EditedTwoColumnRow>
+          <ButtonWrapper>
+            <WideButton buttonType="submit" value="Send Link" text="Send Link" />
+          </ButtonWrapper>
+        </form>
+        {this.renderAuthError()}
+        {initiatePasswordResetSubmission && authError && authError.length === 0 && (
+          <MessageAlert>Your password reset has been submitted. Please check your email inbox.</MessageAlert>
         )}
+      </>
+    );
+  }
+
+  render() {
+    const queryParams = queryString.parse(this.props.location.search);
+
+    const { authError } = this.props;
+    const { resetPasswordSubmission } = this.state;
+
+    if (queryParams.token && resetPasswordSubmission && authError && authError.length === 0) {
+      history.push("/password-reset-success");
+    }
+
+    return (
+      <LayoutWrapper>
+        <Helmet>
+          <title>{reflection.layoutProps.title} - Evry Health</title>
+        </Helmet>
+        {queryParams.token ? this.renderEnterNewPassword() : this.renderResetPassword()}
         <GoToRegistration>
           <p>
-            Don&apos;t have an account yet?
+            <BottomText>Don&apos;t have an account yet?</BottomText>
             <RouterLink to="/register">Register your account</RouterLink>
           </p>
           <p>
-            Already have an account?
+            <BottomText>Already have an account?</BottomText>
             <RouterLink to="/sign-in">Sign in</RouterLink>
           </p>
         </GoToRegistration>

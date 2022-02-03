@@ -65,7 +65,7 @@ const BenefitBreakdown = ({ totalBilled, discounts, payment, owed }) => (
     <SectionDivider />
     <Padding16>
       <SpaceBetween>
-        <Regular>Evry&apos;s Payment</Regular>
+        <Regular>Paid by Evry</Regular>
         <Bold green>{`${payment != '0.00' ? '-' : ''} $${payment}`}</Bold>
       </SpaceBetween>
     </Padding16>

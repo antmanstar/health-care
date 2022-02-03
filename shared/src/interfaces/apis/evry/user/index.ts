@@ -767,3 +767,92 @@ export function passwordChange({
     }
   )
 }
+
+export function error500Test() {
+  return axios.get('/api/v1/Member/InternalServerErrorTest', {
+    headers: {
+      'Content-Type': 'application/json-patch+json'
+    }
+  })
+}
+export function createCaseUpdateAddress(payload) {
+  let metadata = []
+
+  if (payload.address1) {
+    metadata.push({
+      name: 'address1',
+      value: payload.address1 || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.address2) {
+    metadata.push({
+      name: 'address2',
+      value: payload.address2 || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.city) {
+    metadata.push({
+      name: 'city',
+      value: payload.city || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.state) {
+    metadata.push({
+      name: 'state',
+      value: payload.state || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.zip) {
+    metadata.push({
+      name: 'zip',
+      value: payload.zip || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.cell) {
+    metadata.push({
+      name: 'cell_phone_number',
+      value: payload.cell || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.home) {
+    metadata.push({
+      name: 'home_phone_number',
+      value: payload.home || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.work) {
+    metadata.push({
+      name: 'work_phone_number',
+      value: payload.work || '',
+      value_type: 11
+    })
+  }
+
+  return axios.post(
+    '/api/v1/Member/CreateCase',
+    {
+      case_type: 8,
+      metadata
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${payload.token}`
+      }
+    }
+  )
+}

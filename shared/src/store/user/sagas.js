@@ -281,6 +281,13 @@ export default function* watcherSaga() {
         api.fetchRewardCategories
       )
     ),
+    takeLatest(
+      ...takeAllBundler(
+        types.ERROR_500_TEST,
+        generateFetchWorker,
+        api.error500Test
+      )
+    ),
     debounce(
       1000,
       types.NOTIFICATIONS_READ_FETCH,
@@ -375,7 +382,11 @@ export function* authSaga() {
       )
     }
 
-    const action = yield take([types.SIGN_OUT, types.SIGN_IN_FAILURE, types.CLEAR_2FA])
+    const action = yield take([
+      types.SIGN_OUT,
+      types.SIGN_IN_FAILURE,
+      types.CLEAR_2FA
+    ])
 
     if (action.type === types.SIGN_OUT) {
       if (authTask) {

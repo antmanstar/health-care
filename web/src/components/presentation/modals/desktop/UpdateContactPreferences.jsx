@@ -24,11 +24,14 @@ const {
 class UpdateContactPreferences extends Component {
   constructor(props) {
     super(props);
+
+    const prefs = props.accountInfo.contact_preferences;
+
     this.state = {
-      paperless: false,
-      email: false,
-      text: false,
-      call: false
+      paperless: prefs.paperless,
+      email: prefs.receive_emails,
+      text: prefs.receive_text_messages,
+      call: prefs.receive_phone_calls
     };
 
     this.handlers = {

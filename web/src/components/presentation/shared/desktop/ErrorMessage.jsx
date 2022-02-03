@@ -56,6 +56,28 @@ const convertMsg2Redable = msg => {
       return 'Email must be between 3 and 128 characters.';
     case 'The email_address field is not a valid e-mail address.':
       return 'Email is not a valid email address.';
+    case 'The field password must be a string with a minimum length of 4 and a maximum length of 64.':
+      return 'Password must be between 4 and 64 characters.';
+    case 'The two_way_factor_token field is required.':
+      return 'The 2FA token is required.';
+    case 'The identification_code field is required.':
+      return 'The identification code is required.'
+    case 'The field identification_code must be a string with a minimum length of 6 and a maximum length of 6.':
+      return 'The code must be 6 characters long.';
+    case 'Identification code you entered is not valid':
+      return 'The code you entered is not valud';
+    case 'The new_password field is required':
+      return 'The new password field is required';
+    case 'The field new_password must be a string with a minimum length of 4 and a maximum length of 64.':
+      return 'The new password field must be between 4 and 64 characters';
+    case 'The new_password_confirm field is required.':
+      return 'The confirm new password field is required';
+    case 'The field new_password_confirm must be a string with a minimum length of 4 and a maximum length of 64.':
+      return 'The confirm new password field must be between 4 and 64 characters';
+    case 'The password_reset_token field is required.':
+      return 'The password reset token field is required';
+    case 'The field password_reset_token must be a string with a minimum length of 36 and a maximum length of 40.':
+      return 'The password reset token must be between 36 and 40 characters';
     case 'The password_confirm field is required.':
       return '';
     case 'The field password_confirm must be a string with a minimum length of 4 and a maximum length of 64.':

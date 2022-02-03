@@ -1009,3 +1009,18 @@ export const updateContactPreferences = (payload) => ({
   type: types.UPDATE_CONTACT_PREFERENCES,
   payload
 })
+
+export const error500Test = () => ({
+  type: types.ERROR_500_TEST,
+  payload: {}
+})
+
+export const sessionTimedOut = () => ({
+  type: types.SESSION_TIMED_OUT,
+  payload: {}
+})
+
+export const clearSessionTimedOut = () => ({
+  type: types.CLEAR_SESSION_TIMED_OUT,
+  payload: {}
+})

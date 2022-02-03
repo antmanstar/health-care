@@ -347,6 +347,7 @@ const NotificationCenterWithData = withStoreData(
           ...notification
         })),
       notificationsDataFrame: elasticDataFrame(notificationsDataFrame, fetch),
+      isPending: notificationsDataFrame?.pending,
       shouldFetch: () => true,
       ...ownProps
     };

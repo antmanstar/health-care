@@ -97,7 +97,7 @@ const Coverage = () => {
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <LayoutWrapper>
-        <ActionButtonsContainer view="coverage" />
+        <ActionButtonsContainer type="headerButtons" view="coverage" />
         <CoverageSummaryWithData />
         <ClaimsTotals />
         <MedicalServicesSectionWithData />

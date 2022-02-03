@@ -21,10 +21,15 @@ const DateLabel = styled.p`
   margin: 0;
 `;
 
+const BigDivider = styled.div`
+  border-bottom: 2px solid #C1C6CB;
+  margin: -15px 0 15px 0;
+`;
+
 const MedicareModalSection = ({ handleChange, data }) => (
   <>
     <CollapsibleModalSection title="Medicare" divided>
-      <SectionDivider />
+      <BigDivider />
       <ModalMultipleChoiceQuestion
         handleAnswerClick={handleChange('eligibility')}
         chosenAnswer={data.eligibility}

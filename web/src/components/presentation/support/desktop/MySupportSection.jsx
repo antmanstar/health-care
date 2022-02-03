@@ -82,9 +82,20 @@ const ButtonLink = styled.button`
   text-decoration: none;
   border-radius: 4px;
   border: none;
+  width: 100%;
+
   &:hover {
     background: #ececec;
     cursor: pointer;
+  }
+
+  & div.left-group {
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 16px;
+    }
   }
 `;
 class MySupportSection extends Component {
@@ -146,13 +157,17 @@ class MySupportSection extends Component {
                     needs. Whether you have questions about your care plan, need to schedule an
                     appointment, or just want to follow up on a claim, we are here to help.
                   </Description>
-                  <HelpArticleLink
+                  {/* <HelpArticleLink
                     text="Learn more about Concierge Care"
                     url="https://www.evryhealth.com/meet-your-care-team"
-                  />
-                  {/* <ButtonLink onClick={this.handlers.handleConciergeCareClick}>
-                    Learn more about Concierge Care
-                  </ButtonLink> */}
+                  /> */}
+                  <ButtonLink onClick={this.handlers.handleConciergeCareClick}>
+                    <div className="left-group">
+                      <i className="material-icons">info_outline</i>
+                      <p>Learn more about Concierge Care</p>
+                    </div>
+                    <i className="material-icons info-arrow">keyboard_arrow_right</i>
+                  </ButtonLink>
                 </>
               )}
             </SmallContainer>

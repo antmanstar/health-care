@@ -25,11 +25,14 @@ const DatePickerWrapper = styled.div`
     padding-left: 16px;
     background-color: #f4f4f4;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 400;
     color: #00263a;
     font-family: 'Roboto';
     box-sizing: border-box;
+    @media screen and (min-width: 1200px) {
+      font-size: 16px;
+    }
   }
 
   & i {
@@ -92,10 +95,6 @@ const DateTimePicker = ({
       );
     }
   );
-
-  useEffect(() => {
-    setDateSelected(null);
-  }, [clear]);
 
   const setChosenDate = (value, callback) => {
     const chosenDate = value || new Date();

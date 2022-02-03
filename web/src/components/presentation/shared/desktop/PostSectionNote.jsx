@@ -6,17 +6,22 @@ import styled from 'styled-components';
 
 const Note = styled.p`
   margin: 0;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: 300;
-  text-align: left;
-  margin-right: 15px;
+  text-align: center;
   color: ${props => props.theme.colors.shades.gray};
+  @media screen and (min-width: 800px) {
+    text-align: left;
+    font-size: 16px;
+    margin-right: 15px;
+  }
 `;
 
 const Link = styled.a`
   margin: 0 2px 0 6px;
   color: ${props => props.theme.colors.shades.pinkOrange};
   cursor: pointer;
+  font-size: 16px;
 
   &:hover {
     opacity: 0.7;

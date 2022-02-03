@@ -53,7 +53,8 @@ export default {
   talkToADoctor: {
     text: 'Talk to a Doctor',
     icon: 'white_icons/medical-kit',
-    onClick: 'contactDoctorClick'
+    onClick: 'contactDoctorClick',
+    isComing: true
   },
   understandYourBenefits: {
     text: 'Understand your Benefits',
@@ -64,7 +65,8 @@ export default {
   updateHealthSurvey: {
     text: 'Update Health Survey',
     icon: 'white_icons/pencil',
-    onClick: 'updateSurveyClick'
+    onClick: 'updateSurveyClick',
+    isComing: true
   },
   uploadADocument: {
     text: 'Upload a Document',

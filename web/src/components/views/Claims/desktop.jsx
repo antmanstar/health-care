@@ -3,6 +3,7 @@ import defaultTheme from '../../../style/themes';
 import { Standard } from '../../layouts';
 import ClaimsTotals from '../../presentation/shared/desktop/ClaimsTotals';
 import ClaimsHistorySection from '../../presentation/claims/desktop/ClaimsHistorySection';
+import InformationSection from '../../presentation/shared/desktop/InformationSection';
 import ActionButtonsContainer from '../../containers/shared/desktop/ActionButtonsContainer';
 import { Helmet } from 'react-helmet-async';
 
@@ -24,7 +25,12 @@ const Claims = () => (
       <title>{reflection.layoutProps.title} - Evry Health</title>
     </Helmet>
     <LayoutWrapper>
-      <ActionButtonsContainer view="claims" />
+      <ActionButtonsContainer type="headerButtons" view="claims" />
+      <InformationSection
+        title="Summary"
+        subTitle="The summary below reflects the current benefit year. The claims displayed below are only medical claims. Pharmacy claims are not displayed."
+        icon="bar_chart"
+      />
       <ClaimsTotals />
       <ClaimsHistorySection />
     </LayoutWrapper>

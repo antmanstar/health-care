@@ -290,6 +290,7 @@ class Claim extends Component {
   render() {
     const { visible } = this.state;
     const { dateOfService, claimNumber, status, provider, eobUrl, claimDetail } = this.props;
+
     return (
       <Wrapper>
         <ClaimSummary>

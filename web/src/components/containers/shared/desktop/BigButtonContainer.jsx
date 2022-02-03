@@ -5,12 +5,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import history from '../../../../utils/history';
-import BigButton from '../../../presentation/shared/BigButton';
-import PlanBigButton from '../../../presentation/shared/PlanBigButton';
+import BigButton from '../../../presentation/shared/BigButton/desktop';
+import HeaderBigButton from '../../../presentation/shared/HeaderBigButton';
 import buttonData from '../../../../common/button-data';
 import actions from '@evry-member-app/shared/store/actions';
 
-const { showModal } = actions;
+const { showModal, error500Test } = actions;
 
 class BigButtonContainer extends Component {
   constructor(props) {
@@ -28,7 +28,9 @@ class BigButtonContainer extends Component {
   }
 
   contactDoctorClick() {
-    alert('Contact my doc!');
+    // this.props.showModal('ERROR_500');
+    this.props.error500Test();
+    alert('Contact my doc!!');
   }
 
   downloadMembershipCardClick() {
@@ -105,13 +107,14 @@ class BigButtonContainer extends Component {
   }
 
   render() {
-    const { buttonKey, view } = this.props;
+    const { buttonKey, view, type } = this.props;
 
-    return view === 'plans' ? (
-      <PlanBigButton
+    return type === 'headerButtons' ? (
+      <HeaderBigButton
         text={buttonData[buttonKey].text}
         icon={buttonData[buttonKey].icon}
         svgIcon={buttonData[buttonKey].svgIcon}
+        isComing={buttonData[buttonKey].isComing}
         onClick={this.extractClickFunction(buttonData[buttonKey].onClick)}
         view={view}
       />
@@ -136,6 +139,9 @@ BigButtonContainer.propTypes = {
 const mapDispatchToProps = dispatch => ({
   showModal: modal => {
     dispatch(showModal(modal));
+  },
+  error500Test: () => {
+    dispatch(error500Test());
   }
 });
 

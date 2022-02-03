@@ -21,10 +21,15 @@ const DatesContainer = styled(SpaceBetween)`
   padding: 0 0 16px;
 `;
 
+const BigDivider = styled.div`
+  border-bottom: 2px solid #C1C6CB;
+  margin: -15px 0 15px 0;
+`;
+
 const OtherInsuranceModalSection = ({ handleChange, handleDateChange, data, minDate, maxDate }) => (
   <>
     <CollapsibleModalSection title="Other Health Coverage" divided>
-      <SectionDivider />
+      <BigDivider />
       <ModalMultipleChoiceQuestion
         handleAnswerClick={handleChange('type')}
         chosenAnswer={data.type}

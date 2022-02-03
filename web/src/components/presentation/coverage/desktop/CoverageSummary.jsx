@@ -10,6 +10,7 @@ import NoDeductibleMessage from './NoDeductibleMessage';
 import Loader from '../../shared/Loader/Loader';
 import Tip from '../../shared/desktop/Tooltip';
 import constants from '@evry-member-app/shared/constants';
+import Select from 'react-select';
 
 // This is the top summary section of the "My Coverage" view.
 
@@ -55,6 +56,10 @@ const Dials = styled.div`
   width: 100%;
   padding: 32px 0;
   background: #fafafa;
+
+  @media (max-width: 900px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const Link = styled.a`
@@ -84,6 +89,14 @@ const ToggleWrapper = styled.div`
   > *:last-child {
     margin-left: 16px;
   }
+
+  @media (max-width: 500px) {
+    display: block;
+
+    > *:last-child {
+      margin-left: 0px;
+    }
+  }
 `;
 
 const ToggleButton = styled.button`
@@ -105,7 +118,8 @@ class CoverageSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFamily: false
+      isFamily: false,
+      selectedOption: { value: 'Individual', label: 'Individual' }
     };
   }
 
@@ -117,8 +131,14 @@ class CoverageSummary extends Component {
     return accumulator || {};
   };
 
+  handleChange = selectedOption => {
+    this.setState({ selectedOption }, () => {
+      this.setState({ isFamily: this.state.selectedOption.value === 'Family' ? true : false });
+    });
+  };
+
   render() {
-    const { isFamily } = this.state;
+    const { isFamily, selectedOption } = this.state;
     const { benefitType, accumulators } = this.props;
 
     return (
@@ -129,27 +149,17 @@ class CoverageSummary extends Component {
               icon="assessment"
               title={`Summary ${benefitType ? `(${benefitType})` : ''}`}
               subTitle="Your coverage at a glance."
+              noCollaspe={true}
             />
             <ToggleWrapper>
               <Filter>Filtered by:</Filter>
-              <ToggleButton active={!isFamily} onClick={() => this.setState({ isFamily: false })}>
-                Individual
-              </ToggleButton>
-              {` | `}
-              <ToggleButton active={isFamily} onClick={() => this.setState({ isFamily: true })}>
-                Family
-              </ToggleButton>
-              <Tip
-                message={
-                  !isEmpty(omit(accumulators, 'pending'))
-                    ? `Showing Amounts for Coverage Dates: ${Moment(
-                        accumulators[0].period_from
-                      ).format('MM/DD/YYYY')} - ${Moment(accumulators[0].period_to).format(
-                        'MM/DD/YYYY'
-                      )}`
-                    : ''
-                }
-                placement="left"
+              <Select
+                value={selectedOption}
+                onChange={this.handleChange}
+                options={[
+                  { value: 'Individual', label: 'Individual' },
+                  { value: 'Family', label: 'Family' }
+                ]}
               />
             </ToggleWrapper>
           </FlexBetween>

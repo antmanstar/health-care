@@ -14,8 +14,9 @@ import Interpolation from '../../utils/Interpolation';
 import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
 import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import MessageAlert from "./MessageAlert";
 
-const { authenticate, clearAuthError, clear2FA, verify2FACode } = actions;
+const { authenticate, clearAuthError, clear2FA, verify2FACode, clearSessionTimedOut } = actions;
 const {
   getAuthError,
   isSigningIn,
@@ -23,7 +24,8 @@ const {
   hasBasicInfo,
   isAuthenticated,
   isOnboardingComplete,
-  successfulRegistration
+  successfulRegistration,
+  isSessionTimedOut
 } = selectors;
 
 // DESKTOP: Sign In View
@@ -188,7 +190,8 @@ function SignIn({
   hasBasicInfo,
   isAuthenticated,
   isOnboardingComplete,
-  payload2FA
+  payload2FA,
+  isSessionTimedOut
 }) {
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo && isOnboardingComplete) {
@@ -206,15 +209,18 @@ function SignIn({
           <ErrorMessage message={authError} />
         </ErrorMessageWrapper>
       );
+    } else if (isSessionTimedOut) {
+      authErrorMessage = (
+        <ErrorMessageWrapper>
+          <ErrorMessage message={['Your session has expired. Please login again.']} />
+        </ErrorMessageWrapper>
+      );
     }
     return authErrorMessage;
   };
 
-  const [isSubmitting2FA, setIsSubmitting2FA] = useState(false);
-
   function submit2FA(e) {
     e.preventDefault();
-    setIsSubmitting2FA(true);
     handleTwoFactorSubmit(e);
   }
 
@@ -239,7 +245,7 @@ function SignIn({
               placeholder={`Code Sent To ${payload2FA.two_way_factor_sent_to}`}
             />
             <ButtonWrapper>
-              <WideButton buttonType="submit" value="Submit" text="Submit" />
+              <WideButton buttonType="submit" value="Submit" text="Submit" disabled={isSigningIn} />
             </ButtonWrapper>
           </form>
         </FormWrapper>
@@ -280,7 +286,7 @@ function SignIn({
                 buttonType="submit"
                 value="Sign In"
                 text="Sign In"
-                disabled={isSigningIn || isSubmitting2FA}
+                disabled={isSigningIn}
               />
             </ButtonWrapper>
           </form>
@@ -304,7 +310,7 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {(isSigningIn || isSubmitting2FA) && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isSigningIn && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
 }
@@ -335,7 +341,8 @@ const mapStateToProps = state => ({
   hasBasicInfo: hasBasicInfo(state),
   isAuthenticated: isAuthenticated(state),
   isOnboardingComplete: isOnboardingComplete(state),
-  payload2FA: getPayload2FA(state)
+  payload2FA: getPayload2FA(state),
+  isSessionTimedOut: isSessionTimedOut(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -347,6 +354,7 @@ const mapDispatchToProps = dispatch => ({
   handleSubmit: e => {
     const { email, password } = e.target.elements;
     e.preventDefault();
+    dispatch(clearSessionTimedOut());
     dispatch(authenticate(email.value, password.value));
   },
   handleClearAuthError: () => {

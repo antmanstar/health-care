@@ -116,7 +116,7 @@ const Plan = React.memo(({}) => {
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <LayoutWrapper>
-        <ActionButtonsContainer view="plans" />
+        <ActionButtonsContainer type="headerButtons" view="plans" />
         <CarePlanHeaderWithData />
         <RewardsSectionWithData />
         <MeetYourGoalsSectionWithData />

@@ -16,10 +16,18 @@ const Wrapper = styled.div`
   padding: 8px 48px;
   font-size: 16px;
   line-height: 56px;
-  background: ${props =>
-    (props.color === 'action required' && props.theme.colors.roles.danger) ||
-    (props.color === 'pending' && props.theme.colors.roles.pending) ||
-    props.theme.colors.roles.success};
+  background: ${props => {
+    console.log(props.color);
+    console.log(defaultTheme.colors.roles.pending);
+    return (
+      ((props.color === 'action required' || props.color === 'escalated') &&
+        props.theme.colors.roles.actionRequired) ||
+      (props.color === 'on-hold' && props.theme.colors.roles.hold) ||
+      ((props.color === 'pending' || props.color === 'submitted' || props.color === 'created') &&
+        props.theme.colors.roles.pending) ||
+      props.theme.colors.roles.success
+    );
+  }};
   color: ${props => props.theme.colors.shades.white};
   border-radius: 4px 4px 0 0;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1);
@@ -57,7 +65,16 @@ const ColoredModalHeader = React.memo(({ status, phoneNumber }) => (
 ));
 
 ColoredModalHeader.propTypes = {
-  status: PropTypes.oneOf(['action required', 'pending', 'completed']).isRequired,
+  // status: PropTypes.oneOf(['action required', 'pending', 'completed']).isRequired,
+  status: PropTypes.oneOf([
+    'completed',
+    'pending',
+    'action Required',
+    'created',
+    'on-hold',
+    'escalated',
+    'submitted'
+  ]).isRequired,
   phoneNumber: PropTypes.string.isRequired
 };
 

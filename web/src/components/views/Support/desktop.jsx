@@ -14,6 +14,7 @@ import constants from '@evry-member-app/shared/constants';
 import paginate from '../../../utils/pagination';
 import withStoreData from '../../containers/base/withStoreData';
 import { Helmet } from 'react-helmet-async';
+import LoadingSpinnerScreen from '../../presentation/shared/Loader/LoadingSpinnerScreen';
 
 const {
   fetchCareGuideInfo,
@@ -29,7 +30,8 @@ const {
   getEvryContactInfo,
   getToken,
   getSupportArticles,
-  getFAQs
+  getFAQs,
+  getCasesObject
 } = selectors;
 
 const {
@@ -62,7 +64,22 @@ const statusesToMachineNames = {
   [SUBMITTED]: 'submitted',
   [CREATED]: 'created',
   [ON_HOLD]: 'on-hold',
-  [ESCALATED]: 'escalated'
+  [ESCALATED]: 'escalated',
+  [CLOSED]: 'closed'
+};
+
+const caseTypeToMachineNames = {
+  [1]: 'Request Information',
+  [2]: 'Schedule Appointment',
+  [3]: 'Schedule Phone Call',
+  [4]: 'Send a Message to Care Coordinator',
+  [5]: 'Provider Feedback',
+  [6]: 'Claim Feedback',
+  [7]: 'ID Card Request via Mail',
+  [8]: 'Address Update',
+  [9]: 'Phone Number Update',
+  [10]: 'PCP Update',
+  [11]: 'Appointed Representative Update'
 };
 
 // DESKTOP: Support View
@@ -117,11 +134,14 @@ const Support = () => {
 
   const SupportRequestsSectionWithData = withStoreData(
     SupportRequestsSection,
-    state => ({
-      requests: getCases(state),
-      requestsDataFrame: getCasesDataFrame(state),
-      token: getToken(state)
-    }),
+    state => {
+      return {
+        requests: getCases(state),
+        requestsDataFrame: getCasesDataFrame(state),
+        token: getToken(state),
+        caseObject: getCasesObject(state)
+      };
+    },
     dispatch => ({
       fetchCases: ({
         page,
@@ -160,10 +180,12 @@ const Support = () => {
           status: statusesToMachineNames[request.case_status],
           date: moment(request.created_date_utc).format('MM/DD/YYYY'),
           title: typesToContent[request.case_type],
-          requestNumber: request.case_id
+          requestNumber: request.case_id,
+          caseType: caseTypeToMachineNames[request.case_type]
         })),
         showModal: modal => showModal(modal),
         shouldFetch: isEmpty(requestsDataFrame),
+        requestsDataFrame: requestsDataFrame,
         ...ownProps
       };
     }
@@ -221,7 +243,7 @@ const Support = () => {
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <LayoutWrapper>
-        <ActionButtonsContainer view="support" />
+        <ActionButtonsContainer type="headerButtons" view="support" />
         <MySupportSectionWithData />
         {/* <SupportArticlesSection /> */}
         <SupportRequestsSectionWithData />

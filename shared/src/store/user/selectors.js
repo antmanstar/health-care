@@ -53,13 +53,14 @@ const getMembershipSummaryDocuments = (state) =>
 const getMembershipSummaryRx = (state) =>
   getMembershipSummary(state, ['membership_rx_id'])
 
-export const isSignedIn = (state) => get(state, ['user', 'isSignedIn'])
-
 export const isSigningIn = (state) => get(state, ['user', 'isSigningIn'])
 
 export const isSignedOut = (state) => get(state, ['user', 'isSignedOut'])
 
 export const isSigningOut = (state) => get(state, ['user', 'isSigningOut'])
+
+export const isSessionTimedOut = (state) =>
+  get(state, ['user', 'sessionTimedOut'])
 
 export const isVerifyingElegibility = (state) =>
   get(state, ['user', 'registering', 'isVerifyingElegibility'])
@@ -124,6 +125,8 @@ export const getCasesDataFrame = (state) => {
 }
 
 export const getCases = (state) => get(state, ['user', 'cases', 'data'], [])
+
+export const getCasesObject = (state) => get(state, ['user', 'cases'])
 
 export const getEvryContactInfo = (state) =>
   get(state, ['user', 'evryContactInfo'])
@@ -445,7 +448,7 @@ export const getScheduledPhoneCallCase = (state) =>
   get(state, ['user', 'scheduledPhoneCallCase'])
 
 export const getSendMessageCase = (state) =>
-  get(state, ["user", "sendMessageCase"]);
+  get(state, ['user', 'sendMessageCase'])
 
 export const getRequestMailedCardCase = (state) =>
   get(state, ['user', 'requestMailedCardCase'])

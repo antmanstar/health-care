@@ -22,6 +22,7 @@ const Wrapper = styled.div`
   width: 500px;
   background: ${props => props.theme.colors.shades.white};
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
+  overflow-y: hidden;
   @media (max-width: 500px) {
     width: 100%;
   }
@@ -98,7 +99,7 @@ const FilterLabel = styled.div`
   padding: 0 10px 10px 10px;
   font-weight: bold;
   font-size: 18px;
-  color: ${props => props.theme.colors.shades.blue};
+  color: ${props => props.theme.colors.shades.pinkOrange};
 `;
 
 const ScrollerWithInfiniteScroll = withInfiniteScroll(Scroller);
@@ -152,6 +153,7 @@ const NotificationCenter = ({
             clearData={clearNotifications}
             dateButton
             placeholder="Search Messages"
+            type="notifications"
           />
         </SearchWrapper>
         <ScrollerWithInfiniteScroll
@@ -180,7 +182,7 @@ const NotificationCenter = ({
                 // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
               />
             ))}
-            {notifications && notifications.pending && <Loader />}
+            {notifications && isPending && <Loader />}
           </MessageListWrapper>
         </ScrollerWithInfiniteScroll>
       </Wrapper>

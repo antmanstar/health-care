@@ -13,71 +13,129 @@ const {
   ModalWrapper,
   ModalBody,
   ModalSectionDivider,
-  ModalButtonsRight,
   ModalHeader,
   ModalTitle,
-  SpaceBetween
+  SpaceBetween,
+  ModalButtonsCenter
 } = defaultTheme.components;
 
-const { setModalData, showModal } = actions;
+const InnerContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-bottom: 12px;
 
-const { getToken } = selectors;
-
-const InnerContent = styled.div``;
-const InnerContentHeader = styled.div``;
-const InnerContentBody = styled.div``;
+  & div.bold {
+    font-weight: 700;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+`;
+const InnerContentHeader = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+  color: ${defaultTheme.colors.shades.darkTealBlue};
+`;
+const InnerContentBody = styled.span`
+  font-size: 12px;
+  font-weight: 300;
+  color: ${defaultTheme.colors.shades.darkGray};
+`;
+const NumberCircle = styled.div`
+  background-color: ${defaultTheme.colors.shades.darkTealBlue};
+  color: ${defaultTheme.colors.shades.white};
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 25px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 24px;
+  font-weight: 700;
+  font-size: 12px;
+  margin: 0 10px;
+`;
 
 const ConciergeCareModal = props => {
   return (
     <Fragment>
       <Scrim onClick={props.hideModal} />
       <ModalWrapper>
+        <ModalHeader>
+          <ModalTitle>Meet Your New Team</ModalTitle>
+        </ModalHeader>
         <ModalBody>
           <InnerContent>
-            <InnerContentHeader>Healthcare should be so confusing</InnerContentHeader>
-            <InnerContentBody>
-              With Evry, you’ll be paired with your own team of nurses, nutritionists, and doctors
-              who work for you. These medical professionals are the frontline for helping you live a
-              better, healthier, life. Here are just a few things they can do for you.
-            </InnerContentBody>
+            <InnerContentBody>Because you deserve to be taken care of.</InnerContentBody>
           </InnerContent>
           <InnerContent>
-            <InnerContentHeader>Throw out the search engines.</InnerContentHeader>
-            <InnerContentBody>
-              Your time is too valuable to decipher a dozen health blogs full of conflicting
-              information. Let our team of experts find you the best answer.
-            </InnerContentBody>
+            <div>
+              <InnerContentHeader>Healthcare shouldn't be so confusing</InnerContentHeader>
+              <InnerContentBody>
+                With Evry, you’ll be paired with your own team of nurses, nutritionists, and doctors
+                who work for you. These medical professionals are the frontline for helping you live
+                a better, healthier life.
+              </InnerContentBody>
+              <div className="bold">Here are just a few things they can do for you:</div>
+            </div>
           </InnerContent>
           <InnerContent>
-            <InnerContentHeader>Find Local Doctors.</InnerContentHeader>
-            <InnerContentBody>
-              Need a specialist? You don’t need to dig through a provider directory, cross reference
-              reviews online, and pray they’ll have an opening within the next six months. We’ll
-              provide you great recommendations for top-rated doctors who can meet your needs.
-            </InnerContentBody>
+            <NumberCircle>1</NumberCircle>
+            <div>
+              <InnerContentHeader>Throw out the search engines.</InnerContentHeader>
+              <InnerContentBody>
+                Your time is too valuable to decipher a dozen health blogs full of conflicting
+                information. Let our team of experts find you the best answer.
+              </InnerContentBody>
+            </div>
           </InnerContent>
           <InnerContent>
-            <InnerContentHeader>Book appointments</InnerContentHeader>
-            <InnerContentBody>
-              We enjoy the soft jazz of hold music, so that you don’t have to.
-            </InnerContentBody>
+            <NumberCircle>2</NumberCircle>
+            <div>
+              <InnerContentHeader>Find Local Doctors.</InnerContentHeader>
+              <InnerContentBody>
+                Need a specialist? You don’t need to dig through a provider directory, cross
+                reference reviews online, and pray they’ll have an opening within the next six
+                months. We’ll provide you great recommendations for top-rated doctors who can meet
+                your needs.
+              </InnerContentBody>
+            </div>
           </InnerContent>
           <InnerContent>
-            <InnerContentHeader>Get the most out of your Evry coverage</InnerContentHeader>
-            <InnerContentBody>
-              Your Evry membership includes a personalized Care Plan that provides unique benefits.
-              Interested in a private trainer? Talk to your Care Guide about Evry paying for it.
-              Need a ride to the doctor? A car is on the way.
-            </InnerContentBody>
+            <NumberCircle>3</NumberCircle>
+            <div>
+              <InnerContentHeader>Book appointments</InnerContentHeader>
+              <InnerContentBody>
+                We enjoy the soft jazz of hold music, so that you don’t have to.
+              </InnerContentBody>
+            </div>
           </InnerContent>
           <InnerContent>
-            <InnerContentHeader>Stop stressing about appointments.</InnerContentHeader>
-            <InnerContentBody>
-              From routine office visits to complicated procedures, we’ll help you prepare for it
-              and get you ready for gameday.
-            </InnerContentBody>
+            <NumberCircle>4</NumberCircle>
+            <div>
+              <InnerContentHeader>Get the most out of your Evry coverage</InnerContentHeader>
+              <InnerContentBody>
+                Your Evry membership includes a personalized Care Plan that provides unique
+                benefits. Interested in a private trainer? Talk to your Care Guide about Evry paying
+                for it. Need a ride to the doctor? A car is on the way.
+              </InnerContentBody>
+            </div>
+          </InnerContent>
+          <InnerContent>
+            <NumberCircle>5</NumberCircle>
+            <div>
+              <InnerContentHeader>Stop stressing about appointments.</InnerContentHeader>
+              <InnerContentBody>
+                From routine office visits to complicated procedures, we’ll help you prepare for it
+                and get you ready for gameday.
+              </InnerContentBody>
+            </div>
           </InnerContent>
         </ModalBody>
+        <ModalSectionDivider />
+        <ModalButtonsCenter>
+          <SmallButton text="Close" negative onClick={props.hideModal} />
+        </ModalButtonsCenter>
       </ModalWrapper>
     </Fragment>
   );

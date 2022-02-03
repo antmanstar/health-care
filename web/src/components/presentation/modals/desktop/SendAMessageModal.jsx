@@ -7,6 +7,7 @@ import SmallButton from '../../shared/desktop/SmallButton';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import constants from '@evry-member-app/shared/constants';
+import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
 // MODAL - Send a Message
 
 const {
@@ -48,7 +49,9 @@ class SendAMessageModal extends Component {
             `Regarding Support Request # ${props.modalData.requestNumber}`)
         : '',
       message: '',
-      errorMessage: null
+      errorMessage: null,
+      showLoader: false,
+      isSubmitting: false
     };
 
     this.handlers = {
@@ -64,31 +67,35 @@ class SendAMessageModal extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.setState({ isSubmitting: true });
     const { title, message } = event.target.elements;
     if (title.value.trim().length === 0 && message.value.trim().length === 0) {
       const stateObject = {};
       stateObject.errorMessage = '*Form cannot be blank';
+      stateObject.isSubmitting = false;
       this.setState(stateObject);
       return;
     }
     if (title.value.trim().length === 0) {
       const stateObject = {};
       stateObject.errorMessage = '*Title cannot be blank';
+      stateObject.isSubmitting = false;
       this.setState(stateObject);
       return;
     }
     if (message.value.trim().length === 0) {
       const stateObject = {};
       stateObject.errorMessage = '*Message cannot be blank';
+      stateObject.isSubmitting = false;
       this.setState(stateObject);
       return;
     }
+    this.setState({ showLoader: true });
     this.props.createCase(event, this.props.token);
   }
 
   componentDidMount() {
     this.props.resetCase();
-    console.log(this.props.token);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -99,23 +106,38 @@ class SendAMessageModal extends Component {
     ) {
       this.props.completeCase(this.props.sendMessageCase.id, this.props.token);
     }
-    if (
+    else if (
       prevProps.sendMessageCase &&
       prevProps.sendMessageCase.status === 'OPEN' &&
       this.props.sendMessageCase.status === 'COMPLETE'
     ) {
+      this.setState({ isSubmitting: false });
       this.props.fetchCases(this.props.token);
       this.props.setModalData({
         type: 'SUCCESS',
         title: 'Submitted!',
-        message: "Great! We'll get to work on that and send you confirmation once complete."
+        message: "Great! We'll get to work on that and send you a confirmation once complete."
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
+    }
+    else if (
+      prevProps.sendMessageCase &&
+      prevProps.sendMessageCase.status === 'OPEN' &&
+      this.props.sendMessageCase.status.includes('ERROR')
+    ) {
+      this.setState({ isSubmitting: false });
+      this.props.fetchCases(this.props.token);
+      this.props.setModalData({
+        type: 'ERROR',
+        title: 'Error',
+        message: 'Something went wrong. Please try again or give us a call!'
       });
       this.props.showModal('SUBMISSION_RESPONSE');
     }
   }
 
   render() {
-    const { title, message } = this.state;
+    const { title, message, isSubmitting } = this.state;
     const { hideModal } = this.props;
 
     return (
@@ -145,10 +167,11 @@ class SendAMessageModal extends Component {
             </ModalBody>
             <ModalSectionDivider />
             <ModalButtonsRight>
-              <SmallButton text="Send Message" />
-              <SmallButton text="Cancel" negative onClick={hideModal} />
+              <SmallButton text="Send Message" disabled={isSubmitting} />
+              <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
+          {this.state.showLoader && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
         </ModalWrapper>
       </>
     );

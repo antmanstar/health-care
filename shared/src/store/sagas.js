@@ -15,7 +15,6 @@ export const generateFetchWorker = (type, fetch) =>
   function* workerSaga(action) {
     try {
       const response = yield call(fetch, action.payload)
-
       // dispatch a success action to the store with the new user with auth info
       yield put({ type: `${type}_SUCCESS`, payload: response.data })
       return response.data

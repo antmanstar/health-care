@@ -25,7 +25,7 @@ const WarningTime = styled.span`
   font-size: 2.4em;
 `;
 
-const { signOut } = actions;
+const { signOut, sessionTimedOut } = actions;
 const { getToken } = selectors;
 
 const SessionTimeout = props => {
@@ -42,7 +42,8 @@ const SessionTimeout = props => {
   };
 
   const handleSignOut = () => {
-    const { signOut, token } = props;
+    const { signOut, token, sessionTimedOut } = props;
+    sessionTimedOut();
     signOut(token);
   };
 
@@ -144,6 +145,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   signOut: token => {
     dispatch(signOut(token));
+  },
+  sessionTimedOut: () => {
+    dispatch(sessionTimedOut());
   }
 });
 

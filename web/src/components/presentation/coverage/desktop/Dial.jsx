@@ -8,15 +8,15 @@ const Wrapper = styled.div`
   position: relative;
   margin-bottom: 16px;
 
+  @media (max-width: 900px) {
+    margin: 0 16px 0 0;
+  }
+
   svg {
     transform: rotate(-90deg);
     background: #fafafa;
     border-radius: 50%;
     display: block;
-  }
-
-  @media ${props => props.theme.device.tabletXL} {
-    margin: 0 16px 0 0;
   }
 `;
 

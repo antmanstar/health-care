@@ -64,7 +64,8 @@
     "uuid": "^3.3.2",
     "zxcvbn": "^4.4.2",
     "react-tooltip": "^4.2.21",
-    "google-map-react": "^2.1.10"
+    "google-map-react": "^2.1.10",
+    "react-select": "^5.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.2.0",

@@ -17,16 +17,20 @@ const Wrapper = styled.div`
   border-style: solid;
 
   &.on-hold {
+    border-color: ${props => props.theme.colors.shades.mediumGray};
+    color: ${props => props.theme.colors.shades.mediumGray};
+  }
+  &.escalated {
     border-color: ${props => props.theme.colors.roles.actionRequired};
     color: ${props => props.theme.colors.roles.actionRequired};
   }
   &.submitted,
-  &.created,
-  &.escalated {
+  &.created {
     border-color: ${props => props.theme.colors.roles.pending};
     color: ${props => props.theme.colors.roles.pending};
   }
-  &.closed {
+  &.closed,
+  &.completed {
     border-color: ${props => props.theme.colors.roles.success};
     color: ${props => props.theme.colors.roles.success};
   }
@@ -138,7 +142,7 @@ const StatusText = styled.span`
   font-weight: 700;
   @media ${defaultTheme.device.tablet} {
     margin-right: 16px;
-    font-size: 12px;
+    font-size: 14px;
   }
 `;
 
@@ -165,7 +169,7 @@ class SupportRequest extends Component {
   };
 
   render() {
-    const { status, date, title, requestNumber } = this.props;
+    const { status, date, title, requestNumber, caseType } = this.props;
     let systemNote;
 
     //submitted/new case, on hold, escalated, closed
@@ -186,11 +190,14 @@ class SupportRequest extends Component {
       case 'created':
         statusText = 'Created';
         break;
-      case 'Escalated':
+      case 'escalated':
         statusText = 'Escalated';
         break;
-      case 'Closed':
+      case 'closed':
         statusText = 'Closed';
+        break;
+      case 'completed':
+        statusText = 'Completed';
         break;
       default:
         statusText = '';
@@ -215,8 +222,8 @@ class SupportRequest extends Component {
             </InnerContent> */}
             <InnerContent>
               <Text>{date}</Text>
-              <Text className="bold title">{title}</Text>
-              {systemNote && <SystemNote className="support-system-note">{systemNote}</SystemNote>}
+              <Text className="bold title">{title ? title : caseType}</Text>
+              {/* {systemNote && <SystemNote className="support-system-note">{systemNote}</SystemNote>} */}
               <StatusText className={status}>{statusText.toUpperCase()}</StatusText>
             </InnerContent>
           </TextPortion>
@@ -239,10 +246,18 @@ class SupportRequest extends Component {
 }
 
 SupportRequest.propTypes = {
-  status: PropTypes.oneOf(['completed', 'pending', 'actionRequired']).isRequired,
+  status: PropTypes.oneOf([
+    'completed',
+    'pending',
+    'actionRequired',
+    'created',
+    'on-hold',
+    'escalated',
+    'submitted'
+  ]).isRequired,
   date: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  requestNumber: PropTypes.string.isRequired,
+  requestNumber: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   showModal: PropTypes.func.isRequired,
   setModalData: PropTypes.func.isRequired
 };

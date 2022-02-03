@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
@@ -52,51 +52,88 @@ const SectionHeaderItem = styled.div`
   }
 `;
 
-const SupportRequestsSection = ({ paginator, requests, showCompleted, showModal }) => (
-  <>
-    <SectionBackground>
-      <Container>
-        <SectionHeaderWrapper>
-          <SectionHeaderWithIcon
-            title="Support Requests"
-            subTitle="View your pending requests or submit a new one."
-            icon="question_answer"
-          />
-          <InnerWrapper>
-            <SmallButton
-              text="New Support Request"
-              onClick={() => {
-                showModal('SUBMIT_NEW_SUPPORT_REQUEST');
-              }}
+const SupportRequestsSection = ({
+  paginator,
+  requests,
+  showCompleted,
+  showModal,
+  requestsDataFrame
+}) => {
+  // const [hasResultsTimedOut, setHasResultsTimedOut] = useState(false);
+
+  // useEffect(() => {
+  //   setHasResultsTimedOut(false);
+  //   let timer = setTimeout(() => {
+  //     setHasResultsTimedOut(true);
+  //   }, 3000);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [showCompleted]);
+
+  return (
+    <>
+      <SectionBackground>
+        <Container>
+          <SectionHeaderWrapper>
+            <SectionHeaderWithIcon
+              title="Support Requests"
+              subTitle="View your pending requests or submit a new one."
+              icon="question_answer"
             />
-          </InnerWrapper>
-        </SectionHeaderWrapper>
-      </Container>
-      <SectionDivider />
-      <Container>
-        {isEmpty(requests) ? (
-          <Loader />
-        ) : (
-          <SupportRequestList showCompleted={showCompleted} list={requests} />
-        )}
-      </Container>
-    </SectionBackground>
-    <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
-  </>
-);
+            <InnerWrapper>
+              <SmallButton
+                text="New Support Request"
+                onClick={() => {
+                  showModal('SUBMIT_NEW_SUPPORT_REQUEST');
+                }}
+              />
+            </InnerWrapper>
+          </SectionHeaderWrapper>
+        </Container>
+        <SectionDivider />
+        <Container>
+          {/* {isEmpty(requests) &&
+          (!requestsDataFrame || (requestsDataFrame && requestsDataFrame.status === 'QUERYING')) ? (
+            <Loader />
+          ) : (
+            <SupportRequestList showCompleted={showCompleted} list={requests} />
+          )} */}
+          <SupportRequestList showCompleted={showCompleted} list={requests}>
+            {isEmpty(requests) &&
+            (!requestsDataFrame ||
+              (requestsDataFrame && requestsDataFrame.status === 'QUERYING')) ? (
+              <Loader />
+            ) : (
+              ''
+            )}
+            {isEmpty(requests) && requestsDataFrame && requestsDataFrame.status === 'COMPLETE' ? (
+              <p>0 results.</p>
+            ) : (
+              ''
+            )}
+          </SupportRequestList>
+        </Container>
+      </SectionBackground>
+      <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
+    </>
+  );
+};
 
 SupportRequestsSection.propTypes = {
   paginator: PropTypes.shape({}),
   requests: PropTypes.arrayOf(PropTypes.shape({})),
   showCompleted: PropTypes.func,
-  showModal: PropTypes.func
+  showModal: PropTypes.func,
+  casesObject: PropTypes.shape({})
 };
 
 SupportRequestsSection.defaultProps = {
   paginator: {},
   requests: [],
   showCompleted: () => {},
-  showModal: () => {}
+  showModal: () => {},
+  casesObject: {}
 };
 
 export default SupportRequestsSection;

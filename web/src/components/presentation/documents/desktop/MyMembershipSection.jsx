@@ -154,7 +154,7 @@ class MyMembershipSection extends Component {
         </Container>
         <SectionDivider />
         <Container>
-          <Row>
+          {/* <Row>
             <InfoSection>
               <Title>Membership Documents</Title>
               <SectionDivider />
@@ -218,7 +218,58 @@ class MyMembershipSection extends Component {
                 <Dependents>{familyMembers.map(String).join(', ')}</Dependents>
               </Info>
             )}
-          </InfoSection>
+          </InfoSection> */}
+          <Row>
+            <InfoSection>
+              <Title>Doctor & Pharmacy</Title>
+              <SectionDivider />
+              <Info>
+                <Dependents></Dependents>
+              </Info>
+            </InfoSection>
+            <InfoSection>
+              <Title>Costs</Title>
+              <SectionDivider />
+              <Info>
+                <Dependents></Dependents>
+              </Info>
+            </InfoSection>
+          </Row>
+          <Row>
+            <InfoSection>
+              <Title>Dependents</Title>
+              <SectionDivider />
+              <Info>
+                <Dependents></Dependents>
+              </Info>
+            </InfoSection>
+            <InfoSection>
+              <Title>Membership Documents</Title>
+              <SectionDivider />
+              {!membershipDocs ? (
+                <Loader />
+              ) : (
+                <Info>
+                  <MemberDocs>
+                    {membershipDocs
+                      .map(doc => <a href={doc.fileName}>{doc.displayName}</a>)
+                      .reduce((prev, docLink, i) => {
+                        const curr = prev.slice();
+                        if (i % 2) {
+                          curr[curr.length - 1] = curr[curr.length - 1].concat([docLink]);
+                        } else {
+                          curr.push([docLink]);
+                        }
+                        return curr;
+                      }, [])
+                      .map(row => (
+                        <div>{row}</div>
+                      ))}
+                  </MemberDocs>
+                </Info>
+              )}
+            </InfoSection>
+          </Row>
         </Container>
       </SectionBackground>
     );

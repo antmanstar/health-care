@@ -43,8 +43,13 @@ class ClaimsTotals extends Component {
         <SpaceBetween>
           <NumberTile number={claimsSummary.total_claims} label="Total Claims" />
           <NumberTile number={claimsSummary.total_telehealth_claims} label="Telehealth Claims" />
-          <NumberTile number={claimsSummary.total_costs} label="Total Costs" currency />
-          <NumberTile number={claimsSummary.total_benefits} label="Total Benefits" currency green />
+          <NumberTile number={claimsSummary.total_adjustment} label="Total Discounts" currency />
+          <NumberTile
+            number={claimsSummary.total_payment_to_provider}
+            label="Paid by Evry"
+            currency
+            green
+          />
         </SpaceBetween>
       </LayoutWrapper>
     );

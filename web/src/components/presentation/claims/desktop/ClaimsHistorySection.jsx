@@ -27,9 +27,13 @@ const PaginationWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column-reverse;
   align-items: center;
   text-align: center;
+  @media screen and (min-width: 1200px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const Container = styled.div`

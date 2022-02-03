@@ -5,6 +5,10 @@ import Moment from 'moment';
 import defaultTheme from '../../../../style/themes';
 import DatePicker from './DatePicker';
 import SmallButton from './SmallButton';
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
+
+const { getNotificationsFilters } = selectors;
 
 const { SpaceBetween, SectionDivider, Scrim } = defaultTheme.components;
 
@@ -63,10 +67,27 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const FilterOptions = ({ handleClose, search, query, request, clearData }) => {
+const MessagesError = styled.p`
+  margin: 0;
+  font-size: 14px;
+`;
+
+const FilterOptions = ({
+  handleClose,
+  search,
+  query,
+  request,
+  notificationsFilters,
+  type,
+  clearData
+}) => {
   const { dateFrom, dateTo } = request;
   const [dateStart, setDateStart] = useState(dateFrom != undefined ? new Date(dateFrom) : '');
   const [dateEnd, setDateEnd] = useState(dateTo != undefined ? new Date(dateTo) : '');
+  const [filterError, setFilterError] = useState({
+    hasError: false,
+    messageError: ''
+  });
   const [clear, setClear] = useState(0);
 
   const handleClear = () => {
@@ -86,9 +107,18 @@ const FilterOptions = ({ handleClose, search, query, request, clearData }) => {
   };
 
   const handleFilter = () => {
-    if (clearData) {
+    if (!dateStart.length) {
+      setFilterError({ hasError: true, messageError: 'You need to choose the start date.' });
+      return;
+    }
+    if (type === 'notifications') {
       clearData();
-      search({ dateFrom: dateStart, dateTo: dateEnd, query: query });
+      let query = notificationsFilters?.query;
+      search({
+        dateFrom: dateStart,
+        dateTo: dateEnd ? dateEnd : Moment(new Date()).format('YYYY-MM-DD'),
+        query: query
+      });
       handleClose();
     } else {
       search({
@@ -100,6 +130,7 @@ const FilterOptions = ({ handleClose, search, query, request, clearData }) => {
     }
   };
 
+  const { hasError, messageError } = filterError;
   return (
     <>
       <TransparentScrim onClick={() => handleClose()} />
@@ -129,6 +160,7 @@ const FilterOptions = ({ handleClose, search, query, request, clearData }) => {
               chosenDate={dateEnd}
             />
           </EditedSpaceBetween>
+          {hasError && <MessagesError>{messageError}</MessagesError>}
         </Container>
         <SectionDivider />
         <Container>
@@ -146,4 +178,10 @@ FilterOptions.propTypes = {
   handleClose: PropTypes.func.isRequired
 };
 
-export default FilterOptions;
+const mapStateToProps = state => ({
+  notificationsFilters: getNotificationsFilters(state)
+});
+
+const ConnectedFilterOptions = connect(mapStateToProps)(FilterOptions);
+
+export default ConnectedFilterOptions;

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import Select from '../../shared/desktop/Select';
+import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 
 // MODAL - Update Personal Information
 
@@ -103,7 +104,7 @@ const LockedNote = styled.div`
   }
 `;
 
-const UpdatePersonalInformationModal = ({ email, address, phoneNumbers, hideModal, locked }) => {
+const UpdatePersonalInformationModal = props => {
   const extractPhoneNumber = (array, phoneType) => {
     const numbers = array.filter(item => item.phone_type === phoneType);
 
@@ -114,9 +115,46 @@ const UpdatePersonalInformationModal = ({ email, address, phoneNumbers, hideModa
     return undefined;
   };
 
+  let info = props.accountInfo;
+
+  let [ infoEmail, setInfoEmail ] = useState(info?.email_address || "");
+  let [ infoAddress1, setInfoAddress1 ] = useState(info?.address?.address1 || "");
+  let [ infoAddress2, setInfoAddress2 ] = useState(info?.address?.address2 || "");
+  let [ infoCity, setInfoCity ] = useState(info?.address?.city || "");
+  let [ infoState, setInfoState ] = useState(info?.address?.state || "");
+  let [ infoZip, setInfoZip ] = useState(info?.address?.zip || "");
+  let [ phoneCell, setPhoneCell ] = useState(extractPhoneNumber(info.phones, 'Cell Phone') || "");
+  let [ phoneHome, setPhoneHome ] = useState(extractPhoneNumber(info.phones, 'Home Phone') || "");
+  let [ phoneWork, setPhoneWork ] = useState(extractPhoneNumber(info.phones, 'Business Phone') || "");
+
+  function handleErrors(errors) {
+    
+  }
+
+  function completeCase(response) {
+    apis.markCaseAsSubmitComplete({
+      token: props.authToken,
+      id: response.data.id
+    }).then(props.hideModal).catch(handleErrors);
+  }
+
+  function handleSubmit() {
+    apis.createCaseUpdateAddress({
+      token: props.authToken,
+      address1: infoAddress1,
+      address2: infoAddress2,
+      city: infoCity,
+      state: infoState,
+      zip: infoZip,
+      cell: phoneCell,
+      home: phoneHome,
+      work: phoneWork
+    }).then(completeCase).catch(handleErrors);
+  }
+
   return (
     <>
-      <Scrim onClick={hideModal} />
+      <Scrim onClick={props.hideModal} />
       <LargeModalWrapper>
         <ModalHeader>
           <SpaceBetween>
@@ -124,7 +162,7 @@ const UpdatePersonalInformationModal = ({ email, address, phoneNumbers, hideModa
           </SpaceBetween>
         </ModalHeader>
         <ModalBody>
-          {locked ? (
+          {props.locked ? (
             <LockedNote>
               <div>
                 <i className="material-icons">info_outline</i>
@@ -139,29 +177,37 @@ const UpdatePersonalInformationModal = ({ email, address, phoneNumbers, hideModa
             <FormSpaceBetween className="mobile-wrap">
               <Column>
                 <EditedFormLabel>Email</EditedFormLabel>
-                <EditedInput name="email" type="email" placeholder={email || 'Email Address'} />
+                <EditedInput value={infoEmail} onChange={e => setInfoEmail(e.target.value)} name="email" type="email" placeholder='Email Address' />
                 <FormSpaceBetween>
                   <Flex4>
                     <EditedFormLabel>Street Address</EditedFormLabel>
                     <EditedInput
+                      value={infoAddress1}
+                      onChange={e => setInfoAddress1(e.target.value)}
                       name="address"
                       type="text"
-                      placeholder={address.line1 || 'Street Address'}
+                      placeholder='Street Address'
                     />
                   </Flex4>
                   <Flex1>
                     <EditedFormLabel>Apt #</EditedFormLabel>
-                    <EditedInput name="apt" type="text" placeholder={address.postal || 'Zip'} />
+                    <EditedInput 
+                      value={infoAddress2} 
+                      onChange={e => setInfoAddress2(e.target.value)}
+                      name="apt"
+                      type="text"
+                      placeholder='Apt'
+                    />
                   </Flex1>
                 </FormSpaceBetween>
                 <FormSpaceBetween>
                   <Flex2>
                     <EditedFormLabel>City</EditedFormLabel>
-                    <EditedInput name="city" type="text" placeholder={address.postal || 'Zip'} />
+                    <EditedInput value={infoCity} onChange={e => setInfoCity(e.target.value)} name="city" type="text" placeholder='Zip' />
                   </Flex2>
                   <Flex2>
                     <EditedFormLabel>State</EditedFormLabel>
-                    <Select name="state" placeholder={address.state || 'State'}>
+                    <Select name="state" value={infoState} onChange={e => setInfoState(e.target.value)}>
                       <option value="AL">Alabama</option>
                       <option value="AK">Alaska</option>
                       <option value="AZ">Arizona</option>
@@ -217,49 +263,45 @@ const UpdatePersonalInformationModal = ({ email, address, phoneNumbers, hideModa
                   </Flex2>
                   <Flex1>
                     <EditedFormLabel>Zip</EditedFormLabel>
-                    <EditedInput name="postal" type="text" placeholder={address.postal || 'Zip'} />
+                    <EditedInput value={infoZip} onChange={e => setInfoZip(e.target.value)} name="postal" type="text" placeholder='Zip' />
                   </Flex1>
                 </FormSpaceBetween>
               </Column>
               <Column>
                 <EditedFormLabel>Cell Phone Number</EditedFormLabel>
                 <EditedInput
+                  value={phoneCell} onChange={e => setPhoneCell(e.target.value)} 
                   name="cellPhone"
                   type="phone"
-                  placeholder={
-                    extractPhoneNumber(phoneNumbers, 'Cell Phone') || 'Enter a cell phone number.'
-                  }
+                  placeholder='Enter a cell phone number.'
                 />
                 <EditedFormLabel>Home Phone Number</EditedFormLabel>
                 <EditedInput
+                  value={phoneHome} onChange={e => setPhoneHome(e.target.value)} 
                   name="homePhone"
                   type="phone"
-                  placeholder={
-                    extractPhoneNumber(phoneNumbers, 'Home Phone') || 'Enter a home phone number.'
-                  }
+                  placeholder='Enter a home phone number.'
                 />
                 <EditedFormLabel>Work Phone Number</EditedFormLabel>
                 <EditedInput
+                 value={phoneWork} onChange={e => setPhoneWork(e.target.value)} 
                   name="workPhone"
                   type="phone"
-                  placeholder={
-                    extractPhoneNumber(phoneNumbers, 'Business Phone') ||
-                    'Enter a work phone number.'
-                  }
+                  placeholder='Enter a work phone number.'
                 />
               </Column>
             </FormSpaceBetween>
           )}
         </ModalBody>
         <ModalSectionDivider />
-        {locked ? (
+        {props.locked ? (
           <ModalButtonsCenter>
-            <SmallButton text="Cancel" negative onClick={hideModal} />
+            <SmallButton text="Cancel" negative onClick={props.hideModal} />
           </ModalButtonsCenter>
         ) : (
           <ModalButtonsRight>
-            <SmallButton text="Submit Changes" />
-            <SmallButton text="Cancel" negative onClick={hideModal} />
+            <SmallButton text="Submit Changes" onClick={handleSubmit} />
+            <SmallButton text="Cancel" negative onClick={props.hideModal} />
           </ModalButtonsRight>
         )}
       </LargeModalWrapper>

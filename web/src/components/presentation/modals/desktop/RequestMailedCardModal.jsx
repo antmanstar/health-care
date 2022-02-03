@@ -1,10 +1,12 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import actions from '@evry-member-app/shared/store/actions';
 import SmallButton from '../../shared/desktop/SmallButton';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { useSelector, useDispatch } from 'react-redux';
+import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
+import { Link as RouterLink } from 'react-router-dom';
 
 const {
   Scrim,
@@ -23,7 +25,8 @@ const {
   fetchCases,
   setModalData,
   showModal,
-  requestMailedCardReset
+  requestMailedCardReset,
+  hideModal
 } = actions;
 
 const { getRequestMailedCardCase, getToken } = selectors;
@@ -68,6 +71,8 @@ const RequestMailedCardModal = props => {
   const token = useSelector(state => getToken(state));
   const requestMailCardCase = useSelector(state => getRequestMailedCardCase(state));
   const { address } = props.accountInfo;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     dispatch(requestMailedCardReset());
@@ -75,21 +80,38 @@ const RequestMailedCardModal = props => {
 
   useEffect(() => {
     if (requestMailCardCase && requestMailCardCase.status === 'OPEN') {
-      console.log('useEffect: completeRequestMailedCardCase');
-      dispatch(completeRequestMailedCardCase(getRequestMailedCardCase.id, token));
+      dispatch(completeRequestMailedCardCase({ caseID: requestMailCardCase.id, token }));
+    } else if (requestMailCardCase && requestMailCardCase.status === 'COMPLETE') {
+      setIsSubmitting(false);
+      dispatch(
+        setModalData({
+          type: 'SUCCESS',
+          title: 'Submitted!',
+          message: "Great! We'll get to work on that and send you a confirmation once complete."
+        })
+      );
+      dispatch(showModal('SUBMISSION_RESPONSE'));
+      dispatch(requestMailedCardReset());
+    } else if (
+      requestMailCardCase &&
+      requestMailCardCase.status &&
+      requestMailCardCase.status.includes('ERROR')
+    ) {
+      setIsSubmitting(false);
+      dispatch(
+        setModalData({
+          type: 'ERROR',
+          title: 'Error',
+          message: 'Something went wrong. Please try again or give us a call!'
+        })
+      );
+      dispatch(showModal('SUBMISSION_RESPONSE'));
+      dispatch(requestMailedCardReset());
     }
-    if (requestMailCardCase && requestMailCardCase.status === 'COMPLETE') {
-      console.log('useEffect: toggle submission response');
-      setModalData({
-        type: 'SUCCESS',
-        title: 'Submitted!',
-        message: "Great! We'll get to work on that and send you confirmation once complete."
-      });
-      showModal('SUBMISSION_RESPONSE');
-    }
-  }, [getRequestMailedCardCase]);
+  }, [requestMailCardCase, getRequestMailedCardCase]);
 
   const createCase = () => {
+    setIsSubmitting(true);
     dispatch(createRequestMailedCardCase({ token }));
   };
 
@@ -102,7 +124,7 @@ const RequestMailedCardModal = props => {
             <ModalTitle>Request Mailed Card</ModalTitle>
             <PhoneNumber>
               <i className="material-icons">phone</i>
-              <p>{`1-800-867-5309`}</p>
+              <p>{`1-855-579-3879`}</p>
             </PhoneNumber>
           </SpaceBetween>
         </ModalHeader>
@@ -116,14 +138,19 @@ const RequestMailedCardModal = props => {
             </p>
           )}
           <p>
-            Is this correct? If not, <Button>click here</Button> to change your address.
+            Is this correct? If not,{' '}
+            <RouterLink to="/account" onClick={() => dispatch(hideModal())}>
+              click here
+            </RouterLink>{' '}
+            to change your address.
           </p>
         </ModalBody>
         <ModalSectionDivider />
         <ModalButtonsRight>
-          <SmallButton text="Continue" onClick={createCase} />
-          <SmallButton text="Cancel" negative onClick={props.hideModal} />
+          <SmallButton text="Continue" onClick={createCase} disabled={isSubmitting} />
+          <SmallButton text="Cancel" negative onClick={props.hideModal} disabled={isSubmitting} />
         </ModalButtonsRight>
+        {isSubmitting && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
       </ModalWrapper>
     </Fragment>
   );

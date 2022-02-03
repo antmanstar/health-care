@@ -10,9 +10,8 @@ import InfoItem from '../../shared/desktop/InfoItem';
 import ContactPreference from '../../shared/desktop/ContactPreference';
 import HelpArticleLink from '../../shared/desktop/HelpArticleLink';
 import actions from '@evry-member-app/shared/store/actions';
-import history from '../../../../utils/history';
 
-const { showModal } = actions;
+const { setModalData, showModal } = actions;
 
 // This is the My Information Section from the Account Settings View
 
@@ -47,6 +46,21 @@ const WrapContainer = styled(TwoColumnRow)`
   }
 `;
 
+const SmallTitle = styled.div`
+  color: ${props => props.theme.colors.shades.blue};
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+`;
+
+const EmptyLabel = styled.div`
+  margin-top: 15px;
+  color: #405565;
+  font-weight: 400;
+`;
+
 class MyInformationSection extends Component {
   constructor(props) {
     super(props);
@@ -64,15 +78,12 @@ class MyInformationSection extends Component {
   }
 
   handleContactPreferencesClick() {
+    // this.props.setModalData({ contactPreferences: this.props.contactPreferences });
     this.props.showModal('UPDATE_CONTACT_PREFERENCES');
   }
 
   handleAppointRepClick() {
     this.props.showModal('APPOINT_REPRESENTATIVE');
-  }
-
-  handlePCPClick = () => {
-    history.push('/provider-lookup');
   }
 
   render() {
@@ -130,8 +141,14 @@ class MyInformationSection extends Component {
           </WrapContainer>
           <WrapContainer>
             <SmallContainer>
-              <SmallTitleAndButton text="Primary Care Physician" buttonText="Change" onClick={this.handlePCPClick} />
-              
+              <SmallTitle>Primary Care Physician</SmallTitle>
+
+              {(!pcps || pcps.length === 0) && (
+                <>
+                  <EmptyLabel>Nothing here yet!</EmptyLabel>
+                </>
+              )}
+
               {pcps && pcps.length > 0 && (
                 <>
                   <AppointedIndividualName>{`${pcps[0].provider_name}`}</AppointedIndividualName>
@@ -216,6 +233,9 @@ MyInformationSection.defaultProps = {
 };
 
 const mapDispatchToProps = dispatch => ({
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
   showModal: modal => {
     dispatch(showModal(modal));
   }

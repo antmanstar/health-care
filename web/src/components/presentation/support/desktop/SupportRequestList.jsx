@@ -70,16 +70,16 @@ class SupportRequestList extends Component {
   }
 
   render() {
-    const { list } = this.props;
+    const { list, children } = this.props;
     const { showCompleted } = this.state;
-
     return (
       <>
         <Grouping>
           <Header>{showCompleted ? 'Completed Requests' : 'Pending Requests'}</Header>
-          {list.map(item => (
-            <SupportRequest {...item} />
-          ))}
+          {children}
+          {list.map(item => {
+            return <SupportRequest key={item.requestNumber} {...item} />;
+          })}
         </Grouping>
         <SectionDivider />
         {!showCompleted ? (

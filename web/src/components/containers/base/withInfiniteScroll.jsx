@@ -3,17 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import every from 'lodash/every';
 import throttle from 'lodash/throttle';
-import Loader from 'react-loader-spinner';
-import styled from 'styled-components';
-
-const StyledLoadingSpinner = styled(Loader)`
-  z-index: 10;
-  position: absolute;
-  left: calc(50% - 40px);
-  top: calc(50% - 40px);
-  height: 80px;
-  width: 80px;
-`;
 
 export default (Component, scrollTarget) =>
   class WithInfiniteScroll extends React.Component {
@@ -74,12 +63,6 @@ export default (Component, scrollTarget) =>
     };
 
     render() {
-      const { isLoading } = this.props;
-      return (
-        <>
-          <Component ref={this.el} {...this.props} />
-          {isLoading && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
-        </>
-      );
+      return <Component ref={this.el} {...this.props} />;
     }
   };

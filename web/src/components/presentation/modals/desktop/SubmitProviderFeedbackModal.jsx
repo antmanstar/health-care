@@ -85,11 +85,7 @@ const SubmitProviderFeedbackModal = ({
             languages={modalData.provider.languages}
             id={modalData.provider.id}
           />
-          <FeedbackSubmission
-            choice={feedbackChoice}
-            type="provider"
-            handleClick={() => handleClick()}
-          />
+          <FeedbackSubmission choice={feedbackChoice} type="provider" handleClick={handleClick} />
           <FormLabel>How could this provider be better?</FormLabel>
           <ModalTextArea
             name="message"

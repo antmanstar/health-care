@@ -29,7 +29,8 @@ const colors = {
     success: '#8ed081',
     warning: '#f9c22e',
     pending: '#f9c22e',
-    actionRequired: '#f03a47'
+    actionRequired: '#f03a47',
+    hold: '#bbbcbc'
   }
 }
 

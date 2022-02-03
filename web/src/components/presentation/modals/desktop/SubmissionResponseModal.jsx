@@ -33,7 +33,7 @@ const SubmissionResponseModal = props => {
       <Scrim onClick={props.hideModal} />
       <ModalWrapper className="extra-narrow">
         <ModalBodyColumn>
-          <Img src={images['check-in-circle']} alt="" />
+          {type === 'SUCCESS' && <Img src={images['check-in-circle']} alt="" />}
           <SubTitle>{title}</SubTitle>
           <p>{message}</p>
         </ModalBodyColumn>
