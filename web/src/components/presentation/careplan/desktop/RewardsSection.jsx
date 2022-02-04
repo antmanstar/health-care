@@ -170,17 +170,7 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   };
 
   const activityRewards = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 1);
-
-  const discountItems = !showFullDiscounts
-    ? [
-        'Fresh fruits & vegetables',
-        'Fitness Equipment',
-        'Vitamins & Supplements',
-        'Health Products',
-        'Fresh fruits & vegetables',
-        'Perscription Medication'
-      ]
-    : Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
+  const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
 
   return (
     <StyledSectionBackground>
@@ -214,6 +204,8 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                       buttonText={reward.benefit_cta}
                       earned={reward.benefit_amount}
                       date={reward.benefit_effective_date}
+                      action={reward.benefit_cta_value}
+                      ctaType={reward.benefit_cta_type}
                     />
                   );
               })}
@@ -223,7 +215,9 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           <Center>
             <button type="button" onClick={handleRewardsToggleClick}>
               {width <= 768
-                ? 'See More'
+                ? !showFullRewards
+                  ? 'See More'
+                  : 'See Less'
                 : !showFullRewards
                 ? 'See More Rewards'
                 : 'See Less Rewards'}
@@ -250,14 +244,11 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                 </Description>
               </div>
             </Header>
-            <DiscountFlex length={discountItems.length}>
+            <DiscountFlex length={showFullDiscounts ? discountItems.length : 6}>
               {discountItems.map((item, index) => {
-                return (
-                  <DiscountItem
-                    title={!showFullDiscounts ? item : item.benefit_display_name}
-                    key={index}
-                  />
-                );
+                let return_cond = (!showFullDiscounts && index < 6) || showFullDiscounts;
+                if (return_cond)
+                  return <DiscountItem title={item.benefit_display_name} key={index} />;
               })}
             </DiscountFlex>
           </StyledContainer>
@@ -265,7 +256,9 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           <Center>
             <button type="button" onClick={handleDiscountsToggleClick}>
               {width <= 768
-                ? 'See More'
+                ? !showFullDiscounts
+                  ? 'See More'
+                  : 'See Less'
                 : !showFullDiscounts
                 ? 'See More Discounts'
                 : 'See Less Discounts'}

@@ -90,6 +90,16 @@ const ButtonWrapper = styled.div`
 
   @media ${props => props.theme.device_up.tablet} {
     flex-direction: column;
+    align-items: flex-start;
+    width: 160px;
+  }
+
+  @media ${props => props.theme.device_up.mobile} {
+    width: 120px;
+  }
+
+  @media (max-width: 320px) {
+    width: 100px;
   }
 `;
 
@@ -128,6 +138,10 @@ const ComingText = styled.div`
   color: ${props => props.theme.colors.shades.darkGray};
   font-weight: bold;
   text-align: center;
+
+  @media ${props => props.theme.device_up.tablet} {
+    width: 100%;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -146,45 +160,49 @@ const IconWrapper = styled.div`
   }
 `;
 
-const ActivityReward = React.memo(({ title, description, buttonText, earned, date, id }) => {
-  const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583012'
-  const isComing = date === null || new Date(date) < new Date() ? false : true;
+const ActivityReward = React.memo(
+  ({ title, description, buttonText, earned, date, id, ctaType, action }) => {
+    const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583278'
+    const isComing = date === null || new Date(date) < new Date() ? false : true;
 
-  const handleOnClick = e => {
-    if ((e.target.id = '583282')) {
-      const element = document.getElementById('meetyourgoals');
-      const y = element.getBoundingClientRect().top + window.pageYOffset - 65;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    } else console.log('OnClick');
-  };
+    const handleOnClick = (e, link) => {
+      if (e.target.id == '583282') {
+        const element = document.getElementById('meetyourgoals');
+        const y = element.getBoundingClientRect().top + window.pageYOffset - 65;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      } else {
+        window.open(link);
+      }
+    };
 
-  return (
-    <Wrapper isBecome={isBecomeAnEvryMember}>
-      <InfoWrapper>
-        <div>
-          <Title>{title}</Title>
-          {description && <Description>{description}</Description>}
-        </div>
-        <ButtonWrapper>
-          {buttonText && (
-            <Button isComing={isComing} onClick={handleOnClick} id={id}>
-              {buttonText}
-            </Button>
+    return (
+      <Wrapper isBecome={isBecomeAnEvryMember}>
+        <InfoWrapper>
+          <div>
+            <Title>{title}</Title>
+            {description && <Description>{description}</Description>}
+          </div>
+          <ButtonWrapper>
+            {buttonText && (
+              <Button isComing={isComing} onClick={e => handleOnClick(e, action)} id={id}>
+                {buttonText}
+              </Button>
+            )}
+            {isComing && <ComingText>Coming Soon...</ComingText>}
+          </ButtonWrapper>
+        </InfoWrapper>
+        <Earned isBecome={isBecomeAnEvryMember}>
+          <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>
+          {isBecomeAnEvryMember && (
+            <IconWrapper>
+              <i className="material-icons">check</i>
+            </IconWrapper>
           )}
-          {isComing && <ComingText>Coming Soon...</ComingText>}
-        </ButtonWrapper>
-      </InfoWrapper>
-      <Earned isBecome={isBecomeAnEvryMember}>
-        <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>
-        {isBecomeAnEvryMember && (
-          <IconWrapper>
-            <i className="material-icons">check</i>
-          </IconWrapper>
-        )}
-      </Earned>
-    </Wrapper>
-  );
-});
+        </Earned>
+      </Wrapper>
+    );
+  }
+);
 
 ActivityReward.propTypes = {
   title: PropTypes.string.isRequired,
@@ -192,7 +210,9 @@ ActivityReward.propTypes = {
   buttonText: PropTypes.string,
   earned: PropTypes.number,
   date: PropTypes.string,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  ctaType: PropTypes.number.isRequired,
+  action: PropTypes.string
 };
 
 ActivityReward.defaultProps = {

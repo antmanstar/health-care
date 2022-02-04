@@ -51,6 +51,9 @@ const HeaderWrapper = styled.div`
     max-width: 300px;
     margin-top: 50px;
   }
+  @media (max-width: 320px) {
+    max-width: 250px;
+  }
 `;
 
 const LogoWrapper = styled.div`
@@ -136,8 +139,6 @@ const ContactInfo = styled.div`
   align-items: center;
   font-size: 25px;
   font-weight: 400;
-  padding-left: 40px;
-  padding-right: 70px;
   color: ${defaultTheme.colors.shades.blue};
 
   @media ${defaultTheme.device_up.tablet} {
@@ -157,6 +158,8 @@ const ContactInfo = styled.div`
 const PhoneInfo = styled.div`
   align-items: center;
   display: flex;
+
+  padding-left: 40px;
 
   @media ${defaultTheme.device_up.mobile} {
     min-width: 210px;
@@ -180,6 +183,10 @@ const MailInfo = styled.div`
 
   @media ${defaultTheme.device_up.tablet} {
     min-width: 210px;
+  }
+
+  @media (max-width: 530px) {
+    margin-left: 40px;
   }
 `;
 
