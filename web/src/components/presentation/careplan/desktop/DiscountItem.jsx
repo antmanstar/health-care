@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { ellipsis } from 'polished';
+import getWidth from '../../../../utils/getWidth';
 
 // DESKTOP: Discount Item of Reward Section
 
@@ -34,15 +36,21 @@ const Description = styled.p`
   font-weight: 300;
   font-family: 'Roboto';
   color: ${props => props.theme.colors.shades.darkGray};
+  ${({ width }) => ellipsis(`${width * 0.8}px`)}
+
+  @media ${props => props.theme.device.tablet} {
+    ${({ width }) => ellipsis(`${0.35 * width}px`)}
+  }
 `;
 
 const DiscountItem = React.memo(({ title }) => {
+  const width = getWidth();
   return (
     <Wrapper>
       <div>
         <Icon />
       </div>
-      <Description>{title}</Description>
+      <Description width={width}>{title}</Description>
     </Wrapper>
   );
 });

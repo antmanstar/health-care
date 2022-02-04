@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-flow: column;
   flex: 1;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   margin: auto auto 0;
@@ -27,6 +27,7 @@ const Wrapper = styled.div`
   overflow: hidden;
   padding-bottom: 5px;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+
   @media ${defaultTheme.device.tablet} {
     border-top: none;
   }

@@ -16,10 +16,13 @@ const Wrapper = styled.div`
   min-height: 100px;
   padding-top: 32px;
   box-sizing: border-box;
+  max-height: 100px;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
 
   @media ${defaultTheme.device.mobile} {
     border-top: none;
+    position: absolute;
+    bottom: 30px;
   }
 
   @media ${defaultTheme.device.tablet} {
