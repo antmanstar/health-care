@@ -67,6 +67,7 @@ export const geoLocationSearch = ({ city, state, zip, token }) => ({
 
 export const providerSearch = ({
   page,
+  searchWithinBound,
   recordsPerPage,
   search,
   orderBy,
@@ -81,6 +82,7 @@ export const providerSearch = ({
   type: types.PROVIDER_SEARCH,
   payload: {
     page,
+    searchWithinBound,
     recordsPerPage,
     search,
     orderBy,

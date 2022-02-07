@@ -6,6 +6,7 @@ import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import MedicareModalSection from './MedicareModalSection';
 import OtherInsuranceModalSection from './OtherInsuranceModalSection';
+import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 
 // MODAL - Update Coordination of Benefits
 
@@ -70,6 +71,11 @@ class UpdateCoordinationOfBenefitsModal extends Component {
     super(props);
     this.state = {
       medicare: {
+        checked: false,
+        checkedPartA: false,
+        checkedPartB: false,
+        checkedPartC: false,
+        checkedPartD: false,
         eligibility: null,
         partA: null,
         partB: null,
@@ -77,14 +83,15 @@ class UpdateCoordinationOfBenefitsModal extends Component {
         partD: null
       },
       otherInsurance: {
+        checked: false,
         type: null,
         carrier: null,
         policyNumber: null,
         startDate: null,
         endDate: null
       },
-      maxDate: null,
-      minDate: null
+      maxDate: "",
+      minDate: ""
     };
 
     this.handlers = {
@@ -118,6 +125,78 @@ class UpdateCoordinationOfBenefitsModal extends Component {
 
     this.setState({ otherInsurance });
   };
+
+  isValidDate(date) {
+    return date.getTime() === date.getTime() && date.getTime() > 0;
+  }
+
+  convertYMDToISO(dateString) {
+    let date = new Date(dateString);
+
+    return this.isValidDate(date) ? date.toISOString() : "";
+  }
+
+  handleErrors = (errors) => {
+    
+  }
+
+  completeCase = (response) => {
+    apis.markCaseAsSubmitComplete({
+      token: this.props.authToken,
+      id: response.data.id
+    }).then(this.props.hideModal).catch(this.handleErrors);
+  }
+
+  convertMedicareEligibilityType(eligibilityType) {
+    let parsed = (eligibilityType || "").trim().toLowerCase();
+
+    switch (parsed) {
+      case "age": return "1";
+      case "disability": return "2";
+      case "esrd": return "3";
+      default: return undefined;
+    }
+  }
+
+  convertOtherInsuranceType(insuranceType) {
+    let parsed = (insuranceType || "").trim().toLowerCase();
+
+    switch (parsed) {
+      case "individual": return "1";
+      case "group": return 2;
+      default: return undefined;
+    }
+  }
+
+  handleSubmit = () => {
+    const payload = {
+      token: this.props.authToken,
+
+      has_medicare: this.state.medicare.checked.toString(),
+      
+      medicare_eligibility_type: this.convertMedicareEligibilityType(this.state.medicare.eligibility),
+
+      medicare_part_a: this.state.medicare.checkedPartA.toString(),
+      medicare_part_b: this.state.medicare.checkedPartB.toString(),
+      medicare_part_c: this.state.medicare.checkedPartC.toString(),
+      medicare_part_d: this.state.medicare.checkedPartD.toString(),
+
+      medicare_part_a_effective_date: this.convertYMDToISO(this.state.medicare.partA),
+      medicare_part_b_effective_date: this.convertYMDToISO(this.state.medicare.partB),
+      medicare_part_c_effective_date: this.convertYMDToISO(this.state.medicare.partC),
+      medicare_part_d_effective_date: this.convertYMDToISO(this.state.medicare.partD),
+
+      has_other_health_coverage: this.state.otherInsurance.checked.toString(),
+
+      other_insurance_type: this.convertOtherInsuranceType(this.state.otherInsurance.type),
+      other_insurance_carrier_name: this.state.otherInsurance.carrier,
+      other_insurance_policy_number: this.state.otherInsurance.policyNumber,
+      other_insurance_coverage_from: this.convertYMDToISO(this.state.otherInsurance.startDate),
+      other_insurance_coverage_thru: this.convertYMDToISO(this.state.otherInsurance.endDate)
+    };
+
+    apis.createCaseCoordinationOfBenefits(payload).then(this.completeCase).catch(this.handleErrors);
+  }
 
   render() {
     const { medicare, otherInsurance, maxDate, minDate } = this.state;
@@ -175,7 +254,7 @@ class UpdateCoordinationOfBenefitsModal extends Component {
             </ModalButtonsCenter>
           ) : (
             <ModalButtonsRight>
-              <SmallButton text="Submit Changes" />
+              <SmallButton text="Submit Changes" onClick={this.handleSubmit} />
               <SmallButton text="Cancel" negative onClick={hideModal} />
             </ModalButtonsRight>
           )}

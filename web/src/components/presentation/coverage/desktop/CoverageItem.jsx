@@ -73,7 +73,7 @@ const CoverageItem = React.memo(({ alt, label, coverage, note }) => (
       <Item className={!label && 'collapsed'}>
         <Label className={!label && 'hide'}>{label}</Label>
         <Coverage>
-          {coverage}
+          {coverage.replace(/(\\n|\\r)/g, '')}
           {note && ` - ${note}`}
         </Coverage>
       </Item>

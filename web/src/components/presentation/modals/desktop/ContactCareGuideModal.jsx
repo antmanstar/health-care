@@ -21,6 +21,15 @@ const {
   SpaceBetween
 } = defaultTheme.components;
 
+const ScrollableModalWrapper = styled(ModalWrapper)`
+  overflow-y: auto;
+  height: 100%;
+
+  @media (min-height: 650px) {
+    height: auto;
+  }
+`;
+
 const Header = styled.div`
   position: relative;
   display: flex;
@@ -87,25 +96,29 @@ const Column = styled.div`
 const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
   <>
     <Scrim onClick={hideModal} />
-    <ModalWrapper>
+    <ScrollableModalWrapper>
       <Header>
         {!careGuide ? (
           <Loader />
         ) : (
           <>
             <ColoredBackground />
-            <ContactCareGuideProfile
-              name={`${careGuide.first_name} ${careGuide.last_name}`}
-              roleLabel="Your Care Guide"
-              number={`${careGuide.phone.phone_number} ${
-                careGuide.phone.phone_number_extension &&
-                careGuide.phone.phone_number_extension.trim().length > 0
-                  ? `(Ext - ${careGuide.phone.phone_number_extension})`
-                  : ''
-              }`}
-              email={careGuide.email.email_address}
-              imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
-            />
+            {careGuide.error && careGuide.error.length > 0 ? (
+              <ContactCareGuideProfile />
+            ) : (
+              <ContactCareGuideProfile
+                name={`${careGuide.first_name} ${careGuide.last_name}`}
+                roleLabel="Your Care Guide"
+                number={`${careGuide.phone.phone_number} ${
+                  careGuide.phone.phone_number_extension &&
+                  careGuide.phone.phone_number_extension.trim().length > 0
+                    ? `(Ext - ${careGuide.phone.phone_number_extension})`
+                    : ''
+                }`}
+                email={careGuide.email.email_address}
+                imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
+              />
+            )}
           </>
         )}
       </Header>
@@ -146,7 +159,7 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
       <ModalButtonsCenter>
         <SmallButton text="Cancel" negative onClick={hideModal} />
       </ModalButtonsCenter>
-    </ModalWrapper>
+    </ScrollableModalWrapper>
   </>
 ));
 

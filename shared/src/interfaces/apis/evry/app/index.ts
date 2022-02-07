@@ -2,22 +2,24 @@ import { axios } from '..'
 
 // eslint-disable-next-line import/prefer-default-export
 export function providerSearch({
-  page,
-  recordsPerPage,
-  search,
-  orderBy,
-  desc,
+  page = 1,
+  searchWithinBound,
+  recordsPerPage = 10,
+  search = '',
+  orderBy = null,
+  desc = true,
   location,
   bounds,
-  languages,
-  specialties,
-  gender,
+  languages = [],
+  specialties = [],
+  gender = null,
   token
 }) {
   return axios.post(
     '/api/v1/Member/ProviderSearch',
     {
       page,
+      only_search_within_bound: searchWithinBound,
       records_per_page: recordsPerPage,
       search_string: search,
       order_by: orderBy,

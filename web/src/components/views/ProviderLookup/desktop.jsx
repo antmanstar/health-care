@@ -12,7 +12,7 @@ import paginate from '../../../utils/pagination';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import ProviderSearchBar from '../../presentation/providers/desktop/ProviderSearchBar';
-import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
+import SearchingProviders from '../../presentation/providers/desktop/SearchingProviders';
 
 // "Provider Lookup" View
 
@@ -54,44 +54,16 @@ const ProviderLookup = ({
   const [hoveredCardId, setHoveredCardId] = useState();
   const [hoveredPinId, setHoveredPinId] = useState();
   const [organizedData, setOrganizedData] = useState([]);
-  const [boundary, setBoundary] = useState();
 
-  let isLoading = providerSearchData?.isLoading ? true : false;
-
-  useEffect(() => {
-    let baseRequest = {
-      page: 1,
-      recordsPerPage: 10,
-      search: '',
-      orderBy: '',
-      desc: true,
-      location: {
-        latitude: locationData?.latitude,
-        longitude: locationData?.longitude
-      },
-      bounds: {
-        south_west: {
-          latitude: boundary?.sw?.lat,
-          longitude: boundary?.sw?.lng
-        },
-        north_east: {
-          latitude: boundary?.ne?.lat,
-          longitude: boundary?.ne?.lng
-        }
-      },
-      languages: [],
-      specialties: [],
-      gender: null
-    };
-    fetchProviders({ ...baseRequest, ...providerSearchQuery });
-  }, [boundary, providerSearchQuery]);
+  let isLoadingProviders = providerSearchData?.isLoading ? true : false;
+  let isLoadingAddress = providerSearchData?.isLoadingAddress ? true : false;
 
   useEffect(() => {
     fetchAccountInfo();
   }, []);
 
   useEffect(() => {
-    if (!address.isEmpty())
+    !address.isEmpty() &&
       fetchGeoLocation({
         address1: convertAddress(address),
         city: address.city,
@@ -101,6 +73,24 @@ const ProviderLookup = ({
   }, [address.isEmpty()]);
 
   useEffect(() => {
+    let baseRequest = {
+      searchWithinBound: false,
+      location: {
+        latitude: locationData?.latitude,
+        longitude: locationData?.longitude
+      },
+      bounds: {
+        south_west: {},
+        north_east: {}
+      }
+    };
+    locationData !== null &&
+      !locationData?.filter &&
+      fetchProviders({ ...baseRequest, ...providerSearchQuery });
+  }, [locationData]);
+
+  useEffect(() => {
+    console.log(providerSearchData);
     let temp = [];
     providerSearchData?.data?.map(practice => {
       temp.push({
@@ -123,6 +113,23 @@ const ProviderLookup = ({
     setOrganizedData(temp);
   }, [providerSearchData]);
 
+  const renderProviderList = () => {
+    if (isLoadingAddress || isLoadingProviders || organizedData.length === 0)
+      return <SearchingProviders loading={true} />;
+    else
+      return organizedData.map((practiceDetails, i) => {
+        return (
+          <ProviderListItem
+            id={i}
+            setHoveredPinId={setHoveredPinId}
+            hoveredCardId={hoveredCardId}
+            onClick={() => setSelectedProvider(i)}
+            {...practiceDetails}
+          />
+        );
+      });
+  };
+
   return (
     <>
       <Helmet>
@@ -131,17 +138,7 @@ const ProviderLookup = ({
       <LayoutWrapper>
         <ProviderLookupResults>
           <PaginationWrapper>
-            {organizedData.map((practiceDetails, i) => {
-              return (
-                <ProviderListItem
-                  id={i}
-                  setHoveredPinId={setHoveredPinId}
-                  hoveredCardId={hoveredCardId}
-                  onClick={() => setSelectedProvider(i)}
-                  {...practiceDetails}
-                />
-              );
-            })}
+            {renderProviderList()}
             {paginator && <Pagination paginator={paginator} />}
           </PaginationWrapper>
           <ProviderLookupSelectedItem
@@ -149,12 +146,9 @@ const ProviderLookup = ({
             hoveredPinId={hoveredPinId}
             setHoveredCardId={setHoveredCardId}
             providerData={organizedData}
-            geoData={locationData}
-            setBoundary={setBoundary}
             {...organizedData[selectedProvider]}
           />
         </ProviderLookupResults>
-        {isLoading && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
       </LayoutWrapper>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
@@ -16,14 +16,17 @@ const Navigation = styled.ul`
   list-style: none;
 
   @media (max-width: ${mainBreakPoint}) {
-    max-width: ${props => (props.mobileOpen ? '300px' : '0')};
+    max-width: ${props => (props.mobileOpen ? '270px' : '0')};
     box-shadow: 0px 0px 50px #232931;
     position: fixed;
-    right: 0px;
+    top: 0;
+    right: 0;
     align-items: flex-start;
     background: #022b41;
     height: 100%;
     flex-direction: column;
+    padding-top: 50px;
+    z-index: 1;
     transition: max-width 0.3s ease-in;
   }
 `;
@@ -51,12 +54,6 @@ const OurNavLink = styled(NavLink)`
   @media (max-width: ${mainBreakPoint}) {
     white-space: nowrap;
     border-bottom: none;
-    &:hover {
-      color: ${props => props.theme.colors.shades.black};
-    }
-    &.active {
-      border-bottom: none;
-    }
   }
 `;
 
@@ -66,14 +63,7 @@ const NavItem = styled.li`
   @media (max-width: ${mainBreakPoint}) {
     width: 100%;
     margin-right: 0;
-    padding: 30px;
-    &:hover {
-      background: white;
-
-      ${OurNavLink} {
-        color: black;
-      }
-    }
+    padding: 20px 30px 20px 30px;
   }
 `;
 
@@ -120,11 +110,21 @@ const Dropdown = styled(Link)`
     white-space: nowrap;
     line-height: unset;
     width: 100%;
-    padding: 30px;
+    padding: 20px 30px 20px 30px;
     &:hover {
-      color: ${props => props.theme.colors.shades.grayTeal};
       line-height: unset;
     }
+    i {
+      margin-left: 15px;
+      font-size: 20px;
+    }
+  }
+`;
+
+const DropdownLabel = styled.div`
+  @media (max-width: ${mainBreakPoint}) {
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -150,21 +150,20 @@ const DropdownModal = styled.ul`
   }
 
   @media (max-width: ${mainBreakPoint}) {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    overflow: hidden;
     position: static;
     top: initial;
     left: initial;
-    padding: 0x;
+    padding: 0;
+    padding-top: 10px;
     list-style: none;
-    background: white;
     border-radius: 0;
     width: auto;
-    min-width: 0;
     box-shadow: unset;
-    padding: 10px 0 0 0;
     background: none;
-  }
+    max-height: ${props => (props.memberToolsOpen ? '300px' : '0')};
+    transition: max-height 0.2s ease-in;
 `;
 
 const DropDownItem = styled(Link)`
@@ -209,40 +208,62 @@ const DropDownLinkExternal = styled.a`
   }
 `;
 
-const MainNavigation = ({ mobileOpen }) => {
+const MainNavigation = ({ mobileOpen, setMobileMenuOpen }) => {
+  const [memberToolsOpen, setMemberToolsOpen] = useState(false);
+
+  const toggleMemberTools = () => {
+    console.log(memberToolsOpen);
+    mobileOpen && setMemberToolsOpen(!memberToolsOpen);
+  };
+
+  const hideMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <Navigation mobileOpen={mobileOpen}>
       <NavItem>
-        <OurNavLink to="/plan" activeClassName="active">
+        <OurNavLink to="/plan" onClick={() => hideMenu()} activeClassName="active">
           My Care Plan
         </OurNavLink>
       </NavItem>
       <NavItem>
-        <OurNavLink to="/coverage" activeClassName="active">
+        <OurNavLink to="/coverage" onClick={() => hideMenu()} activeClassName="active">
           My Coverage
         </OurNavLink>
       </NavItem>
       <NavItem>
-        <OurNavLink to="/claims" activeClassName="active">
+        <OurNavLink to="/claims" onClick={() => hideMenu()} activeClassName="active">
           My Claims
         </OurNavLink>
       </NavItem>
       <NavItem>
-        <OurNavLink to="/support" activeClassName="active">
+        <OurNavLink to="/support" onClick={() => hideMenu()} activeClassName="active">
           Customer Support
         </OurNavLink>
       </NavItem>
       <NavItem>
-        <OurNavLink to="/documents" activeClassName="active">
+        <OurNavLink to="/documents" onClick={() => hideMenu()} activeClassName="active">
           Document Center
         </OurNavLink>
       </NavItem>
-      <Dropdown>
-        Member Tools
-        <DropdownModal>
+      <Dropdown onClick={() => toggleMemberTools()}>
+        <DropdownLabel>
+          Member Tools
+          {mobileOpen ? (
+            memberToolsOpen ? (
+              <i className="material-icons">keyboard_arrow_up_icon</i>
+            ) : (
+              <i className="material-icons">keyboard_arrow_down_icon</i>
+            )
+          ) : (
+            undefined
+          )}
+        </DropdownLabel>
+        <DropdownModal memberToolsOpen={memberToolsOpen}>
           <DropDownItem>
             <img src={images['provider-lookup']} alt="Provider Lookup" />
-            <DropDownLink to="/provider-lookup" activeClassName="active">
+            <DropDownLink to="/provider-lookup" onClick={() => hideMenu()} activeClassName="active">
               Provider Lookup
             </DropDownLink>
           </DropDownItem>
@@ -258,7 +279,7 @@ const MainNavigation = ({ mobileOpen }) => {
               Expense Calculator
             </DropDownLink>
           </DropDownItem> */}
-          <DropDownItem>
+          <DropDownItem onClick={() => hideMenu()}>
             <img src={images['local-pharmacy-black']} alt="Pharmacy Lookup" />
             <DropDownLinkExternal
               href="https://magellanrx.com/member/external/commercial/common/doc/en-us/MRx_Pharmacy_Network_List.pdf"
@@ -267,7 +288,7 @@ const MainNavigation = ({ mobileOpen }) => {
               Pharmacy Lookup
             </DropDownLinkExternal>
           </DropDownItem>
-          <DropDownItem>
+          <DropDownItem onClick={() => hideMenu()}>
             <img src={images['medical-services-black']} alt="Out-of-Area Provider Lookup" />
             <DropDownLinkExternal
               href="https://multiplan.com/webcenter/portal/ProviderSearch"

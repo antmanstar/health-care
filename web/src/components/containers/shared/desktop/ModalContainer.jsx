@@ -119,6 +119,13 @@ const ScheduleAppointmentModalWithData = withStoreData(
   })
 );
 
+const UpdateCoordinationOfBenefitsModalWithData = withStoreData(
+  UpdateCoordinationOfBenefitsModal,
+  state => ({
+    authToken: getToken(state)
+  })
+);
+
 const ModalContainer = props => {
   switch (props.currentModal) {
     case 'APPOINT_REPRESENTATIVE':
@@ -161,7 +168,7 @@ const ModalContainer = props => {
       return <SupportRequestModal {...props} />;
 
     case 'UPDATE_COORDINATION_OF_BENEFITS':
-      return <UpdateCoordinationOfBenefitsModal {...props} />;
+      return <UpdateCoordinationOfBenefitsModalWithData {...props} />;
 
     case 'UPDATE_CONTACT_PREFERENCES':
       return <UpdateContactPreferences {...props} />;

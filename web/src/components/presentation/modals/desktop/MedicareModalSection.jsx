@@ -28,7 +28,7 @@ const BigDivider = styled.div`
 
 const MedicareModalSection = ({ handleChange, data }) => (
   <>
-    <CollapsibleModalSection title="Medicare" divided>
+    <CollapsibleModalSection onChange={handleChange('checked')} visible={data.checked} title="Medicare" divided>
       <BigDivider />
       <ModalMultipleChoiceQuestion
         handleAnswerClick={handleChange('eligibility')}
@@ -39,7 +39,7 @@ const MedicareModalSection = ({ handleChange, data }) => (
       <SectionDivider />
       <Title>Medicare Coverage</Title>
       <SectionDivider />
-      <CollapsibleModalSection title="Part A" textClass="light">
+      <CollapsibleModalSection onChange={handleChange('checkedPartA')} visible={data.checkedPartA} title="Part A" textClass="light">
         <SpaceBetween>
           <DateLabel>Part A Effective Date</DateLabel>
           <ModalHalfColumn>
@@ -48,7 +48,7 @@ const MedicareModalSection = ({ handleChange, data }) => (
         </SpaceBetween>
       </CollapsibleModalSection>
       <SectionDivider />
-      <CollapsibleModalSection title="Part B" textClass="light">
+      <CollapsibleModalSection onChange={handleChange('checkedPartB')} visible={data.checkedPartB} title="Part B" textClass="light">
         <SpaceBetween>
           <DateLabel>Part B Effective Date</DateLabel>
           <ModalHalfColumn>
@@ -57,7 +57,7 @@ const MedicareModalSection = ({ handleChange, data }) => (
         </SpaceBetween>
       </CollapsibleModalSection>
       <SectionDivider />
-      <CollapsibleModalSection title="Part C" textClass="light">
+      <CollapsibleModalSection onChange={handleChange('checkedPartC')} visible={data.checkedPartC} title="Part C" textClass="light">
         <SpaceBetween>
           <DateLabel>Part C Effective Date</DateLabel>
           <ModalHalfColumn>
@@ -66,7 +66,7 @@ const MedicareModalSection = ({ handleChange, data }) => (
         </SpaceBetween>
       </CollapsibleModalSection>
       <SectionDivider />
-      <CollapsibleModalSection title="Part D" textClass="light">
+      <CollapsibleModalSection onChange={handleChange('checkedPartD')} visible={data.checkedPartD} title="Part D" textClass="light">
         <SpaceBetween>
           <DateLabel>Part D Effective Date</DateLabel>
           <ModalHalfColumn>

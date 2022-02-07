@@ -34,7 +34,7 @@ const Row = styled.div`
 `;
 
 const InfoSection = styled.div`
-  width: 100%;
+  width: 50%;
   margin-bottom: 10px;
   color: ${props => props.theme.colors.shades.blue};
 `;
@@ -47,8 +47,10 @@ const Title = styled.h4`
 
 const Info = styled.div`
   display: flex;
+  flex-wrap: wrap;
   margin-top: 16px;
   margin-bottom: 20px;
+  gap: 10px;
 
   @media ${props => props.theme.device.desktop} {
     margin-bottom: 0;
@@ -57,8 +59,13 @@ const Info = styled.div`
 
 const LabeledNumbers = styled.div`
   display: flex;
+  width: 100%;
   font-size: 16px;
-  margin-right: 32px;
+  margin-bottom: 5px;
+
+  &.half-width {
+    width: 48%;
+  }
 
   h4,
   p {
@@ -73,6 +80,10 @@ const LabeledNumbers = styled.div`
 
 const Labels = styled.div`
   margin-right: 8px;
+  width: 55%;
+  &.half-width {
+    width: 30%;
+  }
 
   h4 {
     font-weight: 400;
@@ -81,6 +92,7 @@ const Labels = styled.div`
 
 const Numbers = styled.div`
   font-weight: 300;
+  text-align: left;
   color: ${props => props.theme.colors.shades.darkGray};
 `;
 
@@ -133,7 +145,11 @@ class MyMembershipSection extends Component {
       name,
       memberId,
       rxBin,
-      rxPcn
+      rxPcn,
+      payerId,
+      rxId,
+      rxGroup,
+      benefits
     } = this.props;
 
     return (
@@ -224,14 +240,70 @@ class MyMembershipSection extends Component {
               <Title>Doctor & Pharmacy</Title>
               <SectionDivider />
               <Info>
-                <Dependents></Dependents>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>RXID:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{rxId}</p>
+                  </Numbers>
+                </LabeledNumbers>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>RXBIN:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{rxBin}</p>
+                  </Numbers>
+                </LabeledNumbers>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>RXPCN:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{rxPcn}</p>
+                  </Numbers>
+                </LabeledNumbers>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>RXGRP:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{rxGroup}</p>
+                  </Numbers>
+                </LabeledNumbers>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>PAYER ID:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{payerId}</p>
+                  </Numbers>
+                </LabeledNumbers>
+                <LabeledNumbers className="half-width">
+                  <Labels className="half-width">
+                    <h4>TYPE:</h4>
+                  </Labels>
+                  <Numbers>
+                    <p>{benefitType}</p>
+                  </Numbers>
+                </LabeledNumbers>
               </Info>
             </InfoSection>
             <InfoSection>
               <Title>Costs</Title>
               <SectionDivider />
               <Info>
-                <Dependents></Dependents>
+                {benefits.map(benefit => (
+                  <LabeledNumbers key={benefit.name}>
+                    <Labels>
+                      <h4>{benefit.name}:</h4>
+                    </Labels>
+                    <Numbers>
+                      <p>{benefit.coverage}</p>
+                    </Numbers>
+                  </LabeledNumbers>
+                ))}
               </Info>
             </InfoSection>
           </Row>
@@ -240,7 +312,14 @@ class MyMembershipSection extends Component {
               <Title>Dependents</Title>
               <SectionDivider />
               <Info>
-                <Dependents></Dependents>
+                {familyMembers.map((member, index) => {
+                  if (member.relationship.toUpperCase() === 'SELF') return;
+                  return (
+                    <Dependents>{`${member.first} ${member.last}${
+                      index + 1 === familyMembers.length ? '' : ', '
+                    }`}</Dependents>
+                  );
+                })}
               </Info>
             </InfoSection>
             <InfoSection>

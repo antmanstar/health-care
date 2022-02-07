@@ -11,7 +11,7 @@ import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components';
 import defaultTheme from '../../style/themes';
-const { getMemberName, isOnboardingComplete } = selectors;
+const { getMemberName, isOnboardingComplete, isAuthenticated } = selectors;
 
 // Onboarding
 const Wrapper = styled.div`
@@ -36,20 +36,19 @@ const Wrapper = styled.div`
   }
 `;
 
-const Onboarding = ({ isOnboardingComplete }) => {
+const Onboarding = ({ isOnboardingComplete, isAuthenticated }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const maxSteps = 4;
 
   useEffect(() => {
-    console.log('mounting');
-    checkOnboardingStatus();
-  }, [isOnboardingComplete]);
-
-  const checkOnboardingStatus = () => {
-    if (isOnboardingComplete) {
-      history.push('/');
+    if (!isAuthenticated) {
+      history.push('/sign-in');
+    } else {
+      if (isOnboardingComplete) {
+        history.push('/');
+      }
     }
-  };
+  }, [isOnboardingComplete, isAuthenticated]);
 
   const handleStepBackward = () => {
     setCurrentStep(currentStep - 1);
@@ -89,7 +88,8 @@ Onboarding.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  isOnboardingComplete: isOnboardingComplete(state)
+  isOnboardingComplete: isOnboardingComplete(state),
+  isAuthenticated: isAuthenticated(state)
 });
 
 const ConnectedOnboarding = connect(mapStateToProps)(Onboarding);

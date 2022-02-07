@@ -22,8 +22,9 @@ const Wrapper = styled.div`
   z-index: 100;
   left: 0;
   width: 100%;
-  @media screen and (min-width: 1200px) {
-    width: auto;
+  @media screen and (min-width: 500px) and (max-width: 1180px) {
+    width: 350px;
+    left: auto;
   }
 `;
 

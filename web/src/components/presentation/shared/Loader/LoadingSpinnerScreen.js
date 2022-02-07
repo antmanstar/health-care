@@ -8,11 +8,10 @@ const ContentLoading = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(218, 218, 218, 0.7);
+  background: rgba(255, 255, 255, 0.3);
   z-index: 30;
-`
-
-const StyledLoadingSpinner = styled(Loader)`
+`;
+const StyledLoader = styled(Loader)`
   position: absolute;
   left: 50%;
   top: 50%;
@@ -21,10 +20,10 @@ const StyledLoadingSpinner = styled(Loader)`
   width: 100px;
 `;
 
-const LoadingSpinnerScreen = ({type, color}) => (
+const LoadingSpinnerScreen = ({ type, color }) => (
   <ContentLoading>
-    <StyledLoadingSpinner type={type} color={color}/>
+    <StyledLoader type={type} color={color} />
   </ContentLoading>
-)
+);
 
 export default LoadingSpinnerScreen;

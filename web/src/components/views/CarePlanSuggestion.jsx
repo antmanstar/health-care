@@ -7,12 +7,13 @@ import { Sparse } from '../layouts';
 import OnboardingProgressBar from '../presentation/registration/desktop/OnboardingProgressBar';
 import CarePlanSuggestionSlide from '../presentation/registration/desktop/CarePlanSuggestionSlide';
 import { carePlans } from '../../content';
+import getCarePlanInfo from '../../utils/carePlanInfo';
 import history from '../../utils/history';
 import Interpolation from '../../utils/Interpolation';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
 
 const { assignCarePlan } = actions;
 const {
@@ -21,6 +22,7 @@ const {
   getToken,
   isAssigningCarePlan,
   isOnboardingComplete,
+  isAuthenticated,
   successfulCarePlanAssignment
 } = selectors;
 
@@ -59,6 +61,7 @@ const CarePlanSuggestion = ({
   suggestedCarePlanId,
   isAssigningCarePlan,
   isOnboardingComplete,
+  isAuthenticated,
   token,
   assignCarePlan,
   handleAccept,
@@ -72,7 +75,12 @@ const CarePlanSuggestion = ({
   );
 
   useEffect(() => {
-    checkOnboardingStatus();
+    if (!isAuthenticated) {
+      history.push('sign-in');
+    }
+    if (isOnboardingComplete) {
+      history.push('/');
+    }
   }, []);
 
   useEffect(() => {
@@ -80,12 +88,6 @@ const CarePlanSuggestion = ({
       history.push('/plan');
     }
   }, [successfulCarePlanAssignment]);
-
-  const checkOnboardingStatus = () => {
-    if (isOnboardingComplete) {
-      history.push('/');
-    }
-  };
 
   return (
     <>
@@ -104,7 +106,7 @@ const CarePlanSuggestion = ({
           carePlanSuggestion={carePlanSuggestion}
           isAssigningCarePlan={isAssigningCarePlan}
         />
-        {isAssigningCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+        {isAssigningCarePlan && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
       </Wrapper>
     </>
   );
@@ -132,6 +134,7 @@ const mapStateToProps = state => ({
   successfulCarePlanAssignment: successfulCarePlanAssignment(state),
   suggestedCarePlanId: getSuggestedCarePlanId(state),
   isAssigningCarePlan: isAssigningCarePlan(state),
+  isAuthenticated: isAuthenticated(state),
   isOnboardingComplete: isOnboardingComplete(state),
   token: getToken(state)
 });
@@ -164,7 +167,10 @@ const reflection = {
           ? 'Keep Current Plan'
           : 'Change Plan?'
     ]),
-    subtitle: 'Based on your selections, we suggest you consider choosing the Heart Health Plan',
+    subtitle: new Interpolation([
+      'Based on your selections, we suggest you consider choosing the ',
+      state => getCarePlanInfo(getSuggestedCarePlanId(state)).title
+    ]),
     fullWidth: true
   },
   route: '/change-plan'

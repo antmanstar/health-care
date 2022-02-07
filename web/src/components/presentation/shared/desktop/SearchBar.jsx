@@ -43,11 +43,16 @@ const Search = styled.div`
   }
 `;
 
+const HiddenSearch = styled.div`
+  height: 16px;
+`;
+
 const SearchBar = React.memo(() => (
-  <Search>
-    <i className="material-icons">search</i>
-    <input type="text" name="search" placeholder="Search for anything." autoComplete="off" />
-  </Search>
+  <HiddenSearch />
+  // <Search>
+  //   <i className="material-icons">search</i>
+  //   <input type="text" name="search" placeholder="Search for anything." autoComplete="off" />
+  // </Search>
 ));
 
 export default SearchBar;

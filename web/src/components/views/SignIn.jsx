@@ -13,8 +13,8 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import Interpolation from '../../utils/Interpolation';
 import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
-import MessageAlert from "./MessageAlert";
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
+import MessageAlert from './MessageAlert';
 
 const { authenticate, clearAuthError, clear2FA, verify2FACode, clearSessionTimedOut } = actions;
 const {
@@ -154,6 +154,12 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 20px;
   width: 100%;
 `;
+
+const AccountNotFoundWrapper = styled.div`
+  margin-bottom: 20px;
+  width: 100%;
+`;
+
 const DividerWrapper = styled.div`
   @media ${props => props.theme.device.tabletXL} {
     display: none;
@@ -202,21 +208,20 @@ function SignIn({
   }, [isAuthenticated, hasBasicInfo, isOnboardingComplete]);
 
   const renderAuthError = () => {
-    let authErrorMessage = null;
-    if (authError) {
-      authErrorMessage = (
-        <ErrorMessageWrapper>
-          <ErrorMessage message={authError} />
-        </ErrorMessageWrapper>
+    if (authError && authError.length > 0 && authError[0] === "User not found.") {
+      return (
+        <AccountNotFoundWrapper>
+          <ErrorMessage message={['Account not found.']} />
+          <RouterLink to="/register">Please register an account</RouterLink>
+        </AccountNotFoundWrapper>
       );
+    } else if (authError) {
+      return <ErrorMessageWrapper><ErrorMessage message={authError} /></ErrorMessageWrapper>;
     } else if (isSessionTimedOut) {
-      authErrorMessage = (
-        <ErrorMessageWrapper>
-          <ErrorMessage message={['Your session has expired. Please login again.']} />
-        </ErrorMessageWrapper>
-      );
+      return <ErrorMessageWrapper><ErrorMessage message={['Your session has expired. Please login again.']} /></ErrorMessageWrapper>;
     }
-    return authErrorMessage;
+
+    return null;
   };
 
   function submit2FA(e) {
@@ -282,12 +287,7 @@ function SignIn({
             </EditedTwoColumnRow>
             <SectionDivider />
             <ButtonWrapper>
-              <Button
-                buttonType="submit"
-                value="Sign In"
-                text="Sign In"
-                disabled={isSigningIn}
-              />
+              <Button buttonType="submit" value="Sign In" text="Sign In" disabled={isSigningIn} />
             </ButtonWrapper>
           </form>
         </FormWrapper>
@@ -310,7 +310,7 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {isSigningIn && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isSigningIn && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
 }

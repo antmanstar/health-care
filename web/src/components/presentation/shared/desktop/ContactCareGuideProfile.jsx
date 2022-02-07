@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-
+import images from '../../../../utils/images';
 // Contact Care Guide Profile (For Contact Care Guide Modal)
 
 const Wrapper = styled.div`
@@ -24,6 +24,18 @@ const ProfilePic = styled.div`
     border-radius: 50%;
     width: 100%;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  }
+`;
+const DefaultPic = styled.div`
+  max-width: 105px;
+
+  img {
+    border-radius: 50%;
+    width: 50%;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+    background-color: ${props => props.theme.colors.shades.blue};
+    padding: 15px;
+    min-width: 35px;
   }
 `;
 
@@ -59,23 +71,46 @@ const Icon = styled.i`
   color: ${props => props.theme.colors.shades.blue};
 `;
 
+const DefaultMessage = styled.div`
+  font-size: 12px;
+  font-weight: 300;
+  color: ${props => props.theme.colors.shades.pinkOrange};
+  @media ${props => props.theme.device.mobile} {
+    font-size: 16px;
+  }
+`;
+
 const ContactCareGuideProfile = React.memo(({ name, roleLabel, number, email, imgSrc }) => (
   <Wrapper>
-    <ProfilePic>
-      <img src={imgSrc} alt={name} />
-    </ProfilePic>
-    <ProfileDetails>
-      <Name>{name}</Name>
-      <Role>{roleLabel}</Role>
-      <ContactInfoItem>
-        <Icon className="material-icons">phone</Icon>
-        <span>{number}</span>
-      </ContactInfoItem>
-      <ContactInfoItem>
-        <Icon className="material-icons">mail_outline</Icon>
-        <a href={`mailto:${email}`}>{email}</a>
-      </ContactInfoItem>
-    </ProfileDetails>
+    {imgSrc && imgSrc.length > 0 ? (
+      <ProfilePic>
+        <img src={imgSrc} alt={name} />
+      </ProfilePic>
+    ) : (
+      <DefaultPic>
+        <img src={images['white_icons/care-guide']} alt={name} />
+      </DefaultPic>
+    )}
+
+    {name && name.length > 0 ? (
+      <ProfileDetails>
+        <Name>{name}</Name>
+        <Role>{roleLabel}</Role>
+        <ContactInfoItem>
+          <Icon className="material-icons">phone</Icon>
+          <span>{number}</span>
+        </ContactInfoItem>
+        <ContactInfoItem>
+          <Icon className="material-icons">mail_outline</Icon>
+          <a href={`mailto:${email}`}>{email}</a>
+        </ContactInfoItem>
+      </ProfileDetails>
+    ) : (
+      <ProfileDetails>
+        <Name>Your Care Guide</Name>
+        <DefaultMessage>We're looking for the right care guide for your needs.</DefaultMessage>
+      </ProfileDetails>
+    )}
   </Wrapper>
 ));
 

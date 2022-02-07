@@ -14,7 +14,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { supportsPassive } from '../../../../utils/browser';
 import elasticDataFrame from '../../../../utils/elasticDataFrame';
 import logoImg from '@evry-member-app/assets/images/vector/logo.svg';
-import StyledLoadingSpinner from '../Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../Loader/LoadingSpinnerScreen';
 
 const { fetchNotifications, markNotificationsAsRead, signOut } = actions;
 const {
@@ -288,6 +288,7 @@ const MobileMenuButton = styled.div`
   i {
     font-size: 26px;
     transition: all 0.1s ease-in-out;
+    z-index: 2;
   }
   &:hover {
     div,
@@ -359,6 +360,19 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
   const [open, setOpen] = useState();
   const [scrolled, setScrolled] = useState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [size, setSize] = useState([0, 0]);
+
+  useEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  useEffect(() => {
+    if (size[0] > 1200) setMobileMenuOpen(false);
+  }, [size]);
 
   const checkScroll = () => {
     return (window.pageYOffset || document.documentElement.scrollTop) > 28;
@@ -366,7 +380,6 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
 
   useEffect(() => {
     window.addEventListener('scroll', () => handleScroll(), supportsPassive());
-
     return window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -399,7 +412,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
           </RouterLink>
         </LeftWrapper>
         <CenterWrapper>
-          <MainNavigation mobileOpen={mobileMenuOpen} />
+          <MainNavigation setMobileMenuOpen={setMobileMenuOpen} mobileOpen={mobileMenuOpen} />
           {phoneNumber && (
             <PhoneNumber>
               <i className="material-icons">phone</i>
@@ -441,7 +454,11 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
             </DropdownModal>
           </AccountMenuDropdown>
           <MobileMenuButton onClick={() => toggleMobileMenu()}>
-            <i className="material-icons">menu</i>
+            {mobileMenuOpen ? (
+              <i className="material-icons">close</i>
+            ) : (
+              <i className="material-icons">menu</i>
+            )}
           </MobileMenuButton>
         </RightWrapper>
       </InnerWrapper>
@@ -453,7 +470,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
       >
         <NotificationCenterWithData handleClick={() => toggleDrawer()} />
       </SwipeableDrawer>
-      {isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isSigningOut && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
 };

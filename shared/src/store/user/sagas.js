@@ -183,6 +183,27 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD,
+        generateFetchWorker,
+        api.createCase_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.APPOINTED_REP_FORM_UPLOAD,
+        generateFetchWorker,
+        api.uploadFiles_v2
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD,
+        generateFetchWorker,
+        api.markCaseAsSubmitComplete
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.EDUCATIONAL_RESOURCES_FETCH,
         generateFetchWorker,
         api.fetchEducationalResources
@@ -360,6 +381,13 @@ export default function* watcherSaga() {
         types.UPDATE_CONTACT_PREFERENCES,
         generateFetchWorker,
         api.updateContactPreferences
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.FILE_CONTENT_FETCH,
+        generateFetchWorker,
+        api.fetchFileContent
       )
     )
   ])

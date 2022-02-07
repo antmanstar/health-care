@@ -10,7 +10,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import Select from '../../shared/desktop/Select';
 import constants from '@evry-member-app/shared/constants';
-import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 // MODAL - Schedule a Phone Call
 
 const {
@@ -176,7 +176,7 @@ class SchedulePhoneCallModal extends Component {
     console.log(value);
     this.setState({ dateTime: value });
   }
-  
+
   handleTimeChange(value) {
     this.setState({ time: value });
   }
@@ -316,7 +316,7 @@ class SchedulePhoneCallModal extends Component {
               <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
-          {this.state.showLoader && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+          {this.state.showLoader && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
         </ModalWrapper>
       </>
     );

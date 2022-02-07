@@ -7,8 +7,9 @@ import Select from '../../shared/desktop/Select';
 import SmallButton from '../../shared/desktop/SmallButton';
 import truncate from '../../../../utils/string';
 import selectors from '@evry-member-app/shared/store/selectors';
+import actions from '@evry-member-app/shared/store/actions';
 
-const { getSupportPhoneNumber } = selectors;
+const { getSupportPhoneNumber, getToken, getAppointRepFormUploadCase } = selectors;
 
 // MODAL - Upload a Document
 
@@ -23,6 +24,15 @@ const {
   ModalWrapper,
   SpaceBetween
 } = defaultTheme.components;
+
+const {
+  createAppointedRepFormUploadCase,
+  appointedRepFormUpload,
+  completeAppointedRepFormUploadCase,
+  appointedRepFormUploadReset,
+  setModalData,
+  showModal
+} = actions;
 
 const SqaushedSpaceBetween = styled(SpaceBetween)`
   margin: 32px 0 -8px;
@@ -86,18 +96,62 @@ class UploadDocumentModal extends Component {
     super(props);
     this.state = {
       documentType: '',
-      file: 'Choose a File'
+      file: 'Choose a File',
+      files: []
     };
 
     this.handlers = {
-      handleChange: this.handleChange.bind(this)
+      handleChange: this.handleChange.bind(this),
+      handleSubmit: this.handleSubmit.bind(this)
     };
   }
 
   handleChange(event) {
     const stateObject = {};
     stateObject[event.target.name] = event.target.value;
+    if (event.target.type === 'file') {
+      stateObject['files'] = event.target.files;
+    }
     this.setState(stateObject);
+  }
+
+  handleSubmit() {
+    this.props.createCase(this.props.token);
+  }
+
+  componentDidMount() {
+    this.props.resetCaseState();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.appointRepFormUploadCase &&
+      prevProps.appointRepFormUploadCase.status === null &&
+      this.props.appointRepFormUploadCase.status === 'OPEN'
+    ) {
+      this.props.uploadFiles(
+        this.props.appointRepFormUploadCase.id,
+        this.state.files,
+        this.props.token
+      );
+    } else if (
+      prevProps.appointRepFormUploadCase &&
+      prevProps.appointRepFormUploadCase.status === 'OPEN' &&
+      this.props.appointRepFormUploadCase.status === 'UPLOADED'
+    ) {
+      this.props.completeCase(this.props.appointRepFormUploadCase.id, this.props.token);
+    } else if (
+      prevProps.appointRepFormUploadCase &&
+      prevProps.appointRepFormUploadCase.status === 'UPLOADED' &&
+      this.props.appointRepFormUploadCase.status === 'COMPLETE'
+    ) {
+      this.props.setModalData({
+        type: 'SUCCESS',
+        title: 'Submitted!',
+        message: "Great! We'll get to work on that and send you a confirmation once complete."
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
+    }
   }
 
   render() {
@@ -149,7 +203,7 @@ class UploadDocumentModal extends Component {
           </ModalBody>
           <ModalSectionDivider />
           <ModalButtonsRight>
-            <SmallButton text="Submit Request" />
+            <SmallButton text="Submit Request" onClick={this.handlers.handleSubmit} />
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsRight>
         </ModalWrapper>
@@ -164,7 +218,17 @@ UploadDocumentModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  phoneNumber: getSupportPhoneNumber(state)
+  phoneNumber: getSupportPhoneNumber(state),
+  token: getToken(state),
+  appointRepFormUploadCase: getAppointRepFormUploadCase(state)
+});
+const mapDispatchToProps = dispatch => ({
+  createCase: token => dispatch(createAppointedRepFormUploadCase({ token })),
+  uploadFiles: (caseID, files, token) => dispatch(appointedRepFormUpload({ caseID, files, token })),
+  resetCaseState: () => dispatch(appointedRepFormUploadReset()),
+  completeCase: (caseID, token) => dispatch(completeAppointedRepFormUploadCase({ caseID, token })),
+  setModalData: modalData => dispatch(setModalData(modalData)),
+  showModal: modal => dispatch(showModal(modal))
 });
 
-export default connect(mapStateToProps)(UploadDocumentModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UploadDocumentModal);

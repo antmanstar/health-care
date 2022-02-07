@@ -48,3 +48,9 @@ export const HEART_HEALTH_PLAN_ID = 1
 export const BONE_AND_JOINT_HEALTH_PLAN_ID = 2
 export const CANCER_TREATMENT_PLAN_ID = 3
 export const WOMENS_HEALTH_PLAN_ID = 4
+
+export const HEALTH_AND_WELLNESS_PLAN_NAME = 'Health & Wellness'
+export const HEART_HEALTH_PLAN_NAME = 'Heart & Lung'
+export const BONE_AND_JOINT_HEALTH_PLAN_NAME = 'Bone & Joint'
+export const CANCER_TREATMENT_PLAN_NAME = 'Cancer'
+export const WOMENS_HEALTH_PLAN_NAME = 'Pregnancy / Women’s Health'

@@ -30,7 +30,7 @@ const { getToken } = selectors;
 
 const SessionTimeout = props => {
   const inactivityLimit = 30;
-  const warningInterval = 120000;
+  const warningInterval = 1200000;
   const [isOpen, setOpen] = useState();
   const [counter, setCounter] = useState();
   const events = ['click', 'load', 'scroll'];

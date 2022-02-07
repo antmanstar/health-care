@@ -11,7 +11,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import history from '../../utils/history';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
 import ReactTooltip from 'react-tooltip';
 
 const { register } = actions;
@@ -267,7 +267,7 @@ function CreateAccount({
         </ButtonWrapper>
       </form>
       {renderRegisterError()}
-      {isRegisteringElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isRegisteringElegibility && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </LayoutWrapper>
   );
 }

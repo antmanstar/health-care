@@ -137,12 +137,27 @@ const appReducer = (state = {}, action) => {
           query: {}
         }
       }
+    case types.GEOCODER:
+      return {
+        ...state,
+        providerSearch: {
+          ...get(state, ['providerSearch']),
+          isLoadingAddress: true
+        }
+      }
     case types.GEOCODER_SUCCESS:
-      return { ...state, geoLocation: action.payload }
+      return {
+        ...state,
+        providerSearch: {
+          ...get(state, ['providerSearch']),
+          isLoadingAddress: false
+        },
+        geoLocation: action.payload
+      }
     case types.GEOCODER_FAILURE:
       return { ...state }
     case types.GEOLOCATIONSEARCH_SUCCESS:
-      return { ...state, geoLocation: action.payload }
+      return { ...state, geoLocation: { ...action.payload, filter: true } }
     case types.GEOLOCATIONSEARCH_FAILURE:
       return { ...state }
   }

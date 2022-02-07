@@ -12,7 +12,14 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
 
 const { fetchBenefitCoverages, fetchAccumulators, fetchMembershipSummary } = actions;
-const { getAccumulators, getBenefitCoverages, getMemberId, getToken, getMembership } = selectors;
+const {
+  getAccumulators,
+  getBenefitCoverages,
+  getMemberId,
+  getToken,
+  getMembership,
+  getFamilyMembers
+} = selectors;
 
 // DESKTOP: Coverage View
 // TODO: Wire up action buttons
@@ -31,7 +38,8 @@ const Coverage = () => {
       token: getToken(state),
       memberId: getMemberId(state),
       accumulators: getAccumulators(state),
-      membershipSummary: getMembership(state)
+      membershipSummary: getMembership(state),
+      familyMembers: getFamilyMembers(state)
     }),
     dispatch => ({
       fetchAccumulators: (token, id, date, type) =>
@@ -57,6 +65,7 @@ const Coverage = () => {
           false
         ),
       accumulators: stateProps.accumulators,
+      familyMembers: stateProps.familyMembers,
       ...stateProps.membershipSummary,
       ...ownProps
     })

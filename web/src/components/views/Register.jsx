@@ -8,7 +8,7 @@ import defaultTheme from '../../style/themes';
 import Button from '../presentation/shared/desktop/Button';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
 import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import history from '../../utils/history';
 import { Divider } from '@material-ui/core';
@@ -265,7 +265,7 @@ function Register({
         </GoToSignIn>
       </BottomSectionDivider>
 
-      {isVerifyingElegibility && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isVerifyingElegibility && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
 }

@@ -14,7 +14,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { supportsPassive } from '../../../../utils/browser';
 import elasticDataFrame from '../../../../utils/elasticDataFrame';
 import logoImg from '@evry-member-app/assets/images/vector/logo.svg';
-import StyledLoadingSpinner from '../Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../Loader/LoadingSpinnerScreen';
 
 const { fetchNotifications, markNotificationsAsRead, signOut } = actions;
 const {
@@ -454,7 +454,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
       >
         <NotificationCenterWithData handleClick={() => toggleDrawer()} />
       </SwipeableDrawer>
-      {isSigningOut && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+      {isSigningOut && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );
 };

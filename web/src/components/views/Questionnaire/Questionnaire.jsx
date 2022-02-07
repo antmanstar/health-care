@@ -13,7 +13,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import history from '../../../utils/history';
 import { Helmet } from 'react-helmet-async';
 import moment from 'moment';
-import StyledLoadingSpinner from '../../presentation/shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../../presentation/shared/Loader/LoadingSpinnerScreen';
 import { useEffect } from 'react';
 
 const { saveQuestionnaire } = actions;
@@ -22,7 +22,8 @@ const {
   getQuestionnaire,
   getToken,
   isQuestionnaireComplete,
-  isSavingQuestionnaire
+  isSavingQuestionnaire,
+  isAuthenticated
 } = selectors;
 
 const Wrapper = styled.form`
@@ -188,6 +189,8 @@ const Questionnaire = () => {
   const isSavingQuestion = useSelector(isSavingQuestionnaire);
   const token = useSelector(getToken);
 
+  const authenticated = useSelector(isAuthenticated);
+
   // dispatch
   const saveResult = sv_data => dispatch(saveQuestionnaire(sv_data));
 
@@ -196,6 +199,7 @@ const Questionnaire = () => {
   if (!questions) {
     return <Redirect to="/" />;
   }
+
   const current_question = questions.find(
     question => question.question_order === currentQuestionIndex
   );
@@ -205,14 +209,15 @@ const Questionnaire = () => {
     .map(answer => answer.questionSelectionId);
 
   useEffect(() => {
-    forwardToSuggestion();
-  }, [isSavingQuestion]);
-
-  const forwardToSuggestion = () => {
+    if (!authenticated) {
+      history.push('/sign-in');
+    }
+  }, []);
+  useEffect(() => {
     if (!isEmpty(carePlanSuggestion) || isQuestionnaireCompleted) {
       history.push('/change-plan');
     }
-  };
+  }, [isSavingQuestion]);
 
   const areAllQuestionsAnswered = () => {
     return questions.reduce(
@@ -349,7 +354,7 @@ const Questionnaire = () => {
           handleNextFunction={handleNextFunction}
           handlePrevFunction={handlePrevFunction}
         />
-        {isSavingQuestion && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+        {isSavingQuestion && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
       </OnboardWrapper>
     </>
   );

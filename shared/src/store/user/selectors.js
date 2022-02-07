@@ -299,6 +299,8 @@ export const getFamilyMembers = (state) =>
     first: dependent.first_name,
     middle: dependent.middle_name,
     last: dependent.last_name,
+    relationship: dependent.relationship,
+    id: dependent.eligibility_id,
     ...nameMethods
   }))
 
@@ -452,3 +454,6 @@ export const getSendMessageCase = (state) =>
 
 export const getRequestMailedCardCase = (state) =>
   get(state, ['user', 'requestMailedCardCase'])
+
+export const getAppointRepFormUploadCase = (state) =>
+  get(state, ['user', 'appointRepFormUploadCase'])

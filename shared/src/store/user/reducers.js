@@ -70,22 +70,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         careGuideInfo: {
-          first_name: 'Nicole',
-          middle_name: '',
-          last_name: 'Stevens',
-          suffix: '',
-          prefix: '',
-          title: 'Care Guide',
-          user_id: '',
-          my_image_file_id: '',
-          phone: {
-            phone_type: '',
-            phone_number: '(214)567-8796',
-            phone_number_extension: ''
-          },
-          email: {
-            email_address: 'nstevens@evryhealth.com'
-          },
           error: action.error.response.data.messages
         }
       }
@@ -309,6 +293,66 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         requestMailedCardCase: { status: null, id: null }
+      }
+    case types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          status: 'OPEN',
+          id: action.payload.id
+        }
+      }
+    case types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD_FAILURE:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          ...state.appointRepFormUploadCase,
+          status: 'ERROR-CREATING',
+          messages: action.payload
+            ? action.payload.messages
+            : ['An error has occured.']
+        }
+      }
+    case types.APPOINTED_REP_FORM_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          ...state.appointRepFormUploadCase,
+          status: 'UPLOADED'
+        }
+      }
+    case types.APPOINTED_REP_FORM_UPLOAD_FAILURE:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          ...state.appointRepFormUploadCase,
+          status: 'ERROR-UPLOADING',
+          messages: action.payload
+            ? action.payload.messages
+            : ['An error has occured.']
+        }
+      }
+      case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
+        return {
+          ...state,
+          appointRepFormUploadCase: {
+            ...state.appointRepFormUploadCase,
+            status: 'COMPLETE'
+          }
+        }
+      case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_FAILURE:
+        return {
+          ...state,
+          appointRepFormUploadCase: {
+            ...state.appointRepFormUploadCase,
+            status: 'ERROR-COMPLETING',
+            messages: action.payload.messages
+          }
+        }
+    case types.APPOINTED_REP_FORM_UPLOAD_RESET:
+      return {
+        ...state,
+        appointRepFormUploadCase: { status: null, id: null }
       }
     case types.EVRY_CONTACT_FETCH_SUCCESS:
       return { ...state, evryContactInfo: action.payload }
@@ -567,6 +611,15 @@ const userReducer = (state = initialState, action) => {
       return { ...state, sessionTimedOut: true }
     case types.CLEAR_SESSION_TIMED_OUT:
       return { ...state, sessionTimedOut: false }
+    case types.FILE_CONTENT_FETCH:
+      return { ...state, fileContent: { isLoading: true } }
+    case types.FILE_CONTENT_FETCH_SUCCESS:
+      return {
+        ...state,
+        fileContent: { isLoading: false, file: action.payload }
+      }
+    case types.FILE_CONTENT_FETCH_FAILURE:
+      return { ...state, fileContent: { isLoading: false } }
     case types.UNSET:
       return null
     case types.INITIALIZE:

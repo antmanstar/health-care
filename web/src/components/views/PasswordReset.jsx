@@ -50,7 +50,7 @@ const Title = styled.h2`
 `;
 
 const EditedTwoColumnRow = styled(TwoColumnRow)`
-  padding: 32px 0;
+  padding: 32px 0 16px 0;
   flex-wrap: wrap;
   margin-bottom: 0;
 
@@ -70,14 +70,17 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-top: 32px;
 `;
 
 const GoToRegistration = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 60px;
-  flex-direction: column;
+  margin-top: 200px;
+  flex-direction: row;
   text-align: center;
+  align-items: center;
+  margin-top: auto;
 
   p {
     display: block;
@@ -87,20 +90,6 @@ const GoToRegistration = styled.div`
   a {
     margin-left: 8px;
     color: ${props => props.theme.colors.shades.pinkOrange};
-  }
-`;
-
-const Copy = styled.p`
-  display: block;
-  width: 100%;
-  padding-top: 20px;
-  text-align: center;
-  line-height: 1.35em;
-  font-size: 15px;
-
-  a {
-    margin-top: 30px;
-    display: block;
   }
 `;
 
@@ -126,19 +115,50 @@ const TextLabel = styled.div`
   margin-left: 3px;
 `;
 
+const VSeparator = styled.div`
+  border-right: 2px solid #eee;
+  height: 30px;
+  margin: 0 20px;
+`;
+
+const Separator = styled.div`
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  margin: 25px 0;
+`;
+
+const ShowPassword = styled.button`
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-style: italic;
+  color: ${props => props.theme.colors.shades.gray};
+  cursor: pointer;
+  float: right;
+  &:hover {
+    color: ${props => props.theme.colors.shades.darkGray};
+  }
+`;
+
+const MatchingMessage = styled.div`
+  font-weight: 500;
+  color: ${props => props.color};
+`;
+
 class DesktopPasswordReset extends Component {
   constructor(props) {
     super(props);
     this.state = {
       initiatePasswordResetSubmission: false,
       resetPasswordSubmission: false,
-      password: ''
+      password: '',
+      confirmPassword: '',
+      showPassword: false
     };
 
     this.handlers = {
       handleResetSubmission: this.handleResetSubmission.bind(this),
-      handleInitialSubmission: this.handleInitialSubmission.bind(this),
-      handleChange: this.handleChange.bind(this)
+      handleInitialSubmission: this.handleInitialSubmission.bind(this)
     };
   }
 
@@ -148,8 +168,12 @@ class DesktopPasswordReset extends Component {
     this.setState({ resetPasswordSubmission: false, initiatePasswordResetSubmission: false });
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     this.setState({ password: event.target.value });
+  }
+
+  handleConfirmPasswordChange = (event) => {
+    this.setState({ confirmPassword: event.target.value });
   }
 
   handleResetSubmission(e) {
@@ -170,9 +194,25 @@ class DesktopPasswordReset extends Component {
     return authError ? <ErrorMessage message={authError} /> : null;
   }
 
+  toggleShowPassword = () => {
+    this.setState({ showPassword: !this.state.showPassword });
+  }
+
+  renderPasswordsMatchString = () => {
+    if (this.state.password.length === 0 && this.state.confirmPassword.length === 0) {
+      return null;
+    }
+
+    const isMatch = this.state.password === this.state.confirmPassword;
+    const message = isMatch ? "Passwords Match" : "Passwords don't match";
+    const color = isMatch ? "#8ED081" : "#F57982";
+
+    return <MatchingMessage color={color}>{message}</MatchingMessage>;
+  }
+
   renderEnterNewPassword() {
     const { location, authError } = this.props;
-    const { resetPasswordSubmission, password } = this.state;
+    const { resetPasswordSubmission, password, confirmPassword } = this.state;
     const queryParams = queryString.parse(location.search);
 
     return (
@@ -184,25 +224,34 @@ class DesktopPasswordReset extends Component {
             <WrapperContainer>
               <input type="hidden" value={queryParams.token} name="token" />
               <input type="hidden" value={queryParams.email} name="email" />
+              <ShowPassword type="button" tabIndex="-1" onClick={this.toggleShowPassword}>
+                {this.state.showPassword ? 'hide password' : 'show password'}
+              </ShowPassword>
               <TextLabel>New Password</TextLabel>
               <Input
-                type="password"
+                type={this.state.showPassword ? 'text' : 'password'}
                 autoComplete="off"
                 name="newPassword"
-                onChange={this.handlers.handleChange}
+                onChange={this.handleChange}
                 placeholder="New Password"
                 value={password}
               />
               <PasswordStrengthMeter password={password} />
             </WrapperContainer>
             <WrapperContainer>
+              <ShowPassword type="button" tabIndex="-1" onClick={this.toggleShowPassword}>
+                {this.state.showPassword ? 'hide password' : 'show password'}
+              </ShowPassword>
               <TextLabel>Confirm Password</TextLabel>
               <Input
-                type="password"
+                type={this.state.showPassword ? 'text' : 'password'}
                 placeholder="Confirm New Password"
                 autoComplete="off"
                 name="newPasswordConfirm"
+                onChange={this.handleConfirmPasswordChange}
+                value={confirmPassword}
               />
+              {this.renderPasswordsMatchString()}
             </WrapperContainer>
           </EditedTwoColumnRow>
           <ButtonWrapper>
@@ -225,6 +274,7 @@ class DesktopPasswordReset extends Component {
     return (
       <>
         <Title>Forgot Password?</Title>
+        <Separator />
         <Body>
           After pressing the button below, please check your email for the password reset link.
           If you haven't got it, you can use the button below to send it again.
@@ -243,6 +293,7 @@ class DesktopPasswordReset extends Component {
               />
             </SmallContainer>
           </EditedTwoColumnRow>
+          <Separator />
           <ButtonWrapper>
             <WideButton buttonType="submit" value="Send Link" text="Send Link" />
           </ButtonWrapper>
@@ -266,22 +317,25 @@ class DesktopPasswordReset extends Component {
     }
 
     return (
-      <LayoutWrapper>
-        <Helmet>
-          <title>{reflection.layoutProps.title} - Evry Health</title>
-        </Helmet>
-        {queryParams.token ? this.renderEnterNewPassword() : this.renderResetPassword()}
+      <>
+        <LayoutWrapper>
+          <Helmet>
+            <title>{reflection.layoutProps.title} - Evry Health</title>
+          </Helmet>
+          {queryParams.token ? this.renderEnterNewPassword() : this.renderResetPassword()}
+        </LayoutWrapper>
         <GoToRegistration>
           <p>
             <BottomText>Don&apos;t have an account yet?</BottomText>
             <RouterLink to="/register">Register your account</RouterLink>
           </p>
+          <VSeparator />
           <p>
             <BottomText>Already have an account?</BottomText>
             <RouterLink to="/sign-in">Sign in</RouterLink>
           </p>
         </GoToRegistration>
-      </LayoutWrapper>
+      </>
     );
   }
 }

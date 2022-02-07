@@ -590,6 +590,32 @@ export const requestMailedCardReset = () => ({
   type: types.REQUEST_MAILED_CARD_RESET
 })
 
+export const createAppointedRepFormUploadCase = ({ token }) => {
+  return createCase_v2({
+    storeType: types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD,
+    metadata: [],
+    token,
+    type: APPOINTED_REPRESENTATIVE_UPDATE
+  })
+}
+export const appointedRepFormUpload = ({ caseID, files, token }) => ({
+  type: types.APPOINTED_REP_FORM_UPLOAD,
+  payload: {
+    id: caseID,
+    files,
+    token
+  }
+})
+export const completeAppointedRepFormUploadCase = ({ caseID, token }) => ({
+  type: types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD,
+  payload: {
+    id: caseID,
+    token
+  }
+})
+export const appointedRepFormUploadReset = () => ({
+  type: types.APPOINTED_REP_FORM_UPLOAD_RESET
+})
 export const fetchAccountInfo = (token) => ({
   type: types.ACCOUNT_INFO_FETCH,
   payload: {
@@ -1023,4 +1049,12 @@ export const sessionTimedOut = () => ({
 export const clearSessionTimedOut = () => ({
   type: types.CLEAR_SESSION_TIMED_OUT,
   payload: {}
+})
+
+export const fetchFileContent = (id, token) => ({
+  type: types.FILE_CONTENT_FETCH,
+  payload: {
+    id,
+    token
+  }
 })

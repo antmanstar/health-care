@@ -13,7 +13,6 @@ const { getLocationData, getToken } = selectors;
 
 const Wrapper = styled.div`
   height: 64px;
-  max-width: 960px;
   width: 100%;
   padding: 0 0 0 24px;
   background: white;

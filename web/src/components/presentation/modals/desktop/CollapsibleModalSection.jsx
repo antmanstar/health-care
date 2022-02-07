@@ -72,44 +72,31 @@ const CollapsibleSectionBody = styled.div`
 class CollapsibleModalSection extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      visible: false
-    };
-
-    this.handlers = {
-      toggleOn: this.handleToggleOn.bind(this),
-      toggleOff: this.handleToggleOff.bind(this)
-    };
   }
 
-  handleToggleOn() {
-    this.setState(prevState => ({
-      visible: true
-    }));
+  handleToggleOn = () => {
+    this.props.onChange(true);
   }
 
-  handleToggleOff() {
-    this.setState(prevState => ({
-      visible: false
-    }));
+  handleToggleOff = () => {
+    this.props.onChange(false);
   }
 
   render() {
-    const { visible } = this.state;
-    const { title, textClass, children } = this.props;
+    const { title, textClass, visible, children } = this.props;
+
     return (
       <>
         <Container className={textClass}>
           <p>{title}</p>
           <Toggles>
-            <ToggleWrapper onClick={this.handlers.toggleOn} type="button">
+            <ToggleWrapper onClick={this.handleToggleOn} type="button">
               <CircleOuter checked={visible}>
                 <div />
               </CircleOuter>
               <p>Yes</p>
             </ToggleWrapper>
-            <ToggleWrapper onClick={this.handlers.toggleOff} type="button">
+            <ToggleWrapper onClick={this.handleToggleOff} type="button">
               <CircleOuter checked={!visible}>
                 <div />
               </CircleOuter>

@@ -36,9 +36,9 @@ const Wrapper = styled.div`
   }
 `;
 
-const NoDeductibleMessage = React.memo(() => (
+const NoDeductibleMessage = React.memo(({ benefitType }) => (
   <Wrapper>
-    <p>Your EPO has a</p>
+    <p>Your {benefitType} has a</p>
     <h2>$0 Deductible</h2>
   </Wrapper>
 ));

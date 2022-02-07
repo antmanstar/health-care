@@ -40,7 +40,7 @@ const Type = styled.p`
 const Status = styled.p`
   text-transform: uppercase;
   font-weight: 700;
-  color: ${props => props.theme.colors.shades.pinkOrange};
+  color: ${props => props.theme.colors.shades.darkGray};
 `;
 
 const CoordinationOfBenefits = ({

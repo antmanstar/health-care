@@ -9,6 +9,7 @@ import defaultTheme from '../style/themes';
 import views from './views';
 import Page404 from './views/Page404';
 import ModalContainer from './containers/shared/desktop/ModalContainer';
+import LoadingSplash from './presentation/shared/LoadingSplash/LoadingSplash';
 import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
 import SessionTimeout from './views/SessionTimeout';
@@ -123,7 +124,7 @@ const Root = ({ isAuthenticated, currentModal, store }) => {
   if (pageMayLoad) {
     return renderPage(isAuthenticated, currentModal, store);
   } else {
-    return <div>Loading..</div>;
+    return <LoadingSplash />;
   }
 };
 

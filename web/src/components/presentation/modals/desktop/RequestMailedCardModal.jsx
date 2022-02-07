@@ -5,7 +5,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import SmallButton from '../../shared/desktop/SmallButton';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 import { Link as RouterLink } from 'react-router-dom';
 
 const {
@@ -150,7 +150,7 @@ const RequestMailedCardModal = props => {
           <SmallButton text="Continue" onClick={createCase} disabled={isSubmitting} />
           <SmallButton text="Cancel" negative onClick={props.hideModal} disabled={isSubmitting} />
         </ModalButtonsRight>
-        {isSubmitting && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+        {isSubmitting && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
       </ModalWrapper>
     </Fragment>
   );

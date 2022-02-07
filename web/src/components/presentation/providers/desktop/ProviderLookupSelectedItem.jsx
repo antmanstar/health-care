@@ -11,8 +11,13 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import GoogleMap from 'google-map-react';
 import { PopOver } from '../../shared/desktop/PopOver';
 
-const { setModalData, showModal, providerSearchQueryClear } = actions;
-const { getProviderSearchLocation } = selectors;
+const { setModalData, showModal, providerSearchQueryClear, providerSearch } = actions;
+const {
+  getProviderSearchLocation,
+  getProviderSearchData,
+  getProviderSearchQuery,
+  getToken
+} = selectors;
 
 const { SectionDivider, FormLabel } = defaultTheme.components;
 
@@ -180,18 +185,20 @@ const ProviderLookupSelectedItem = ({
   phone,
   npiNumber,
   specialties,
-  geoData,
   providerData,
   setHoveredCardId,
   hoveredPinId,
   id,
-  setBoundary,
   currentLocation,
-  providerSearchQueryClear
+  providerSearchQuery,
+  providerSearchQueryClear,
+  fetchProviders,
+  token
 }) => {
   const [userLocation, setUserLocation] = useState();
   const boundary = useRef();
   const [profile, setProfile] = useState();
+  const [triggerSearch, setTriggerSearch] = useState(false);
 
   const defaultMapProps = {
     center: {
@@ -233,22 +240,44 @@ const ProviderLookupSelectedItem = ({
   }, [name, distance, practiceName, address, phone, npiNumber, specialties, id]);
 
   useEffect(() => {
-    setUserLocation({ lat: geoData?.latitude, lng: geoData?.longitude });
-  }, [geoData]);
+    setUserLocation({ lat: currentLocation?.latitude, lng: currentLocation?.longitude });
+  }, [currentLocation]);
 
   useEffect(() => {
-    setUserLocation({ lat: currentLocation?.lat, lng: currentLocation?.lng });
-  }, [currentLocation]);
+    setTriggerSearch(true);
+  }, [providerSearchQuery]);
+
+  useEffect(() => {
+    let baseRequest = {
+      token: token,
+      searchWithinBound: true,
+      location: {
+        latitude: userLocation?.latitude,
+        longitude: userLocation?.longitude
+      },
+      bounds: {
+        south_west: {
+          latitude: boundary.current?.sw?.lat,
+          longitude: boundary.current?.sw?.lng
+        },
+        north_east: {
+          latitude: boundary.current?.ne?.lat,
+          longitude: boundary.current?.ne?.lng
+        }
+      }
+    };
+    triggerSearch && fetchProviders({ ...baseRequest, ...providerSearchQuery });
+    setTriggerSearch(false);
+  }, [triggerSearch]);
 
   const bindResizeListener = (map, maps) => {
     maps.event.addListener(map, 'idle', () => {
       boundary.current = getBounds(map);
     });
-    setBoundary(getBounds(map));
   };
 
   const handleSearchArea = () => {
-    setBoundary(boundary.current);
+    setTriggerSearch(true);
   };
 
   const handleApiLoaded = (map, maps) => {
@@ -390,12 +419,18 @@ ProviderLookupSelectedItem.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  currentLocation: getProviderSearchLocation(state)
+  token: getToken(state),
+  currentLocation: getProviderSearchLocation(state),
+  providerSearchData: getProviderSearchData(state),
+  providerSearchQuery: getProviderSearchQuery(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   providerSearchQueryClear: () => {
     dispatch(providerSearchQueryClear());
+  },
+  fetchProviders: args => {
+    dispatch(providerSearch(args));
   },
   setModalData: data => {
     dispatch(setModalData(data));

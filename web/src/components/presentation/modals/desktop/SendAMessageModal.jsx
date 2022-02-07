@@ -7,7 +7,7 @@ import SmallButton from '../../shared/desktop/SmallButton';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import constants from '@evry-member-app/shared/constants';
-import StyledLoadingSpinner from '../../shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 // MODAL - Send a Message
 
 const {
@@ -105,8 +105,7 @@ class SendAMessageModal extends Component {
       this.props.sendMessageCase.status === 'OPEN'
     ) {
       this.props.completeCase(this.props.sendMessageCase.id, this.props.token);
-    }
-    else if (
+    } else if (
       prevProps.sendMessageCase &&
       prevProps.sendMessageCase.status === 'OPEN' &&
       this.props.sendMessageCase.status === 'COMPLETE'
@@ -119,8 +118,7 @@ class SendAMessageModal extends Component {
         message: "Great! We'll get to work on that and send you a confirmation once complete."
       });
       this.props.showModal('SUBMISSION_RESPONSE');
-    }
-    else if (
+    } else if (
       prevProps.sendMessageCase &&
       prevProps.sendMessageCase.status === 'OPEN' &&
       this.props.sendMessageCase.status.includes('ERROR')
@@ -171,7 +169,7 @@ class SendAMessageModal extends Component {
               <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
-          {this.state.showLoader && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+          {this.state.showLoader && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
         </ModalWrapper>
       </>
     );

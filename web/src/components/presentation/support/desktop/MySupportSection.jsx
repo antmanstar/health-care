@@ -8,7 +8,7 @@ import SupportProfile from '../../shared/desktop/SupportProfile';
 import SmallTitleAndButton from '../../shared/desktop/SmallTitleAndButton';
 import TwoColumnInfoItem from '../../shared/desktop/TwoColumnInfoItem';
 import HelpArticleLink from '../../shared/desktop/HelpArticleLink';
-
+import images from '../../../../utils/images';
 // My Support Section for the Customer Support View
 // TODO: Need Concierge Care Article Link from Knowledgebase
 
@@ -119,7 +119,6 @@ class MySupportSection extends Component {
 
   render() {
     const { careGuide, evryContactInfo } = this.props;
-
     return (
       <SectionBackground>
         <Container>
@@ -135,22 +134,26 @@ class MySupportSection extends Component {
                     onClick={this.handlers.handleContactCareGuideClick}
                   />
                   <SupportProfileWithMarginWrapper>
-                    <SupportProfile
-                      name={`${careGuide.first_name} ${careGuide.last_name}`}
-                      roleLabel="Care Guide"
-                      number={`${careGuide.phone.phone_number} ${
-                        careGuide.phone.phone_number_extension &&
-                        careGuide.phone.phone_number_extension.trim().length > 0
-                          ? `(Ext - ${careGuide.phone.phone_number_extension})`
-                          : ''
-                      }`}
-                      email={careGuide.email.email_address}
-                      imgSrc={
-                        careGuide.my_image_file_id && careGuide.my_image_file_id.length > 0
-                          ? `` //URL NEEDED
-                          : 'https://randomuser.me/api/portraits/women/58.jpg'
-                      }
-                    />
+                    {careGuide.error && careGuide.error.length > 0 ? (
+                      <SupportProfile />
+                    ) : (
+                      <SupportProfile
+                        name={`${careGuide.first_name} ${careGuide.last_name}`}
+                        roleLabel="Care Guide"
+                        number={`${careGuide.phone.phone_number} ${
+                          careGuide.phone.phone_number_extension &&
+                          careGuide.phone.phone_number_extension.trim().length > 0
+                            ? `(Ext - ${careGuide.phone.phone_number_extension})`
+                            : ''
+                        }`}
+                        email={careGuide.email.email_address}
+                        imgSrc={
+                          careGuide.my_image_file_id && careGuide.my_image_file_id.length > 0
+                            ? `` //URL NEEDED
+                            : null
+                        }
+                      />
+                    )}
                   </SupportProfileWithMarginWrapper>
                   <Description>
                     Your personal care guide is here to take care of all your health insurance

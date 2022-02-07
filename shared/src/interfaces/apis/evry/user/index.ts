@@ -129,7 +129,7 @@ export function fetchAccumulators({ token, id, date, type }) {
     {
       id,
       as_of: date,
-      accumulators_type: type
+      accumulators_level: type
     },
     {
       headers: {
@@ -846,6 +846,172 @@ export function createCaseUpdateAddress(payload) {
     '/api/v1/Member/CreateCase',
     {
       case_type: 8,
+      metadata
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${payload.token}`
+      }
+    }
+  )
+}
+
+export function uploadFiles_v2({ token, id, files }) {
+  const formData = new FormData()
+  //still a work in progress
+  formData.append(
+    'related_object_info',
+    JSON.stringify({ id, object_type: 301 })
+  )
+  formData.append('files', files[0])
+  // files.map((file) => {
+  //   formData.append('files', file)
+  // })
+  console.log(formData)
+  return axios.post(`/api/v1/Member/UploadDocument`, formData, {
+    headers: {
+      'Content-Type':
+        'multipart/form-data; boundary=----WebKitFormBoundaryyd5UY7cT0Jq1Xh0h',
+      Authorization: `Bearer ${token}`
+    }
+  })
+}
+export function createCaseCoordinationOfBenefits(payload) {
+  let metadata = []
+
+  if (payload.has_medicare) {
+    metadata.push({
+      name: 'has_medicare',
+      value: payload.has_medicare || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.has_other_health_coverage) {
+    metadata.push({
+      name: 'has_other_health_coverage',
+      value: payload.has_other_health_coverage || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.medicare_eligibility_type) {
+    metadata.push({
+      name: 'medicare_eligibility_type',
+      value: payload.medicare_eligibility_type || '',
+      value_type: 12
+    })
+  }
+
+  if (payload.medicare_part_a) {
+    metadata.push({
+      name: 'medicare_part_a',
+      value: payload.medicare_part_a || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.medicare_part_b) {
+    metadata.push({
+      name: 'medicare_part_b',
+      value: payload.medicare_part_b || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.medicare_part_c) {
+    metadata.push({
+      name: 'medicare_part_c',
+      value: payload.medicare_part_c || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.medicare_part_d) {
+    metadata.push({
+      name: 'medicare_part_d',
+      value: payload.medicare_part_d || '',
+      value_type: 16
+    })
+  }
+
+  if (payload.medicare_part_a_effective_date) {
+    metadata.push({
+      name: 'medicare_part_a_effective_date',
+      value: payload.medicare_part_a_effective_date || '',
+      value_type: 15
+    })
+  }
+
+  if (payload.medicare_part_b_effective_date) {
+    metadata.push({
+      name: 'medicare_part_b_effective_date',
+      value: payload.medicare_part_b_effective_date || '',
+      value_type: 15
+    })
+  }
+
+  if (payload.medicare_part_c_effective_date) {
+    metadata.push({
+      name: 'medicare_part_c_effective_date',
+      value: payload.medicare_part_c_effective_date || '',
+      value_type: 15
+    })
+  }
+
+  if (payload.medicare_part_d_effective_date) {
+    metadata.push({
+      name: 'medicare_part_d_effective_date',
+      value: payload.medicare_part_d_effective_date || '',
+      value_type: 15
+    })
+  }
+
+  if (payload.other_insurance_type) {
+    metadata.push({
+      name: 'other_insurance_type',
+      value: payload.other_insurance_type || '',
+      value_type: 12
+    })
+  }
+
+  if (payload.other_insurance_carrier_name) {
+    metadata.push({
+      name: 'other_insurance_carrier_name',
+      value: payload.other_insurance_carrier_name || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.other_insurance_policy_number) {
+    metadata.push({
+      name: 'other_insurance_policy_number',
+      value: payload.other_insurance_policy_number || '',
+      value_type: 11
+    })
+  }
+
+  if (payload.other_insurance_coverage_from) {
+    metadata.push({
+      name: 'other_insurance_coverage_from',
+      value: payload.other_insurance_coverage_from || '',
+      value_type: 15
+    })
+  }
+
+  if (payload.other_insurance_coverage_thru) {
+    metadata.push({
+      name: 'other_insurance_coverage_thru',
+      value: payload.other_insurance_coverage_thru || '',
+      value_type: 15
+    })
+  }
+
+  return axios.post(
+    '/api/v1/Member/CreateCase',
+    {
+      case_type: 12,
       metadata
     },
     {

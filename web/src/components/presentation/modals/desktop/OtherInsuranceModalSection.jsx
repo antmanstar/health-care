@@ -28,7 +28,7 @@ const BigDivider = styled.div`
 
 const OtherInsuranceModalSection = ({ handleChange, handleDateChange, data, minDate, maxDate }) => (
   <>
-    <CollapsibleModalSection title="Other Health Coverage" divided>
+    <CollapsibleModalSection onChange={handleChange('checked')} visible={data.checked} title="Other Health Coverage" divided>
       <BigDivider />
       <ModalMultipleChoiceQuestion
         handleAnswerClick={handleChange('type')}

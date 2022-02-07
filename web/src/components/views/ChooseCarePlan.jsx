@@ -10,10 +10,16 @@ import withStoreData from '../containers/base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
 
 const { getLastQuestionnaireOrCreate } = actions;
-const { isQuestionnaireLoaded, getToken, isChoosingCarePlan, isOnboardingComplete } = selectors;
+const {
+  isQuestionnaireLoaded,
+  getToken,
+  isChoosingCarePlan,
+  isOnboardingComplete,
+  isAuthenticated
+} = selectors;
 
 const Wrapper = styled.div`
   margin: 40px auto 80px;
@@ -71,9 +77,13 @@ class ChooseCarePlan extends Component {
   }
 
   checkOnboardingStatus() {
-    const { isOnboardingComplete } = this.props;
-    if (isOnboardingComplete) {
-      history.push('/');
+    const { isOnboardingComplete, isAuthenticated } = this.props;
+    if (!isAuthenticated) {
+      history.push('/sign-in');
+    } else {
+      if (isOnboardingComplete) {
+        history.push('/');
+      }
     }
   }
 
@@ -88,7 +98,7 @@ class ChooseCarePlan extends Component {
         <OnboardingProgressBar progressStep={2} />
         <Wrapper>
           <CarePlanSelectionSlideWithData isChoosingCarePlan={isChoosingCarePlan} />
-          {isChoosingCarePlan && <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />}
+          {isChoosingCarePlan && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
         </Wrapper>
       </>
     );
@@ -107,6 +117,7 @@ ChooseCarePlan.defaultProps = {
 
 const mapStateToProps = state => ({
   isChoosingCarePlan: isChoosingCarePlan(state),
+  isAuthenticated: isAuthenticated(state),
   isOnboardingComplete: isOnboardingComplete(state),
   isQuestionnaireLoaded: isQuestionnaireLoaded(state)
 });

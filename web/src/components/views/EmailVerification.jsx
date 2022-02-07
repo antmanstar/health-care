@@ -7,16 +7,14 @@ import Danger from '@evry-member-app/assets/images/vector/danger.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import queryString from 'query-string';
 import { Sparse } from '../layouts';
-import StyledLoadingSpinner from '../presentation/shared/Loader/StyledLoadingSpinner';
-import MessageAlert from "./MessageAlert";
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
+import MessageAlert from './MessageAlert';
 
 import { connect } from 'react-redux';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 
-const {
-  getEmailVerificationChallengeStatus
-} = selectors;
+const { getEmailVerificationChallengeStatus } = selectors;
 
 const { MobileContentWrapper } = defaultTheme.components;
 
@@ -27,12 +25,12 @@ const EditedMobileContentWrapper = styled(MobileContentWrapper)`
 const Container = styled.div`
   display: grid;
   justify-content: center;
-  grid-template-areas: "check text .";
+  grid-template-areas: 'check text .';
   grid-template-columns: 1fr auto 1fr;
   column-gap: 50px;
 
   @media (max-width: 1000px) {
-    grid-template-areas: "check" "text"; 
+    grid-template-areas: 'check' 'text';
     grid-template-columns: 1fr;
   }
 `;
@@ -54,7 +52,7 @@ const ActionButton = styled.button`
   box-sizing: border-box;
   padding: 22px;
   font-size: 20px;
-  font-weight: 500;    
+  font-weight: 500;
   width: 100%;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -78,7 +76,7 @@ const ActionButton = styled.button`
 `;
 
 const Header = styled.div`
-  color: #00263A;
+  color: #00263a;
   font-weight: 500;
   font-size: 28px;
 `;
@@ -100,7 +98,7 @@ const Body = styled.div`
 
 const VerificationContainer = styled.div`
   display: flex;
-  flex-direction: column;            
+  flex-direction: column;
   grid-area: text;
   place-self: center;
 `;
@@ -113,7 +111,7 @@ const Center = styled.div`
 `;
 
 const EmailVerification = props => {
-  const [ resendClicked, setResendClicked ] = useState(false);
+  const [resendClicked, setResendClicked] = useState(false);
 
   function handleResend(e) {
     e.preventDefault();
@@ -142,7 +140,7 @@ const EmailVerification = props => {
         <VerificationContainer>
           <Header>Confirming your email....</Header>
           <Separator />
-          <StyledLoadingSpinner type="TailSpin" color="#00BFFF" />
+          <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />
         </VerificationContainer>
       </Container>
     );
@@ -151,26 +149,28 @@ const EmailVerification = props => {
   function renderVerificationFailureLoggedIn() {
     return (
       <>
-        <Body>
-          Click here to resend a new verification link.
-        </Body>
+        <Body>Click here to resend a new verification link.</Body>
         <Separator />
         <Center>
           <RouterLink to="/">
-            <ActionButton bgColor="#022B40" onClick={handleResend}>Send Link Again</ActionButton>
+            <ActionButton bgColor="#022B40" onClick={handleResend}>
+              Send Link Again
+            </ActionButton>
           </RouterLink>
-          {resendClicked && <MessageAlert>Your email verification has been submitted. Please check your email inbox.</MessageAlert>}
+          {resendClicked && (
+            <MessageAlert>
+              Your email verification has been submitted. Please check your email inbox.
+            </MessageAlert>
+          )}
         </Center>
       </>
-    )
+    );
   }
 
   function renderVerificationFailureLoggedOut() {
     return (
       <>
-        <Body>
-          Click here to login and get a new verification link.
-        </Body>
+        <Body>Click here to login and get a new verification link.</Body>
         <Separator />
         <Center>
           <RouterLink to="/sign-in">
@@ -178,9 +178,8 @@ const EmailVerification = props => {
           </RouterLink>
         </Center>
       </>
-    )
+    );
   }
-
 
   function renderVerificationFailure() {
     const isLoggedIn = props?.token?.length > 0;
@@ -204,10 +203,7 @@ const EmailVerification = props => {
         <VerificationContainer>
           <Header>Verified!</Header>
           <Separator />
-          <Body>
-            Thanks for verifying your email!
-            Click the button below to continue.
-          </Body>
+          <Body>Thanks for verifying your email! Click the button below to continue.</Body>
           <Separator />
           <Center>
             <RouterLink to="/">
@@ -222,11 +218,15 @@ const EmailVerification = props => {
   function renderProperItem() {
     switch (props.emailVerificationChallengeStatus) {
       case null:
-      case "":
-      case undefined: return renderLoading();
-      case "failure": return renderVerificationFailure();
-      case "success": return renderVerificationSuccess();
-      default: return renderLoading();
+      case '':
+      case undefined:
+        return renderLoading();
+      case 'failure':
+        return renderVerificationFailure();
+      case 'success':
+        return renderVerificationSuccess();
+      default:
+        return renderLoading();
     }
   }
 
@@ -235,12 +235,10 @@ const EmailVerification = props => {
       <Helmet>
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
-      <EditedMobileContentWrapper>
-        {renderProperItem()}
-      </EditedMobileContentWrapper>
+      <EditedMobileContentWrapper>{renderProperItem()}</EditedMobileContentWrapper>
     </>
   );
-}
+};
 
 const mapStateToProps = state => ({
   emailVerificationChallengeStatus: getEmailVerificationChallengeStatus(state),
@@ -251,22 +249,19 @@ const mapDispatchToProps = dispatch => ({
   handleChallenge: (emailAddress, verificationCode) => {
     dispatch(actions.verifyEmailChallenge(emailAddress, verificationCode));
   },
-  handleResendSubmit: (token) => {
+  handleResendSubmit: token => {
     dispatch(actions.verifyEmail(token));
   }
 });
 
-const ConnectedEmailVerification = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EmailVerification);
+const ConnectedEmailVerification = connect(mapStateToProps, mapDispatchToProps)(EmailVerification);
 
 const reflection = {
   component: ConnectedEmailVerification,
   layout: Sparse,
   layoutProps: {
     title: 'Evry Member Portal',
-    subtitle: "Email Verification"
+    subtitle: 'Email Verification'
   },
   route: '/email-verification'
 };
