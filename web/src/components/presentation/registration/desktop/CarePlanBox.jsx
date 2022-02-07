@@ -11,12 +11,13 @@ const Wrapper = styled.button`
   align-items: center;
   height: 166px;
   width: 100%;
-  border: 1px solid #f4f4f4;
+  border: 1px solid #f3f3f3;
   color: #bdbdbd;
   font-size: 16px;
   font-weight: 400;
   border-radius: 4px;
   cursor: pointer;
+  background: white;
 
   @media ${props => props.theme.device.mobile} {
     width: 178px;
@@ -48,9 +49,8 @@ const Icon = styled.div`
   width: 50px;
   border-radius: 50%;
   margin-bottom: 16px;
-  /*background: #f4f4f4;*/
   background-image: ${props => (props.icon ? `url(${images[props.icon]})` : '')};
-  filter: ${props => (props.active ? `` : `brightness(80%)`)};
+  // filter: ${props => (props.active ? `` : `brightness(100%)`)};
 `;
 
 const Title = styled.p`

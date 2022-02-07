@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import ProgressDots from '../../shared/desktop/ProgressDots';
-const { LayoutWrapper, Input, TwoColumnRow, SectionDivider } = defaultTheme.components;
+import useIsOverflow from '../../../../utils/useIsOverflow';
 // Desktop Onboarding Controls
 
 const Wrapper = styled.div`
@@ -13,20 +13,16 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  min-height: 100px;
   padding-top: 32px;
   box-sizing: border-box;
-  max-height: 100px;
+  height: 100px;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
-
-  @media ${defaultTheme.device.mobile} {
-    border-top: none;
-    position: absolute;
-    bottom: 30px;
-  }
 
   @media ${defaultTheme.device.tablet} {
     border-top: none;
+    position: ${props => (props.isOverflow ? 'unset' : 'absolute')};
+    bottom: 30px;
+    left: 0;
   }
 
   @media ${defaultTheme.device.desktopXL} {
@@ -78,8 +74,10 @@ const OnboardingControls = React.memo(
     isQuestionAnswered,
     isSavingQuestionnaire
   }) => {
+    const isOverflow = useIsOverflow();
+
     return (
-      <Wrapper>
+      <Wrapper isOverflow={isOverflow}>
         <ButtonWrapper>
           <SmallButton
             onClick={handleNextFunction}
@@ -93,7 +91,7 @@ const OnboardingControls = React.memo(
           </SmallButton>
         </ButtonWrapper>
         <ProgressWrapper>
-          <SectionDivider />
+          {/* <SectionDivider /> */}
           <ProgressDots currentStep={currentStep} maxSteps={maxSteps} />
         </ProgressWrapper>
       </Wrapper>
