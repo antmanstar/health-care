@@ -67,6 +67,7 @@ const CarePlanSelectionSlideWithData = withStoreData(
 class ChooseCarePlan extends Component {
   componentDidUpdate() {
     const { isQuestionnaireLoaded } = this.props;
+    console.log(isQuestionnaireLoaded);
     if (isQuestionnaireLoaded) {
       history.push('/care-plan-questions');
     }

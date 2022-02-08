@@ -91,6 +91,30 @@ const EditedTwoColumnRow = styled(TwoColumnRow)`
   }
 `;
 
+const PasswordLabelWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+
+  p {
+    margin: 0;
+    margin-right: 20px;
+  }
+`;
+
+const ShowPassword = styled.button`
+  border: none;
+  outline: none;
+  font-size: 12px;
+  font-style: italic;
+  color: ${props => props.theme.colors.shades.gray};
+  cursor: pointer;
+  &:hover {
+    color: ${props => props.theme.colors.shades.darkGray};
+  }
+`;
+
 const Label = styled.p`
   margin: 0 0 16px;
   font-size: 18px;
@@ -199,6 +223,8 @@ function SignIn({
   payload2FA,
   isSessionTimedOut
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo && isOnboardingComplete) {
       history.push('/');
@@ -208,7 +234,7 @@ function SignIn({
   }, [isAuthenticated, hasBasicInfo, isOnboardingComplete]);
 
   const renderAuthError = () => {
-    if (authError && authError.length > 0 && authError[0] === "User not found.") {
+    if (authError && authError.length > 0 && authError[0] === 'User not found.') {
       return (
         <AccountNotFoundWrapper>
           <ErrorMessage message={['Account not found.']} />
@@ -216,9 +242,17 @@ function SignIn({
         </AccountNotFoundWrapper>
       );
     } else if (authError) {
-      return <ErrorMessageWrapper><ErrorMessage message={authError} /></ErrorMessageWrapper>;
+      return (
+        <ErrorMessageWrapper>
+          <ErrorMessage message={authError} />
+        </ErrorMessageWrapper>
+      );
     } else if (isSessionTimedOut) {
-      return <ErrorMessageWrapper><ErrorMessage message={['Your session has expired. Please login again.']} /></ErrorMessageWrapper>;
+      return (
+        <ErrorMessageWrapper>
+          <ErrorMessage message={['Your session has expired. Please login again.']} />
+        </ErrorMessageWrapper>
+      );
     }
 
     return null;
@@ -272,10 +306,21 @@ function SignIn({
                 />
               </SmallContainer>
               <SmallContainer>
-                <Label htmlFor="password">Password</Label>
+                <PasswordLabelWrapper>
+                  <Label htmlFor="password">Password</Label>
+                  <ShowPassword
+                    type="button"
+                    tabIndex="-1"
+                    onClick={() => {
+                      setShowPassword(!showPassword);
+                    }}
+                  >
+                    {showPassword !== true ? 'show password' : 'hide password'}
+                  </ShowPassword>
+                </PasswordLabelWrapper>
                 <Input
                   autoComplete="current-password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
                   placeholder="Enter your password."

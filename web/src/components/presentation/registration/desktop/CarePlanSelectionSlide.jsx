@@ -1,5 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["activePlan", "plans"] }] */
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import CarePlanBox from './CarePlanBox';
@@ -41,61 +41,40 @@ const Description = styled.p`
   color: ${props => props.theme.colors.shades.darkGray};
 `;
 
-class CarePlanSelectionSlide extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      plans: [...carePlans]
-    };
-  }
+const CarePlanSelectionSlide = ({ handleCarePlanSelection, isChoosingCarePlan }) => {
+  const [plans, setPlans] = useState(carePlans);
+  const activePlan = plans?.find(plan => plan.active);
 
-  getActivePlan() {
-    const { plans } = this.state;
-    return plans.find(plan => plan.active);
-  }
-
-  render() {
-    const { plans } = this.state;
-    const activePlan = this.getActivePlan();
-
-    return (
-      <>
-        <Options>
-          {plans.map(({ desc, ...props }, i) => (
-            <CarePlanBox
-              {...props}
-              key={props.title}
-              onClick={() => {
-                const { plans } = this.state;
-                this.setState({
-                  plans: plans.map((plan, j) => ({
-                    ...plan,
-                    active: i === j ? true : false
-                  }))
-                });
-              }}
-            />
-          ))}
-        </Options>
-        <Information>
-          <Title>{activePlan && activePlan.title}</Title>
-          <Description>{activePlan && activePlan.desc}</Description>
-        </Information>
-        <Button
-          text="Choose Plan"
-          onClick={() => {
-            const { handleCarePlanSelection } = this.props;
-            const activePlan = this.getActivePlan();
-            if (activePlan) {
-              handleCarePlanSelection(activePlan.id);
-            }
-          }}
-          disabled={this.props.isChoosingCarePlan}
-        />
-      </>
+  // handlers
+  const handleBoxClick = i => {
+    setPlans(
+      plans.map((plan, j) => {
+        plan.active = i == j;
+        return plan;
+      })
     );
-  }
-}
+  };
+
+  const handleChooseBtnClick = () => {
+    activePlan && handleCarePlanSelection(activePlan.id);
+  };
+
+  // render
+  return (
+    <>
+      <Options>
+        {plans.map(({ desc, ...props }, i) => (
+          <CarePlanBox {...props} key={props.title} onClick={() => handleBoxClick(i)} />
+        ))}
+      </Options>
+      <Information>
+        <Title>{activePlan && activePlan.title}</Title>
+        <Description>{activePlan && activePlan.desc}</Description>
+      </Information>
+      <Button text="Choose Plan" onClick={handleChooseBtnClick} disabled={isChoosingCarePlan} />
+    </>
+  );
+};
 
 CarePlanSelectionSlide.propTypes = {
   handleCarePlanSelection: PropTypes.func.isRequired,

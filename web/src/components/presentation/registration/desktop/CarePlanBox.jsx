@@ -26,7 +26,7 @@ const Wrapper = styled.button`
   &.active {
     background: ${props => props.theme.gradients.main};
     border: none;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
     color: ${props => props.theme.colors.shades.white};
   }
 
@@ -34,7 +34,7 @@ const Wrapper = styled.button`
     &:hover {
       background: ${props => props.theme.gradients.main};
       border: none;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
       color: ${props => props.theme.colors.shades.white};
     }
 

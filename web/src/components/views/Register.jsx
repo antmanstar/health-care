@@ -264,7 +264,6 @@ function Register({
           <RouterLink to="/sign-in">Sign In</RouterLink>
         </GoToSignIn>
       </BottomSectionDivider>
-
       {isVerifyingElegibility && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
     </Wrapper>
   );

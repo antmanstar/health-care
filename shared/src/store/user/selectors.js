@@ -29,9 +29,8 @@ const addressMethods = {
     if (this.isEmpty()) {
       return ''
     }
-    return `${this.address1 || ''}\n${this.address2 || ''}\n${
-      this.city || ''
-    }, ${this.state || ''} ${this.zip || ''}`
+    return `${this.address1 || ''}\n${this.address2 || ''}\n${this.city || ''
+      }, ${this.state || ''} ${this.zip || ''}`
   }
 }
 

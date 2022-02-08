@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   padding-top: 32px;
   box-sizing: border-box;
   height: 100px;
+  max-height: 100px;
   border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
 
   @media ${defaultTheme.device.tablet} {
