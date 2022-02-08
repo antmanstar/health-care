@@ -1,10 +1,14 @@
 import React from 'react';
-import { Standard } from '../layouts';
 import styled from 'styled-components';
 import defaultTheme from '../../style/themes';
 import SmallButton from '../presentation/shared/desktop/SmallButton';
 import logoImg from '@evry-member-app/assets/images/vector/logo.svg';
 import { Helmet } from 'react-helmet-async';
+import history from '../../utils/history';
+import selectors from '@evry-member-app/shared/store/selectors';
+import { useSelector } from 'react-redux';
+
+const { getEvryContactInfo } = selectors;
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -225,44 +229,52 @@ const StyledButton = styled(SmallButton)`
   align-self: center;
 `;
 
-const Page404 = () => (
-  <>
-    <Helmet>
-      <title>{reflection.layoutProps.title} - Evry Health</title>
-    </Helmet>
-    <StyledWrapper>
-      <InnerContentHeader>
-        <HeaderWrapper>
-          <LogoWrapper>
-            <LogoImg src={logoImg} alt="Evry Healthcare" />
-          </LogoWrapper>
-          <Title>404 Error</Title>
-        </HeaderWrapper>
-      </InnerContentHeader>
-      <InnerContentBody>
-        <Content>
-          We can’t seem to find that page. Go back, or if you think there’s a problem, please
-          contact us.
-        </Content>
-        <ContactInfo>
-          <PhoneInfo>
-            <StyeldIcon className="material-icons">phone</StyeldIcon>
-            1-800-555-1234
-          </PhoneInfo>
-          <VerticalDivider />
-          <MailInfo>
-            <StyeldIcon className="material-icons">mail_outline</StyeldIcon>
-            support@evryhealth.com
-          </MailInfo>
-        </ContactInfo>
-      </InnerContentBody>
-      <InnerFooter>
-        <HorizontalDivider />
-        <StyledButton text="back" onClick={() => window.history.back()} />
-      </InnerFooter>
-    </StyledWrapper>
-  </>
-);
+const Page404 = () => {
+  const contact = useSelector(getEvryContactInfo);
+
+  const handleBackClick = () => {
+    history.push('/');
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>{reflection.layoutProps.title} - Evry Health</title>
+      </Helmet>
+      <StyledWrapper>
+        <InnerContentHeader>
+          <HeaderWrapper>
+            <LogoWrapper>
+              <LogoImg src={logoImg} alt="Evry Healthcare" />
+            </LogoWrapper>
+            <Title>404 Error</Title>
+          </HeaderWrapper>
+        </InnerContentHeader>
+        <InnerContentBody>
+          <Content>
+            We can’t seem to find that page. Go back, or if you think there’s a problem, please
+            contact us.
+          </Content>
+          <ContactInfo>
+            <PhoneInfo>
+              <StyeldIcon className="material-icons">phone</StyeldIcon>
+              {contact?.phones[0].phone_number}
+            </PhoneInfo>
+            <VerticalDivider />
+            <MailInfo>
+              <StyeldIcon className="material-icons">mail_outline</StyeldIcon>
+              {contact?.support_email.email_address}
+            </MailInfo>
+          </ContactInfo>
+        </InnerContentBody>
+        <InnerFooter>
+          <HorizontalDivider />
+          <StyledButton text="back" onClick={handleBackClick} />
+        </InnerFooter>
+      </StyledWrapper>
+    </>
+  );
+};
 
 const reflection = {
   component: Page404,

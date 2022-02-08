@@ -169,7 +169,8 @@ const reflection = {
     ]),
     subtitle: new Interpolation([
       'Based on your selections, we suggest you consider choosing the ',
-      state => getCarePlanInfo(getSuggestedCarePlanId(state)).title
+      state =>
+        getSuggestedCarePlanId(state) ? getCarePlanInfo(getSuggestedCarePlanId(state)).title : ''
     ]),
     fullWidth: true
   },

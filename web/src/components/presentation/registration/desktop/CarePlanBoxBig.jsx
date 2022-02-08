@@ -20,7 +20,7 @@ const Wrapper = styled.button`
   border-radius: 4px;
   // cursor: pointer;
   pointer-events: none;
-  background: ${props => (props.suggested ? props.theme.gradients.main : '')};
+  background: ${props => (props.suggested ? props.theme.gradients.main : 'white')};
   border: ${props => (props.suggested ? 'none' : '1px solid #f4f4f4')};
   box-shadow: ${props => (props.suggested ? '0 20px 40px rgba(0, 0, 0, 0.1)' : '')};
   background: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));

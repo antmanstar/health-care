@@ -23,7 +23,8 @@ const {
   getToken,
   isQuestionnaireComplete,
   isSavingQuestionnaire,
-  isAuthenticated
+  isAuthenticated,
+  getBasicInfo
 } = selectors;
 
 const Wrapper = styled.form`
@@ -188,6 +189,7 @@ const Questionnaire = () => {
   const isQuestionnaireCompleted = useSelector(isQuestionnaireComplete);
   const isSavingQuestion = useSelector(isSavingQuestionnaire);
   const token = useSelector(getToken);
+  const basicInfo = useSelector(getBasicInfo);
 
   const authenticated = useSelector(isAuthenticated);
 
