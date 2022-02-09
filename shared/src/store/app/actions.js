@@ -103,6 +103,13 @@ export const providerSearchQuery = (query) => ({
   }
 })
 
+export const setNewCurrentLocation = (query) => ({
+  type: types.PROVIDER_SET_NEW_LOCATION,
+  payload: {
+    ...query
+  }
+})
+
 export const providerSearchQueryClear = () => ({
   type: types.PROVIDER_SEARCH_QUERY_CLEAR,
   payload: {}

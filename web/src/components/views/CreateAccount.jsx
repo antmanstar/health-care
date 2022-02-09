@@ -267,7 +267,7 @@ function CreateAccount({
         </ButtonWrapper>
       </form>
       {renderRegisterError()}
-      {isRegisteringElegibility && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+      {isRegisteringElegibility && <LoadingSpinnerScreen />}
     </LayoutWrapper>
   );
 }

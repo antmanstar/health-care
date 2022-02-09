@@ -284,7 +284,12 @@ function SignIn({
               placeholder={`Code Sent To ${payload2FA.two_way_factor_sent_to}`}
             />
             <ButtonWrapper>
-              <WideButton buttonType="submit" value="Submit" text="Submit" disabled={isSigningIn} />
+              <WideButton
+                buttonType="submit"
+                value="Submit"
+                text="Submit"
+                disabled={isSigningIn || isAuthenticated}
+              />
             </ButtonWrapper>
           </form>
         </FormWrapper>
@@ -332,7 +337,12 @@ function SignIn({
             </EditedTwoColumnRow>
             <SectionDivider />
             <ButtonWrapper>
-              <Button buttonType="submit" value="Sign In" text="Sign In" disabled={isSigningIn} />
+              <Button
+                buttonType="submit"
+                value="Sign In"
+                text="Sign In"
+                disabled={isSigningIn || isAuthenticated}
+              />
             </ButtonWrapper>
           </form>
         </FormWrapper>
@@ -355,7 +365,7 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {isSigningIn && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+      {(isSigningIn || isAuthenticated) && <LoadingSpinnerScreen />}
     </Wrapper>
   );
 }

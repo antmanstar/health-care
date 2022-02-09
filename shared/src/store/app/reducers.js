@@ -137,6 +137,11 @@ const appReducer = (state = {}, action) => {
           query: {}
         }
       }
+    case types.PROVIDER_SET_NEW_LOCATION:
+      return {
+        ...state,
+        geoLocation: { ...get(state, ['geoLocation']), ...action.payload }
+      }
     case types.GEOCODER:
       return {
         ...state,
@@ -157,9 +162,26 @@ const appReducer = (state = {}, action) => {
     case types.GEOCODER_FAILURE:
       return { ...state }
     case types.GEOLOCATIONSEARCH_SUCCESS:
-      return { ...state, geoLocation: { ...action.payload, filter: true } }
+      return {
+        ...state,
+        providerSearch: {
+          ...get(state, ['providerSearch']),
+          location: {
+            ...action.payload
+          }
+        }
+      }
     case types.GEOLOCATIONSEARCH_FAILURE:
-      return { ...state }
+      return {
+        ...state,
+        providerSearch: {
+          ...get(state, ['providerSearch']),
+          location: {
+            ...get(state, ['providerSearch', 'location']),
+            error: true
+          }
+        }
+      }
   }
 }
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
 import SectionHeader from '../../shared/desktop/SectionHeader';
 import CoordinationOfBenefits from './CoordinationOfBenefits';
+import Loader from '../../shared/Loader/Loader';
 
 // Coordination of Benefits Section from the "Account Settings" View
 
@@ -37,6 +38,7 @@ class CoordinationOfBenefitsSection extends Component {
         </Container>
         <SectionDivider />
         <Container>
+          {!familyMembers && <Loader />}
           {familyMembers &&
             familyMembers
               .map(familyMember => <CoordinationOfBenefits {...familyMember} />)

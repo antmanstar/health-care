@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
@@ -362,10 +362,11 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [size, setSize] = useState([0, 0]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function updateSize() {
       setSize([window.innerWidth, window.innerHeight]);
     }
+    updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
@@ -412,7 +413,12 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
           </RouterLink>
         </LeftWrapper>
         <CenterWrapper>
-          <MainNavigation setMobileMenuOpen={setMobileMenuOpen} mobileOpen={mobileMenuOpen} />
+          <MainNavigation
+            phoneNumber={phoneNumber}
+            handleSignOut={handleSignOut}
+            setMobileMenuOpen={setMobileMenuOpen}
+            mobileOpen={mobileMenuOpen}
+          />
           {phoneNumber && (
             <PhoneNumber>
               <i className="material-icons">phone</i>
@@ -470,7 +476,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
       >
         <NotificationCenterWithData handleClick={() => toggleDrawer()} />
       </SwipeableDrawer>
-      {isSigningOut && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+      {isSigningOut && <LoadingSpinnerScreen />}
     </Wrapper>
   );
 };

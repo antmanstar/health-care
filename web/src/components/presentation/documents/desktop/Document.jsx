@@ -1,12 +1,18 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Moment from 'moment';
 import images from '../../../../utils/images';
-
+import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
 // Document List Entry
 // TODO: props
 // WAITING: this development will be greatly further facilitated by test documents
+
+const { fetchFileContent } = actions;
+
+const { getToken } = selectors;
 
 const SectionDivider = styled.hr`
   margin: 0;
@@ -24,12 +30,32 @@ const DocumentWrapper = styled.div`
 `;
 
 const Date = styled.p`
-  min-width: 100px;
+  min-width: 50px;
   margin: 0 32px 0 0;
+  font-size: 8px;
+
+  @media ${props => props.theme.device.mobile} {
+    min-width: 75px;
+    font-size: 12px;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    min-width: 100px;
+    font-size: 16px;
+  }
 `;
 
 const DocumentName = styled.p`
   margin: 0;
+  font-size: 8px;
+
+  @media ${props => props.theme.device.mobile} {
+    font-size: 12px;
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    font-size: 16px;
+  }
 `;
 
 const DownloadButton = styled.button`
@@ -43,8 +69,12 @@ const DownloadButton = styled.button`
   background: ${props => props.theme.colors.shades.white};
   color: ${props => props.theme.colors.shades.blue};
   font-weight: 700;
-  font-size: 16px;
+  font-size: 10px;
   text-transform: uppercase;
+
+  @media ${props => props.theme.device.mobile} {
+    font-size: 16px;
+  }
 
   img {
     margin-left: 8px;
@@ -56,19 +86,28 @@ const DownloadButton = styled.button`
   }
 `;
 
-const Document = React.memo(({ file }) => (
-  <>
-    <SectionDivider />
-    <DocumentWrapper>
-      <Date>{Moment(file.utc_date).format('MM/DD/YYYY')}</Date>
-      <DocumentName>{file.display_name}</DocumentName>
-      <DownloadButton>
-        PDF
-        <img src={images["download"]} alt="Download PDF" />
-      </DownloadButton>
-    </DocumentWrapper>
-  </>
-));
+const Document = React.memo(({ file }) => {
+  const dispatch = useDispatch();
+  const token = useSelector(state => getToken(state));
+
+  const downloadButtonHandler = () => {
+    dispatch(fetchFileContent(file.file_id, file.file_name, token));
+  };
+
+  return (
+    <>
+      <SectionDivider />
+      <DocumentWrapper>
+        <Date>{Moment(file.utc_date).format('MM/DD/YYYY')}</Date>
+        <DocumentName>{file.display_name}</DocumentName>
+        <DownloadButton onClick={downloadButtonHandler}>
+          PDF
+          <img src={images['download']} alt="Download PDF" />
+        </DownloadButton>
+      </DocumentWrapper>
+    </>
+  );
+});
 
 Document.propTypes = {
   file: PropTypes.shape({}).isRequired

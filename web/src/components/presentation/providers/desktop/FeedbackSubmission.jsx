@@ -17,12 +17,10 @@ const Buttons = styled.div`
 const FeedbackButton = styled.button`
   width: 32%;
   padding: 8px 0;
-  border: none;
   border-radius: 4px;
   outline: none;
   cursor: pointer;
   background: ${props => props.theme.colors.shades.white};
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 
   img {
     background: #fff;
@@ -31,45 +29,65 @@ const FeedbackButton = styled.button`
     transition: all 200 ease-in-out;
   }
 
-  @media ${props => props.theme.device.tablet} {
-    border: 1px solid ${props => props.theme.colors.roles.warning};
-    box-shadow: none;
+  border: 1px solid ${props => props.theme.colors.roles.warning};
+  box-shadow: none;
 
+  &:hover {
+    background: ${props => props.theme.colors.roles.warning};
+  }
+
+  &.active {
+    background: ${props => props.theme.colors.roles.warning};
+  }
+
+  &:first-child {
+    border-color: ${props => props.theme.colors.roles.success};
     &:hover {
-      background: ${props => props.theme.colors.roles.warning};
+      background: ${props => props.theme.colors.roles.success};
     }
 
     &.active {
-      background: ${props => props.theme.colors.roles.warning};
+      background: ${props => props.theme.colors.roles.success};
+    }
+  }
+
+  &:last-child {
+    border-color: ${props => props.theme.colors.roles.danger};
+    &:hover {
+      background: ${props => props.theme.colors.roles.danger};
     }
 
-    &:first-child {
-      border-color: ${props => props.theme.colors.roles.success};
-      &:hover {
-        background: ${props => props.theme.colors.roles.success};
-      }
-
-      &.active {
-        background: ${props => props.theme.colors.roles.success};
-      }
-    }
-
-    &:last-child {
-      border-color: ${props => props.theme.colors.roles.danger};
-      &:hover {
-        background: ${props => props.theme.colors.roles.danger};
-      }
-
-      &.active {
-        background: ${props => props.theme.colors.roles.danger};
-      }
+    &.active {
+      background: ${props => props.theme.colors.roles.danger};
     }
   }
 `;
 
+const FormLabelText = styled.p`
+  font-family: 'Roboto';
+  font-size: 16px;
+  line-height: 18.75px;
+  font-weight: 700;
+  color: linear-gradient(101.88deg, #022639 0%, #003c5c 100%);
+`;
+
+const ClaimNumber = styled.p`
+  font-family: 'Roboto';
+  font-size: 16px;
+  line-height: 22.5px;
+  color: #4a4a4b;
+  font-weight: 300;
+`;
+
 const FeedbackSubmission = React.memo(({ type, choice, handleClick, claimNumber }) => (
   <>
-    {type === 'claim' && <FormLabel>{`How do you feel about Claim # ${claimNumber}?`}</FormLabel>}
+    {type === 'claim' && (
+      <>
+        <FormLabelText>Claim Number</FormLabelText>
+        <ClaimNumber>{claimNumber}</ClaimNumber>
+        <FormLabel>{`How do you feel about Claim?`}</FormLabel>
+      </>
+    )}
     {type === 'provider' && <FormLabel>How do you feel about this provider?</FormLabel>}
     <Buttons>
       <FeedbackButton

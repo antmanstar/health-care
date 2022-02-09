@@ -76,6 +76,8 @@ export const isSavingQuestionnaire = (state) =>
 export const isAssigningCarePlan = (state) =>
   get(state, ['user', 'onboarding', 'isAssigningCarePlan'])
 
+export const getEobFile = (state) => get(state, ['user', 'eobFile'])
+
 export const getToken = (state) => get(getAuth(state), ['auth_token'])
 
 export const getAccountInfo = (state) => get(state, ['user', 'accountInfo'])
@@ -318,6 +320,9 @@ export const getDocuments = (state) =>
     tag: document.tag
   }))
 
+export const getMembershipLoadingStatus = (state) =>
+  get(state, ['user', 'membershipSummary', 'isLoading'])
+
 export const getMembership = (state) => ({
   benefitType: getBenefitType(state),
   benefits: getBenefits(state),
@@ -456,3 +461,7 @@ export const getRequestMailedCardCase = (state) =>
 
 export const getAppointRepFormUploadCase = (state) =>
   get(state, ['user', 'appointRepFormUploadCase'])
+
+export const getFileContent = (state) => get(state, ['user', 'fileContent'])
+
+export const getForms = (state) => get(state, ['user', 'forms'])

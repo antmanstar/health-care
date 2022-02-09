@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import leadingZero from '../../../../utils/number';
 import Loader from '../Loader/Loader';
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
 
 // Tiles with Label / Number for "ClaimsTotals" Component
+
+const { getClaimsSummary } = selectors;
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,9 +48,9 @@ const Label = styled.p`
   color: ${props => props.theme.colors.shades.blue};
 `;
 
-const NumberTile = React.memo(({ number, label, currency, green }) => (
+const NumberTile = React.memo(({ number, label, currency, green, isLoading }) => (
   <Wrapper>
-    {number == null ? (
+    {number == null || isLoading ? (
       <Loader />
     ) : (
       <>
@@ -71,4 +75,8 @@ NumberTile.defaultProps = {
   green: false
 };
 
-export default NumberTile;
+const mapStateToProps = state => ({
+  isLoading: getClaimsSummary(state)?.isLoading
+});
+
+export default connect(mapStateToProps)(NumberTile);

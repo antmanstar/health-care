@@ -111,12 +111,15 @@ const SearchAndFilterBar = ({
   const handleClose = () => {
     setShowFilters(false);
   };
-
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
       setQuery(e.target.value);
       if (type === 'notifications') {
         clearData();
+        let dateFrom = notificationsFilters?.dateFrom;
+        let dateTo = notificationsFilters?.dateTo;
+        search({ dateFrom: dateFrom, dateTo: dateTo, query: query });
+      } else if (type === 'myDocuments') {
         let dateFrom = notificationsFilters?.dateFrom;
         let dateTo = notificationsFilters?.dateTo;
         search({ dateFrom: dateFrom, dateTo: dateTo, query: query });
@@ -143,7 +146,14 @@ const SearchAndFilterBar = ({
         <FilterButtons>
           {dateButton && (
             <FilterButton bordered={bordered} onClick={() => setShowFilters(true)}>
-              <i className={`material-icons ${showFilters ? 'calendar-red' : ''}`}>date_range</i>
+              <i
+                className={`
+                material-icons 
+                ${request?.dateFrom && request?.dateTo ? 'calendar-red' : ''}
+                ${showFilters ? 'calendar-red' : ''}`}
+              >
+                date_range
+              </i>
             </FilterButton>
           )}
           {filterButton && (

@@ -34,7 +34,8 @@ const MyInformationSectionWithData = withStoreData(
     address: getAddress(state),
     pcps: getPCPs(state),
     representative: getRepresentative(state),
-    contactPreferences: getContactPreferences(state)
+    contactPreferences: getContactPreferences(state),
+    accountInfo: getAccountInfo(state)
   }),
   dispatch => ({
     fetchAccountInfo: token => dispatch(fetchAccountInfo(token))

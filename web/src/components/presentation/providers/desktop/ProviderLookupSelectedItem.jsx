@@ -10,16 +10,18 @@ import images from '../../../../utils/images';
 import selectors from '@evry-member-app/shared/store/selectors';
 import GoogleMap from 'google-map-react';
 import { PopOver } from '../../shared/desktop/PopOver';
+import Loader from '../../shared/Loader/Loader';
 
 const { setModalData, showModal, providerSearchQueryClear, providerSearch } = actions;
 const {
   getProviderSearchLocation,
   getProviderSearchData,
   getProviderSearchQuery,
+  getProviderSearchQueryLocation,
   getToken
 } = selectors;
 
-const { SectionDivider, FormLabel } = defaultTheme.components;
+const { FormLabel } = defaultTheme.components;
 
 const Wrapper = styled.div`
   flex: 48%;
@@ -35,6 +37,7 @@ const SelectedItemWrapper = styled.div`
 `;
 
 const MapWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   height: 400px;
@@ -68,11 +71,11 @@ const Padding = styled.div`
   padding: 16px 32px;
 `;
 
-const WarningLabel = styled.div`
+const InfoLabel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: orange;
+  color: ${props => props.theme.colors.shades.blue};
   gap: 10px;
 `;
 
@@ -171,6 +174,16 @@ const FeedbackButton = styled.button`
   }
 `;
 
+const LoadingContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+`;
+
 const EditedFormLabel = styled(FormLabel)`
   margin-top: 0;
 `;
@@ -191,21 +204,26 @@ const ProviderLookupSelectedItem = ({
   id,
   currentLocation,
   providerSearchQuery,
+  providerSearchQueryLocation,
   providerSearchQueryClear,
   fetchProviders,
+  isLoadingCurrentLocation,
+  loadingStatus,
+  providerSearchData,
   token
 }) => {
   const [userLocation, setUserLocation] = useState();
   const boundary = useRef();
   const [profile, setProfile] = useState();
   const [triggerSearch, setTriggerSearch] = useState(false);
+  const [searchArea, setSearchArea] = useState(false);
+  const [defaultZoom, setDefaultZoom] = useState(14);
 
   const defaultMapProps = {
     center: {
       lat: 32.0023,
       lng: -102.13496
-    },
-    zoom: 14
+    }
   };
 
   const getBounds = map => {
@@ -244,29 +262,51 @@ const ProviderLookupSelectedItem = ({
   }, [currentLocation]);
 
   useEffect(() => {
-    setTriggerSearch(true);
+    setUserLocation({
+      lat: providerSearchQueryLocation?.latitude,
+      lng: providerSearchQueryLocation?.longitude
+    });
+    setDefaultZoom(prev => prev * 1.00001);
+  }, [providerSearchQueryLocation]);
+
+  useEffect(() => {
+    if (providerSearchQuery !== undefined) {
+      if (Object.keys(providerSearchQuery).length !== 0) setTriggerSearch(true);
+    }
   }, [providerSearchQuery]);
 
   useEffect(() => {
-    let baseRequest = {
-      token: token,
-      searchWithinBound: true,
-      location: {
-        latitude: userLocation?.latitude,
-        longitude: userLocation?.longitude
-      },
-      bounds: {
-        south_west: {
-          latitude: boundary.current?.sw?.lat,
-          longitude: boundary.current?.sw?.lng
-        },
-        north_east: {
-          latitude: boundary.current?.ne?.lat,
-          longitude: boundary.current?.ne?.lng
+    let baseRequest = {};
+    if (!providerSearchData?.request?.searchWithinBound && !searchArea)
+      baseRequest = {
+        token: token,
+        searchWithinBound: false,
+        location: {
+          latitude: providerSearchData?.request?.location?.latitude,
+          longitude: providerSearchData?.request?.location?.longitude
         }
-      }
-    };
+      };
+    else
+      baseRequest = {
+        token: token,
+        searchWithinBound: true,
+        location: {
+          latitude: currentLocation?.latitude,
+          longitude: currentLocation?.longitude
+        },
+        bounds: {
+          south_west: {
+            latitude: boundary.current?.sw?.lat,
+            longitude: boundary.current?.sw?.lng
+          },
+          north_east: {
+            latitude: boundary.current?.ne?.lat,
+            longitude: boundary.current?.ne?.lng
+          }
+        }
+      };
     triggerSearch && fetchProviders({ ...baseRequest, ...providerSearchQuery });
+    setSearchArea(false);
     setTriggerSearch(false);
   }, [triggerSearch]);
 
@@ -277,6 +317,7 @@ const ProviderLookupSelectedItem = ({
   };
 
   const handleSearchArea = () => {
+    setSearchArea(true);
     setTriggerSearch(true);
   };
 
@@ -341,7 +382,7 @@ const ProviderLookupSelectedItem = ({
         <GoogleMap
           bootstrapURLKeys={{ key: 'AIzaSyAunkg9QcyS0CdUNmxqCONgqnxc2ewsvEo' }}
           center={userLocation?.lat !== undefined ? userLocation : defaultMapProps.center}
-          defaultZoom={defaultMapProps.zoom}
+          zoom={defaultZoom}
           yesIWantToUseGoogleMapApiInternals
           onGoogleApiLoaded={({ map, maps }) => handleApiLoaded(map, maps)}
           onChildClick={id => handleMarkerClick(id)}
@@ -359,9 +400,14 @@ const ProviderLookupSelectedItem = ({
             );
           })}
         </GoogleMap>
+        {isLoadingCurrentLocation && (
+          <LoadingContainer>
+            <Loader />
+          </LoadingContainer>
+        )}
       </MapWrapper>
       <SelectedItemWrapper>
-        {providerData.length !== 0 ? (
+        {loadingStatus === 'foundResults' ? (
           <>
             <ProviderProfile {...profile} />
             <Padding>
@@ -400,12 +446,14 @@ const ProviderLookupSelectedItem = ({
               </Buttons>
             </Padding>
           </>
+        ) : loadingStatus === 'isLoading' ? (
+          <Loader />
         ) : (
           <Padding>
-            <WarningLabel>
-              <i className="material-icons">warning</i>
-              No providers found, please search another area.
-            </WarningLabel>
+            <InfoLabel>
+              <i className="material-icons">info</i>
+              Use the map to search a different area.
+            </InfoLabel>
           </Padding>
         )}
       </SelectedItemWrapper>
@@ -422,7 +470,9 @@ const mapStateToProps = state => ({
   token: getToken(state),
   currentLocation: getProviderSearchLocation(state),
   providerSearchData: getProviderSearchData(state),
-  providerSearchQuery: getProviderSearchQuery(state)
+  providerSearchQuery: getProviderSearchQuery(state),
+  providerSearchQueryLocation: getProviderSearchQueryLocation(state),
+  isLoadingCurrentLocation: state?.app?.geoLocation?.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({

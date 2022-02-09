@@ -29,6 +29,9 @@ const Button = styled.button`
     font-size: 16px;
     padding: 19px 32px;
   }
+
+  pointer-events: ${props => (props.isComing ? 'none' : 'auto')};
+  cursor: ${props => (props.isComing ? 'not-allowed' : 'pointer')};
 `;
 
 const StyledDiv = styled.div`
@@ -49,8 +52,8 @@ const SvgIcon = styled.img`
   height: auto;
 `;
 
-const BigButton = React.memo(({ text, icon, onClick, svgIcon }) => {
-  const isComing = text === 'Update Health Survey';
+const BigButton = React.memo(({ text, icon, onClick, svgIcon, isComing }) => {
+  //const isComing = text === 'Update Health Survey';
 
   return (
     <Button onClick={onClick} className="big-button" isComing={isComing}>
@@ -72,7 +75,8 @@ BigButton.propTypes = {
 
 BigButton.defaultProps = {
   onClick: null,
-  svgIcon: true
+  svgIcon: true,
+  isComing: false
 };
 
 export default BigButton;

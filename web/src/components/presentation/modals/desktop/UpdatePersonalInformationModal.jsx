@@ -5,6 +5,10 @@ import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import Select from '../../shared/desktop/Select';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import actions from '@evry-member-app/shared/store/actions';
+import { connect } from 'react-redux';
+
+const { setModalData, showModal } = actions;
 
 // MODAL - Update Personal Information
 
@@ -117,7 +121,6 @@ const UpdatePersonalInformationModal = props => {
 
   let info = props.accountInfo;
 
-  let [ infoEmail, setInfoEmail ] = useState(info?.email_address || "");
   let [ infoAddress1, setInfoAddress1 ] = useState(info?.address?.address1 || "");
   let [ infoAddress2, setInfoAddress2 ] = useState(info?.address?.address2 || "");
   let [ infoCity, setInfoCity ] = useState(info?.address?.city || "");
@@ -131,14 +134,23 @@ const UpdatePersonalInformationModal = props => {
     
   }
 
+  function createSuccessModal() {
+    props.setModalData({
+      type: 'SUCCESS',
+      title: 'Submitted!',
+      message: "Great! We'll get to work on that and send you a confirmation once complete."
+    });
+    props.showModal('SUBMISSION_RESPONSE');
+  }
+
   function completeCase(response) {
     apis.markCaseAsSubmitComplete({
       token: props.authToken,
       id: response.data.id
-    }).then(props.hideModal).catch(handleErrors);
+    }).then(createSuccessModal).catch(handleErrors);
   }
 
-  function handleSubmit() {
+  function handleSubmit() {    
     apis.createCaseUpdateAddress({
       token: props.authToken,
       address1: infoAddress1,
@@ -176,8 +188,6 @@ const UpdatePersonalInformationModal = props => {
           ) : (
             <FormSpaceBetween className="mobile-wrap">
               <Column>
-                <EditedFormLabel>Email</EditedFormLabel>
-                <EditedInput value={infoEmail} onChange={e => setInfoEmail(e.target.value)} name="email" type="email" placeholder='Email Address' />
                 <FormSpaceBetween>
                   <Flex4>
                     <EditedFormLabel>Street Address</EditedFormLabel>
@@ -335,4 +345,17 @@ UpdatePersonalInformationModal.defaultProps = {
   locked: false
 };
 
-export default UpdatePersonalInformationModal;
+const mapStateToProps = state => ({
+  //token: selectors.getToken(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdatePersonalInformationModal);

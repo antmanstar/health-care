@@ -1,14 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../style/themes';
+import isEmpty from 'lodash/isEmpty';
 import SmallButton from '../presentation/shared/desktop/SmallButton';
 import logoImg from '@evry-member-app/assets/images/vector/logo.svg';
 import { Helmet } from 'react-helmet-async';
 import history from '../../utils/history';
+import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { useSelector } from 'react-redux';
+import withStoreData from '../containers/base/withStoreData';
+import Loader from '../presentation/shared/Loader/Loader';
 
-const { getEvryContactInfo } = selectors;
+const { getToken, getEvryContactInfo } = selectors;
+const { fetchEvryContactInfo } = actions;
 
 const StyledWrapper = styled.div`
   width: 100%;
@@ -229,9 +235,7 @@ const StyledButton = styled(SmallButton)`
   align-self: center;
 `;
 
-const Page404 = () => {
-  const contact = useSelector(getEvryContactInfo);
-
+const Page404 = ({ evryContactInfo }) => {
   const handleBackClick = () => {
     history.push('/');
   };
@@ -255,34 +259,64 @@ const Page404 = () => {
             We can’t seem to find that page. Go back, or if you think there’s a problem, please
             contact us.
           </Content>
-          <ContactInfo>
-            <PhoneInfo>
-              <StyeldIcon className="material-icons">phone</StyeldIcon>
-              {contact?.phones[0].phone_number}
-            </PhoneInfo>
-            <VerticalDivider />
-            <MailInfo>
-              <StyeldIcon className="material-icons">mail_outline</StyeldIcon>
-              {contact?.support_email.email_address}
-            </MailInfo>
-          </ContactInfo>
+          {evryContactInfo ? (
+            <ContactInfo>
+              <PhoneInfo>
+                <StyeldIcon className="material-icons">phone</StyeldIcon>
+                {evryContactInfo?.phones[0]
+                  ? evryContactInfo?.phones[0]?.phone_number
+                  : '855-579-3879'}
+              </PhoneInfo>
+              <VerticalDivider />
+              <MailInfo>
+                <StyeldIcon className="material-icons">mail_outline</StyeldIcon>
+                {evryContactInfo?.support_email.email_address
+                  ? evryContactInfo?.support_email.email_address
+                  : 'support@evryhealth.com'}
+              </MailInfo>
+            </ContactInfo>
+          ) : (
+            <Loader />
+          )}
         </InnerContentBody>
         <InnerFooter>
           <HorizontalDivider />
-          <StyledButton text="back" onClick={handleBackClick} />
+          <StyledButton text="SIGN IN" onClick={handleBackClick} />
         </InnerFooter>
       </StyledWrapper>
     </>
   );
 };
 
+const Page404WithData = withStoreData(
+  Page404,
+  state => ({
+    token: getToken(state),
+    evryContactInfo: getEvryContactInfo(state)
+  }),
+  dispatch => ({
+    fetchEvryContactInfo: token => dispatch(fetchEvryContactInfo(token))
+  }),
+  (stateProps, dispatchProps, ownProps) => ({
+    fetch: () => {
+      dispatchProps.fetchEvryContactInfo(stateProps.token);
+    },
+    shouldFetch: isEmpty(stateProps.evryContactInfo),
+    ...stateProps,
+    ...ownProps
+  })
+);
+
+Page404.propTypes = {
+  evryContactInfo: PropTypes.shape({}).isRequired
+};
+
 const reflection = {
-  component: Page404,
+  component: Page404WithData,
   layoutProps: {
     title: '404 Page found'
   }
 };
 
-export default Page404;
-
+export default Page404WithData;
 export { reflection };

@@ -92,8 +92,13 @@ const userReducer = (state = initialState, action) => {
         ...state,
         cases: { ...state.cases, ...action.payload, status: 'COMPLETE' }
       }
+    case types.CLAIMS_SUMMARY_FETCH:
+      return { ...state, claimsSummary: { isLoading: true } }
     case types.CLAIMS_SUMMARY_FETCH_SUCCESS:
-      return { ...state, claimsSummary: action.payload }
+      return {
+        ...state,
+        claimsSummary: { ...action.payload, isLoading: false }
+      }
     case types.CLAIM_DETAIL_FETCH_SUCCESS:
       return {
         ...state,
@@ -149,6 +154,8 @@ const userReducer = (state = initialState, action) => {
       return { ...state }
     case types.CREATE_CASE_SUCCESS:
       return { ...state, createCase: action.payload, sendingFeedback: true }
+    case types.CLEAR_SENDING_FEEDBACK:
+      return { ...state, sendingFeedback: false }
     case types.CREATE_CASE_FAILURE:
       return { ...state, createCase: { error: action.error } }
     case types.CREATE_CASE_SCHEDULE_PHONE_SUCCESS:
@@ -332,23 +339,23 @@ const userReducer = (state = initialState, action) => {
             : ['An error has occured.']
         }
       }
-      case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
-        return {
-          ...state,
-          appointRepFormUploadCase: {
-            ...state.appointRepFormUploadCase,
-            status: 'COMPLETE'
-          }
+    case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          ...state.appointRepFormUploadCase,
+          status: 'COMPLETE'
         }
-      case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_FAILURE:
-        return {
-          ...state,
-          appointRepFormUploadCase: {
-            ...state.appointRepFormUploadCase,
-            status: 'ERROR-COMPLETING',
-            messages: action.payload.messages
-          }
+      }
+    case types.COMPLETE_CASE_APPOINTED_REP_FORM_UPLOAD_FAILURE:
+      return {
+        ...state,
+        appointRepFormUploadCase: {
+          ...state.appointRepFormUploadCase,
+          status: 'ERROR-COMPLETING',
+          messages: action.payload.messages
         }
+      }
     case types.APPOINTED_REP_FORM_UPLOAD_RESET:
       return {
         ...state,
@@ -385,6 +392,13 @@ const userReducer = (state = initialState, action) => {
           isVerifyingElegibility: false
         }
       }
+    case types.FETCH_EOB_SUCCESS:
+      return {
+        ...state,
+        eobFile: action.payload
+      }
+    case types.FETCH_EOB_FAILURE:
+      return { ...state }
     case types.FAMILY_MEMBER_COB_FETCH_SUCCESS:
       return { ...state, familyCOB: action.payload }
     case types.FAMILY_MEMBER_COB_SUMMARY_FETCH_SUCCESS:
@@ -394,14 +408,23 @@ const userReducer = (state = initialState, action) => {
         ...state,
         files: {
           request: {
+            dateFrom: action.payload.dateFrom,
+            dateTo: action.payload.dateTo,
             query: action.payload.query,
             categories: action.payload.categories,
             documentTypes: action.payload.documentTypes
-          }
+          },
+          isLoading: true
         }
       }
     case types.FILES_FETCH_SUCCESS:
-      return { ...state, files: { ...state.files, ...action.payload } }
+      return { ...state, files: { ...state.files, ...action.payload, isLoading: false } }
+    case types.FORMS_FETCH:
+      return {...state, forms: {isLoading: true}}
+    case types.FORMS_FETCH_SUCCESS:
+      return {...state, forms: {...action.payload, isLoading: false}}
+    case types.FORMS_FETCH_FAILURE:
+      return {...state, forms: {...action.payload, isLoading: false}}
     case types.FIND_CASES:
       return {
         ...state,
@@ -456,8 +479,13 @@ const userReducer = (state = initialState, action) => {
         saveQuestionnaire: { error: action.error.response },
         isSavingQuestionnaire: false
       }
+    case types.MEMBERSHIP_SUMMARY_FETCH:
+      return { ...state, membershipSummary: { isLoading: true } }
     case types.MEMBERSHIP_SUMMARY_FETCH_SUCCESS:
-      return { ...state, membershipSummary: action.payload }
+      return {
+        ...state,
+        membershipSummary: { ...action.payload, isLoading: false }
+      }
     case types.REWARD_BENEFITS_FETCH_SUCCESS:
       return { ...state, rewardBenefits: action.payload }
     case types.REWARD_CATEGORIES_FETCH_SUCCESS:
@@ -612,14 +640,30 @@ const userReducer = (state = initialState, action) => {
     case types.CLEAR_SESSION_TIMED_OUT:
       return { ...state, sessionTimedOut: false }
     case types.FILE_CONTENT_FETCH:
-      return { ...state, fileContent: { isLoading: true } }
+      return { ...state, fileContent: { fileName: action.payload.fileName, isLoading: true } }
     case types.FILE_CONTENT_FETCH_SUCCESS:
       return {
         ...state,
-        fileContent: { isLoading: false, file: action.payload }
+        fileContent: { ...state.fileContent, isLoading: false, file: action.payload }
       }
     case types.FILE_CONTENT_FETCH_FAILURE:
-      return { ...state, fileContent: { isLoading: false } }
+      return { ...state, fileContent: { ...state.fileContent, isLoading: false, messages: action.payload.messages } }
+    case types.DOWNLOAD_UNDERSTAND_BENEFITS:
+      return { ...state, understandYourBenefit: { isLoading: true } }
+    case types.DOWNLOAD_UNDERSTAND_BENEFITS_SUCCESS:
+      const url = window.URL.createObjectURL(new Blob([action.payload]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'Understand your Benefits.pdf')
+      document.body.appendChild(link)
+      link.click()
+      return {
+        ...state,
+        understandYourBenefit: {
+          fileLink: link,
+          isLoading: false
+        }
+      }
     case types.UNSET:
       return null
     case types.INITIALIZE:

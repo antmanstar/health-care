@@ -6,19 +6,26 @@ import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import SmallButton from '../../shared/desktop/SmallButton';
-import Loader from '../../shared/Loader/Loader';
+import Loader from '../../shared/Loader/LoadingSpinnerScreen';
 import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
 
-const { showModal } = actions;
-
+const { showModal, fetchFileContent } = actions;
+const { getToken, getMembershipLoadingStatus } = selectors;
 // DESKTOP: My Membership Section for Document Center View
 
 const { SectionBackground, Container, SectionDivider, SpaceBetween } = defaultTheme.components;
 
 const Row = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
+  flex-direction: column;
+
+  @media ${props => props.theme.device.tablet} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   @media ${props => props.theme.device.desktop} {
     margin-bottom: 24px;
@@ -34,14 +41,18 @@ const Row = styled.div`
 `;
 
 const InfoSection = styled.div`
-  width: 50%;
+  width: 100%;
   margin-bottom: 10px;
   color: ${props => props.theme.colors.shades.blue};
+
+  @media ${props => props.theme.device.tablet} {
+    width: 50%;
+  }
 `;
 
 const Title = styled.h4`
   margin: 0 0 8px 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
 `;
 
@@ -60,8 +71,13 @@ const Info = styled.div`
 const LabeledNumbers = styled.div`
   display: flex;
   width: 100%;
-  font-size: 16px;
+  min-width: 170px;
+  font-size: 10px;
   margin-bottom: 5px;
+
+  @media ${props => props.theme.device.mobile} {
+    font-size: 16px;
+  }
 
   &.half-width {
     width: 48%;
@@ -80,7 +96,17 @@ const LabeledNumbers = styled.div`
 
 const Labels = styled.div`
   margin-right: 8px;
-  width: 55%;
+  width: 75%;
+  @media (min-width: 500px) {
+    width: 55%;
+  }
+  @media ${props => props.theme.device.tablet} {
+    width: 75%;
+  }
+  @media ${props => props.theme.device.tabletXL} {
+    width: 55%;
+  }
+
   &.half-width {
     width: 30%;
   }
@@ -129,12 +155,18 @@ class MyMembershipSection extends Component {
     this.state = {};
 
     this.handlers = {
-      handleReplaceCardClick: this.handleReplaceCardClick.bind(this)
+      handleReplaceCardClick: this.handleReplaceCardClick.bind(this),
+      handleMembershipDocumentsClick: this.handleMembershipDocumentsClick.bind(this)
     };
   }
 
   handleReplaceCardClick() {
     this.props.showModal('REQUEST_NEW_MEMBERSHIP_CARD');
+  }
+  handleMembershipDocumentsClick(event) {
+    console.log('handleMembershipDocumentsClick');
+    console.log(event.target);
+    //this.props.fetchFileContent(event.target.value, this.props.token)
   }
 
   render() {
@@ -149,9 +181,9 @@ class MyMembershipSection extends Component {
       payerId,
       rxId,
       rxGroup,
-      benefits
+      benefits,
+      isLoading
     } = this.props;
-
     return (
       <SectionBackground>
         <Container>
@@ -161,80 +193,13 @@ class MyMembershipSection extends Component {
               title="My Membership"
               subTitle={`${name}  |  ${memberId} - Premier ${benefitType}`}
               svgIcon
+              noCollaspe={true}
             />
-            <SmallButton
-              text="Replace Membership Card"
-              onClick={this.handlers.handleReplaceCardClick}
-            />
+            <SmallButton text="Replace Card" onClick={this.handlers.handleReplaceCardClick} />
           </SpaceBetween>
         </Container>
         <SectionDivider />
         <Container>
-          {/* <Row>
-            <InfoSection>
-              <Title>Membership Documents</Title>
-              <SectionDivider />
-              {!membershipDocs ? (
-                <Loader />
-              ) : (
-                <Info>
-                  <MemberDocs>
-                    {membershipDocs
-                      .map(doc => <a href={doc.fileName}>{doc.displayName}</a>)
-                      .reduce((prev, docLink, i) => {
-                        const curr = prev.slice();
-                        if (i % 2) {
-                          curr[curr.length - 1] = curr[curr.length - 1].concat([docLink]);
-                        } else {
-                          curr.push([docLink]);
-                        }
-                        return curr;
-                      }, [])
-                      .map(row => (
-                        <div>{row}</div>
-                      ))}
-                  </MemberDocs>
-                </Info>
-              )}
-            </InfoSection>
-            <InfoSection>
-              <Title>Pharmacy Information</Title>
-              <SectionDivider />
-              {!rxBin && !rxPcn ? (
-                <Loader />
-              ) : (
-                <Info>
-                  <LabeledNumbers>
-                    <Labels>
-                      <h4>BIN</h4>
-                    </Labels>
-                    <Numbers>
-                      <p>{rxBin}</p>
-                    </Numbers>
-                  </LabeledNumbers>
-                  <LabeledNumbers>
-                    <Labels>
-                      <h4>PCN</h4>
-                    </Labels>
-                    <Numbers>
-                      <p>{rxPcn}</p>
-                    </Numbers>
-                  </LabeledNumbers>
-                </Info>
-              )}
-            </InfoSection>
-          </Row>
-          <InfoSection>
-            <Title>Family Members</Title>
-            <SectionDivider />
-            {!familyMembers ? (
-              <Loader />
-            ) : (
-              <Info>
-                <Dependents>{familyMembers.map(String).join(', ')}</Dependents>
-              </Info>
-            )}
-          </InfoSection> */}
           <Row>
             <InfoSection>
               <Title>Doctor & Pharmacy</Title>
@@ -244,49 +209,37 @@ class MyMembershipSection extends Component {
                   <Labels className="half-width">
                     <h4>RXID:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{rxId}</p>
-                  </Numbers>
+                  <Numbers>{rxId}</Numbers>
                 </LabeledNumbers>
                 <LabeledNumbers className="half-width">
                   <Labels className="half-width">
                     <h4>RXBIN:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{rxBin}</p>
-                  </Numbers>
+                  <Numbers>{rxBin}</Numbers>
                 </LabeledNumbers>
                 <LabeledNumbers className="half-width">
                   <Labels className="half-width">
                     <h4>RXPCN:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{rxPcn}</p>
-                  </Numbers>
+                  <Numbers>{rxPcn}</Numbers>
                 </LabeledNumbers>
                 <LabeledNumbers className="half-width">
                   <Labels className="half-width">
                     <h4>RXGRP:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{rxGroup}</p>
-                  </Numbers>
+                  <Numbers>{rxGroup}</Numbers>
                 </LabeledNumbers>
                 <LabeledNumbers className="half-width">
                   <Labels className="half-width">
                     <h4>PAYER ID:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{payerId}</p>
-                  </Numbers>
+                  <Numbers>{payerId}</Numbers>
                 </LabeledNumbers>
                 <LabeledNumbers className="half-width">
                   <Labels className="half-width">
                     <h4>TYPE:</h4>
                   </Labels>
-                  <Numbers>
-                    <p>{benefitType}</p>
-                  </Numbers>
+                  <Numbers>{benefitType}</Numbers>
                 </LabeledNumbers>
               </Info>
             </InfoSection>
@@ -299,9 +252,7 @@ class MyMembershipSection extends Component {
                     <Labels>
                       <h4>{benefit.name}:</h4>
                     </Labels>
-                    <Numbers>
-                      <p>{benefit.coverage}</p>
-                    </Numbers>
+                    <Numbers>{benefit.coverage}</Numbers>
                   </LabeledNumbers>
                 ))}
               </Info>
@@ -331,7 +282,11 @@ class MyMembershipSection extends Component {
                 <Info>
                   <MemberDocs>
                     {membershipDocs
-                      .map(doc => <a href={doc.fileName}>{doc.displayName}</a>)
+                      .map(doc => (
+                        <a onClick={this.handleMembershipDocumentsClick} value={doc.file_id}>
+                          {doc.display_name}
+                        </a>
+                      ))
                       .reduce((prev, docLink, i) => {
                         const curr = prev.slice();
                         if (i % 2) {
@@ -350,6 +305,7 @@ class MyMembershipSection extends Component {
             </InfoSection>
           </Row>
         </Container>
+        {isLoading && <Loader />}
       </SectionBackground>
     );
   }
@@ -376,13 +332,18 @@ MyMembershipSection.defaultProps = {
   rxPcn: ''
 };
 
+const mapStateToProps = state => ({
+  token: getToken(state),
+  isLoading: getMembershipLoadingStatus(state)
+});
+
 const mapDispatchToProps = dispatch => ({
   showModal: modal => {
     dispatch(showModal(modal));
+  },
+  fetchFileContent: (fileId, token) => {
+    dispatch(fetchFileContent(file.file_id, token));
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(MyMembershipSection);
+export default connect(mapStateToProps, mapDispatchToProps)(MyMembershipSection);

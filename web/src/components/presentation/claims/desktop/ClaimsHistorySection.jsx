@@ -13,7 +13,9 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import paginate from '../../../../utils/pagination';
 import constants from '@evry-member-app/shared/constants';
-import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
+import Moment from 'moment';
+import Loader from '../../shared/Loader/Loader';
+import { useEffect } from 'react';
 
 const { fetchClaimsList, showModal } = actions;
 const { getClaimsList, getClaimsListDataFrame, getToken, getClaimLoading, getRequest } = selectors;
@@ -68,30 +70,62 @@ const SearchWrapper = styled.div`
   }
 `;
 
-class ClaimsHistorySection extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handlers = {
-      contactCareGuideClick: this.contactCareGuideClick.bind(this),
-      search: this.search.bind(this)
-    };
+const EmptyState = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 80px;
+  i {
+    color: #959595;
   }
+`;
 
-  componentDidMount() {
-    const { claimsList, fetchClaimsList } = this.props;
-
-    if (!claimsList) {
-      fetchClaimsList({ page: 1, recordsPerPage: RECORDS_PER_PAGE });
-    }
+const EmptyStateText = styled.p`
+  margin: 0;
+  font-size: 18px;
+  line-height: 28.13px;
+  color: #bdbdbd;
+  font-family: 'Roboto';
+  font-weight: 700;
+  margin-left: 15px;
+  @media screen and (min-width: 1200px) {
+    font-size: 24px;
   }
+`;
 
-  contactCareGuideClick() {
-    this.props.showModal('CONTACT_CARE_GUIDE');
+const FilterText = styled.p`
+  color: #f9423a;
+  font-size: 16px;
+  line-height: 18.75px;
+  margin-left: 10px;
+  span {
+    display: inline-block;
+    margin-left: 6px;
+    margin-right: 6px;
   }
+  @media screen and (min-width: 1200px) {
+    margin-left: 0;
+  }
+`;
 
-  search(data) {
-    const { fetchClaimsList, claimsListDataFrame, paginator } = this.props;
+const ClaimsHistorySection = ({
+  claimsList,
+  paginator,
+  pending,
+  request,
+  fetchClaimsList,
+  claimsListDataFrame,
+  showModal
+}) => {
+  useEffect(() => {
+    fetchClaimsList({ page: 1, recordsPerPage: RECORDS_PER_PAGE });
+  }, []);
+
+  const contactCareGuideClick = () => {
+    showModal('CONTACT_CARE_GUIDE');
+  };
+
+  const search = data => {
     const trimmedQuery = data.query.trim();
 
     if (trimmedQuery !== claimsListDataFrame.query) {
@@ -103,49 +137,70 @@ class ClaimsHistorySection extends Component {
         dateTo: data.dateTo
       });
     }
-  }
+  };
 
-  render() {
-    const { claimsList, paginator, pending, request } = this.props;
-    return (
-      <LayoutWrapper>
-        <SectionBackground>
-          <Container>
-            <HeaderWrapper>
-              <SectionHeaderWithIcon
-                title="Claims History"
-                subTitle="View claims information or follow up on an active claim."
-                icon="history"
+  return (
+    <LayoutWrapper>
+      <SectionBackground>
+        <Container>
+          <HeaderWrapper>
+            <SectionHeaderWithIcon
+              title="Claims History"
+              subTitle="View claims information."
+              icon="history"
+            />
+            <SearchWrapper>
+              <SearchAndFilterBar
+                bordered
+                search={search}
+                placeholder="Search Claims"
+                request={request}
+                dateButton
               />
-              <SearchWrapper>
-                <SearchAndFilterBar
-                  bordered
-                  search={this.handlers.search}
-                  placeholder="Search Claims"
-                  request={request}
-                  dateButton
-                />
-              </SearchWrapper>
-            </HeaderWrapper>
-          </Container>
-          <SectionDivider />
-          <Container>
+            </SearchWrapper>
+          </HeaderWrapper>
+        </Container>
+        <SectionDivider />
+        <Container>
+          {request?.dateFrom && request?.dateTo ? (
+            <FilterText>
+              Filtered from:
+              <span>
+                {Moment(request?.dateFrom)
+                  .format('MM-DD-YYYY')
+                  .replaceAll('-', '/')}
+              </span>
+              -
+              <span>
+                {Moment(request?.dateTo)
+                  .format('MM-DD-YYYY')
+                  .replaceAll('-', '/')}
+              </span>
+            </FilterText>
+          ) : null}
+          {pending ? (
+            <Loader />
+          ) : claimsList?.length ? (
             <ClaimsList claims={claimsList} />
-            {pending && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
-          </Container>
-        </SectionBackground>
-        <PaginationWrapper>
-          <PostSectionNote
-            text="Have a question about a pending claim?"
-            linkText="Contact Customer Support"
-            handleClick={this.handlers.contactCareGuideClick}
-          />
-          {paginator && <Pagination paginator={paginator} />}
-        </PaginationWrapper>
-      </LayoutWrapper>
-    );
-  }
-}
+          ) : (
+            <EmptyState>
+              <i className="material-icons">search</i>
+              <EmptyStateText>No Claims Found</EmptyStateText>
+            </EmptyState>
+          )}
+        </Container>
+      </SectionBackground>
+      <PaginationWrapper>
+        <PostSectionNote
+          text="Have a question about a pending claim?"
+          linkText="Contact Customer Support"
+          handleClick={contactCareGuideClick}
+        />
+        {paginator && <Pagination paginator={paginator} />}
+      </PaginationWrapper>
+    </LayoutWrapper>
+  );
+};
 
 const mapStateToProps = state => {
   return {

@@ -348,6 +348,12 @@ const theme = {
       &.extra-narrow {
         max-width: 500px;
       }
+      &.feedback-modal-narrow {
+        min-width: 95%;
+        @media screen and (min-width: 1200px) {
+          max-width: 500px;
+        }
+      }
     `,
     SectionBackground: css`
       background: ${(props) => props.theme.colors.shades.white};

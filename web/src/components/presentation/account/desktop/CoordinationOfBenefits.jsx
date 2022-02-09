@@ -48,6 +48,8 @@ const CoordinationOfBenefits = ({
   has_medicare: hasMedicare,
   has_other_health_coverage: hasOtherHealthCoverage,
   member_cob_id: id,
+  eligibility_id,
+  member_cob_id,
   showModal,
   setModalData
 }) => {
@@ -61,7 +63,7 @@ const CoordinationOfBenefits = ({
       <SmallTitleAndButton
         text={`${name}`}
         buttonText="Update"
-        onClick={() => handleUpdateClick({ name })}
+        onClick={() => handleUpdateClick({ name, eligibility_id, member_cob_id })}
       />
       <SpaceBetween>
         <Type>Medicare</Type>

@@ -741,6 +741,16 @@ export const fetchClaimsList = ({
   }
 }
 
+export const fetchEOB = (token, id) => {
+  return {
+    type: types.FETCH_EOB,
+    payload: {
+      token,
+      id
+    }
+  }
+}
+
 export const fetchEducationalResources = (token) => ({
   type: types.EDUCATIONAL_RESOURCES_FETCH,
   payload: {
@@ -777,20 +787,37 @@ export const fetchFiles = ({
   page,
   query,
   recordsPerPage,
-  orderBy
-}) => ({
-  type: types.FILES_FETCH,
-  payload: {
-    token,
-    categories,
-    documentTypes,
-    page,
-    recordsPerPage,
-    query,
-    orderBy,
-    direction
+  orderBy,
+  dateFrom,
+  dateTo
+}) => {
+  return {
+    type: types.FILES_FETCH,
+    payload: {
+      token,
+      categories,
+      documentTypes,
+      page,
+      recordsPerPage,
+      query,
+      orderBy,
+      direction,
+      dateFrom,
+      dateTo
+    }
   }
-})
+}
+
+export const fetchForms = ({category, formType, token}) => {
+  return {
+    types: null,
+    payload:{
+      token,
+      category,
+      formType,
+    }
+  }
+}
 
 export const getLastQuestionnaireOrCreate = ({ id, token }) => ({
   type: types.GET_LAST_QUESTIONNAIRE_OR_CREATE,
@@ -1051,10 +1078,24 @@ export const clearSessionTimedOut = () => ({
   payload: {}
 })
 
-export const fetchFileContent = (id, token) => ({
+
+export const clearSendingFeedback = () => ({
+  type: types.CLEAR_SENDING_FEEDBACK,
+  payload: {}
+})
+
+export const fetchFileContent = (id, fileName, token) => ({
   type: types.FILE_CONTENT_FETCH,
   payload: {
     id,
+    fileName,
+    token
+  }
+})
+
+export const downloadUnderstandYourBenefits = (token) => ({
+  type: types.DOWNLOAD_UNDERSTAND_BENEFITS,
+  payload: {
     token
   }
 })

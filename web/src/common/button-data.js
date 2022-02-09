@@ -8,13 +8,15 @@ export default {
     text: 'Download Card',
     icon: 'get_app',
     onClick: 'downloadMembershipCardClick',
-    svgIcon: false
+    svgIcon: false,
+    isComing: true
   },
   orderClaimsDocuments: {
     text: 'Order Claims Documents',
     icon: 'email',
     onClick: 'orderClaimsClick',
-    svgIcon: false
+    svgIcon: false,
+    isComing: true
   },
   replaceMembershipCard: {
     text: 'Replace Membership Card',

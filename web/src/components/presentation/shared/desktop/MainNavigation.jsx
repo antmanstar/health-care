@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
@@ -16,18 +17,43 @@ const Navigation = styled.ul`
   list-style: none;
 
   @media (max-width: ${mainBreakPoint}) {
-    max-width: ${props => (props.mobileOpen ? '270px' : '0')};
+    justify-content: space-between;
+    max-width: ${props => (props.mobileOpen ? '300px' : '0')};
     box-shadow: 0px 0px 50px #232931;
     position: fixed;
     top: 0;
     right: 0;
     align-items: flex-start;
     background: #022b41;
-    height: 100%;
+    height: 100vh;
     flex-direction: column;
     padding-top: 50px;
     z-index: 1;
-    transition: max-width 0.3s ease-in;
+    transition: max-width 0.2s ease-in;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    div:last-child {
+      margin: 35px auto;
+    }
+  }
+`;
+
+const SignOutLink = styled.li`
+  padding-bottom: 4px;
+  color: ${props => props.theme.colors.shades.grayTeal};
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  &:hover,
+  &.active {
+    color: ${props => props.theme.colors.shades.white};
   }
 `;
 
@@ -53,7 +79,6 @@ const OurNavLink = styled(NavLink)`
 
   @media (max-width: ${mainBreakPoint}) {
     white-space: nowrap;
-    border-bottom: none;
   }
 `;
 
@@ -208,11 +233,33 @@ const DropDownLinkExternal = styled.a`
   }
 `;
 
-const MainNavigation = ({ mobileOpen, setMobileMenuOpen }) => {
+const PhoneNumber = styled.div`
+  height: 64px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  color: ${props => props.theme.colors.shades.white};
+  font-size: 16px;
+  font-weight: 300;
+
+  i {
+    margin-right: 8px;
+  }
+`;
+
+const MainNavigation = ({ mobileOpen, setMobileMenuOpen, phoneNumber, handleSignOut }) => {
   const [memberToolsOpen, setMemberToolsOpen] = useState(false);
+  const [mobileComponents, setMobileComponents] = useState(false);
+
+  useEffect(() => {
+    !mobileOpen
+      ? setTimeout(function() {
+          setMobileComponents(false);
+        }, 200)
+      : setMobileComponents(true);
+  }, [mobileOpen]);
 
   const toggleMemberTools = () => {
-    console.log(memberToolsOpen);
     mobileOpen && setMemberToolsOpen(!memberToolsOpen);
   };
 
@@ -250,7 +297,7 @@ const MainNavigation = ({ mobileOpen, setMobileMenuOpen }) => {
       <Dropdown onClick={() => toggleMemberTools()}>
         <DropdownLabel>
           Member Tools
-          {mobileOpen ? (
+          {mobileComponents ? (
             memberToolsOpen ? (
               <i className="material-icons">keyboard_arrow_up_icon</i>
             ) : (
@@ -300,6 +347,22 @@ const MainNavigation = ({ mobileOpen, setMobileMenuOpen }) => {
           </DropDownItem>
         </DropdownModal>
       </Dropdown>
+      {mobileComponents && (
+        <>
+          <NavItem>
+            <OurNavLink to="/account" onClick={() => hideMenu()} activeClassName="active">
+              Account Settings
+            </OurNavLink>
+          </NavItem>
+          <NavItem>
+            <SignOutLink onClick={() => handleSignOut()}>Sign Out</SignOutLink>
+          </NavItem>
+          <PhoneNumber>
+            <i className="material-icons">phone</i>
+            <p>{`1-${phoneNumber}`}</p>
+          </PhoneNumber>
+        </>
+      )}
     </Navigation>
   );
 };

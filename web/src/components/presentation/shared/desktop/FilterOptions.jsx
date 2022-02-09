@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   top: calc(100% + 16px);
   right: 0;
   background: ${props => props.theme.colors.shades.white};
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   z-index: 100;
   left: 0;
@@ -33,13 +33,19 @@ const TransparentScrim = styled(Scrim)`
 `;
 
 const Header = styled.div`
-  padding: 16px;
-  background: ${props => props.theme.gradients.main};
-  color: ${props => props.theme.colors.shades.white};
+  padding: 38px 0 19px 23px;
+  background: #f3f3f3;
   border-radius: 4px 4px 0 0;
-  text-transform: uppercase;
+  font-family: 'Roboto';
   font-weight: 400;
+  font-size: 24px;
+  line-height: 28.13px;
 
+  span {
+    background: linear-gradient(101.88deg, #022639 0%, #003c5c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   button {
     outline: none;
     border: none;
@@ -83,8 +89,8 @@ const FilterOptions = ({
   clearData
 }) => {
   const { dateFrom, dateTo } = request;
-  const [dateStart, setDateStart] = useState(dateFrom != undefined ? new Date(dateFrom) : '');
-  const [dateEnd, setDateEnd] = useState(dateTo != undefined ? new Date(dateTo) : '');
+  const [dateStart, setDateStart] = useState('');
+  const [dateEnd, setDateEnd] = useState('');
   const [filterError, setFilterError] = useState({
     hasError: false,
     messageError: ''
@@ -138,10 +144,7 @@ const FilterOptions = ({
       <Wrapper>
         <Header>
           <SpaceBetween>
-            Filters
-            <button type="button" onClick={() => handleClose()}>
-              <i className="material-icons">close</i>
-            </button>
+            <span>Filters</span>
           </SpaceBetween>
         </Header>
         <Container>

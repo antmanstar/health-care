@@ -8,8 +8,8 @@ import { PopOver } from '../../shared/desktop/PopOver';
 
 // Provider Lookup Search Bar
 
-const { providerSearchQuery, geoLocationSearch } = actions;
-const { getLocationData, getToken } = selectors;
+const { providerSearchQuery, geoLocationSearch, setNewCurrentLocation } = actions;
+const { getLocationData, getProviderSearchQueryLocation, getToken } = selectors;
 
 const Wrapper = styled.div`
   height: 64px;
@@ -108,6 +108,13 @@ const FilterContainer = styled.div`
   padding: 10px;
 `;
 
+const ErrorLabel = styled.label`
+  display: block;
+  text-align: center;
+  color: red;
+  padding: 0px 10px 0px 10px;
+`;
+
 const FilterSearch = styled.div`
   display: flex;
   flex-wrap: no-wrap;
@@ -163,129 +170,160 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const ProviderSearchBar = React.memo(({ providerSearchQuery, token, geoLocationSearch }) => {
-  const [query, setQuery] = useState('');
-  const [searchAddress, setSearchAddress] = useState({ state: '', city: '', zip: '' });
-  const [filterModal, setFilterModal] = useState(false);
+const ProviderSearchBar = React.memo(
+  ({
+    providerSearchQuery,
+    token,
+    geoLocationSearch,
+    setNewCurrentLocation,
+    searchLocationError
+  }) => {
+    const [query, setQuery] = useState('');
+    const [searchAddress, setSearchAddress] = useState({ state: '', city: '', zip: '' });
+    const [filterModal, setFilterModal] = useState(false);
+    const [filterError, setFilterError] = useState('');
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      setQuery(e.target.value);
-      search({ search: query });
-    }
-  };
-
-  const search = args => {
-    providerSearchQuery({ query: args });
-  };
-
-  const setCurrentLocation = position => {
-    providerSearchQuery({
-      location: {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+    const handleKeyDown = e => {
+      if (e.key === 'Enter') {
+        setQuery(e.target.value);
+        search({ search: query });
       }
-    });
-  };
-
-  const getLocation = () => {
-    if (window.navigator.geolocation) {
-      window.navigator.geolocation.getCurrentPosition(setCurrentLocation, console.log);
-    }
-  };
-
-  const handleFilterSubmit = () => {
-    let request = {
-      city: searchAddress.city,
-      state: searchAddress.state,
-      zip: searchAddress.zip
     };
-    geoLocationSearch({ ...request, token });
-  };
 
-  return (
-    <div>
-      <Wrapper>
-        <Search>
-          <input
-            type="text"
-            name="search"
-            placeholder="Search our provider network."
-            value={query}
-            onChange={e => {
-              setQuery(e.target.value);
-            }}
-            onKeyDown={e => handleKeyDown(e)}
-          />
-        </Search>
-        <FilterButtons>
-          <PopOver content={'Navigate to current location'} top="-30px">
-            <FilterButton onClick={() => getLocation()}>
-              <i className="material-icons">navigation</i>
-            </FilterButton>
-          </PopOver>
-          <PopOver content={'Filter providers'} top="-30px" right={'2px'}>
-            <FilterButton onClick={() => setFilterModal(!filterModal)}>
-              <i className="material-icons">filter_list</i>
-            </FilterButton>
-          </PopOver>
-        </FilterButtons>
-      </Wrapper>
-      {filterModal ? (
-        <FilterWrapper>
-          <FilterTitle>FILTERS</FilterTitle>
-          <FilterContainer>
-            <FilterSearch>
-              <input
-                type="text"
-                name="search"
-                placeholder={'City'}
-                value={searchAddress.city}
-                onChange={e => {
-                  setSearchAddress({ ...searchAddress, city: e.target.value });
-                }}
-              />
-              <input
-                type="text"
-                name="search"
-                placeholder={'State'}
-                value={searchAddress.state}
-                onChange={e => {
-                  setSearchAddress({ ...searchAddress, state: e.target.value });
-                }}
-              />
-            </FilterSearch>
-            <FilterSearch>
-              <input
-                type="text"
-                name="search"
-                placeholder={'Zip'}
-                value={searchAddress.zip}
-                onChange={e => {
-                  setSearchAddress({ ...searchAddress, zip: e.target.value });
-                }}
-              />
-            </FilterSearch>
-          </FilterContainer>
-          <ButtonWrapper>
-            <SmallButton text="Apply Filters" onClick={() => handleFilterSubmit()} />
-            <SmallButton
-              text="Clear Filters"
-              onClick={() => setSearchAddress({ state: '', city: '', zip: '' })}
-              negative
+    const search = args => {
+      providerSearchQuery({ query: args });
+    };
+
+    const getCurrentLocation = () => {
+      setNewCurrentLocation({ isLoading: true, filter: true });
+      window.navigator.geolocation.getCurrentPosition(setCurrentLocation, console.log);
+    };
+
+    const setCurrentLocation = position => {
+      setNewCurrentLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        filter: true,
+        isLoading: false
+      });
+    };
+
+    const getLocation = () => {
+      if (window.navigator.geolocation) {
+        getCurrentLocation();
+      }
+    };
+
+    const handleFilterSubmit = () => {
+      let request = {
+        city: searchAddress.city,
+        state: searchAddress.state,
+        zip: searchAddress.zip
+      };
+      if (
+        (searchAddress.zip && searchAddress.city) ||
+        (searchAddress.city && searchAddress.state) ||
+        searchAddress.zip
+      ) {
+        setFilterError('');
+        geoLocationSearch({ ...request, token });
+        waitForError();
+      } else setFilterError('Choose a City & State, City & Zip or Zip');
+    };
+
+    return (
+      <div>
+        <Wrapper>
+          <Search>
+            <input
+              type="text"
+              name="search"
+              placeholder="Search our provider network."
+              value={query}
+              onChange={e => {
+                setQuery(e.target.value);
+              }}
+              onKeyDown={e => handleKeyDown(e)}
             />
-          </ButtonWrapper>
-        </FilterWrapper>
-      ) : (
-        <></>
-      )}
-    </div>
-  );
-});
+          </Search>
+          <FilterButtons>
+            <PopOver content={'Navigate to current location'} top="-30px">
+              <FilterButton onClick={() => getLocation()}>
+                <i className="material-icons">navigation</i>
+              </FilterButton>
+            </PopOver>
+            <PopOver content={'Filter providers'} top="-30px" right={'2px'}>
+              <FilterButton onClick={() => setFilterModal(!filterModal)}>
+                <i className="material-icons">filter_list</i>
+              </FilterButton>
+            </PopOver>
+          </FilterButtons>
+        </Wrapper>
+        {filterModal ? (
+          <FilterWrapper onMouseLeave={() => setFilterModal(false)}>
+            <FilterTitle>FILTERS</FilterTitle>
+            <FilterContainer>
+              <FilterSearch>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder={'City'}
+                  value={searchAddress.city}
+                  onChange={e => {
+                    setSearchAddress({ ...searchAddress, city: e.target.value });
+                  }}
+                  autocomplete="off"
+                />
+                <input
+                  type="text"
+                  name="search"
+                  placeholder={'State'}
+                  value={searchAddress.state}
+                  onChange={e => {
+                    setSearchAddress({ ...searchAddress, state: e.target.value });
+                  }}
+                  autocomplete="off"
+                />
+              </FilterSearch>
+              <FilterSearch>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder={'Zip'}
+                  value={searchAddress.zip}
+                  onChange={e => {
+                    setSearchAddress({ ...searchAddress, zip: e.target.value });
+                  }}
+                  autocomplete="off"
+                />
+              </FilterSearch>
+            </FilterContainer>
+            {searchLocationError && filterError === '' ? (
+              <ErrorLabel>Problem searching area.</ErrorLabel>
+            ) : (
+              <ErrorLabel>{filterError}</ErrorLabel>
+            )}
+            <ButtonWrapper>
+              <SmallButton text="Apply Filters" onClick={() => handleFilterSubmit()} />
+              <SmallButton
+                text="Clear Filters"
+                onClick={() => setSearchAddress({ state: '', city: '', zip: '' })}
+                negative
+              />
+            </ButtonWrapper>
+          </FilterWrapper>
+        ) : (
+          <></>
+        )}
+      </div>
+    );
+  }
+);
 
 const mapStateToProps = state => ({
   locationData: getLocationData(state),
-  token: getToken(state)
+  token: getToken(state),
+  searchLocationError: getProviderSearchQueryLocation(state)?.error
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -294,6 +332,9 @@ const mapDispatchToProps = dispatch => ({
   },
   geoLocationSearch: args => {
     dispatch(geoLocationSearch(args));
+  },
+  setNewCurrentLocation: args => {
+    dispatch(setNewCurrentLocation(args));
   }
 });
 

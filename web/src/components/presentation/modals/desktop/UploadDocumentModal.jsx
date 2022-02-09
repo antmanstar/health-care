@@ -8,6 +8,7 @@ import SmallButton from '../../shared/desktop/SmallButton';
 import truncate from '../../../../utils/string';
 import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 const { getSupportPhoneNumber, getToken, getAppointRepFormUploadCase } = selectors;
 
@@ -97,7 +98,8 @@ class UploadDocumentModal extends Component {
     this.state = {
       documentType: '',
       file: 'Choose a File',
-      files: []
+      files: [],
+      isSubmitting: false
     };
 
     this.handlers = {
@@ -116,6 +118,7 @@ class UploadDocumentModal extends Component {
   }
 
   handleSubmit() {
+    this.setState({ isSubmitting: true });
     this.props.createCase(this.props.token);
   }
 
@@ -150,12 +153,26 @@ class UploadDocumentModal extends Component {
         title: 'Submitted!',
         message: "Great! We'll get to work on that and send you a confirmation once complete."
       });
+      this.setState({ isSubmitting: false });
+      this.props.showModal('SUBMISSION_RESPONSE');
+    } else if (
+      prevProps.appointRepFormUploadCase &&
+      (prevProps.appointRepFormUploadCase.status === 'UPLOADED' ||
+        prevProps.appointRepFormUploadCase.status === 'OPEN') &&
+      this.props.appointRepFormUploadCase.status.includes('ERROR')
+    ) {
+      this.props.setModalData({
+        type: 'ERROR',
+        title: 'Error',
+        message: 'Something went wrong. Please try again or give us a call!'
+      });
+      this.setState({ isSubmitting: false });
       this.props.showModal('SUBMISSION_RESPONSE');
     }
   }
 
   render() {
-    const { documentType, file } = this.state;
+    const { documentType, file, isSubmitting } = this.state;
     const { phoneNumber, hideModal } = this.props;
 
     return (
@@ -187,7 +204,7 @@ class UploadDocumentModal extends Component {
                   onChange={this.handlers.handleChange}
                 >
                   <option>Appointed Representative Form</option>
-                  <option>Complaint Form</option>
+                  {/* <option>Complaint Form</option> */}
                 </Select>
               </ModalHalfColumn>
               <ModalHalfColumn>
@@ -195,7 +212,7 @@ class UploadDocumentModal extends Component {
                   <input name="file" id="file" type="file" onChange={this.handlers.handleChange} />
                   <label htmlFor="file">
                     <i className="material-icons">attachment</i>
-                    {truncate(30)(file)}
+                    {truncate(30)(file.split('\\').pop())}
                   </label>
                 </FilePicker>
               </ModalHalfColumn>
@@ -203,9 +220,14 @@ class UploadDocumentModal extends Component {
           </ModalBody>
           <ModalSectionDivider />
           <ModalButtonsRight>
-            <SmallButton text="Submit Request" onClick={this.handlers.handleSubmit} />
-            <SmallButton text="Cancel" negative onClick={hideModal} />
+            <SmallButton
+              text="Submit Request"
+              onClick={this.handlers.handleSubmit}
+              disabled={isSubmitting}
+            />
+            <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
           </ModalButtonsRight>
+          {isSubmitting && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );

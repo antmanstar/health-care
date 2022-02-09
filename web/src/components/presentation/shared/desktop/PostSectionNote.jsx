@@ -21,7 +21,11 @@ const Link = styled.a`
   margin: 0 2px 0 6px;
   color: ${props => props.theme.colors.shades.pinkOrange};
   cursor: pointer;
-  font-size: 16px;
+  font-size: 10px;
+
+  @media screen and (min-width: 800px) {
+    font-size: 16px;
+  }
 
   &:hover {
     opacity: 0.7;

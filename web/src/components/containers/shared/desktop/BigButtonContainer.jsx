@@ -9,132 +9,136 @@ import BigButton from '../../../presentation/shared/BigButton/desktop';
 import HeaderBigButton from '../../../presentation/shared/HeaderBigButton';
 import buttonData from '../../../../common/button-data';
 import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
 
-const { showModal, error500Test } = actions;
+const { showModal, error500Test, downloadUnderstandYourBenefits } = actions;
+const { getToken } = selectors;
 
-class BigButtonContainer extends Component {
-  constructor(props) {
-    super(props);
+const BigButtonContainer = ({
+  buttonKey,
+  view,
+  type,
+  showModal,
+  token,
+  downloadUnderstandYourBenefits,
+  error500Test
+}) => {
+  const benefitsClick = () => {
+    downloadUnderstandYourBenefits(token);
+  };
 
-    this.state = {};
-  }
+  const careGuideClick = () => {
+    showModal('CONTACT_CARE_GUIDE');
+  };
 
-  benefitsClick() {
-    alert('Understand my benefits now!');
-  }
-
-  careGuideClick() {
-    this.props.showModal('CONTACT_CARE_GUIDE');
-  }
-
-  contactDoctorClick() {
-    // this.props.showModal('ERROR_500');
-    this.props.error500Test();
+  const contactDoctorClick = () => {
+    //showModal('ERROR_500');
+    error500Test();
     alert('Contact my doc!!');
-  }
+  };
 
-  downloadMembershipCardClick() {
+  const downloadMembershipCardClick = () => {
     alert('Download Membership Card');
-  }
+  };
 
-  orderClaimsClick() {
+  const orderClaimsClick = () => {
     alert('Order Claims!');
-  }
+  };
 
-  passwordClick() {
-    this.props.showModal('UPDATE_PASSWORD');
-  }
+  const passwordClick = () => {
+    showModal('UPDATE_PASSWORD');
+  };
 
-  replaceCardClick() {
-    this.props.showModal('REQUEST_NEW_MEMBERSHIP_CARD');
-  }
+  const replaceCardClick = () => {
+    showModal('REQUEST_NEW_MEMBERSHIP_CARD');
+  };
 
-  requestInformationClick() {
-    this.props.showModal('REQUEST_INFORMATION');
-  }
+  const requestInformationClick = () => {
+    showModal('REQUEST_INFORMATION');
+  };
 
-  requestMembershipCardClick() {
-    this.props.showModal('REQUEST_MAILED_CARD');
-  }
+  const requestMembershipCardClick = () => {
+    showModal('REQUEST_MAILED_CARD');
+  };
 
-  scheduleAppointmentClick() {
-    this.props.showModal('SCHEDULE_APPOINTMENT');
-  }
+  const scheduleAppointmentClick = () => {
+    showModal('SCHEDULE_APPOINTMENT');
+  };
 
-  schedulePhoneCallClick() {
-    this.props.showModal('SCHEDULE_PHONE_CALL');
-  }
+  const schedulePhoneCallClick = () => {
+    showModal('SCHEDULE_PHONE_CALL');
+  };
 
-  sendMessageClick() {
-    this.props.showModal('SEND_MESSAGE');
-  }
+  const sendMessageClick = () => {
+    showModal('SEND_MESSAGE');
+  };
 
-  submitRequestClick() {
-    this.props.showModal('SUBMIT_NEW_SUPPORT_REQUEST');
-  }
+  const submitRequestClick = () => {
+    showModal('SUBMIT_NEW_SUPPORT_REQUEST');
+  };
 
-  updateQuestionsClick() {
-    this.props.showModal('UPDATE_SECURITY_QUESTIONS');
-  }
+  const updateQuestionsClick = () => {
+    showModal('UPDATE_SECURITY_QUESTIONS');
+  };
 
-  updateSurveyClick() {
+  const updateSurveyClick = () => {
     history.push('/health-assessment');
-  }
+  };
 
-  uploadDocumentClick() {
-    this.props.showModal('UPLOAD_DOCUMENT');
-  }
+  const uploadDocumentClick = () => {
+    showModal('UPLOAD_DOCUMENT');
+  };
 
-  extractClickFunction(method) {
-    return {
-      benefitsClick: this.benefitsClick.bind(this),
-      careGuideClick: this.careGuideClick.bind(this),
-      contactDoctorClick: this.contactDoctorClick.bind(this),
-      downloadMembershipCardClick: this.downloadMembershipCardClick.bind(this),
-      orderClaimsClick: this.orderClaimsClick.bind(this),
-      passwordClick: this.passwordClick.bind(this),
-      replaceCardClick: this.replaceCardClick.bind(this),
-      requestInformationClick: this.requestInformationClick.bind(this),
-      requestMembershipCardClick: this.requestMembershipCardClick.bind(this),
-      scheduleAppointmentClick: this.scheduleAppointmentClick.bind(this),
-      schedulePhoneCallClick: this.schedulePhoneCallClick.bind(this),
-      sendMessageClick: this.sendMessageClick.bind(this),
-      submitRequestClick: this.submitRequestClick.bind(this),
-      updateQuestionsClick: this.updateQuestionsClick.bind(this),
-      updateSurveyClick: this.updateSurveyClick.bind(this),
-      uploadDocumentClick: this.uploadDocumentClick.bind(this)
-    }[method];
-  }
+  const extractClickFunction = method => {
+    const methods = {
+      benefitsClick: benefitsClick,
+      careGuideClick: careGuideClick,
+      contactDoctorClick: contactDoctorClick,
+      downloadMembershipCardClick: downloadMembershipCardClick,
+      orderClaimsClick: orderClaimsClick,
+      passwordClick: passwordClick,
+      replaceCardClick: replaceCardClick,
+      requestInformationClick: requestInformationClick,
+      requestMembershipCardClick: requestMembershipCardClick,
+      scheduleAppointmentClick: scheduleAppointmentClick,
+      schedulePhoneCallClick: schedulePhoneCallClick,
+      sendMessageClick: sendMessageClick,
+      submitRequestClick: submitRequestClick,
+      updateQuestionsClick: updateQuestionsClick,
+      updateSurveyClick: updateSurveyClick,
+      uploadDocumentClick: uploadDocumentClick
+    };
+    return methods[method];
+  };
 
-  render() {
-    const { buttonKey, view, type } = this.props;
-
-    return type === 'headerButtons' ? (
-      <HeaderBigButton
-        text={buttonData[buttonKey].text}
-        icon={buttonData[buttonKey].icon}
-        svgIcon={buttonData[buttonKey].svgIcon}
-        isComing={buttonData[buttonKey].isComing}
-        onClick={this.extractClickFunction(buttonData[buttonKey].onClick)}
-        view={view}
-      />
-    ) : (
-      <BigButton
-        text={buttonData[buttonKey].text}
-        icon={buttonData[buttonKey].icon}
-        svgIcon={buttonData[buttonKey].svgIcon}
-        onClick={this.extractClickFunction(buttonData[buttonKey].onClick)}
-        view={view}
-      />
-    );
-  }
-}
-
+  return type === 'headerButtons' ? (
+    <HeaderBigButton
+      text={buttonData[buttonKey].text}
+      icon={buttonData[buttonKey].icon}
+      svgIcon={buttonData[buttonKey].svgIcon}
+      isComing={buttonData[buttonKey].isComing}
+      onClick={() => extractClickFunction(buttonData[buttonKey].onClick)()}
+      view={view}
+    />
+  ) : (
+    <BigButton
+      text={buttonData[buttonKey].text}
+      icon={buttonData[buttonKey].icon}
+      svgIcon={buttonData[buttonKey].svgIcon}
+      onClick={() => extractClickFunction(buttonData[buttonKey].onClick)()}
+      view={view}
+    />
+  );
+};
 BigButtonContainer.propTypes = {
   buttonKey: PropTypes.string.isRequired,
   showModal: PropTypes.func.isRequired,
   view: PropTypes.string
 };
+
+const mapStateToProps = state => ({
+  token: getToken(state)
+});
 
 const mapDispatchToProps = dispatch => ({
   showModal: modal => {
@@ -142,7 +146,10 @@ const mapDispatchToProps = dispatch => ({
   },
   error500Test: () => {
     dispatch(error500Test());
+  },
+  downloadUnderstandYourBenefits: token => {
+    dispatch(downloadUnderstandYourBenefits(token));
   }
 });
 
-export default connect(null, mapDispatchToProps)(BigButtonContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(BigButtonContainer);

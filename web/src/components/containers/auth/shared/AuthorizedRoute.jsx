@@ -18,9 +18,11 @@ function getComponent(Component, props, authorized, emailVerified, onboardingCom
   }
 }
 
-const AuthorizedRoute = ({ component: Component, authorized, emailVerified, onboardingComplete, ...rest }) => (
-  <Route {...rest} render={props => getComponent(Component, props, authorized, emailVerified, onboardingComplete)} />
-);
+const AuthorizedRoute = ({ component: Component, authorized, emailVerified, onboardingComplete, ...rest }) => {
+  return (
+    <Route {...rest} render={props => getComponent(Component, props, authorized, emailVerified, onboardingComplete)} />
+  );
+}
 
 AuthorizedRoute.propTypes = {
   authorized: PropTypes.bool,

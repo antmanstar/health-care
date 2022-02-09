@@ -20,7 +20,12 @@ import { connect } from 'react-redux';
 const { SectionBackground } = defaultTheme.components;
 const { INDIVIDUAL, FAMILY, MEDICAL_DEDUCTIBLE, MEDICAL_MOOP, PRESCRIPTION_MOOP } = constants;
 
-const { fetchAccumulators, fetchFileContent } = actions;
+const {
+  fetchAccumulators,
+  fetchFileContent,
+  fetchClaimsSummary,
+  downloadUnderstandYourBenefits
+} = actions;
 const { getToken, getDocuments } = selectors;
 
 const Container = styled.div`
@@ -68,11 +73,12 @@ const Dials = styled.div`
   }
 `;
 
-const Link = styled.a`
+const Link = styled.div`
   display: inline;
   margin: 0 2px 0 6px;
   font-weight: 400;
   color: ${props => props.theme.colors.shades.pinkOrange};
+  cursor: pointer;
 
   &:hover {
     opacity: 0.7;
@@ -108,10 +114,13 @@ const FilterWrapper = styled.div`
 
 const CoverageSummary = ({
   benefitType,
+  isLoading,
   accumulators,
   familyMembers,
   token,
   fetchAccumulators,
+  fetchClaimsSummary,
+  downloadUnderstandYourBenefits,
   documentList,
   fetchFileContent
 }) => {
@@ -128,10 +137,16 @@ const CoverageSummary = ({
   };
 
   const handleChange = selectedOption => {
-    selectedOption.value !== 'Family' &&
-      fetchAccumulators(token, selectedOption.value, new Date().toISOString(), 1);
     setSelectedOption({ value: selectedOption.value, label: selectedOption.label });
     setIsFamily(selectedOption.value === 'Family' ? true : false);
+
+    if (selectedOption.value === 'Family') {
+      fetchAccumulators(token, '', new Date().toISOString(), 2);
+      fetchClaimsSummary({ token: token, type: FAMILY });
+    } else {
+      fetchAccumulators(token, selectedOption.value, new Date().toISOString(), 1);
+      fetchClaimsSummary({ id: selectedOption.value, token: token, type: INDIVIDUAL });
+    }
   };
 
   useEffect(() => {
@@ -165,7 +180,7 @@ const CoverageSummary = ({
           </FilterWrapper>
         </FlexBetween>
       </Container>
-      {isEmpty(omit(accumulators, 'pending')) ? (
+      {isEmpty(omit(accumulators, 'pending')) || isLoading ? (
         <Loader />
       ) : (
         <>
@@ -224,7 +239,7 @@ const CoverageSummary = ({
           <span>100% covered</span>
           on this plan.
         </p>
-        <Link href="#">Undertand Your Benefits</Link>
+        <Link onClick={() => downloadUnderstandYourBenefits(token)}>Understand Your Benefits</Link>
         {`.`}
       </Container>
     </SectionBackground>
@@ -252,6 +267,10 @@ const mapDispatchToProps = dispatch => ({
   },
   fetchFileContent: (id, token) => {
     dispatch(fetchFileContent(token, id));
+  },
+  fetchClaimsSummary: args => dispatch(fetchClaimsSummary(args)),
+  downloadUnderstandYourBenefits: token => {
+    dispatch(downloadUnderstandYourBenefits(token));
   }
 });
 

@@ -169,7 +169,7 @@ class SendAMessageModal extends Component {
               <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
-          {this.state.showLoader && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );

@@ -5,11 +5,10 @@ import SmallButton from '../../shared/desktop/SmallButton';
 
 import { connect } from 'react-redux';
 import selectors from '@evry-member-app/shared/store/selectors';
-import actions from '@evry-member-app/shared/store/actions';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 import ErrorMessage from '../../shared/desktop/ErrorMessage';
 
-// MODAL - Update Your Password
+// MODAL - Update Your Email
 
 const {
   Scrim,
@@ -22,12 +21,11 @@ const {
   ModalWrapper
 } = defaultTheme.components;
 
-class UpdateYourPasswordModal extends Component {
+class UpdateYourEmailModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      oldPassword: '',
-      newPassword: '',
+      email: '',
       confirmPassword: '',
       errors: []
     };
@@ -44,9 +42,8 @@ class UpdateYourPasswordModal extends Component {
   submitModal = e => {
     apis.passwordChange({
       token: this.props.token,
-      oldPassword: this.state.oldPassword,
-      newPassword: this.state.newPassword,
-      newPasswordConfirm: this.state.confirmPassword
+      email: this.state.email,
+      confirmPassword: this.state.confirmPassword
     }).then(this.props.hideModal).catch(this.handleErrors);
   }
 
@@ -56,27 +53,22 @@ class UpdateYourPasswordModal extends Component {
         <Scrim onClick={this.props.hideModal} />
         <ModalWrapper className="narrow">
           <ModalHeader>
-            <ModalTitle>Update your password.</ModalTitle>
+            <ModalTitle>Update your email</ModalTitle>
           </ModalHeader>
           <ModalBody>
+            <p>New Email</p>
             <Input
-              name="oldPassword"
-              type="password"
-              placeholder="Enter your current password."
-              value={this.state.oldPassword}
+              name="email"
+              type="text"
+              placeholder="Enter an email address"
+              value={this.state.email}
               onChange={this.handleChange}
             />
-            <Input
-              name="newPassword"
-              type="password"
-              placeholder="Enter a new password."
-              value={this.state.newPassword}
-              onChange={this.handleChange}
-            />
+            <p>Confirm Password</p>
             <Input
               name="confirmPassword"
               type="password"
-              placeholder="Confirm your new password."
+              placeholder="Enter your current password"
               value={this.state.confirmPassword}
               onChange={this.handleChange}
             />
@@ -93,7 +85,7 @@ class UpdateYourPasswordModal extends Component {
   }
 }
 
-UpdateYourPasswordModal.propTypes = {
+UpdateYourEmailModal.propTypes = {
   hideModal: PropTypes.func.isRequired
 };
 
@@ -107,4 +99,4 @@ const mapDispatchToProps = dispatch => ({
   // }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateYourPasswordModal);
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateYourEmailModal);

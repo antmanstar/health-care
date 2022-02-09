@@ -16,6 +16,7 @@ import SubmitClaimFeedbackModal from '../../../presentation/modals/desktop/Submi
 import SupportRequestModal from '../../../presentation/modals/desktop/SupportRequestModal';
 import UpdateCoordinationOfBenefitsModal from '../../../presentation/modals/desktop/UpdateCoordinationOfBenefitsModal';
 import UpdatePasswordModal from '../../../presentation/modals/desktop/UpdatePasswordModal';
+import UpdateEmailModal from '../../../presentation/modals/desktop/UpdateEmailModal';
 import UpdatePersonalInformationModal from '../../../presentation/modals/desktop/UpdatePersonalInformationModal';
 import UpdateSecurityQuestionsModal from '../../../presentation/modals/desktop/UpdateSecurityQuestionsModal';
 import UploadDocumentModal from '../../../presentation/modals/desktop/UploadDocumentModal';
@@ -24,12 +25,19 @@ import UpdateContactPreferences from '../../../presentation/modals/desktop/Updat
 import RequestMailedCardModal from '../../../presentation/modals/desktop/RequestMailedCardModal';
 import ConciergeCareModal from '../../../presentation/modals/desktop/ConciergeCareModal';
 import Error500Modal from '../../../presentation/modals/desktop/Error500Modal';
+import SubmitClaimFeedbackSuccess from '../../../presentation/modals/desktop/SubmitClaimFeedbackSuccess';
 import withStoreData from '../../base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import constants from '@evry-member-app/shared/constants';
 import selectors from '@evry-member-app/shared/store/selectors';
 
-const { fetchAccountInfo, fetchCareGuideInfo, fetchMembershipSummary, findCases } = actions;
+const {
+  fetchAccountInfo,
+  fetchCareGuideInfo,
+  fetchMembershipSummary,
+  findCases,
+  clearSendingFeedback
+} = actions;
 const {
   foundCases,
   getAccountInfo,
@@ -37,6 +45,7 @@ const {
   getCareGuideInfo,
   getCurrentModal,
   getFamilyMembers,
+  getFamilyMemberCOBSummary,
   getEmail,
   getMemberName,
   getModalData,
@@ -53,7 +62,7 @@ const UpdatePersonalInformationModalWithData = withStoreData(
     email: getEmail(state),
     foundCases: foundCases(state),
     name: getMemberName(state),
-    authToken: getToken(state),
+    authToken: getToken(state)
   }),
   dispatch => ({
     fetchAccountInfo: token => dispatch(fetchAccountInfo(token)),
@@ -64,7 +73,8 @@ const UpdatePersonalInformationModalWithData = withStoreData(
           token,
           types: [CONTACT_INFO_UPDATE]
         })
-      )
+      ),
+    clearSendingFeedback: () => dispatch(clearSendingFeedback())
   }),
   ({ token, ...stateProps }, dispatchProps, ownProps) => ({
     fetch: {
@@ -122,7 +132,16 @@ const ScheduleAppointmentModalWithData = withStoreData(
 const UpdateCoordinationOfBenefitsModalWithData = withStoreData(
   UpdateCoordinationOfBenefitsModal,
   state => ({
-    authToken: getToken(state)
+    authToken: getToken(state),
+    familyMembers: getFamilyMemberCOBSummary(state)
+  })
+);
+
+const SubmitClaimFeedbackSuccessWithData = withStoreData(
+  SubmitClaimFeedbackSuccess,
+  state => state,
+  dispatch => ({
+    clearSendingFeedback: () => dispatch(clearSendingFeedback())
   })
 );
 
@@ -175,6 +194,9 @@ const ModalContainer = props => {
 
     case 'UPDATE_PASSWORD':
       return <UpdatePasswordModal {...props} />;
+      
+    case 'UPDATE_EMAIL':
+      return <UpdateEmailModal {...props} />;
 
     case 'UPDATE_PERSONAL_INFORMATION':
       return <UpdatePersonalInformationModalWithData {...props} />;
@@ -193,6 +215,9 @@ const ModalContainer = props => {
 
     case 'CONCIERGE_CARE':
       return <ConciergeCareModal {...props} />;
+
+    case 'SUBMIT_CLAIM_FEEDBACK_SUCCESS':
+      return <SubmitClaimFeedbackSuccess {...props} />;
 
     case 'ERROR_500':
       return <Error500Modal {...props} />;

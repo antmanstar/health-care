@@ -6,10 +6,13 @@ import BigButtonContainer from '../../../containers/shared/desktop/BigButtonCont
 import SmallButton from '../../shared/desktop/SmallButton';
 import ContactCareGuideProfile from '../../shared/desktop/ContactCareGuideProfile';
 import Loader from '../../shared/Loader/Loader';
-
+import actions from '@evry-member-app/shared/store/actions';
+import { useDispatch } from 'react-redux';
 // MODAL - Contact Care Guide
 // TODO: Message & Phone Call Buttons should specify on backend that they are for Care Guide
 // TODO: Add Care Guide image
+
+const { showModal } = actions;
 
 const {
   FormLabel,
@@ -76,6 +79,10 @@ const SqaushedSpaceBetween = styled(SpaceBetween)`
   margin: -24px 0 -8px;
 `;
 
+const SmallButtonLink = styled(SmallButton)`
+  border: none;
+`;
+
 const Column = styled.div`
   width: 100%;
   margin-left: -16px;
@@ -93,41 +100,52 @@ const Column = styled.div`
   }
 `;
 
-const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
-  <>
-    <Scrim onClick={hideModal} />
-    <ScrollableModalWrapper>
-      <Header>
-        {!careGuide ? (
-          <Loader />
-        ) : (
-          <>
-            <ColoredBackground />
-            {careGuide.error && careGuide.error.length > 0 ? (
-              <ContactCareGuideProfile />
-            ) : (
-              <ContactCareGuideProfile
-                name={`${careGuide.first_name} ${careGuide.last_name}`}
-                roleLabel="Your Care Guide"
-                number={`${careGuide.phone.phone_number} ${
-                  careGuide.phone.phone_number_extension &&
-                  careGuide.phone.phone_number_extension.trim().length > 0
-                    ? `(Ext - ${careGuide.phone.phone_number_extension})`
-                    : ''
-                }`}
-                email={careGuide.email.email_address}
-                imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
-              />
-            )}
-          </>
-        )}
-      </Header>
-      <ModalBody>
-        <ModalSectionDivider />
-        <CenterText>
-          <Title>{name ? `Hi ${name.first}, how can I help?` : 'Hi, how can I help?'}</Title>
-        </CenterText>
-        {/* <SqaushedSpaceBetween>
+const StyledAnchor = styled.a`
+  cursor: pointer;
+`;
+
+const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => {
+  const dispatch = useDispatch();
+
+  const showConciergeCareHandler = () => {
+    dispatch(showModal('CONCIERGE_CARE'));
+  };
+
+  return (
+    <>
+      <Scrim onClick={hideModal} />
+      <ScrollableModalWrapper>
+        <Header>
+          {!careGuide ? (
+            <Loader />
+          ) : (
+            <>
+              <ColoredBackground />
+              {careGuide.error && careGuide.error.length > 0 ? (
+                <ContactCareGuideProfile />
+              ) : (
+                <ContactCareGuideProfile
+                  name={`${careGuide.first_name} ${careGuide.last_name}`}
+                  roleLabel="Your Care Guide"
+                  number={`${careGuide.phone.phone_number} ${
+                    careGuide.phone.phone_number_extension &&
+                    careGuide.phone.phone_number_extension.trim().length > 0
+                      ? `(Ext - ${careGuide.phone.phone_number_extension})`
+                      : ''
+                  }`}
+                  email={careGuide.email.email_address}
+                  imgSrc="https://randomuser.me/api/portraits/women/58.jpg"
+                />
+              )}
+            </>
+          )}
+        </Header>
+        <ModalBody>
+          <ModalSectionDivider />
+          <CenterText>
+            <Title>{name ? `Hi ${name.first}, how can I help?` : 'Hi, how can I help?'}</Title>
+          </CenterText>
+          {/* <SqaushedSpaceBetween>
           <Column>
             <FormLabel>Concierge Care</FormLabel>
             <BigButtonContainer buttonKey="requestInformation" />
@@ -141,27 +159,29 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => (
             <BigButtonContainer buttonKey="schedulePhoneCall" />
           </Column>
         </SqaushedSpaceBetween> */}
+          <ModalButtonsCenter>
+            <Column>
+              <BigButtonContainer buttonKey="requestInformation" />
+              <BigButtonContainer buttonKey="sendAMessage" />
+              <BigButtonContainer buttonKey="schedulePhoneCall" />
+            </Column>
+          </ModalButtonsCenter>
+          <CenterText>
+            <p>
+              What all can your Care Coordinator do for you? Visit our Help Center to learn more
+              about{' '}
+              <StyledAnchor onClick={showConciergeCareHandler}>Evry's Concierge Care</StyledAnchor>.
+            </p>
+          </CenterText>
+        </ModalBody>
+        <ModalSectionDivider />
         <ModalButtonsCenter>
-          <Column>
-            <BigButtonContainer buttonKey="requestInformation" />
-            <BigButtonContainer buttonKey="sendAMessage" />
-            <BigButtonContainer buttonKey="schedulePhoneCall" />
-          </Column>
+          <SmallButton text="Cancel" negative onClick={hideModal} />
         </ModalButtonsCenter>
-        <CenterText>
-          <p>
-            What all can your Care Coordinator do for you? Visit our Help Center to learn more about{' '}
-            <a href="">Evry's Concierge Care</a>.
-          </p>
-        </CenterText>
-      </ModalBody>
-      <ModalSectionDivider />
-      <ModalButtonsCenter>
-        <SmallButton text="Cancel" negative onClick={hideModal} />
-      </ModalButtonsCenter>
-    </ScrollableModalWrapper>
-  </>
-));
+      </ScrollableModalWrapper>
+    </>
+  );
+});
 
 ContactCareGuideModal.propTypes = {
   hideModal: PropTypes.func.isRequired,

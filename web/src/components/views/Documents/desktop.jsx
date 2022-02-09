@@ -10,14 +10,11 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
 
 const { fetchMembershipSummary, showModal } = actions;
-const { getToken, getMembership } = selectors;
+const { getToken, getMembership, getMembershipLoadingStatus } = selectors;
 
 // DESKTOP: Document Center View
 // TODO: Update Styling / Markup for Member Info Section
 // TODO: API needs to supply membership docs
-// TODO: Wire up search / filters for document lists
-// TODO: Wire up Document list toggle (received docs / forms)
-// TODO: Wire up pagination
 
 const { LayoutWrapper } = defaultTheme.components;
 

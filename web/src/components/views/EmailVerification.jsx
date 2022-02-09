@@ -140,7 +140,7 @@ const EmailVerification = props => {
         <VerificationContainer>
           <Header>Confirming your email....</Header>
           <Separator />
-          <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />
+          <LoadingSpinnerScreen />
         </VerificationContainer>
       </Container>
     );

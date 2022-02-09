@@ -126,34 +126,21 @@ class UpdateCoordinationOfBenefitsModal extends Component {
     this.setState({ otherInsurance });
   };
 
-  isValidDate(date) {
-    return date.getTime() === date.getTime() && date.getTime() > 0;
-  }
-
-  convertYMDToISO(dateString) {
-    let date = new Date(dateString);
-
-    return this.isValidDate(date) ? date.toISOString() : "";
-  }
-
   handleErrors = (errors) => {
     
   }
 
   completeCase = (response) => {
-    apis.markCaseAsSubmitComplete({
-      token: this.props.authToken,
-      id: response.data.id
-    }).then(this.props.hideModal).catch(this.handleErrors);
+    this.props.hideModal();
   }
 
   convertMedicareEligibilityType(eligibilityType) {
     let parsed = (eligibilityType || "").trim().toLowerCase();
 
     switch (parsed) {
-      case "age": return "1";
-      case "disability": return "2";
-      case "esrd": return "3";
+      case "age": return 1;
+      case "disability": return 2;
+      case "esrd": return 3;
       default: return undefined;
     }
   }
@@ -162,37 +149,49 @@ class UpdateCoordinationOfBenefitsModal extends Component {
     let parsed = (insuranceType || "").trim().toLowerCase();
 
     switch (parsed) {
-      case "individual": return "1";
+      case "individual": return 1;
       case "group": return 2;
       default: return undefined;
     }
+  }
+
+  isValidDate(date) {
+    return date.getTime() === date.getTime() && date.getTime() > 0;
+  }
+
+  toYMD(dateString) {
+    let date = new Date(dateString);
+
+    return this.isValidDate(date) ? date.toJSON().slice(0, 10) : "";
   }
 
   handleSubmit = () => {
     const payload = {
       token: this.props.authToken,
 
-      has_medicare: this.state.medicare.checked.toString(),
+      member_cob_id: this.props.modalData.member_cob_id,
+
+      has_medicare: this.state.medicare.checked,
       
       medicare_eligibility_type: this.convertMedicareEligibilityType(this.state.medicare.eligibility),
 
-      medicare_part_a: this.state.medicare.checkedPartA.toString(),
-      medicare_part_b: this.state.medicare.checkedPartB.toString(),
-      medicare_part_c: this.state.medicare.checkedPartC.toString(),
-      medicare_part_d: this.state.medicare.checkedPartD.toString(),
+      medicare_part_a: this.state.medicare.checkedPartA,
+      medicare_part_b: this.state.medicare.checkedPartB,
+      medicare_part_c: this.state.medicare.checkedPartC,
+      medicare_part_d: this.state.medicare.checkedPartD,
 
-      medicare_part_a_effective_date: this.convertYMDToISO(this.state.medicare.partA),
-      medicare_part_b_effective_date: this.convertYMDToISO(this.state.medicare.partB),
-      medicare_part_c_effective_date: this.convertYMDToISO(this.state.medicare.partC),
-      medicare_part_d_effective_date: this.convertYMDToISO(this.state.medicare.partD),
+      medicare_part_a_effective_date: this.toYMD(this.state.medicare.partA) || null,
+      medicare_part_b_effective_date: this.toYMD(this.state.medicare.partB) || null,
+      medicare_part_c_effective_date: this.toYMD(this.state.medicare.partC) || null,
+      medicare_part_d_effective_date: this.toYMD(this.state.medicare.partD) || null,
 
-      has_other_health_coverage: this.state.otherInsurance.checked.toString(),
+      has_other_health_coverage: this.state.otherInsurance.checked,
 
       other_insurance_type: this.convertOtherInsuranceType(this.state.otherInsurance.type),
       other_insurance_carrier_name: this.state.otherInsurance.carrier,
       other_insurance_policy_number: this.state.otherInsurance.policyNumber,
-      other_insurance_coverage_from: this.convertYMDToISO(this.state.otherInsurance.startDate),
-      other_insurance_coverage_thru: this.convertYMDToISO(this.state.otherInsurance.endDate)
+      other_insurance_coverage_from: this.toYMD(this.state.otherInsurance.startDate) || null,
+      other_insurance_coverage_through: this.toYMD(this.state.otherInsurance.endDate) || null
     };
 
     apis.createCaseCoordinationOfBenefits(payload).then(this.completeCase).catch(this.handleErrors);

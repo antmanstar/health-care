@@ -196,7 +196,14 @@ export function fetchBenefitCoverages({ token }) {
   });
 }
 
-export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = null, dateFrom, dateTo }) {
+export function fetchClaimsList({
+  token,
+  page = 1,
+  recordsPerPage = 10,
+  query = null,
+  dateFrom,
+  dateTo
+}) {
   return axios.post(
     '/api/v1/Member/GetClaimList',
     {
@@ -205,6 +212,21 @@ export function fetchClaimsList({ token, page = 1, recordsPerPage = 10, query = 
       search_string: query,
       dos_from: dateFrom,
       dos_to: dateTo
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
+export function fetchClaimsList(token, claimId) {
+  return axios.post(
+    '/api/v1/Member/GetEOB',
+    {
+      id: claimId
     },
     {
       headers: {
@@ -258,12 +280,16 @@ export function fetchFamilyMemberCOB({ token }) {
 }
 
 export function fetchFamilyMemberCOBSummary({ token }) {
-  return axios.post('/api/v1/Member/GetFamilyMemberCOBSummary', { ids: [] }, {
-    headers: {
-      'Content-Type': 'application/json-patch+json',
-      Authorization: `Bearer ${token}`
+  return axios.post(
+    '/api/v1/Member/GetFamilyMemberCOBSummary',
+    { ids: [] },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
     }
-  });
+  );
 }
 
 export function fetchFAQs({

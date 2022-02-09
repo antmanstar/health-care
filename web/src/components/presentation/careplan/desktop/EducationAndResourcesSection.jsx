@@ -158,14 +158,14 @@ const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
                 </Center>
               </>
             )}
-            <Title>Further Reading</Title>
+            {/* <Title>Further Reading</Title>
             <SubTitle>
               {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
               <span style={{ display: 'inherit' }}>
                 {`Check out our `}
                 <a href="https://www.evryhealth.com/faq">Help Center</a>
               </span>
-            </SubTitle>
+            </SubTitle> */}
           </StyledContainer>
         </>
       )}

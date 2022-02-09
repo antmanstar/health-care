@@ -48,15 +48,14 @@ const ProviderLookup = ({
   fetchAccountInfo,
   fetchGeoLocation,
   locationData,
-  providerSearchQuery
+  isLoadingProviders,
+  isLoadingAddress
 }) => {
   const [selectedProvider, setSelectedProvider] = useState(0);
   const [hoveredCardId, setHoveredCardId] = useState();
   const [hoveredPinId, setHoveredPinId] = useState();
   const [organizedData, setOrganizedData] = useState([]);
-
-  let isLoadingProviders = providerSearchData?.isLoading ? true : false;
-  let isLoadingAddress = providerSearchData?.isLoadingAddress ? true : false;
+  const [initialLoad, setInitialLoad] = useState(null);
 
   useEffect(() => {
     fetchAccountInfo();
@@ -74,7 +73,6 @@ const ProviderLookup = ({
 
   useEffect(() => {
     let baseRequest = {
-      searchWithinBound: false,
       location: {
         latitude: locationData?.latitude,
         longitude: locationData?.longitude
@@ -82,15 +80,13 @@ const ProviderLookup = ({
       bounds: {
         south_west: {},
         north_east: {}
-      }
+      },
+      searchWithinBound: false
     };
-    locationData !== null &&
-      !locationData?.filter &&
-      fetchProviders({ ...baseRequest, ...providerSearchQuery });
+    locationData !== null && !locationData?.filter && fetchProviders({ ...baseRequest });
   }, [locationData]);
 
   useEffect(() => {
-    console.log(providerSearchData);
     let temp = [];
     providerSearchData?.data?.map(practice => {
       temp.push({
@@ -113,10 +109,23 @@ const ProviderLookup = ({
     setOrganizedData(temp);
   }, [providerSearchData]);
 
+  const checkLoadingStatus = () => {
+    if (isLoadingAddress === null) return 'isLoading';
+    else if (
+      isLoadingAddress ||
+      isLoadingProviders ||
+      (isLoadingProviders && organizedData.length === 0)
+    )
+      return 'isLoading';
+    else if (!isLoadingAddress && !isLoadingProviders && organizedData.length === 0)
+      return 'noResults';
+    else return 'foundResults';
+  };
+
   const renderProviderList = () => {
-    if (isLoadingAddress || isLoadingProviders || organizedData.length === 0)
-      return <SearchingProviders loading={true} />;
-    else
+    if (checkLoadingStatus() === 'isLoading') return <SearchingProviders loading={true} />;
+    else if (checkLoadingStatus() === 'noResults') return <SearchingProviders noResults={true} />;
+    else if (checkLoadingStatus() === 'foundResults')
       return organizedData.map((practiceDetails, i) => {
         return (
           <ProviderListItem
@@ -139,13 +148,15 @@ const ProviderLookup = ({
         <ProviderLookupResults>
           <PaginationWrapper>
             {renderProviderList()}
-            {paginator && <Pagination paginator={paginator} />}
+            {console.log(paginator)}
+            {paginator?.currentPage && <Pagination paginator={paginator} />}
           </PaginationWrapper>
           <ProviderLookupSelectedItem
             id={selectedProvider}
             hoveredPinId={hoveredPinId}
             setHoveredCardId={setHoveredCardId}
             providerData={organizedData}
+            loadingStatus={checkLoadingStatus()}
             {...organizedData[selectedProvider]}
           />
         </ProviderLookupResults>
@@ -175,7 +186,9 @@ ProviderLookup.propTypes = {
 ProviderLookup.defaultProps = {
   providerSearchData: null,
   paginator: null,
-  locationData: null
+  locationData: null,
+  isLoadingAddress: null,
+  isLoadingProviders: null
 };
 
 const mapStateToProps = state => ({
@@ -183,11 +196,14 @@ const mapStateToProps = state => ({
   address: getAddress(state),
   locationData: getLocationData(state),
   providerSearchData: getProviderSearchData(state),
-  providerSearchQuery: getProviderSearchQuery(state)
+  providerSearchQuery: getProviderSearchQuery(state),
+  isLoadingAddress: state?.app?.providerSearch?.isLoadingAddress,
+  isLoadingProviders: state?.app?.providerSearch?.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchProviders: args => {
+    console.log(args);
     dispatch(providerSearch(args));
   },
   fetchGeoLocation: args => {
@@ -209,7 +225,8 @@ const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
     bounds,
     languages,
     specialties,
-    gender
+    gender,
+    searchWithinBound
   }) => {
     dispatchProps.fetchProviders({
       page,
@@ -222,6 +239,7 @@ const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
       languages,
       specialties,
       gender,
+      searchWithinBound,
       token
     });
   };

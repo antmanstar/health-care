@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Document from './Document';
 import withStoreData from '../../../containers/base/withStoreData';
 import selectors from '@evry-member-app/shared/store/selectors';
+import Loader from '../../shared/Loader/Loader';
 
-const { getFiles } = selectors;
+const { getFiles, getFilesDataFrame } = selectors;
 
 // Document Lists for "Document Center" View
 
@@ -15,13 +16,25 @@ const ListColumns = styled.div`
 
 const Label = styled.h3`
   margin: 0 0 16px 0;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: 700;
   color: ${props => props.theme.colors.shades.blue};
 
+  @media ${props => props.theme.device.mobile} {
+    font-size: 16px;
+  }
+
   &:first-child {
-    min-width: 100px;
+    min-width: 50px;
     margin: 0 32px 16px 0;
+
+    @media ${props => props.theme.device.mobile} {
+      min-width: 75px;
+    }
+
+    @media ${props => props.theme.device.tablet} {
+      min-width: 100px;
+    }
   }
 
   &:last-child {
@@ -36,18 +49,21 @@ const Notice = styled.div`
   color: ${props => props.theme.colors.shades.gray};
 `;
 
-const DocumentList = React.memo(({ files }) => (
+const DocumentList = React.memo(({ files, filesDataFrame }) => (
   <>
     <ListColumns>
       <Label>Date</Label>
       <Label>Document Name</Label>
       <Label>Download</Label>
     </ListColumns>
-    {files.length === 0 ? (
+    {(!filesDataFrame || filesDataFrame.isLoading) && <Loader />}
+    {files.length === 0 && filesDataFrame && !filesDataFrame.isLoading && (
       <Notice>There are no documents available.</Notice>
-    ) : (
-      files.map(file => <Document file={file} key={file.file_id} />)
     )}
+    {files.length > 0 &&
+      filesDataFrame &&
+      !filesDataFrame.isLoading &&
+      files.map(file => <Document file={file} key={file.file_id} />)}
   </>
 ));
 
@@ -60,5 +76,6 @@ DocumentList.defaultProps = {
 };
 
 export default withStoreData(DocumentList, (state, ownProps) => ({
-  files: getFiles(state, ownProps.type)
+  files: getFiles(state, ownProps.type),
+  filesDataFrame: getFilesDataFrame(state)
 }));

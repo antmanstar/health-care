@@ -106,7 +106,7 @@ const CarePlanSuggestion = ({
           carePlanSuggestion={carePlanSuggestion}
           isAssigningCarePlan={isAssigningCarePlan}
         />
-        {isAssigningCarePlan && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+        {isAssigningCarePlan && <LoadingSpinnerScreen />}
       </Wrapper>
     </>
   );

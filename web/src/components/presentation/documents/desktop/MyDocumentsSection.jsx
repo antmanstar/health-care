@@ -17,7 +17,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import constants from '@evry-member-app/shared/constants';
 
 const { fetchFiles, showModal } = actions;
-const { getFilesDataFrame, getToken } = selectors;
+const { getFilesDataFrame, getToken, getFileContent } = selectors;
 const { FILE_CATEGORIES } = constants;
 
 // This is the My Membership Section from the Document Center View
@@ -32,6 +32,7 @@ const {
 
 const ToggleButtons = styled.div`
   display: flex;
+  justify-content: space-evenly;
 `;
 
 const ToggleButton = styled.button`
@@ -39,7 +40,7 @@ const ToggleButton = styled.button`
   height: 32px;
   margin-right: 32px;
   padding: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: ${props => (props.active ? '700' : '300')};
   color: ${props => props.theme.colors.shades.blue};
   opacity: ${props => (props.active ? '1' : '.6')};
@@ -54,16 +55,16 @@ const ToggleButton = styled.button`
 
   outline: none;
 
-  @media ${props => props.theme.device.desktop} {
+  @media ${props => props.theme.device.mobile} {
     font-size: 16px;
   }
 `;
 
 const SearchWrapper = styled.div`
   width: 100%;
-  margin-top: 24px;
+  //margin-top: 24px;
 
-  @media ${props => props.theme.device.desktop} {
+  @media ${props => props.theme.device.tablet} {
     max-width: 48%;
     margin-top: 0;
   }
@@ -73,17 +74,28 @@ const PaginationWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   text-align: center;
   margin-top: 24px;
+  gap: 20px;
 
-  div:last-child {
-    position: absolute;
-    right: 0;
+  @media ${props => props.theme.device.tabletXL} {
+    flex-direction: row;
+
+    div:last-child {
+      position: absolute;
+      right: 0;
+    }
   }
 `;
-
+const StyledSpaceBetween = styled(SpaceBetween)`
+  @media ${props => props.theme.device_up.tablet} {
+    flex-direction: column-reverse;
+    gap: 20px;
+  }
+`;
 class MyDocumentsSection extends Component {
   constructor(props) {
     super(props);
@@ -108,7 +120,60 @@ class MyDocumentsSection extends Component {
     );
 
     if (isEmpty(filesDataFrame)) {
-      fetchFiles({ categories: receivedDocuments });
+      fetchFiles({ categories: [] });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.fileContent &&
+      prevProps.fileContent.isLoading === true &&
+      this.props.fileContent.isLoading === false
+    ) {
+      const fileType = this.props.fileContent.fileName.split('.').pop();
+      let blob;
+
+      switch (fileType) {
+        case 'pdf':
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'application/pdf'
+          });
+          break;
+        case 'jpeg':
+        case 'jpg':
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'image/jpeg'
+          });
+          break;
+        case 'png':
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'image/png'
+          });
+          break;
+        case 'doc':
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'application/msword'
+          });
+          break;
+        case 'jpg':
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'image/jpeg'
+          });
+          break;
+        default:
+          blob = new Blob([this.props.fileContent.file], {
+            type: 'text/plain'
+          });
+      }
+
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = this.props.fileContent.fileName
+        ? this.props.fileContent.fileName
+        : 'download.txt';
+      anchor.click();
+      URL.revokeObjectURL(url);
     }
   }
 
@@ -119,7 +184,7 @@ class MyDocumentsSection extends Component {
   handleFormTabClick() {
     const { fetchFiles } = this.props;
 
-    fetchFiles({ categories: FILE_CATEGORIES.DOWNLOADABLE_FORMS });
+    fetchFiles({ categories: [] /*FILE_CATEGORIES.DOWNLOADABLE_FORMS*/ });
 
     this.setState({
       toggled: true
@@ -133,7 +198,7 @@ class MyDocumentsSection extends Component {
       FILE_CATEGORIES.CLAIMS_DOCUMENTS
     );
 
-    fetchFiles({ categories: receivedDocuments });
+    fetchFiles({ categories: [] });
 
     this.setState({
       toggled: false
@@ -143,17 +208,23 @@ class MyDocumentsSection extends Component {
   search(query) {
     const { fetchFiles, filesDataFrame, paginator } = this.props;
     const { toggled } = this.state;
-    const trimmedQuery = query.trim();
+    const trimmedQuery = query.query.trim();
     const categories = toggled
       ? FILE_CATEGORIES.DOWNLOADABLE_FORMS
       : FILE_CATEGORIES.combine(FILE_CATEGORIES.USER_NOTICES, FILE_CATEGORIES.CLAIMS_DOCUMENTS);
 
-    if (trimmedQuery !== filesDataFrame.query) {
+    if (
+      trimmedQuery !== filesDataFrame.query ||
+      query.dateFrom !== filesDataFrame.dateFrom ||
+      query.dateTo !== filesDataFrame.dateTo
+    ) {
       fetchFiles({
-        categories,
+        categories: [],
         page: 1,
         recordsPerPage: paginator.recordsPerPage,
-        query: trimmedQuery
+        query: trimmedQuery,
+        dateFrom: query.dateFrom,
+        dateTo: query.dateTo
       });
     }
   }
@@ -170,11 +241,12 @@ class MyDocumentsSection extends Component {
               icon="insert_drive_file"
               title="My Documents"
               subTitle="Search your documents or download forms."
+              noCollaspe={true}
             />
           </Container>
           <SectionDivider />
           <Container>
-            <SpaceBetween>
+            <StyledSpaceBetween>
               <ToggleButtons>
                 <ToggleButton active={!toggled} onClick={this.handlers.handleDocumentTabClick}>
                   Documents
@@ -189,9 +261,10 @@ class MyDocumentsSection extends Component {
                   search={this.handlers.search}
                   dateButton
                   placeholder={`Search ${toggled ? 'Download Forms' : 'Documents'}`}
+                  type="myDocuments"
                 />
               </SearchWrapper>
-            </SpaceBetween>
+            </StyledSpaceBetween>
           </Container>
           <SectionDivider />
           <Container>{toggled ? <FormList /> : <DocumentList />}</Container>
@@ -226,7 +299,8 @@ MyDocumentsSection.defaultProps = {
 
 const mapStateToProps = state => ({
   filesDataFrame: getFilesDataFrame(state),
-  token: getToken(state)
+  token: getToken(state),
+  fileContent: getFileContent(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -239,8 +313,25 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
-  const fetchFiles = ({ categories, documentTypes, page, query, recordsPerPage }) => {
-    dispatchProps.fetchFiles({ categories, documentTypes, page, query, recordsPerPage, token });
+  const fetchFiles = ({
+    categories,
+    documentTypes,
+    page,
+    query,
+    recordsPerPage,
+    dateFrom,
+    dateTo
+  }) => {
+    dispatchProps.fetchFiles({
+      categories,
+      documentTypes,
+      page,
+      query,
+      recordsPerPage,
+      token,
+      dateFrom,
+      dateTo
+    });
   };
 
   return {

@@ -454,7 +454,7 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
       >
         <NotificationCenterWithData handleClick={() => toggleDrawer()} />
       </SwipeableDrawer>
-      {isSigningOut && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+      {isSigningOut && <LoadingSpinnerScreen />}
     </Wrapper>
   );
 };

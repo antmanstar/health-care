@@ -130,7 +130,11 @@ class MySupportSection extends Component {
                 <>
                   <SmallTitleAndButton
                     text="Your Care Guide"
-                    buttonText={`Contact ${careGuide.first_name}`}
+                    buttonText={
+                      careGuide.error && careGuide.error.length > 0
+                        ? ''
+                        : `Contact ${careGuide.first_name}`
+                    }
                     onClick={this.handlers.handleContactCareGuideClick}
                   />
                   <SupportProfileWithMarginWrapper>

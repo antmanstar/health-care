@@ -3,11 +3,11 @@ import { axios } from '..'
 // eslint-disable-next-line import/prefer-default-export
 export function providerSearch({
   page = 1,
-  searchWithinBound,
+  searchWithinBound = false,
   recordsPerPage = 10,
   search = '',
   orderBy = null,
-  desc = true,
+  desc = false,
   location,
   bounds,
   languages = [],

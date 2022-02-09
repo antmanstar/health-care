@@ -15,26 +15,29 @@ const Wrapper = styled.div`
   border: 1px solid transparent;
   border-radius: 4px;
   box-sizing: border-box;
+  height: 495px;
 `;
 
 const LoadingText = styled.div`
   font-size: 1em;
 `;
 
-const SearchingProviders = React.memo(({ loading }) => {
-  const [maybeError, setMaybeError] = useState(false);
+const WarningLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: orange;
+  gap: 10px;
+`;
 
-  useEffect(() => {
-    let maybeErrorTimer = setTimeout(() => setMaybeError(true), 15000);
-    return () => {
-      clearTimeout(maybeErrorTimer);
-    };
-  }, []);
-
+const SearchingProviders = React.memo(({ loading, noResults }) => {
   return (
     <Wrapper>
-      {maybeError ? (
-        'Something went wrong, Please try again.'
+      {noResults ? (
+        <WarningLabel>
+          <i className="material-icons">warning</i>
+          No providers found in this area.
+        </WarningLabel>
       ) : (
         <div>
           <Loader />

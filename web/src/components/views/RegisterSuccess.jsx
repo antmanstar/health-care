@@ -199,7 +199,7 @@ function RegisterSuccess({
           />
         </ButtonWrapper>
       </form>
-      {isRegisteringElegibility && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+      {isRegisteringElegibility && <LoadingSpinnerScreen />}
     </LayoutWrapper>
   );
 }

@@ -248,6 +248,21 @@ export function fetchClaimsList({
   )
 }
 
+export function fetchEOB({ token, id }) {
+  return axios.post(
+    '/api/v1/Member/GetEOB',
+    {
+      id
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+}
+
 export function fetchClaimDetail({ token, claimId }) {
   return axios.post(
     '/api/v1/Member/GetClaimDetail',
@@ -367,11 +382,15 @@ export function fetchFiles({
   recordsPerPage = 10,
   query = null,
   orderBy,
-  direction
+  direction,
+  dateFrom = null,
+  dateTo = null
 }) {
   return axios.post(
     '/api/v1/Member/GetFiles',
     {
+      date_from: dateFrom,
+      date_to: dateTo,
       categories,
       document_types: documentTypes,
       page,
@@ -393,6 +412,23 @@ export function fetchFileContent({ token, id }) {
   return axios.post(
     '/api/v1/Member/GetFileContent',
     { id },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      },
+      responseType: 'arraybuffer'
+    }
+  )
+}
+
+export function fetchForms({token, category, formType}){
+  return axios.post(
+    'api/v1/Member/GetDownloadableForms',
+    {
+      category,
+      downloadable_form_type: formType
+    },
     {
       headers: {
         'Content-Type': 'application/json-patch+json',
@@ -746,18 +782,29 @@ export function updateContactPreferences({
   )
 }
 
-export function passwordChange({
-  token,
-  oldPassword,
-  newPassword,
-  newPasswordConfirm
-}) {
+export function passwordChange({ token, oldPassword, newPassword, newPasswordConfirm }) {
   return axios.post(
     '/api/v1/Member/PasswordChange',
     {
       old_password: oldPassword,
       new_password: newPassword,
       new_password_confirm: newPasswordConfirm
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+  )
+}
+
+export function emailChange({ token, email, confirmPassword }) {
+  return axios.post(
+    '/api/v1/Member/EmailChange',
+    {
+      password: confirmPassword,
+      email: email
     },
     {
       headers: {
@@ -864,11 +911,15 @@ export function uploadFiles_v2({ token, id, files }) {
     'related_object_info',
     JSON.stringify({ id, object_type: 301 })
   )
-  formData.append('files', files[0])
-  // files.map((file) => {
-  //   formData.append('files', file)
-  // })
-  console.log(formData)
+
+  if (files.length > 1) {
+    files.forEach((file) => {
+      formData.append('files', file)
+    })
+  } else {
+    formData.append('files', files[0])
+  }
+
   return axios.post(`/api/v1/Member/UploadDocument`, formData, {
     headers: {
       'Content-Type':
@@ -878,147 +929,46 @@ export function uploadFiles_v2({ token, id, files }) {
   })
 }
 export function createCaseCoordinationOfBenefits(payload) {
-  let metadata = []
-
-  if (payload.has_medicare) {
-    metadata.push({
-      name: 'has_medicare',
-      value: payload.has_medicare || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.has_other_health_coverage) {
-    metadata.push({
-      name: 'has_other_health_coverage',
-      value: payload.has_other_health_coverage || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.medicare_eligibility_type) {
-    metadata.push({
-      name: 'medicare_eligibility_type',
-      value: payload.medicare_eligibility_type || '',
-      value_type: 12
-    })
-  }
-
-  if (payload.medicare_part_a) {
-    metadata.push({
-      name: 'medicare_part_a',
-      value: payload.medicare_part_a || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.medicare_part_b) {
-    metadata.push({
-      name: 'medicare_part_b',
-      value: payload.medicare_part_b || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.medicare_part_c) {
-    metadata.push({
-      name: 'medicare_part_c',
-      value: payload.medicare_part_c || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.medicare_part_d) {
-    metadata.push({
-      name: 'medicare_part_d',
-      value: payload.medicare_part_d || '',
-      value_type: 16
-    })
-  }
-
-  if (payload.medicare_part_a_effective_date) {
-    metadata.push({
-      name: 'medicare_part_a_effective_date',
-      value: payload.medicare_part_a_effective_date || '',
-      value_type: 15
-    })
-  }
-
-  if (payload.medicare_part_b_effective_date) {
-    metadata.push({
-      name: 'medicare_part_b_effective_date',
-      value: payload.medicare_part_b_effective_date || '',
-      value_type: 15
-    })
-  }
-
-  if (payload.medicare_part_c_effective_date) {
-    metadata.push({
-      name: 'medicare_part_c_effective_date',
-      value: payload.medicare_part_c_effective_date || '',
-      value_type: 15
-    })
-  }
-
-  if (payload.medicare_part_d_effective_date) {
-    metadata.push({
-      name: 'medicare_part_d_effective_date',
-      value: payload.medicare_part_d_effective_date || '',
-      value_type: 15
-    })
-  }
-
-  if (payload.other_insurance_type) {
-    metadata.push({
-      name: 'other_insurance_type',
-      value: payload.other_insurance_type || '',
-      value_type: 12
-    })
-  }
-
-  if (payload.other_insurance_carrier_name) {
-    metadata.push({
-      name: 'other_insurance_carrier_name',
-      value: payload.other_insurance_carrier_name || '',
-      value_type: 11
-    })
-  }
-
-  if (payload.other_insurance_policy_number) {
-    metadata.push({
-      name: 'other_insurance_policy_number',
-      value: payload.other_insurance_policy_number || '',
-      value_type: 11
-    })
-  }
-
-  if (payload.other_insurance_coverage_from) {
-    metadata.push({
-      name: 'other_insurance_coverage_from',
-      value: payload.other_insurance_coverage_from || '',
-      value_type: 15
-    })
-  }
-
-  if (payload.other_insurance_coverage_thru) {
-    metadata.push({
-      name: 'other_insurance_coverage_thru',
-      value: payload.other_insurance_coverage_thru || '',
-      value_type: 15
-    })
-  }
-
   return axios.post(
-    '/api/v1/Member/CreateCase',
+    '/api/v1/Member/UpdateFamilyMemberCOB',
     {
-      case_type: 12,
-      metadata
+      medicare_eligibility_type: payload.medicare_eligibility_type,
+      member_cob_id: payload.member_cob_id,
+      medicare_part_a: payload.medicare_part_a,
+      medicare_part_b: payload.medicare_part_b,
+      medicare_part_c: payload.medicare_part_c,
+      medicare_part_d: payload.medicare_part_d,
+      medicare_part_a_effective_date: payload.medicare_part_a_effective_date,
+      medicare_part_b_effective_date: payload.medicare_part_b_effective_date,
+      medicare_part_c_effective_date: payload.medicare_part_c_effective_date,
+      medicare_part_d_effective_date: payload.medicare_part_d_effective_date,
+      other_insurance_type: payload.other_insurance_type,
+      other_insurance_carrier_name: payload.other_insurance_carrier_name,
+      other_insurance_policy_number: payload.other_insurance_policy_number,
+      other_insurance_coverage_from: payload.other_insurance_coverage_from,
+      other_insurance_coverage_through:
+        payload.other_insurance_coverage_through,
+      has_medicare: payload.has_medicare,
+      has_other_health_coverage: payload.has_other_health_coverage
     },
     {
       headers: {
         'Content-Type': 'application/json-patch+json',
         Authorization: `Bearer ${payload.token}`
       }
+    }
+  )
+}
+
+export function downloadUnderstandYourBenefits({ token }: TokenOnly) {
+  return axios.post(
+    '/api/v1/Member/DownloadUnderstandYourBenefit',
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      responseType: 'blob'
     }
   )
 }

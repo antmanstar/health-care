@@ -19,6 +19,8 @@ export const getProviderSearchData = (state) =>
   get(state, ['app', 'providerSearch'])
 export const getProviderSearchQuery = (state) =>
   get(state, ['app', 'providerSearch', 'query'])
+export const getProviderSearchQueryLocation = (state) =>
+  get(state, ['app', 'providerSearch', 'location'])
 export const getProviderSearchLocation = (state) =>
   get(state, ['app', 'geoLocation'])
 export const getLocationData = (state) => get(state, ['app', 'geoLocation'])

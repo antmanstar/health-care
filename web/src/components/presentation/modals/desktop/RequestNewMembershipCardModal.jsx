@@ -72,20 +72,17 @@ const ButtonContainer = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: stretch;
   gap: 10px;
 
   @media ${defaultTheme.device.tablet} {
     flex-direction: row;
   }
-  & div {
-    flex: 1 1 auto;
-    @media ${defaultTheme.device.mobile} {
-      flex: 1 1 0;
-    }
-  }
-
   .big-button {
     width: 100%;
+    @media ${defaultTheme.device.tablet} {
+      width: 48%;
+    }
   }
 `;
 
@@ -105,35 +102,9 @@ const RequestNewMembershipCardModal = React.memo(({ hideModal, phoneNumber }) =>
         </SpaceBetween>
       </ModalHeader>
       <ModalBody>
-        {/* <p>
-          <Span>You always have a digital card available through our mobile app.&nbsp;</Span>
-          You can also download a new temporary card to print yourself or request a new one be sent
-          to you.
-        </p>
-        <FormLabel>Get the App</FormLabel>
-        <LINK href="http://www.google.com">
-          <img src={images['app-store']} alt="Evry iOS App" />
-        </LINK>
-        <LINK href="http://www.google.com">
-          <img src={images['google-play']} alt="Evry Android App" />
-        </LINK>
-        
-        <FormLabel>Get your New Membership Card</FormLabel> */}
-        {/* <SpaceBetween>
-          <Column>
-            <BigButtonContainer buttonKey="downloadMembershipCard" />
-          </Column>
-          <Column>
-            <BigButtonContainer buttonKey="requestMembershipCard" />
-          </Column>
-        </SpaceBetween> */}
         <ButtonContainer>
-          <div>
-            <BigButtonContainer buttonKey="downloadMembershipCard" />
-          </div>
-          <div>
-            <BigButtonContainer buttonKey="requestMembershipCard" />
-          </div>
+          <BigButtonContainer buttonKey="downloadMembershipCard" />
+          <BigButtonContainer buttonKey="requestMembershipCard" />
         </ButtonContainer>
       </ModalBody>
       <ModalSectionDivider />

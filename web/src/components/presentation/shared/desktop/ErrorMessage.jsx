@@ -78,6 +78,18 @@ const convertMsg2Redable = msg => {
       return 'The password reset token field is required';
     case 'The field password_reset_token must be a string with a minimum length of 36 and a maximum length of 40.':
       return 'The password reset token must be between 36 and 40 characters';
+    case 'The old_password field is required.':
+      return 'The old password field is required.';
+    case 'The field old_password must be a string with a minimum length of 8 and a maximum length of 64.':
+      return 'The old password field must be between 8 and 64 characters.';
+    case 'The new_password field is required.':
+      return 'The new password field is required.';
+    case 'The field new_password must be a string with a minimum length of 8 and a maximum length of 64.':
+      return 'The new password field must be between 8 and 64 characters.';
+    case 'The new_password_confirm field is required.':
+      return 'The confirm new password field is required.';
+    case 'The field new_password_confirm must be a string with a minimum length of 8 and a maximum length of 64.':
+      return 'The confirm new password field must be between 8 and 64 characters.'
     case 'The password_confirm field is required.':
       return '';
     case 'The field password_confirm must be a string with a minimum length of 4 and a maximum length of 64.':
@@ -87,13 +99,8 @@ const convertMsg2Redable = msg => {
   }
 };
 const ErrorMessage = React.memo(({ message }) => {
-  const [msgs, setMsgs] = useState(
-    message
-      ?.map(text => convertMsg2Redable(text))
-      .filter(item => item.length > 0 && !item.includes('password_confirm'))
-  );
-
-  console.log('MSG', message, msgs);
+  let msgs = message?.map(text => convertMsg2Redable(text))
+                     .filter(item => item.length > 0 && !item.includes('password_confirm'))
 
   return (
     <Wrapper>

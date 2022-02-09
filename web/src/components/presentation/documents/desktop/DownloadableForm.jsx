@@ -1,9 +1,16 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
+import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
 
 // Form List Entry
+
+const { fetchFileContent } = actions;
+
+const { getToken } = selectors;
 
 const SectionDivider = styled.hr`
   margin: 0;
@@ -52,21 +59,30 @@ const DownloadButton = styled.button`
   }
 `;
 
-const DownloadableForm = React.memo(({ file }) => (
-  <>
-    <SectionDivider />
-    <DocumentWrapper>
-      <Icon>
-        <i className="material-icons">description</i>
-      </Icon>
-      <DocumentName>{file.display_name}</DocumentName>
-      <DownloadButton>
-        PDF
-        <img src={images["download"]} alt="Download PDF" />
-      </DownloadButton>
-    </DocumentWrapper>
-  </>
-));
+const DownloadableForm = React.memo(({ file }) => {
+  const dispatch = useDispatch();
+  const token = useSelector(state => getToken(state));
+
+  const downloadButtonHandler = () => {
+    dispatch(fetchFileContent(file.file_id, token));
+  };
+
+  return (
+    <>
+      <SectionDivider />
+      <DocumentWrapper>
+        <Icon>
+          <i className="material-icons">description</i>
+        </Icon>
+        <DocumentName>{file.display_name}</DocumentName>
+        <DownloadButton onClick={downloadButtonHandler}>
+          PDF
+          <img src={images['download']} alt="Download PDF" />
+        </DownloadButton>
+      </DocumentWrapper>
+    </>
+  );
+});
 
 DownloadableForm.propTypes = {
   file: PropTypes.shape({}).isRequired

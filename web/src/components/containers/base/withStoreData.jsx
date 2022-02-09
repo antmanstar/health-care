@@ -27,11 +27,10 @@ export default function withStoreData(WrappedComponent, ...connectMaps) {
 
       componentDidMount() {
         const { shouldFetch, fetch } = this.props;
-
         if (typeof fetch === 'object' && typeof shouldFetch === 'object') {
-          Object.entries(shouldFetch).forEach(([name, shouldFetch]) =>
-            runFetch(shouldFetch, fetch[name])
-          );
+          Object.entries(shouldFetch).forEach(([name, shouldFetch]) => {
+            return runFetch(shouldFetch, fetch[name]);
+          });
         } else {
           runFetch(shouldFetch, fetch);
         }

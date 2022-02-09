@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const SmallTitleAndButton = React.memo(({ text, buttonText, onClick }) => (
   <Wrapper>
     <h3 className="small-title-heading">{text}</h3>
-    <SmallButton text={buttonText} onClick={onClick} />
+    {buttonText && buttonText.length > 0 && <SmallButton text={buttonText} onClick={onClick} />}
   </Wrapper>
 ));
 

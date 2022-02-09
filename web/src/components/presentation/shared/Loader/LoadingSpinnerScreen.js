@@ -8,7 +8,8 @@ const ContentLoading = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(255, 255, 255, 0.3);
+  //background: rgba(255, 255, 255, 0.3);
+  background: #00000052;
   z-index: 30;
 `;
 const StyledLoader = styled(Loader)`
@@ -22,7 +23,8 @@ const StyledLoader = styled(Loader)`
 
 const LoadingSpinnerScreen = ({ type, color }) => (
   <ContentLoading>
-    <StyledLoader type={type} color={color} />
+    <StyledLoader type={type ? type : 'TailSpin'} color={color ? color : '#F9423A'} />
+    <input type="hidden" autoFocus />
   </ContentLoading>
 );
 

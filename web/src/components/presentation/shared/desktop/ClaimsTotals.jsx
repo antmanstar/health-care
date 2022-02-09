@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import defaultTheme from '../../../../style/themes';
@@ -28,33 +28,27 @@ const SpaceBetween = styled.div`
   }
 `;
 
-class ClaimsTotals extends Component {
-  componentDidMount() {
-    const { claimsSummary, fetchClaimsSummary } = this.props;
-    if (Object.getOwnPropertyNames(claimsSummary).length === 0) {
-      fetchClaimsSummary();
-    }
-  }
+const ClaimsTotals = ({ fetchClaimsSummary, claimsSummary }) => {
+  useEffect(() => {
+    fetchClaimsSummary();
+  }, []);
 
-  render() {
-    const { claimsSummary } = this.props;
-    return (
-      <LayoutWrapper>
-        <SpaceBetween>
-          <NumberTile number={claimsSummary.total_claims} label="Total Claims" />
-          <NumberTile number={claimsSummary.total_telehealth_claims} label="Telehealth Claims" />
-          <NumberTile number={claimsSummary.total_adjustment} label="Total Discounts" currency />
-          <NumberTile
-            number={claimsSummary.total_payment_to_provider}
-            label="Paid by Evry"
-            currency
-            green
-          />
-        </SpaceBetween>
-      </LayoutWrapper>
-    );
-  }
-}
+  return (
+    <LayoutWrapper>
+      <SpaceBetween>
+        <NumberTile number={claimsSummary.total_claims} label="Total Claims" />
+        <NumberTile number={claimsSummary.total_telehealth_claims} label="Telehealth Claims" />
+        <NumberTile number={claimsSummary.total_adjustment} label="Total Discounts" currency />
+        <NumberTile
+          number={claimsSummary.total_payment_to_provider}
+          label="Paid by Evry"
+          currency
+          green
+        />
+      </SpaceBetween>
+    </LayoutWrapper>
+  );
+};
 
 const mapStateToProps = state => ({
   claimsSummary: getClaimsSummary(state),

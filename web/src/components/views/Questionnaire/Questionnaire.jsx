@@ -199,7 +199,7 @@ const Questionnaire = () => {
   // constants
   const questions = questionnaire?.questions;
   if (!questions) {
-    return <Redirect to="/" />;
+    return <Redirect to="/choose-a-care-plan" />;
   }
 
   const current_question = questions.find(
@@ -356,7 +356,7 @@ const Questionnaire = () => {
           handleNextFunction={handleNextFunction}
           handlePrevFunction={handlePrevFunction}
         />
-        {isSavingQuestion && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+        {isSavingQuestion && <LoadingSpinnerScreen />}
       </OnboardWrapper>
     </>
   );

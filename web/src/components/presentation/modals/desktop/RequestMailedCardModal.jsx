@@ -150,7 +150,7 @@ const RequestMailedCardModal = props => {
           <SmallButton text="Continue" onClick={createCase} disabled={isSubmitting} />
           <SmallButton text="Cancel" negative onClick={props.hideModal} disabled={isSubmitting} />
         </ModalButtonsRight>
-        {isSubmitting && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+        {isSubmitting && <LoadingSpinnerScreen />}
       </ModalWrapper>
     </Fragment>
   );

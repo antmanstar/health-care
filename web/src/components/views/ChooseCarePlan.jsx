@@ -99,7 +99,7 @@ class ChooseCarePlan extends Component {
         <OnboardingProgressBar progressStep={2} />
         <Wrapper>
           <CarePlanSelectionSlideWithData isChoosingCarePlan={isChoosingCarePlan} />
-          {isChoosingCarePlan && <LoadingSpinnerScreen type="TailSpin" color="#00BFFF" />}
+          {isChoosingCarePlan && <LoadingSpinnerScreen />}
         </Wrapper>
       </>
     );

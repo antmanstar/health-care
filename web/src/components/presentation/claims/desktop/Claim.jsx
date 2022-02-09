@@ -1,14 +1,16 @@
 /* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import BenefitBreakdown from './BenefitBreakdown';
+import selectors from '@evry-member-app/shared/store/selectors';
 import actions from '@evry-member-app/shared/store/actions';
 import images from '../../../../utils/images';
 import numberFormat from '../../../../utils/numberFormat';
+import Moment from 'moment';
 
 const { setModalData, showModal } = actions;
 
@@ -257,185 +259,197 @@ const ContentSubmitFeedback = styled.div`
   }
 `;
 
-class Claim extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visible: props.visible || false
-    };
+const Claim = ({
+  visible,
+  dateOfService,
+  claimNumber,
+  status,
+  provider,
+  claimDetail,
+  token,
+  setModalData,
+  showModal,
+  eobFile
+}) => {
+  const [show, setShow] = useState(visible || false);
 
-    this.handlers = {
-      toggleClick: this.handleToggleClick.bind(this),
-      handleContactCustomerSupportClick: this.handleContactCustomerSupportClick.bind(this),
-      handleFeedbackClick: this.handleFeedbackClick.bind(this)
-    };
-  }
-
-  handleToggleClick = () => {
-    this.setState(prevState => ({
-      visible: !prevState.visible
-    }));
+  const downloadFile = e => {
+    e.preventDefault();
+    let blob = new Blob([eobFile], { type: 'application/pdf' });
+    let URL = window.URL || window.webkitURL;
+    let downloadUrl = URL.createObjectURL(blob);
+    window.open(downloadUrl);
   };
 
-  handleContactCustomerSupportClick = data => {
-    this.props.setModalData(data);
-    this.props.showModal('CLAIMS_SUPPORT');
+  const handleToggleClick = () => {
+    setShow(!show);
   };
 
-  handleFeedbackClick = data => {
-    this.props.setModalData(data);
-    this.props.showModal('SUBMIT_CLAIM_FEEDBACK');
+  const handleContactCustomerSupportClick = data => {
+    setModalData(data);
+    showModal('CLAIMS_SUPPORT');
   };
 
-  render() {
-    const { visible } = this.state;
-    const { dateOfService, claimNumber, status, provider, eobUrl, claimDetail } = this.props;
+  const handleFeedbackClick = data => {
+    setModalData(data);
+    showModal('SUBMIT_CLAIM_FEEDBACK');
+  };
 
-    return (
-      <Wrapper>
-        <ClaimSummary>
-          <MobileContainer className="content-mobile-text">
-            <div>
-              <Text>{dateOfService}</Text>
-              <SmallText className="claim-number">{`Claim # ${claimNumber}`}</SmallText>
-            </div>
-            <div>
-              <Text>{provider.name}</Text>
-              <SmallText>{provider.practice}</SmallText>
-            </div>
-            <Status status={status.toLowerCase()}>{status}</Status>
-            <InnerWrapper className="status-and-toggle">
-              <Toggle onClick={this.handlers.toggleClick}>
-                <p>{visible ? 'Collapse' : 'Expand Details'}</p>
-                {visible ? (
-                  <i className="material-icons">keyboard_arrow_up</i>
-                ) : (
-                  <i className="material-icons">keyboard_arrow_down</i>
-                )}
-              </Toggle>
-            </InnerWrapper>
-          </MobileContainer>
-          <DesktopContainer>
-            <InnerWrapper>
-              <Text>{dateOfService}</Text>
-              <SmallText>{`Claim # ${claimNumber}`}</SmallText>
-            </InnerWrapper>
-            <InnerWrapper>
-              <Text>{provider.name}</Text>
-              <SmallText>{provider.practice}</SmallText>
-            </InnerWrapper>
-            <InnerWrapper className="status-and-toggle">
-              <Status status={status.toLowerCase()}>{status}</Status>
-              <Toggle onClick={this.handlers.toggleClick}>
-                <p>{visible ? 'Collapse' : 'Expand Details'}</p>
-                {visible ? (
-                  <i className="material-icons">keyboard_arrow_down</i>
-                ) : (
-                  <i className="material-icons">keyboard_arrow_left</i>
-                )}
-              </Toggle>
-            </InnerWrapper>
-          </DesktopContainer>
-        </ClaimSummary>
-        {visible && (
-          <>
-            <EditedSectionDivider />
-            <Padding16>
-              <ClaimDetails>
-                <FlexGroup className="claim-costs">
+  return (
+    <Wrapper>
+      <ClaimSummary>
+        <MobileContainer className="content-mobile-text">
+          <div>
+            <Text>{dateOfService}</Text>
+            <SmallText className="claim-number">{`Claim # ${claimNumber}`}</SmallText>
+          </div>
+          <div>
+            <Text>{provider.name}</Text>
+            <SmallText>{provider.practice}</SmallText>
+          </div>
+          <Status></Status>
+          <InnerWrapper className="status-and-toggle">
+            <Toggle onClick={handleToggleClick}>
+              <p>{show ? 'Collapse' : 'Expand Details'}</p>
+              {show ? (
+                <i className="material-icons">keyboard_arrow_up</i>
+              ) : (
+                <i className="material-icons">keyboard_arrow_down</i>
+              )}
+            </Toggle>
+          </InnerWrapper>
+        </MobileContainer>
+        <DesktopContainer>
+          <InnerWrapper>
+            <Text>{dateOfService}</Text>
+            <SmallText>{`Claim # ${claimNumber}`}</SmallText>
+          </InnerWrapper>
+          <InnerWrapper>
+            <Text>{provider.name}</Text>
+            <SmallText>{provider.practice}</SmallText>
+          </InnerWrapper>
+          <InnerWrapper className="status-and-toggle">
+            <Toggle onClick={handleToggleClick}>
+              <p>{show ? 'Collapse' : 'Expand Details'}</p>
+              {show ? (
+                <i className="material-icons">keyboard_arrow_down</i>
+              ) : (
+                <i className="material-icons">keyboard_arrow_left</i>
+              )}
+            </Toggle>
+          </InnerWrapper>
+        </DesktopContainer>
+      </ClaimSummary>
+      {show && (
+        <>
+          <EditedSectionDivider />
+          <Padding16>
+            <ClaimDetails>
+              <FlexGroup className="claim-costs">
+                <SmallSectionBackground>
+                  <BenefitBreakdown
+                    totalBilled={numberFormat(claimDetail?.total_billed)}
+                    discounts={numberFormat(claimDetail?.total_adjustment)}
+                    payment={numberFormat(claimDetail?.total_payment_to_provider)}
+                    owed={numberFormat(claimDetail?.total_member_responsibility)}
+                  />
+                </SmallSectionBackground>
+              </FlexGroup>
+              <FlexGroup className="claim-status">
+                {claimDetail?.paid_on ? (
                   <SmallSectionBackground>
-                    <BenefitBreakdown
-                      totalBilled={numberFormat(claimDetail?.total_billed)}
-                      discounts={numberFormat(claimDetail?.total_adjustment)}
-                      payment={numberFormat(claimDetail?.total_payment_to_provider)}
-                      owed={numberFormat(claimDetail?.total_member_responsibility)}
-                    />
-                  </SmallSectionBackground>
-                </FlexGroup>
-                <FlexGroup className="claim-status">
-                  <SmallSectionBackground className="claim-physician">
                     <Padding16>
-                      <ProviderName>{provider.name}</ProviderName>
                       <ProviderInfo>
-                        {provider.practice}
-                        <br />
-                        {provider.address}
-                        <br />
-                        {provider.phoneNumber ||
-                          (claimDetail &&
-                            claimDetail?.provider_phones &&
-                            claimDetail?.provider_phones[0]?.phone_number)}
+                        This Claim was <span>PROCESSED</span> on{' '}
+                        {Moment(claimDetail.paid_on).format('MM-DD-YYYY')}
                       </ProviderInfo>
                     </Padding16>
                   </SmallSectionBackground>
-                </FlexGroup>
-              </ClaimDetails>
-              <EobLink>
-                Need more info?
-                <a href={eobUrl}>Download Explanation of Benefits</a>
-                {`.`}
-              </EobLink>
-            </Padding16>
-            <EditedSectionDivider />
-            <Padding16>
-              <ContentSubmitFeedback>
-                <SubmitFeedback>
-                  <Text>How do you feel about this claim?</Text>
-                  <div>
-                    <FeedbackButton
-                      onClick={() =>
-                        this.handlers.handleFeedbackClick({
-                          feedbackChoice: 'positive',
-                          claimNumber
-                        })
-                      }
-                    >
-                      <img src={images['feedback-positive']} alt="positive response" />
-                    </FeedbackButton>
-                    <FeedbackButton
-                      onClick={() =>
-                        this.handlers.handleFeedbackClick({
-                          feedbackChoice: 'neutral',
-                          claimNumber
-                        })
-                      }
-                    >
-                      <img src={images['feedback-neutral']} alt="neutral response" />
-                    </FeedbackButton>
-                    <FeedbackButton
-                      onClick={() =>
-                        this.handlers.handleFeedbackClick({
-                          feedbackChoice: 'negative',
-                          claimNumber
-                        })
-                      }
-                    >
-                      <img src={images['feedback-negative']} alt="negative response" />
-                    </FeedbackButton>
-                  </div>
-                </SubmitFeedback>
-                <SmallButton
-                  className="support-button"
-                  text="Contact Customer Support"
-                  onClick={() =>
-                    this.handlers.handleContactCustomerSupportClick({
-                      claimNumber,
-                      status,
-                      provider: provider.name || provider.practice
-                    })
-                  }
-                />
-              </ContentSubmitFeedback>
-            </Padding16>
-          </>
-        )}
-      </Wrapper>
-    );
-  }
-}
+                ) : null}
+                <SmallSectionBackground className="claim-physician">
+                  <Padding16>
+                    <ProviderName>{provider.name}</ProviderName>
+                    <ProviderInfo>
+                      {provider.practice}
+                      <br />
+                      {provider.address}
+                      <br />
+                      {provider.phoneNumber ||
+                        (claimDetail &&
+                          claimDetail?.provider_phones &&
+                          claimDetail?.provider_phones[0]?.phone_number)}
+                    </ProviderInfo>
+                  </Padding16>
+                </SmallSectionBackground>
+              </FlexGroup>
+            </ClaimDetails>
+            <EobLink>
+              Need more info?
+              <a href="#" onClick={e => downloadFile(e)} target="_blank" download="true">
+                Download Explanation of Benefits
+              </a>
+              {`.`}
+            </EobLink>
+          </Padding16>
+          <EditedSectionDivider />
+          <Padding16>
+            <ContentSubmitFeedback>
+              <SubmitFeedback>
+                <Text>How do you feel about this claim?</Text>
+                <div>
+                  <FeedbackButton
+                    onClick={() =>
+                      handleFeedbackClick({
+                        feedbackChoice: 'positive',
+                        claimNumber
+                      })
+                    }
+                  >
+                    <img src={images['feedback-positive']} alt="positive response" />
+                  </FeedbackButton>
+                  <FeedbackButton
+                    onClick={() =>
+                      handleFeedbackClick({
+                        feedbackChoice: 'neutral',
+                        claimNumber
+                      })
+                    }
+                  >
+                    <img src={images['feedback-neutral']} alt="neutral response" />
+                  </FeedbackButton>
+                  <FeedbackButton
+                    onClick={() =>
+                      handleFeedbackClick({
+                        feedbackChoice: 'negative',
+                        claimNumber
+                      })
+                    }
+                  >
+                    <img src={images['feedback-negative']} alt="negative response" />
+                  </FeedbackButton>
+                </div>
+              </SubmitFeedback>
+              <SmallButton
+                className="support-button"
+                text="Contact Customer Support"
+                onClick={() =>
+                  handleContactCustomerSupportClick({
+                    claimNumber,
+                    status,
+                    provider: provider.name || provider.practice
+                  })
+                }
+              />
+            </ContentSubmitFeedback>
+          </Padding16>
+        </>
+      )}
+    </Wrapper>
+  );
+};
 
 Claim.propTypes = {
-  visible: PropTypes.bool,
+  show: PropTypes.bool,
   dateOfService: PropTypes.string.isRequired,
   claimNumber: PropTypes.string.isRequired,
   claimDetail: PropTypes.shape({}),
@@ -446,15 +460,21 @@ Claim.propTypes = {
     address: PropTypes.string.isRequired,
     phoneNumber: PropTypes.string
   }).isRequired,
-  eobUrl: PropTypes.string.isRequired,
   showModal: PropTypes.func.isRequired,
   setModalData: PropTypes.func.isRequired
 };
 
 Claim.defaultProps = {
-  visible: false,
+  show: false,
   claimDetail: {}
 };
+
+/* const mapStateToProps = state => {
+  return {
+    eobFile: getEobFile(state),
+    token: getToken(state)
+  };
+}; */
 
 const mapDispatchToProps = dispatch => ({
   setModalData: data => {
@@ -464,5 +484,18 @@ const mapDispatchToProps = dispatch => ({
     dispatch(showModal(modal));
   }
 });
+
+/* const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
+  const fetchEOB = ({ id }) => {
+    dispatchProps.fetchEOB({ token, id });
+  };
+
+  return {
+    ...dispatchProps,
+    ...stateProps,
+    ...ownProps,
+    fetchEOB
+  };
+}; */
 
 export default connect(null, mapDispatchToProps)(Claim);

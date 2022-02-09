@@ -108,6 +108,9 @@ export default function* watcherSaga() {
         api.fetchClaimDetail
       )
     ),
+    takeEvery(
+      ...takeAllBundler(types.FETCH_EOB, generateFetchWorker, api.fetchEOB)
+    ),
     takeLatest(
       ...takeAllBundler(
         types.CLAIMS_SUMMARY_FETCH,
@@ -258,6 +261,9 @@ export default function* watcherSaga() {
       ...takeAllBundler(types.FILES_FETCH, generateFetchWorker, api.fetchFiles)
     ),
     takeLatest(
+      ...takeAllBundler(types.FORMS_FETCH, generateFetchWorker, api.fetchForms)
+    ),
+    takeLatest(
       ...takeAllBundler(types.FIND_CASES, generateFetchWorker, api.fetchCases)
     ),
     takeLatest(
@@ -388,6 +394,13 @@ export default function* watcherSaga() {
         types.FILE_CONTENT_FETCH,
         generateFetchWorker,
         api.fetchFileContent
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.DOWNLOAD_UNDERSTAND_BENEFITS,
+        generateFetchWorker,
+        api.downloadUnderstandYourBenefits
       )
     )
   ])
