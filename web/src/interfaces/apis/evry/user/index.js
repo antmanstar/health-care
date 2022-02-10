@@ -252,13 +252,30 @@ export function fetchClaimDetail({ token, claimId }) {
   );
 }
 
-export function fetchEducationalResources({ token }) {
-  return axios.get('/api/v1/Member/GetMyEducationalResources', {
-    headers: {
-      'Content-Type': 'application/json-patch+json',
-      Authorization: `Bearer ${token}`
+export function fetchEducationalResources({
+  token,
+  page = 1,
+  recordsPerPage,
+  searchString = null,
+  orderBy,
+  orderByDesc
+}) {
+  return axios.post(
+    '/api/v1/Member/GetMyEducationalResources',
+    {
+      page,
+      records_per_page: recordsPerPage,
+      search_string: searchString,
+      order_by: orderBy,
+      order_by_desc: orderByDesc
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
     }
-  });
+  )
 }
 
 export function fetchEvryContactInfo({ token }) {

@@ -429,9 +429,14 @@ export const getWellnessGoal = ({ id, state }) => ({
   )
 })
 
-export const getEducationalResources = (state) => ({
-  ...get(state, ['user', 'educationalResources'])
-})
+export const getEducationalResourcesDataFrame = (state) => {
+  const dataFrame = get(state, ['user', 'educationalResources'])
+  return dataFrame && omit(dataFrame, 'data')
+}
+
+export const getEducationalResources = (state) => get(state, ['user', 'educationalResources', 'data'], [])
+
+export const getEducationalResourcesObject = (state) => get(state, ['user', 'educationalResources'])
 
 export const getRewardBenefits = (state) => ({
   ...get(state, ['user', 'rewardBenefits'])

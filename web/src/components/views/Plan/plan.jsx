@@ -11,6 +11,8 @@ import withStoreData from '../../containers/base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
+import paginate from '../../../utils/pagination';
+import getWidth from '../../../utils/getWidth';
 
 const {
   fetchCarePlan,
@@ -25,13 +27,15 @@ const {
   getWellnessGoals,
   getEducationalResources,
   getRewardBenefits,
-  getRewardCategories
+  getRewardCategories,
+  getEducationalResourcesDataFrame
 } = selectors;
 
 // DESKTOP: Care Plan View
 const { LayoutWrapper } = defaultTheme.components;
 
 const Plan = React.memo(({}) => {
+  const width = getWidth();
   const CarePlanHeaderWithData = withStoreData(
     CarePlanHeader,
     state => ({
@@ -68,24 +72,35 @@ const Plan = React.memo(({}) => {
       ...ownProps
     })
   );
+
   const EducationAndResourcesSectionWithData = withStoreData(
     EducationAndResourcesSection,
     state => ({
+      requests: getEducationalResources(state),
       token: getToken(state),
-      educationalResources: getEducationalResources(state)
+      requestsDataFrame: getEducationalResourcesDataFrame(state)
     }),
     dispatch => ({
-      fetchEducationalResources: token => dispatch(fetchEducationalResources(token))
+      fetchEducationalResources: args => dispatch(fetchEducationalResources(args))
     }),
-    (stateProps, dispatchProps, ownProps) => ({
-      fetch: () => {
-        dispatchProps.fetchEducationalResources(stateProps.token);
-      },
-      shouldFetch: isEmpty(stateProps.educationalResources),
-      educationalResources: stateProps.educationalResources,
-      ...ownProps
-    })
+    (stateProps, { fetchEducationalResources }, ownProps) => {
+      const fetch = args =>
+        fetchEducationalResources({
+          token: stateProps.token,
+          recordsPerPage: width > 768 ? 6 : 2,
+          ...args
+        });
+      return {
+        fetch,
+        paginator: paginate(stateProps.requestsDataFrame, fetch),
+        shouldFetch: isEmpty(stateProps.requestsDataFrame),
+        requestsDataFrame: stateProps.requestsDataFrame,
+        requests: stateProps.requests,
+        ...ownProps
+      };
+    }
   );
+
   const RewardsSectionWithData = withStoreData(
     RewardsSection,
     state => ({

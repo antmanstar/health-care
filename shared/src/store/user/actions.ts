@@ -751,12 +751,26 @@ export const fetchEOB = (token, id) => {
   }
 }
 
-export const fetchEducationalResources = (token) => ({
-  type: types.EDUCATIONAL_RESOURCES_FETCH,
-  payload: {
-    token
+export const fetchEducationalResources = ({
+  token,
+  page,
+  recordsPerPage,
+  searchString,
+  orderBy,
+  orderByDesc
+}) => {
+  return {
+    type: types.EDUCATIONAL_RESOURCES_FETCH,
+    payload: {
+      token,
+      page,
+      recordsPerPage,
+      searchString,
+      orderBy,
+      orderByDesc
+    }
   }
-})
+}
 
 export const fetchEvryContactInfo = (token) => ({
   type: types.EVRY_CONTACT_FETCH,
@@ -808,13 +822,13 @@ export const fetchFiles = ({
   }
 }
 
-export const fetchForms = ({category, formType, token}) => {
+export const fetchForms = ({ category, formType, token }) => {
   return {
     types: null,
-    payload:{
+    payload: {
       token,
       category,
-      formType,
+      formType
     }
   }
 }
@@ -1077,7 +1091,6 @@ export const clearSessionTimedOut = () => ({
   type: types.CLEAR_SESSION_TIMED_OUT,
   payload: {}
 })
-
 
 export const clearSendingFeedback = () => ({
   type: types.CLEAR_SENDING_FEEDBACK,

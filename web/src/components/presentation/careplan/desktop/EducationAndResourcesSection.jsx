@@ -7,6 +7,8 @@ import ArticleCard from '../../shared/desktop/ArticleCard';
 import Loader from '../../shared/Loader/Loader';
 import truncate from '../../../../utils/string';
 import getWidth from '../../../../utils/getWidth';
+import Pagination from '../../shared/desktop/Pagination';
+import { isEmpty } from 'lodash';
 
 // Education & Resources Section found on the "Care Plan" View.
 // TODO: Pass props through to SectionHeaders and ArticleCards
@@ -38,6 +40,19 @@ const ArticleList = styled(SpaceBetween)`
   ::after {
     content: '';
     flex: 0 0 32%;
+  }
+`;
+
+const PaginationWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+
+  @media ${props => props.theme.device_up.mobile} {
+    justify-content: center;
   }
 `;
 
@@ -92,89 +107,102 @@ const Center = styled.div`
   }
 `;
 
-const EducationAndResourcesSection = React.memo(({ educationalResources }) => {
-  const width = getWidth();
-  const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
-  const [showFullResources, setShowFullResources] = useState(false);
+const EducationAndResourcesSection = React.memo(
+  ({ paginator, requests, token, requestsDataFrame }) => {
+    const width = getWidth();
+    const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
+    const [showFullResources, setShowFullResources] = useState(false);
 
-  useEffect(() => {
-    width > 768 && setCollapsed(false);
-    setShowFullResources(width > 768);
-  }, [width]);
+    useEffect(() => {
+      width > 768 && setCollapsed(false);
+      setShowFullResources(width > 768);
+    }, [width]);
 
-  const handelHeaderToggleClick = () => {
-    setCollapsed(!collapsed);
-  };
+    const handelHeaderToggleClick = () => {
+      setCollapsed(!collapsed);
+    };
 
-  const handleResourcesToggleClick = () => {
-    setShowFullResources(!showFullResources);
-  };
+    const handleResourcesToggleClick = () => {
+      setShowFullResources(!showFullResources);
+    };
 
-  return (
-    <StyledSectionBackground>
-      <StyledContainer>
-        <SectionHeaderWithIcon
-          icon="library_books"
-          title="Education & Resources"
-          subTitle="Explore our list of articles and learning materials specifically curated for you."
-          onClick={handelHeaderToggleClick}
-          collapsed={collapsed}
-        />
-      </StyledContainer>
-      <SectionDivider />
-      {!collapsed && (
-        <>
+    return (
+      <>
+        <StyledSectionBackground>
           <StyledContainer>
-            {!educationalResources ? (
-              <Loader />
-            ) : (
-              <ArticleList>
-                {Object.values(educationalResources).map((resource, index) => {
-                  let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
-                  if (return_cond)
-                    return (
-                      <ArticleCard
-                        key={resource.educational_resource_id}
-                        image={resource.title_image_file_id}
-                        title={resource.educational_resource_title}
-                        desc={truncate(130)(resource.educational_resource_summary)}
-                        link={resource.educational_resource_content}
-                        buttonLabel="Read More"
-                        view="plans"
-                      />
-                    );
-                })}
-              </ArticleList>
-            )}
+            <SectionHeaderWithIcon
+              icon="library_books"
+              title="Education & Resources"
+              subTitle="Explore our list of articles and learning materials specifically curated for you."
+              onClick={handelHeaderToggleClick}
+              collapsed={collapsed}
+            />
           </StyledContainer>
           <SectionDivider />
-          <StyledContainer>
-            {width <= 768 && (
-              <>
-                <Center>
-                  <button type="button" onClick={handleResourcesToggleClick}>
-                    {!showFullResources ? 'See More' : 'See Less'}
-                  </button>
-                </Center>
-              </>
-            )}
-            {/* <Title>Further Reading</Title>
+          {!collapsed && (
+            <>
+              <StyledContainer>
+                {isEmpty(requests) && requestsDataFrame ? (
+                  <Loader />
+                ) : (
+                  <ArticleList>
+                    {requests.map((resource, index) => {
+                      let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
+                      if (return_cond)
+                        return (
+                          <ArticleCard
+                            key={resource.educational_resource_id}
+                            image={resource.title_image_file_id}
+                            title={resource.educational_resource_title}
+                            desc={truncate(130)(resource.educational_resource_summary)}
+                            link={resource.educational_resource_content}
+                            buttonLabel="Read More"
+                            view="plans"
+                          />
+                        );
+                    })}
+                  </ArticleList>
+                )}
+              </StyledContainer>
+              <SectionDivider />
+              {/* <StyledContainer>
+                {width <= 768 && (
+                  <>
+                    <Center>
+                      <button type="button" onClick={handleResourcesToggleClick}>
+                        {!showFullResources ? 'See More' : 'See Less'}
+                      </button>
+                    </Center>
+                  </>
+                )}
+                <Title>Further Reading</Title>
             <SubTitle>
               {`Our Help Center is filled to the brim with useful articles and guides to help you navigate every aspect of your health condition. Want to explore more incredible resources?`}
               <span style={{ display: 'inherit' }}>
                 {`Check out our `}
                 <a href="https://www.evryhealth.com/faq">Help Center</a>
               </span>
-            </SubTitle> */}
-          </StyledContainer>
-        </>
-      )}
-    </StyledSectionBackground>
-  );
-});
+            </SubTitle>
+              </StyledContainer> */}
+            </>
+          )}
+        </StyledSectionBackground>
+        {!collapsed && (
+          <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
+        )}
+      </>
+    );
+  }
+);
 
 EducationAndResourcesSection.propTypes = {
-  educationalResources: PropTypes.PropTypes.shape({}).isRequired
+  paginator: PropTypes.shape({}),
+  requests: PropTypes.arrayOf(PropTypes.shape({}))
+};
+
+EducationAndResourcesSection.defaultProps = {
+  paginator: {},
+  requests: []
 };
 
 export default EducationAndResourcesSection;

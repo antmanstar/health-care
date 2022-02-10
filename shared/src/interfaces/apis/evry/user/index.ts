@@ -278,13 +278,30 @@ export function fetchClaimDetail({ token, claimId }) {
   )
 }
 
-export function fetchEducationalResources({ token }: TokenOnly) {
-  return axios.get('/api/v1/Member/GetMyEducationalResources', {
-    headers: {
-      'Content-Type': 'application/json-patch+json',
-      Authorization: `Bearer ${token}`
+export function fetchEducationalResources({
+  token,
+  page = 1,
+  recordsPerPage,
+  searchString = null,
+  orderBy,
+  orderByDesc
+}) {
+  return axios.post(
+    '/api/v1/Member/GetMyEducationalResources',
+    {
+      page,
+      records_per_page: recordsPerPage,
+      search_string: searchString,
+      order_by: orderBy,
+      order_by_desc: orderByDesc
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      }
     }
-  })
+  )
 }
 
 export function fetchEvryContactInfo({ token }: TokenOnly) {
@@ -422,7 +439,7 @@ export function fetchFileContent({ token, id }) {
   )
 }
 
-export function fetchForms({token, category, formType}){
+export function fetchForms({ token, category, formType }) {
   return axios.post(
     'api/v1/Member/GetDownloadableForms',
     {
@@ -782,7 +799,12 @@ export function updateContactPreferences({
   )
 }
 
-export function passwordChange({ token, oldPassword, newPassword, newPasswordConfirm }) {
+export function passwordChange({
+  token,
+  oldPassword,
+  newPassword,
+  newPasswordConfirm
+}) {
   return axios.post(
     '/api/v1/Member/PasswordChange',
     {
