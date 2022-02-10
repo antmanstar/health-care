@@ -6,9 +6,9 @@ import defaultTheme from '../../../../style/themes';
 import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import ActivityReward from './ActivityReward';
 import DiscountItem from './DiscountItem';
-import DiscountList from './DiscountList';
 import images from '../../../../utils/images';
 import getWidth from '../../../../utils/getWidth';
+import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
 
 // Rewards Section found on the "Care Plan" View.
 
@@ -70,39 +70,39 @@ const StyledSectionDivider = styled(SectionDivider)`
 const Flex = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   width: 100%;
   box-sizing: border-box;
-  flex-direction: column;
-
   > * {
     box-sizing: border-box;
     margin-bottom: 16px;
+  }
+  @media ${props => props.theme.device_up.tablet} {
+    flex-direction: column;
   }
 `;
 
 const DiscountFlex = styled.div`
   display: flex;
-  flex-direction: column;
-  height: ${props => `${(props.length / 3) * 52}px`};
   flex-wrap: wrap;
   box-sizing: border-box;
   align-items: flex-start;
+  margin-left: 50px;
+  padding-left: 64px;
+  padding-right: 64px;
+  gap: 20px;
+  margin-top: 45px;
 
   > * {
     box-sizing: border-box;
     margin-bottom: 16px;
-  }
-
-  @media ${props => props.theme.device_up.tablet} {
-    flex-wrap: unset;
-    padding-top: 10px;
-    height: unset;
   }
 `;
 
 const Center = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 
   p {
     margin: 0 4px 0 0;
@@ -147,10 +147,31 @@ const StyledIcon = styled.i`
   margin-left: 32px;
 `;
 
+const CategoryMenuWrapper = styled.div`
+  margin-bottom: 16px;
+`;
+
+const StyledScrollMenu = styled(ScrollMenu)`
+  .slider-slide {
+    :focus {
+      outline: none;
+    }
+  }
+`;
+
+const Category = styled.div`
+  font-weight: 300;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.shades.blue}
+  opacity: 0.5;
+`;
+
 const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   const width = getWidth();
   const [showFullDiscounts, setShowFullDiscounts] = useState(false);
-  const [showFullRewards, setShowFullRewards] = useState(false);
+  const [showRewards, setshowRewards] = useState(true);
+  const [curCategoryIndex, setCurCategoryIndex] = useState(0);
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
 
   useEffect(() => {
@@ -162,40 +183,73 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   };
 
   const handleRewardsToggleClick = () => {
-    setShowFullRewards(!showFullRewards);
+    setshowRewards(!showRewards);
   };
-
-  const handleDiscountsToggleClick = () => {
-    setShowFullDiscounts(!showFullDiscounts);
-  };
-
   const activityRewards = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 1);
   const discountItems = Object.values(rewardBenefits).filter(reward => reward.benefit_type === 2);
+  const currentCategory = Object.values(rewardCategories)[curCategoryIndex];
+
+  const getRewardsBenefitByCategory = category => {
+    return discountItems.filter(item => item.benefit_category_ids[0] === category?.category_id);
+  };
+
+  const renderRewardsBenefit = () => {
+    const benefits = getRewardsBenefitByCategory(currentCategory);
+    return (
+      <>
+        <CategoryMenuWrapper>
+          <StyledScrollMenu>
+            {Object.values(rewardCategories)?.map(category => (
+              <Category>{category.category_name}</Category>
+            ))}
+          </StyledScrollMenu>
+        </CategoryMenuWrapper>
+        <DiscountFlex>
+          {benefits?.map(benefit => (
+            <DiscountItem title={benefit.benefit_name} key={benefit.benefit_id} />
+          ))}
+        </DiscountFlex>
+      </>
+    );
+  };
 
   return (
-    <StyledSectionBackground>
-      <StyledContainer>
-        <SectionHeaderWithIcon
-          icon="card_giftcard"
-          title="Rewards"
-          subTitle={
-            width > 768
-              ? 'Your new Evry Care Plan Rewards are easy to use. The list below will update throughout the year with simple things you can do to earn cash on your Evry Spending Card that you can spend at thousands of retailers nationwide.'
-              : 'Learn about our simple rewards system.'
-          }
-          onClick={handelHeaderToggleClick}
-          collapsed={collapsed}
-        />
-      </StyledContainer>
-      {!collapsed && (
-        <>
-          <SectionDivider />
-          <StyledContainer>
-            <Flex>
-              {activityRewards.map((reward, index) => {
-                let return_cond = (!showFullRewards && index < 3) || showFullRewards; // if the flag showFullRewards = true, show all rewards, else return only 3 rewards
-                if (return_cond)
-                  return (
+    <>
+      <StyledSectionBackground>
+        <StyledContainer>
+          <SectionHeaderWithIcon
+            icon="card_giftcard"
+            title="Rewards"
+            subTitle={
+              width > 768
+                ? 'Your new Evry Care Plan Rewards are easy to use. The list below will update throughout the year with simple things you can do to earn cash on your Evry Spending Card that you can spend at thousands of retailers nationwide.'
+                : 'Learn about our simple rewards system.'
+            }
+            onClick={handelHeaderToggleClick}
+            collapsed={collapsed}
+          />
+        </StyledContainer>
+        {!collapsed && (
+          <>
+            <StyledSectionDivider />
+            <Center>
+              <button type="button" onClick={handleRewardsToggleClick}>
+                {!showRewards ? 'Show Rewards' : 'Hide Rewards'}
+              </button>
+              {width > 768 && (
+                <ExpandIconWrapper onClick={handleRewardsToggleClick}>
+                  <div>{!showRewards ? 'Open' : 'Collaspe'}</div>
+                  <StyledIcon className="material-icons">
+                    {showRewards ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
+                  </StyledIcon>
+                </ExpandIconWrapper>
+              )}
+            </Center>
+            <StyledSectionDivider style={{ marginBottom: 0 }} />
+            <StyledContainer>
+              <Flex>
+                {showRewards &&
+                  activityRewards.map((reward, index) => (
                     <ActivityReward
                       key={reward.benefit_id}
                       id={reward.benefit_id}
@@ -207,74 +261,30 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
                       action={reward.benefit_cta_value}
                       ctaType={reward.benefit_cta_type}
                     />
-                  );
-              })}
-            </Flex>
-          </StyledContainer>
-          <StyledSectionDivider style={{ 'margin-top': 0 }} />
-          <Center>
-            <button type="button" onClick={handleRewardsToggleClick}>
-              {width <= 768
-                ? !showFullRewards
-                  ? 'See More'
-                  : 'See Less'
-                : !showFullRewards
-                ? 'See More Rewards'
-                : 'See Less Rewards'}
-            </button>
-            {width > 768 && (
-              <ExpandIconWrapper onClick={handleRewardsToggleClick}>
-                <div>{!showFullRewards ? 'Open' : 'Collaspe'}</div>
-                <StyledIcon className="material-icons">
-                  {showFullRewards ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
-                </StyledIcon>
-              </ExpandIconWrapper>
-            )}
-          </Center>
+                  ))}
+              </Flex>
+            </StyledContainer>
+          </>
+        )}
+      </StyledSectionBackground>
+      <StyledSectionBackground>
+        <StyledContainer>
+          <Header>
+            <Icon src={images['money-in-circle']} />
+            <div>
+              <Title>Rewards Benefit</Title>
+              <Description>
+                Use your EvryHealth Card at participating retailers to get discounts.
+                <span>Everyday</span>
+                {`.`}
+              </Description>
+            </div>
+          </Header>
           <StyledSectionDivider />
-          <StyledContainer>
-            <Header>
-              <Icon src={images['money-in-circle']} />
-              <div>
-                <Title>Discount Items</Title>
-                <Description>
-                  Get Discounts on these items.
-                  <span>Everyday</span>
-                  {`.`}
-                </Description>
-              </div>
-            </Header>
-            <DiscountFlex length={showFullDiscounts ? discountItems.length : 6}>
-              {discountItems.map((item, index) => {
-                let return_cond = (!showFullDiscounts && index < 6) || showFullDiscounts;
-                if (return_cond)
-                  return <DiscountItem title={item.benefit_display_name} key={index} />;
-              })}
-            </DiscountFlex>
-          </StyledContainer>
-          <StyledSectionDivider className="discount" />
-          <Center>
-            <button type="button" onClick={handleDiscountsToggleClick}>
-              {width <= 768
-                ? !showFullDiscounts
-                  ? 'See More'
-                  : 'See Less'
-                : !showFullDiscounts
-                ? 'See More Discounts'
-                : 'See Less Discounts'}
-            </button>
-            {width > 768 && (
-              <ExpandIconWrapper onClick={handleDiscountsToggleClick}>
-                <div>{!showFullDiscounts ? 'Open' : 'Collaspe'}</div>
-                <StyledIcon className="material-icons">
-                  {showFullDiscounts ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
-                </StyledIcon>
-              </ExpandIconWrapper>
-            )}
-          </Center>
-        </>
-      )}
-    </StyledSectionBackground>
+          {renderRewardsBenefit()}
+        </StyledContainer>
+      </StyledSectionBackground>
+    </>
   );
 };
 

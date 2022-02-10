@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { ellipsis } from 'polished';
 import styled from 'styled-components';
 
 // DESKTOP: Activity ActivityReward
@@ -12,12 +13,18 @@ const Wrapper = styled.div`
   width: 100%;
   background: #fafafa;
   padding: 16px 32px;
+
+  width: calc(50% - 10px);
   border: 1px solid
     ${props =>
       props.isBecome ? props.theme.colors.roles.success : props.theme.colors.shades.nearlyWhite};
-  justify-content: space-between;
-  margin- @media ${props => props.theme.device_up.tablet} {
+  @media ${props => props.theme.device_up.tablet} {
+    width: 100%;
     padding: 12px;
+  }
+
+  @media ${props => props.theme.device.tabletXL} {
+    width: calc(50% - 16px);
   }
 
   @media ${props => props.theme.device_up.desktop} {
@@ -27,7 +34,7 @@ const Wrapper = styled.div`
 
 const InfoWrapper = styled.div`
   display: flex;
-  margin: 8px 30px 8px 0px;
+  margin-top: 16px;
   flex-direction: column;
   @media ${props => props.theme.device_up.tablet} {
     margin: 0;
@@ -39,31 +46,47 @@ const Title = styled.h3`
   width: 100%;
   margin: 0 0 8px;
   font-size: 16px;
-  color: ${props => props.theme.colors.shades.blue};
+  color: ${props =>
+    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.blue};
 `;
 
 const Description = styled.p`
-  width: 100%;
+  width: ${props => (props.isBecome ? '80%' : '100%')};
   margin: 0;
   font-size: 12px;
   font-weight: 300;
   font-family: 'Roboto';
-  color: ${props => props.theme.colors.shades.darkGray};
+  color: ${props =>
+    props.isComing ? props.theme.colors.shades.mediumGray : props.theme.colors.shades.darkGray};
+
+  &.collapsed {
+    ${ellipsis(undefined, 3)};
+  }
 
   @media ${props => props.theme.device_up.tablet} {
     display: none;
+  }
+
+  @media ${props => props.theme.device_up.mobile} {
+    width: 100%;
   }
 `;
 
 const Earned = styled.div`
   display: flex;
+  position: absolute;
   justify-content: flex-start;
   align-items: center;
+  right: 16px;
   height: 16px;
   min-width: ${props => (props.isBecome ? '120px' : '60px')};
   margin-top: ${props => (props.isBecome ? '16px' : '0')};
   color: ${props =>
-    props.isBecome ? props.theme.colors.roles.success : props.theme.colors.shades.pinkOrange};
+    props.isComing
+      ? props.theme.colors.shades.darkGray
+      : props.isBecome
+      ? props.theme.colors.roles.success
+      : props.theme.colors.shades.pinkOrange};
 
   @media ${props => props.theme.device_up.tablet} {
     flex-direction: column;
@@ -75,6 +98,7 @@ const Earned = styled.div`
 
   @media ${props => props.theme.device_up.mobile} {
     margin-left: 10px;
+    position: unset;
   }
 `;
 
@@ -83,23 +107,26 @@ const EarnedText = styled.div`
   font-weight: bold;
 `;
 
+const Link = styled.a`
+  margin-top: 4px;
+  color: ${props => props.theme.colors.shades.tealBlue};
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: underline;
+`;
+
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-top: 12px;
 
-  @media ${props => props.theme.device_up.tablet} {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 160px;
+  @media (max-width: 850px) {
+    width: 300px;
   }
 
   @media ${props => props.theme.device_up.mobile} {
-    width: 120px;
-  }
-
-  @media (max-width: 320px) {
-    width: 100px;
+    width: 100%;
   }
 `;
 
@@ -148,7 +175,9 @@ const IconWrapper = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  border: 3px solid ${props => props.theme.colors.roles.success};
+  border: 3px solid
+    ${props =>
+      props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.roles.success};
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -162,6 +191,8 @@ const IconWrapper = styled.div`
 
 const ActivityReward = React.memo(
   ({ title, description, buttonText, earned, date, id, ctaType, action }) => {
+    const [expanded, setExpanded] = useState(false);
+
     const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583278'
     const isComing = date === null || new Date(date) < new Date() ? false : true;
 
@@ -179,9 +210,18 @@ const ActivityReward = React.memo(
       <Wrapper isBecome={isBecomeAnEvryMember}>
         <InfoWrapper>
           <div>
-            <Title>{title}</Title>
-            {description && <Description>{description}</Description>}
+            <Title isComing={isComing}>{title}</Title>
+            {description && (
+              <Description
+                isComing={isComing}
+                className={expanded ? '' : 'collapsed'}
+                isBecome={isBecomeAnEvryMember}
+              >
+                {description}
+              </Description>
+            )}
           </div>
+          <Link onClick={() => setExpanded(!expanded)}>{expanded ? 'Read Less' : 'Read More'}</Link>
           <ButtonWrapper>
             {buttonText && (
               <Button isComing={isComing} onClick={e => handleOnClick(e, action)} id={id}>
@@ -191,10 +231,10 @@ const ActivityReward = React.memo(
             {isComing && <ComingText>Coming Soon...</ComingText>}
           </ButtonWrapper>
         </InfoWrapper>
-        <Earned isBecome={isBecomeAnEvryMember}>
+        <Earned isBecome={isBecomeAnEvryMember} isComing={isComing}>
           <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>
           {isBecomeAnEvryMember && (
-            <IconWrapper>
+            <IconWrapper isComing={isComing}>
               <i className="material-icons">check</i>
             </IconWrapper>
           )}
