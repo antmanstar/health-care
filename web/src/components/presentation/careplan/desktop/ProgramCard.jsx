@@ -75,10 +75,6 @@ const Avatar = styled.div`
   align-items: center;
 `;
 
-const QuestionIcon = styled.img`
-  width: 12px;
-`;
-
 const ExpandableWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -161,7 +157,6 @@ const ProgramCard = React.memo(({ icon, icon_type, title, desc, actionText, onCl
             {icon && icon_type == 3 && <Svg dangerouslySetInnerHTML={{ __html: icon }}></Svg>}
             <Title width={width - 50}>{title}</Title>
           </Avatar>
-          <QuestionIcon src={images['question-mark']} />
         </TitleSection>
         <ExpandableWrapper>
           <Description className={expanded ? '' : 'collapsed'}>{desc}</Description>
