@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { find, isEmpty, omit } from 'lodash';
-import Moment from 'moment';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SectionHeaderWithIcon from '../../shared/desktop/SectionHeaderWithIcon';
 import DialAndNumbers from './DialAndNumbers';
 import NoDeductibleMessage from './NoDeductibleMessage';
 import Loader from '../../shared/Loader/Loader';
-import Tip from '../../shared/desktop/Tooltip';
 import constants from '@evry-member-app/shared/constants';
 import Select from 'react-select';
 import actions from '@evry-member-app/shared/store/actions';
@@ -112,6 +110,10 @@ const FilterWrapper = styled.div`
   }
 `;
 
+const StyledSelect = styled(Select)`
+  width: 200px;
+`;
+
 const CoverageSummary = ({
   benefitType,
   isLoading,
@@ -151,14 +153,22 @@ const CoverageSummary = ({
 
   useEffect(() => {
     let members = [];
+    let owner = {};
     if (familyMembers.length !== 0 && options.length === 0) {
-      familyMembers.map(member =>
-        members.push({
-          value: member.id,
-          label: `${member.first} ${member.last}`,
-          relationship: member.relationship
-        })
-      );
+      familyMembers.map(member => {
+        member.relationship === 'Self'
+          ? (owner = {
+              value: member.id,
+              label: `${member.first} ${member.last}`,
+              relationship: member.relationship
+            })
+          : members.push({
+              value: member.id,
+              label: `${member.first} ${member.last}`,
+              relationship: member.relationship
+            });
+      });
+      members.unshift(owner);
       setOptions([...members, { value: 'Family', label: 'Family' }]);
       setSelectedOption(members[0]);
     }
@@ -176,11 +186,11 @@ const CoverageSummary = ({
           />
           <FilterWrapper>
             <Filter>Filtered by:</Filter>
-            <Select value={selectedOption} onChange={handleChange} options={options} />
+            <StyledSelect value={selectedOption} onChange={handleChange} options={options} />
           </FilterWrapper>
         </FlexBetween>
       </Container>
-      {isEmpty(omit(accumulators, 'pending')) || isLoading ? (
+      {isEmpty(omit(accumulators, 'pending')) || isLoading || benefitType === null ? (
         <Loader />
       ) : (
         <>

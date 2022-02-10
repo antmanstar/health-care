@@ -83,7 +83,7 @@ class ChooseCarePlan extends Component {
       history.push('/sign-in');
     } else {
       if (isOnboardingComplete) {
-        history.push('/');
+        history.push('/plan');
       }
     }
   }

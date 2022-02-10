@@ -59,12 +59,12 @@ const DownloadButton = styled.button`
   }
 `;
 
-const DownloadableForm = React.memo(({ file }) => {
+const DownloadableForm = React.memo(({ form }) => {
   const dispatch = useDispatch();
   const token = useSelector(state => getToken(state));
 
   const downloadButtonHandler = () => {
-    dispatch(fetchFileContent(file.file_id, token));
+    dispatch(fetchFileContent(form.file_id, form.downloadable_form_name + '.pdf', token));
   };
 
   return (
@@ -74,7 +74,7 @@ const DownloadableForm = React.memo(({ file }) => {
         <Icon>
           <i className="material-icons">description</i>
         </Icon>
-        <DocumentName>{file.display_name}</DocumentName>
+        <DocumentName>{form.downloadable_form_name}</DocumentName>
         <DownloadButton onClick={downloadButtonHandler}>
           PDF
           <img src={images['download']} alt="Download PDF" />
@@ -85,7 +85,7 @@ const DownloadableForm = React.memo(({ file }) => {
 });
 
 DownloadableForm.propTypes = {
-  file: PropTypes.shape({}).isRequired
+  form: PropTypes.shape({}).isRequired
 };
 
 export default DownloadableForm;

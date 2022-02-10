@@ -6,7 +6,7 @@ import DownloadableForm from './DownloadableForm';
 import withStoreData from '../../../containers/base/withStoreData';
 import selectors from '@evry-member-app/shared/store/selectors';
 import Loader from '../../shared/Loader/Loader';
-const { getFiles, getFilesDataFrame, getForms } = selectors;
+const { getForms } = selectors;
 
 // Form List for "Document Lists" Section of the "Document Center" View
 
@@ -30,21 +30,22 @@ const Notice = styled.div`
   color: ${props => props.theme.colors.shades.gray};
 `;
 
-const FormList = React.memo(({ files, filesDataFrame }) => {
+const FormList = React.memo(({ forms }) => {
+
   return (
     <>
       <SpaceBetween>
         <Label>Form Name</Label>
         <Label>Download</Label>
       </SpaceBetween>
-      {(!filesDataFrame || filesDataFrame.isLoading) && <Loader />}
-      {files.length === 0 && filesDataFrame && !filesDataFrame.isLoading && (
+      {(!forms || forms.isLoading) && <Loader />}
+      {forms && !forms.isLoading && forms.formDataFrame.data.length === 0 && (
         <Notice>There are no forms available.</Notice>
       )}
-      {files.length > 0 &&
-        filesDataFrame &&
-        !filesDataFrame.isLoading &&
-        files.map(file => <DownloadableForm file={file} key={file.file_id} />)}
+      {forms &&
+        !forms.isLoading &&
+        forms.formDataFrame.data.length > 0 &&
+        forms.formDataFrame.data.map(form => <DownloadableForm form={form} key={form.file_id} />)}
     </>
   );
 });
@@ -58,7 +59,5 @@ FormList.defaultProps = {
 };
 
 export default withStoreData(FormList, (state, ownProps) => ({
-  files: getFiles(state, ownProps.type),
-  filesDataFrame: getFilesDataFrame(state),
   forms: getForms(state)
 }));

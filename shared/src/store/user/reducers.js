@@ -302,7 +302,7 @@ const userReducer = (state = initialState, action) => {
         requestMailedCardCase: { status: null, id: null }
       }
     case types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
-      return {
+    return {
         ...state,
         appointRepFormUploadCase: {
           status: 'OPEN',
@@ -422,9 +422,9 @@ const userReducer = (state = initialState, action) => {
     case types.FORMS_FETCH:
       return {...state, forms: {isLoading: true}}
     case types.FORMS_FETCH_SUCCESS:
-      return {...state, forms: {...action.payload, isLoading: false}}
+      return {...state, forms: {formDataFrame: action.payload, isLoading: false}}
     case types.FORMS_FETCH_FAILURE:
-      return {...state, forms: {...action.payload, isLoading: false}}
+      return {...state, forms: {...action.payload, formDataFrame: null, isLoading: false}}
     case types.FIND_CASES:
       return {
         ...state,

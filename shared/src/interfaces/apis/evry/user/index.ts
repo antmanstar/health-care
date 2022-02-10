@@ -439,12 +439,22 @@ export function fetchFileContent({ token, id }) {
   )
 }
 
-export function fetchForms({ token, category, formType }) {
+export function fetchForms({
+  token,
+  category,
+  formType,
+  page = 1,
+  records_per_page = 10,
+  search_string = ''
+}) {
   return axios.post(
     'api/v1/Member/GetDownloadableForms',
     {
       category,
-      downloadable_form_type: formType
+      downloadable_form_type: formType,
+      page,
+      records_per_page,
+      search_string
     },
     {
       headers: {
@@ -821,12 +831,12 @@ export function passwordChange({
   )
 }
 
-export function emailChange({ token, email, confirmPassword }) {
+export function emailChange({ token, email_address, password }) {
   return axios.post(
     '/api/v1/Member/EmailChange',
     {
-      password: confirmPassword,
-      email: email
+      email_address: email_address,
+      password: password
     },
     {
       headers: {

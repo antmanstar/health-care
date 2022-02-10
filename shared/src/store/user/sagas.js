@@ -458,8 +458,8 @@ function* successfulAuthWorkerSaga(action) {
     })
     yield take(types.BASIC_INFO_FETCH_SUCCESS)
 
-    const history = yield getContext('history')
-    yield history.push('/')
+    // const history = yield getContext('history')
+    // yield history.push('/plan')
   }
 }
 

@@ -7,6 +7,7 @@ import SmallButton from '../../shared/desktop/SmallButton';
 import MedicareModalSection from './MedicareModalSection';
 import OtherInsuranceModalSection from './OtherInsuranceModalSection';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 // MODAL - Update Coordination of Benefits
 
@@ -91,7 +92,8 @@ class UpdateCoordinationOfBenefitsModal extends Component {
         endDate: null
       },
       maxDate: "",
-      minDate: ""
+      minDate: "",
+      showLoader: false
     };
 
     this.handlers = {
@@ -127,7 +129,7 @@ class UpdateCoordinationOfBenefitsModal extends Component {
   };
 
   handleErrors = (errors) => {
-    
+    this.setState({ showLoader: false });
   }
 
   completeCase = (response) => {
@@ -166,6 +168,8 @@ class UpdateCoordinationOfBenefitsModal extends Component {
   }
 
   handleSubmit = () => {
+    this.setState({ showLoader: true });
+
     const payload = {
       token: this.props.authToken,
 
@@ -257,6 +261,7 @@ class UpdateCoordinationOfBenefitsModal extends Component {
               <SmallButton text="Cancel" negative onClick={hideModal} />
             </ModalButtonsRight>
           )}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </Wrapper>
       </>
     );

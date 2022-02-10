@@ -822,13 +822,23 @@ export const fetchFiles = ({
   }
 }
 
-export const fetchForms = ({ category, formType, token }) => {
+export const fetchForms = ({
+  category,
+  formType,
+  page,
+  records_per_page,
+  search_string,
+  token
+}) => {
   return {
-    types: null,
+    type: types.FORMS_FETCH,
     payload: {
       token,
       category,
-      formType
+      formType,
+      page,
+      records_per_page,
+      search_string
     }
   }
 }

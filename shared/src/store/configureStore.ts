@@ -1,13 +1,14 @@
-import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import * as reducers from './reducers';
-import rootSaga from './sagas';
-import { loadState, saveState } from './localStorage';
-import { History, MemoryHistory } from 'history';
-import selectors from './selectors';
+import { compose, createStore, combineReducers, applyMiddleware } from 'redux'
+import recycleState from 'redux-recycle'
+import createSagaMiddleware from 'redux-saga'
+import * as reducers from './reducers'
+import rootSaga from './sagas'
+import { loadState, saveState } from './localStorage'
+import { History, MemoryHistory } from 'history'
+import selectors from './selectors'
 
 function createSaveState(storeState) {
-  return { 
+  return {
     user: {
       auth: {
         auth_token: selectors.getToken(storeState)
@@ -16,27 +17,28 @@ function createSaveState(storeState) {
   }
 }
 
-export default function configureStore(history: History | MemoryHistory, preloadedState, ...middlewares: Array<() => void>) {
+export default function configureStore(
+  history: History | MemoryHistory,
+  preloadedState,
+  ...middlewares: Array<() => void>
+) {
   const sagaMiddleware = createSagaMiddleware({
     context: {
       history
     }
-  });
+  })
 
   const store = createStore(
-    combineReducers(reducers),
+    recycleState(combineReducers(reducers), 'user/SIGN_OUT'),
     preloadedState || loadState(),
-    compose(
-      applyMiddleware(sagaMiddleware),
-      ...middlewares
-    )
-  );
+    compose(applyMiddleware(sagaMiddleware), ...middlewares)
+  )
 
   store.subscribe(() => {
-    saveState(createSaveState(store.getState()));
-  });
+    saveState(createSaveState(store.getState()))
+  })
 
-  sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(rootSaga)
   /*
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
@@ -46,5 +48,5 @@ export default function configureStore(history: History | MemoryHistory, preload
   }
   */
 
-  return store;
-};
+  return store
+}

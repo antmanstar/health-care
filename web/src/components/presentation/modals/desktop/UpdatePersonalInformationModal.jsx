@@ -7,6 +7,7 @@ import Select from '../../shared/desktop/Select';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 import actions from '@evry-member-app/shared/store/actions';
 import { connect } from 'react-redux';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 const { setModalData, showModal } = actions;
 
@@ -129,12 +130,15 @@ const UpdatePersonalInformationModal = props => {
   let [ phoneCell, setPhoneCell ] = useState(extractPhoneNumber(info.phones, 'Cell Phone') || "");
   let [ phoneHome, setPhoneHome ] = useState(extractPhoneNumber(info.phones, 'Home Phone') || "");
   let [ phoneWork, setPhoneWork ] = useState(extractPhoneNumber(info.phones, 'Business Phone') || "");
+  let [ showLoader, setShowLoader ] = useState(false);
 
   function handleErrors(errors) {
-    
+    setShowLoader(false);
   }
 
   function createSuccessModal() {
+    setShowLoader(false);
+
     props.setModalData({
       type: 'SUCCESS',
       title: 'Submitted!',
@@ -151,6 +155,8 @@ const UpdatePersonalInformationModal = props => {
   }
 
   function handleSubmit() {    
+    setShowLoader(true);
+
     apis.createCaseUpdateAddress({
       token: props.authToken,
       address1: infoAddress1,
@@ -314,6 +320,8 @@ const UpdatePersonalInformationModal = props => {
             <SmallButton text="Cancel" negative onClick={props.hideModal} />
           </ModalButtonsRight>
         )}
+        
+        {showLoader && <LoadingSpinnerScreen />}
       </LargeModalWrapper>
     </>
   );

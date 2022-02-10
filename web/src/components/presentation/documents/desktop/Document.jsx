@@ -89,6 +89,10 @@ const DownloadButton = styled.button`
 const Document = React.memo(({ file }) => {
   const dispatch = useDispatch();
   const token = useSelector(state => getToken(state));
+  const fileType = file.file_name
+    .split('.')
+    .pop()
+    .toUpperCase();
 
   const downloadButtonHandler = () => {
     dispatch(fetchFileContent(file.file_id, file.file_name, token));
@@ -101,7 +105,7 @@ const Document = React.memo(({ file }) => {
         <Date>{Moment(file.utc_date).format('MM/DD/YYYY')}</Date>
         <DocumentName>{file.display_name}</DocumentName>
         <DownloadButton onClick={downloadButtonHandler}>
-          PDF
+          {fileType && fileType.length < 5 ? fileType : 'PDF'}
           <img src={images['download']} alt="Download PDF" />
         </DownloadButton>
       </DocumentWrapper>

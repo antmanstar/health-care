@@ -5,9 +5,10 @@ import SmallButton from '../../shared/desktop/SmallButton';
 
 import { connect } from 'react-redux';
 import selectors from '@evry-member-app/shared/store/selectors';
-import actions from '@evry-member-app/shared/store/actions';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 import ErrorMessage from '../../shared/desktop/ErrorMessage';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
+import styled from 'styled-components';
 
 // MODAL - Update Your Password
 
@@ -22,6 +23,15 @@ const {
   ModalWrapper
 } = defaultTheme.components;
 
+const Label = styled.div`
+  margin-bottom: 5px;
+`;
+
+const NewPWLabel = styled.div`
+  margin-top: 15px;
+  margin-bottom: 5px; 
+`;
+
 class UpdateYourPasswordModal extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +39,8 @@ class UpdateYourPasswordModal extends Component {
       oldPassword: '',
       newPassword: '',
       confirmPassword: '',
-      errors: []
+      errors: [],
+      showLoader: false
     };
   }
 
@@ -38,10 +49,12 @@ class UpdateYourPasswordModal extends Component {
   }
 
   handleErrors = response => {
-    this.setState({ errors: response.response.data.messages });
+    this.setState({ showLoader: false, errors: response.response.data.messages });
   }
 
   submitModal = e => {
+    this.setState({ showLoader: true });
+
     apis.passwordChange({
       token: this.props.token,
       oldPassword: this.state.oldPassword,
@@ -59,6 +72,7 @@ class UpdateYourPasswordModal extends Component {
             <ModalTitle>Update your password.</ModalTitle>
           </ModalHeader>
           <ModalBody>
+            <Label>Current Password</Label>
             <Input
               name="oldPassword"
               type="password"
@@ -66,6 +80,7 @@ class UpdateYourPasswordModal extends Component {
               value={this.state.oldPassword}
               onChange={this.handleChange}
             />
+            <NewPWLabel>New Password</NewPWLabel>
             <Input
               name="newPassword"
               type="password"
@@ -87,6 +102,7 @@ class UpdateYourPasswordModal extends Component {
             <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
           </ModalButtonsRight>
           {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );

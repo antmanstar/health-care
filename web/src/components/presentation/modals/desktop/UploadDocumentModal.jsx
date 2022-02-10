@@ -11,7 +11,6 @@ import actions from '@evry-member-app/shared/store/actions';
 import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 const { getSupportPhoneNumber, getToken, getAppointRepFormUploadCase } = selectors;
-
 // MODAL - Upload a Document
 
 const {
@@ -32,11 +31,13 @@ const {
   completeAppointedRepFormUploadCase,
   appointedRepFormUploadReset,
   setModalData,
-  showModal
+  showModal,
+  fetchFiles
 } = actions;
 
 const SqaushedSpaceBetween = styled(SpaceBetween)`
   margin: 32px 0 -8px;
+  align-items: flex-start;
 `;
 
 const PhoneNumber = styled.div`
@@ -91,7 +92,11 @@ const FilePicker = styled.div`
     border-color: ${props => props.theme.colors.shades.darkGray};
   }
 `;
-
+const FileFormats = styled.span`
+  & span {
+    color: ${props => props.theme.colors.shades.pinkOrange};
+  }
+`;
 class UploadDocumentModal extends Component {
   constructor(props) {
     super(props);
@@ -154,6 +159,8 @@ class UploadDocumentModal extends Component {
         message: "Great! We'll get to work on that and send you a confirmation once complete."
       });
       this.setState({ isSubmitting: false });
+      this.props.fetchFiles(this.props.token);
+
       this.props.showModal('SUBMISSION_RESPONSE');
     } else if (
       prevProps.appointRepFormUploadCase &&
@@ -209,12 +216,22 @@ class UploadDocumentModal extends Component {
               </ModalHalfColumn>
               <ModalHalfColumn>
                 <FilePicker>
-                  <input name="file" id="file" type="file" onChange={this.handlers.handleChange} />
+                  <input
+                    name="file"
+                    id="file"
+                    type="file"
+                    onChange={this.handlers.handleChange}
+                    accept="image/gif, image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  />
                   <label htmlFor="file">
                     <i className="material-icons">attachment</i>
                     {truncate(30)(file.split('\\').pop())}
                   </label>
                 </FilePicker>
+                <FileFormats>
+                  <span>*</span>Acceptable file formats include: jpg, jpeg, gif, png, pdf, doc,
+                  docx.
+                </FileFormats>
               </ModalHalfColumn>
             </SqaushedSpaceBetween>
           </ModalBody>
@@ -250,7 +267,8 @@ const mapDispatchToProps = dispatch => ({
   resetCaseState: () => dispatch(appointedRepFormUploadReset()),
   completeCase: (caseID, token) => dispatch(completeAppointedRepFormUploadCase({ caseID, token })),
   setModalData: modalData => dispatch(setModalData(modalData)),
-  showModal: modal => dispatch(showModal(modal))
+  showModal: modal => dispatch(showModal(modal)),
+  fetchFiles: token => dispatch(fetchFiles({ categories: [], token }))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadDocumentModal);

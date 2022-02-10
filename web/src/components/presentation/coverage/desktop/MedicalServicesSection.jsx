@@ -4,6 +4,7 @@ import defaultTheme from '../../../../style/themes';
 import SectionHeader from '../../shared/desktop/SectionHeader';
 import CollapsibleSection from '../../shared/desktop/CollapsibleSection';
 import CoverageItem from './CoverageItem';
+import Loader from '../../shared/Loader/Loader';
 
 // List of Medical Services & Coverage Details for "My Coverage" View
 
@@ -53,29 +54,35 @@ class MedicalServicesSection extends Component {
       coverage =>
         coverage.in_network_indicator === networkIndicator && (
           <>
-            <Container>
-              <CollapsibleSection
-                visible
-                canToggleChildren={benefitType !== 'EPO'}
-                handleChildrenToggleClick={this.handlers.handleNetworkToggle}
-                active={showInNetwork}
-                title={coverage.category_name}
-              >
-                {coverage.benefit_coverages.map((item, index) => {
-                  const label = checkLastCoverageLabel(item);
-                  const alt = checkLastAlt(label, index);
+            {benefitType === undefined ? (
+              <Container>
+                <Loader />
+              </Container>
+            ) : (
+              <Container>
+                <CollapsibleSection
+                  visible
+                  canToggleChildren={benefitType !== 'EPO'}
+                  handleChildrenToggleClick={this.handlers.handleNetworkToggle}
+                  active={showInNetwork}
+                  title={coverage.category_name}
+                >
+                  {coverage.benefit_coverages.map((item, index) => {
+                    const label = checkLastCoverageLabel(item);
+                    const alt = checkLastAlt(label, index);
 
-                  return (
-                    <CoverageItem
-                      label={label}
-                      coverage={item.coverage}
-                      alt={alt}
-                      note={item.note}
-                    />
-                  );
-                })}
-              </CollapsibleSection>
-            </Container>
+                    return (
+                      <CoverageItem
+                        label={label}
+                        coverage={item.coverage}
+                        alt={alt}
+                        note={item.note}
+                      />
+                    );
+                  })}
+                </CollapsibleSection>
+              </Container>
+            )}
             <SectionDivider />
           </>
         )

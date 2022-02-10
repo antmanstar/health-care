@@ -16,8 +16,8 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import constants from '@evry-member-app/shared/constants';
 
-const { fetchFiles, showModal } = actions;
-const { getFilesDataFrame, getToken, getFileContent } = selectors;
+const { fetchFiles, showModal, fetchForms } = actions;
+const { getFilesDataFrame, getToken, getFileContent, getForms } = selectors;
 const { FILE_CATEGORIES } = constants;
 
 // This is the My Membership Section from the Document Center View
@@ -44,6 +44,7 @@ const ToggleButton = styled.button`
   font-weight: ${props => (props.active ? '700' : '300')};
   color: ${props => props.theme.colors.shades.blue};
   opacity: ${props => (props.active ? '1' : '.6')};
+  background-color: ${props => props.theme.colors.shades.white};
   text-transform: uppercase;
   border-bottom: 3px solid
     ${props => (props.active ? props.theme.colors.shades.pinkOrange : 'transparent')};
@@ -155,9 +156,9 @@ class MyDocumentsSection extends Component {
             type: 'application/msword'
           });
           break;
-        case 'jpg':
+        case 'doc':
           blob = new Blob([this.props.fileContent.file], {
-            type: 'image/jpeg'
+            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
           });
           break;
         default:
@@ -182,9 +183,12 @@ class MyDocumentsSection extends Component {
   }
 
   handleFormTabClick() {
-    const { fetchFiles } = this.props;
+    // const { fetchFiles } = this.props;
 
-    fetchFiles({ categories: [] /*FILE_CATEGORIES.DOWNLOADABLE_FORMS*/ });
+    // fetchFiles({ categories: [] /*FILE_CATEGORIES.DOWNLOADABLE_FORMS*/ });
+    const { fetchForms } = this.props;
+
+    fetchForms({ category: null, formType: 1 });
 
     this.setState({
       toggled: true
@@ -206,17 +210,18 @@ class MyDocumentsSection extends Component {
   }
 
   search(query) {
-    const { fetchFiles, filesDataFrame, paginator } = this.props;
+    const { fetchFiles, filesDataFrame, paginator, fetchForms, forms, formsPaginator } = this.props;
     const { toggled } = this.state;
     const trimmedQuery = query.query.trim();
-    const categories = toggled
-      ? FILE_CATEGORIES.DOWNLOADABLE_FORMS
-      : FILE_CATEGORIES.combine(FILE_CATEGORIES.USER_NOTICES, FILE_CATEGORIES.CLAIMS_DOCUMENTS);
+    // const categories = toggled
+    //   ? FILE_CATEGORIES.DOWNLOADABLE_FORMS
+    //   : FILE_CATEGORIES.combine(FILE_CATEGORIES.USER_NOTICES, FILE_CATEGORIES.CLAIMS_DOCUMENTS);
 
     if (
-      trimmedQuery !== filesDataFrame.query ||
-      query.dateFrom !== filesDataFrame.dateFrom ||
-      query.dateTo !== filesDataFrame.dateTo
+      !toggled &&
+      (trimmedQuery !== filesDataFrame.query ||
+        query.dateFrom !== filesDataFrame.dateFrom ||
+        query.dateTo !== filesDataFrame.dateTo)
     ) {
       fetchFiles({
         categories: [],
@@ -227,11 +232,20 @@ class MyDocumentsSection extends Component {
         dateTo: query.dateTo
       });
     }
+    if (toggled && trimmedQuery !== forms.formDataFrame.search_string) {
+      fetchForms({
+        category: null,
+        formType: 1,
+        page: 1,
+        records_per_page: formsPaginator.recordsPerPage,
+        search_string: trimmedQuery
+      });
+    }
   }
 
   render() {
     const { toggled } = this.state;
-    const { paginator } = this.props;
+    const { paginator, formsPaginator } = this.props;
 
     return (
       <>
@@ -259,9 +273,9 @@ class MyDocumentsSection extends Component {
                 <SearchAndFilterBar
                   bordered
                   search={this.handlers.search}
-                  dateButton
+                  dateButton={!toggled}
                   placeholder={`Search ${toggled ? 'Download Forms' : 'Documents'}`}
-                  type="myDocuments"
+                  type={toggled ? '' : 'myDocuments'}
                 />
               </SearchWrapper>
             </StyledSpaceBetween>
@@ -276,7 +290,8 @@ class MyDocumentsSection extends Component {
               linkText="Contact Customer Support"
               handleClick={this.handlers.handleContactCustomerSupportClick}
             />
-            {paginator && <Pagination paginator={paginator} />}
+            {paginator && !toggled && <Pagination paginator={paginator} />}
+            {formsPaginator && toggled && <Pagination paginator={formsPaginator} />}
           </PaginationWrapper>
         </LayoutWrapper>
       </>
@@ -300,7 +315,8 @@ MyDocumentsSection.defaultProps = {
 const mapStateToProps = state => ({
   filesDataFrame: getFilesDataFrame(state),
   token: getToken(state),
-  fileContent: getFileContent(state)
+  fileContent: getFileContent(state),
+  forms: getForms(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -309,6 +325,9 @@ const mapDispatchToProps = dispatch => ({
   },
   showModal: modal => {
     dispatch(showModal(modal));
+  },
+  fetchForms: args => {
+    dispatch(fetchForms(args));
   }
 });
 
@@ -333,13 +352,18 @@ const mergeProps = ({ token, ...stateProps }, dispatchProps, ownProps) => {
       dateTo
     });
   };
+  const fetchForms = ({ category, formType, page, records_per_page, search_string }) => {
+    dispatchProps.fetchForms({ category, formType, page, records_per_page, search_string, token });
+  };
 
   return {
     paginator: stateProps.filesDataFrame && paginate(stateProps.filesDataFrame, fetchFiles),
+    formsPaginator: stateProps.forms && paginate(stateProps.forms.formDataFrame, fetchForms),
     ...stateProps,
     ...dispatchProps,
     ...ownProps,
-    fetchFiles
+    fetchFiles,
+    fetchForms
   };
 };
 

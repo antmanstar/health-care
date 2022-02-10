@@ -79,7 +79,7 @@ const CarePlanSuggestion = ({
       history.push('sign-in');
     }
     if (isOnboardingComplete) {
-      history.push('/');
+      history.push('/plan');
     }
   }, []);
 

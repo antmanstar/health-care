@@ -227,7 +227,7 @@ function SignIn({
 
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo && isOnboardingComplete) {
-      history.push('/');
+      history.push('/plan');
     } else if (authError && authError.data) {
       handleClearAuthError();
     }
@@ -354,7 +354,7 @@ function SignIn({
         </DividerWrapper>
         {payload2FA && payload2FA.two_way_factor_challenge_required ? (
           <GoToRegistration>
-            <RouterLink to="/" onClick={handleClear2FA}>
+            <RouterLink to="/sign-in" onClick={handleClear2FA}>
               Back To Sign In
             </RouterLink>
           </GoToRegistration>

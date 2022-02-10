@@ -237,7 +237,7 @@ const StyledButton = styled(SmallButton)`
 
 const Page404 = ({ evryContactInfo }) => {
   const handleBackClick = () => {
-    history.push('/');
+    history.push('/sign-in');
   };
 
   return (

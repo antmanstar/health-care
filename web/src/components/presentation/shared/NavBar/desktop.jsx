@@ -435,8 +435,8 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
                 <RouterLink to="/account">Account Settings</RouterLink>
               </DropdownLink>
               <DropdownLink>
-                <RouterLink to="/" onClick={handleSignOut}>
-                  Sign Out
+                <RouterLink to="/sign-in" onClick={handleSignOut}>
+                  !Sign Out
                 </RouterLink>
               </DropdownLink>
             </DropdownModal>

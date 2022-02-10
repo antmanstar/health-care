@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import selectors from '@evry-member-app/shared/store/selectors';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 import ErrorMessage from '../../shared/desktop/ErrorMessage';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 // MODAL - Update Your Email
 
@@ -25,9 +26,10 @@ class UpdateYourEmailModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      confirmPassword: '',
-      errors: []
+      email_address: '',
+      password: '',
+      errors: [],
+      showLoader: false
     };
   }
 
@@ -36,14 +38,16 @@ class UpdateYourEmailModal extends Component {
   }
 
   handleErrors = response => {
-    this.setState({ errors: response.response.data.messages });
+    this.setState({ showLoader: false, errors: response.response.data.messages });
   }
 
   submitModal = e => {
-    apis.passwordChange({
+    this.setState({ showLoader: true });
+
+    apis.emailChange({
       token: this.props.token,
-      email: this.state.email,
-      confirmPassword: this.state.confirmPassword
+      email_address: this.state.email_address,
+      password: this.state.password
     }).then(this.props.hideModal).catch(this.handleErrors);
   }
 
@@ -58,18 +62,18 @@ class UpdateYourEmailModal extends Component {
           <ModalBody>
             <p>New Email</p>
             <Input
-              name="email"
+              name="email_address"
               type="text"
               placeholder="Enter an email address"
-              value={this.state.email}
+              value={this.state.email_address}
               onChange={this.handleChange}
             />
             <p>Confirm Password</p>
             <Input
-              name="confirmPassword"
+              name="password"
               type="password"
               placeholder="Enter your current password"
-              value={this.state.confirmPassword}
+              value={this.state.password}
               onChange={this.handleChange}
             />
           </ModalBody>
@@ -79,6 +83,7 @@ class UpdateYourEmailModal extends Component {
             <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
           </ModalButtonsRight>
           {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );

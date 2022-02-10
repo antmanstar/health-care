@@ -114,6 +114,8 @@ const Root = ({ isAuthenticated, currentModal, store }) => {
           setPageMayLoad(true);
         })
         .catch(() => {
+          store.dispatch(actions.clearAuthError());
+
           setPageMayLoad(true);
         });
     } else {

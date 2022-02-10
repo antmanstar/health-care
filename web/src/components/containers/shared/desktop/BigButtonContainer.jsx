@@ -125,6 +125,7 @@ const BigButtonContainer = ({
       text={buttonData[buttonKey].text}
       icon={buttonData[buttonKey].icon}
       svgIcon={buttonData[buttonKey].svgIcon}
+      isComing={buttonData[buttonKey].isComing}
       onClick={() => extractClickFunction(buttonData[buttonKey].onClick)()}
       view={view}
     />

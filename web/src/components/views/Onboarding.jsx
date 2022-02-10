@@ -45,7 +45,7 @@ const Onboarding = ({ isOnboardingComplete, isAuthenticated }) => {
       history.push('/sign-in');
     } else {
       if (isOnboardingComplete) {
-        history.push('/');
+        history.push('/plan');
       }
     }
   }, [isOnboardingComplete, isAuthenticated]);
