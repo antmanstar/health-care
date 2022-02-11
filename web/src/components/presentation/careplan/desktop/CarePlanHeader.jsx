@@ -5,6 +5,7 @@ import defaultTheme from '../../../../style/themes';
 import getCarePlanInfo from '../../../../utils/carePlanInfo';
 import Loader from '../../shared/Loader/Loader';
 import images from '../../../../utils/images';
+import ReactTooltip from 'react-tooltip';
 
 // DESKTOP: Care Plan Icon, Title, and Subtitle on Care Plan View
 
@@ -59,6 +60,25 @@ const QuestionIcon = styled.img`
   margin-right: 5px;
 `;
 
+const StyledTooltip = styled(ReactTooltip)`
+  max-width: 40vh;
+  opacity: 1 !important;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  white-space: normal;
+  right: 20px;
+
+  @media ${props => props.theme.device.mobile} {
+  }
+
+  @media ${props => props.theme.device.tablet} {
+    height: 30px;
+    right: unset;
+  }
+`;
+
 const CarePlanHeader = React.memo(({ carePlan }) => {
   const plan = getCarePlanInfo(carePlan && carePlan.care_plan_id);
 
@@ -76,7 +96,17 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
                 <Description>{plan.description}</Description>
               </div>
             </LeftWrapper>
-            <QuestionIcon src={images['question-mark']} />
+            <QuestionIcon src={images['question-mark']} data-tip data-for="registerTip" />
+            <StyledTooltip
+              id="registerTip"
+              place="bottom"
+              textColor="#000000"
+              backgroundColor="#e1f9fa"
+              offset={{ top: -5, left: 0 }}
+              type="light"
+            >
+              {plan.description}
+            </StyledTooltip>
           </SpaceBetween>
         )}
       </StyledContainer>
