@@ -8,34 +8,28 @@ import getWidth from '../../../../utils/getWidth';
 
 const Wrapper = styled.div`
   display: flex;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  position: relative;
+  width: 104px;
+  height: 84px;
+  flex-direction: column;
 
-  background: white;
+  border: 0.5px solid #97979788;
+  box-sizing: border-box;
+  border-radius: 3px;
+
   align-items: center;
-  padding: 0px 0px 0px 32px;
+  padding: 8px;
 
-  @media ${props => props.theme.device_up.tablet} {
-    width: 100%;
-  }
+  justify-content: space-between;
 `;
 
-const Icon = styled.div`
-  background: ${props => props.theme.colors.roles.success};
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  margin-right: 26px;
-`;
+const Logo = styled.img``;
 
 const Description = styled.p`
   width: 100%;
-  margin: 0;
   font-size: 12px;
-  font-weight: 300;
-  font-family: 'Roboto';
-  color: ${props => props.theme.colors.shades.darkGray};
+  font-weight: 500;
+  text-align: center;
+  color: background: #252526;
   ${({ width }) => ellipsis(`${width * 0.8}px`)}
 
   @media ${props => props.theme.device.tablet} {
@@ -47,9 +41,7 @@ const DiscountItem = React.memo(({ title }) => {
   const width = getWidth();
   return (
     <Wrapper>
-      <div>
-        <Icon />
-      </div>
+      <Logo />
       <Description width={width}>{title}</Description>
     </Wrapper>
   );

@@ -83,7 +83,7 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
           title="Meet Your Goals"
           subTitle={
             width > 768
-              ? 'We have partnered with amazing programs to provide the best resources at a discount.'
+              ? 'We have partnered with these amazing programs that are available to you and your family. Almost all of these will be paid for entirely by Evry on your behalf. Our medical team has worked diligently to review the clinical evidence and customer experience of these programs, and we’re extremely confident that each of these can help you live a healthier life. We are always working to add new programs to this list so check back often! If you’ve been interested in a different program that you don’t see below, contact your Care Guide about it so that they can work to make it available for you.'
               : 'Free & Discounted health programs.'
           }
           svgIcon
