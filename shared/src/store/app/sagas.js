@@ -22,6 +22,13 @@ export default function* watcherSaga() {
         generateFetchWorker,
         api.geoLocationSearch
       )
+    ),
+    takeLatest(
+      ...takeAllBundler(
+        types.AVAILABLE_SPECIALITIES,
+        generateFetchWorker,
+        api.findAvailableSpecialities
+      )
     )
   ])
 }

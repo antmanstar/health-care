@@ -10,6 +10,7 @@ import FeedbackSubmission from '../../providers/desktop/FeedbackSubmission';
 
 import SmallButton from '../../shared/desktop/SmallButton';
 import { useEffect } from 'react';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
 const { setModalData, showModal, clearSendingFeedback } = actions;
 
@@ -75,35 +76,42 @@ const SubmitClaimFeedbackModal = ({
   modalData,
   showModal,
   hideModal,
+  setModalData,
   token,
   createClaimFeedbackCase,
-  sendingFeedback
+  sendingFeedback,
+  feedbackSended
 }) => {
   const [claimFeedback, setClaimFeedback] = useState({
     feedbackChoice: modalData.feedbackChoice,
     message: ''
   });
+  const [showMessageError, setShowMessageError] = useState(false);
   const { feedbackChoice, message } = claimFeedback;
 
   useEffect(() => {
-    if (sendingFeedback) {
+    if (feedbackSended) {
       hideModal();
       showModal('SUBMIT_CLAIM_FEEDBACK_SUCCESS');
     }
-  }, [sendingFeedback]);
+  }, [feedbackSended]);
 
   const handleChange = event => {
     setClaimFeedback({ ...claimFeedback, message: event.target.value });
   };
 
   const submitFeedback = () => {
-    createClaimFeedbackCase({
-      claimNumber: modalData.claimNumber,
-      files: false,
-      rate: feedbackChoice,
-      comment: message,
-      token
-    });
+    if (message.length > 3) {
+      createClaimFeedbackCase({
+        claimNumber: modalData.claimNumber,
+        files: false,
+        rate: feedbackChoice,
+        comment: message,
+        token
+      });
+    } else {
+      setShowMessageError(true);
+    }
   };
 
   const handleClick = choice => {
@@ -131,13 +139,16 @@ const SubmitClaimFeedbackModal = ({
             placeholder="Type your message here."
             onChange={handleChange}
             value={message}
+            required
           />
+          {showMessageError && <p>You must write a message.</p>}
         </ModalBody>
         <ModalSectionDivider />
         <ModalButtonsRight>
-          <SmallButton text="Submit" onClick={submitFeedback} />
+          <SmallButton text="Submit" onClick={submitFeedback} disabled={feedbackSended} />
           <SmallButton text="Cancel" negative onClick={hideModal} />
         </ModalButtonsRight>
+        {sendingFeedback && <LoadingSpinnerScreen />}
       </ModalWrapper>
     </>
   );
@@ -153,6 +164,7 @@ SubmitClaimFeedbackModal.propTypes = {
 
 const mapStateToProps = state => {
   return {
+    feedbackSended: state.user.feedbackSended,
     sendingFeedback: state.user.sendingFeedback,
     token: getToken(state)
   };

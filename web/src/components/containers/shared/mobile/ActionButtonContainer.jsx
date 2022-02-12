@@ -21,7 +21,7 @@ class ActionButtonContainer extends Component {
   }
 
   contactDoctorClick() {
-    alert('Contact my doc!');
+    alert('Contact my doc! Mobile Only');
   }
 
   downloadMembershipCardClick() {

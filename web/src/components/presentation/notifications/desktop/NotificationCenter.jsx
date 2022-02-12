@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import SearchAndFilterBar from '../../shared/desktop/SearchAndFilterBar';
 import Message from './Message';
 import Loader from '../../shared/Loader/Loader';
-import withInfiniteScroll from '../../../containers/base/withInfiniteScroll';
+import withInfiniteScroll from '../../../containers/base/InfiniteScroll';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { connect } from 'react-redux';
+import ScrollerWithInfiniteScroll from '../../../containers/base/InfiniteScroll';
 
 const { fetchNotifications, clearNotifications } = actions;
 const { getToken, getNotificationsFilters } = selectors;
@@ -59,23 +60,8 @@ const SearchWrapper = styled.div`
   padding: 0 32px;
 `;
 
-const Scroller = styled.div`
-  position: relative;
-  margin-top: -48px;
-  padding-top: 48px;
-  height: calc(100vh - 148px);
-  overflow-y: auto;
-  z-index: 9;
-`;
-
 const MessageListWrapper = styled.div`
   margin-bottom: 24px;
-`;
-
-const Title = styled.h2`
-  margin: 0 0 16px;
-  padding: 0 32px;
-  color: ${props => props.theme.colors.shades.blue};
 `;
 
 const CloseDrawer = styled.button`
@@ -96,13 +82,16 @@ const CloseDrawer = styled.button`
 const FilterLabel = styled.div`
   display: flex;
   margin-top: -10px;
-  padding: 0 10px 10px 10px;
+  margin-left: 35px;
+  padding: 0 10px 10px 0;
   font-weight: bold;
   font-size: 18px;
   color: ${props => props.theme.colors.shades.pinkOrange};
-`;
 
-const ScrollerWithInfiniteScroll = withInfiniteScroll(Scroller);
+  @media (max-width: 500px) {
+    margin-left: 10px;
+  }
+`;
 
 const NotificationCenter = ({
   handleClick,
@@ -120,19 +109,20 @@ const NotificationCenter = ({
     };
   }, []);
 
-  const getNotificationModalMessage = () => {
-    let searchQuery = notificationsFilters?.query;
+  const FilterMessages = memo(() => {
     let dateFrom = notificationsFilters?.dateFrom;
     let dateTo = notificationsFilters?.dateTo;
     let filterMessage;
 
-    if (searchQuery && dateFrom && dateTo)
-      filterMessage = `Filters - Search: ${searchQuery} | From: ${dateFrom} - ${dateTo}`;
-    else if (searchQuery) filterMessage = `Filter - Search: ${searchQuery}`;
-    else if (dateFrom && dateTo) filterMessage = `Filter - From: ${dateFrom} - ${dateTo}`;
-
-    return filterMessage;
-  };
+    if (dateFrom && dateTo) {
+      filterMessage = (
+        <FilterLabel>
+          Filtered from: {dateFrom} - {dateTo}
+        </FilterLabel>
+      );
+      return filterMessage;
+    } else return null;
+  }, [notificationsFilters?.dateFrom, notificationsFilters?.dateTo]);
 
   return (
     <>
@@ -154,6 +144,7 @@ const NotificationCenter = ({
             dateButton
             placeholder="Search Messages"
             type="notifications"
+            noValidation={true}
           />
         </SearchWrapper>
         <ScrollerWithInfiniteScroll
@@ -166,9 +157,7 @@ const NotificationCenter = ({
             markNotificationsAsRead({ ids: [id] });
           }}
         >
-          {getNotificationModalMessage() && (
-            <FilterLabel>{getNotificationModalMessage()}</FilterLabel>
-          )}
+          <FilterMessages />
           <MessageListWrapper>
             {notifications.map(message => (
               <Message

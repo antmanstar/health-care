@@ -35,7 +35,7 @@ const Button = styled.button`
   padding: 0;
   font-size: 16px;
   font-weight: 300;
-  color: ${defaultTheme.colors.shades.blue};
+  color: ${props => props.theme.colors.shades.blue};
   border: none;
   border-radius: 4px;
   outline: none;

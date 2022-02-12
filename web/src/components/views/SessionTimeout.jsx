@@ -103,6 +103,7 @@ const SessionTimeout = props => {
   const renderTimeMinSec = () => {
     let minutes = Math.floor(counter / 60);
     let seconds = counter - minutes * 60;
+    if (seconds < 10) seconds = `0${seconds}`;
 
     return `${minutes}:${seconds}`;
   };

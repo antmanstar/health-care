@@ -10,7 +10,7 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
 
 const { fetchMembershipSummary, showModal } = actions;
-const { getToken, getMembership, getMembershipLoadingStatus } = selectors;
+const { getToken, getMembership } = selectors;
 
 // DESKTOP: Document Center View
 // TODO: Update Styling / Markup for Member Info Section

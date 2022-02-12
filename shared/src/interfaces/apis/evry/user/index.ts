@@ -473,7 +473,19 @@ export function fetchMembershipSummary({ token }: TokenOnly) {
     }
   })
 }
-
+export function fetchMembershipDocument({ id, token }) {
+  return axios.post(
+    '/api/v1/Member/DownloadMyMembershipDocument',
+    { id },
+    {
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Authorization: `Bearer ${token}`
+      },
+      responseType: 'arraybuffer'
+    }
+  )
+}
 export function fetchNotifications({
   direction,
   orderBy,
@@ -994,8 +1006,8 @@ export function createCaseCoordinationOfBenefits(payload) {
 
 export function downloadUnderstandYourBenefits({ token }: TokenOnly) {
   return axios.post(
-    '/api/v1/Member/DownloadUnderstandYourBenefit',
-    {},
+    '/api/v1/Member/DownloadMyMembershipDocument',
+    { id: 45 },
     {
       headers: {
         Authorization: `Bearer ${token}`

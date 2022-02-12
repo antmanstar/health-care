@@ -140,7 +140,8 @@ const reflection = {
     title: 'Evry Member Portal',
     subtitle: "Verify your email."
   },
-  route: '/email-verification-sent'
+  route: '/email-verification-sent',
+  forAuthorized: true
 };
 
 export default EmailVerificationSent;

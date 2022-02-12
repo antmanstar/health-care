@@ -102,7 +102,8 @@ const reflection = {
     subtitle: 'We do things a little different.',
     fullWidth: true
   },
-  route: '/onboarding'
+  route: '/onboarding',
+  forAuthorized: true
 };
 
 export default Onboarding;

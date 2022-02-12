@@ -289,6 +289,13 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.MEMBERSHIP_DOCUMENT_FETCH,
+        generateFetchWorker,
+        api.fetchMembershipDocument
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.NOTIFICATIONS_FETCH,
         generateFetchWorker,
         api.fetchNotifications

@@ -76,11 +76,11 @@ function renderPage(isAuthenticated, currentModal, store) {
                         .layoutProps}
                     >
                       {views.map(view => {
-                        const ViewRoute = view.forAuthorized ? AuthorizedRoute : Route;
                         return (
-                          <ViewRoute
+                          <AuthorizedRoute
                             key={view.route}
                             path={view.route}
+                            forAuthorized={view.forAuthorized}
                             component={view.component}
                           />
                         );

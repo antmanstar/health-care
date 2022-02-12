@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import defaultTheme from '../../style/themes';
 import { Helmet } from 'react-helmet-async';
-import CheckCircle from '@evry-member-app/assets/images/vector/check-in-circle.svg';
+import CheckCircle from '@evry-member-app/assets/images/vector/success-check.svg';
 import Danger from '@evry-member-app/assets/images/vector/danger.svg';
 import { Link as RouterLink } from 'react-router-dom';
 import queryString from 'query-string';
@@ -27,7 +27,7 @@ const Container = styled.div`
   justify-content: center;
   grid-template-areas: 'check text .';
   grid-template-columns: 1fr auto 1fr;
-  column-gap: 50px;
+  column-gap: 100px;
 
   @media (max-width: 1000px) {
     grid-template-areas: 'check' 'text';
@@ -84,7 +84,7 @@ const Header = styled.div`
 const Separator = styled.div`
   border-bottom: 1px solid #ddd;
   width: 100%;
-  margin: 25px 0;
+  margin: 35px 0;
 `;
 
 const Body = styled.div`
@@ -110,6 +110,11 @@ const Center = styled.div`
   align-items: center;
 `;
 
+const WideActionButton = styled(ActionButton)`
+  padding-left: 50px;
+  padding-right: 50px;
+`;
+
 const EmailVerification = props => {
   const [resendClicked, setResendClicked] = useState(false);
 
@@ -127,7 +132,7 @@ const EmailVerification = props => {
     const verifyEmail = queryParams.email;
     const verifyToken = queryParams.token;
 
-    if (verifyEmail && verifyToken) {
+    if (verifyEmail !== undefined || verifyToken !== undefined) {
       props.handleChallenge(verifyEmail, verifyToken);
     }
   }
@@ -153,9 +158,9 @@ const EmailVerification = props => {
         <Separator />
         <Center>
           <RouterLink to="/">
-            <ActionButton bgColor="#022B40" onClick={handleResend}>
+            <WideActionButton bgColor="#022B40" onClick={handleResend}>
               Send Link Again
-            </ActionButton>
+            </WideActionButton>
           </RouterLink>
           {resendClicked && (
             <MessageAlert>
@@ -174,7 +179,7 @@ const EmailVerification = props => {
         <Separator />
         <Center>
           <RouterLink to="/sign-in">
-            <ActionButton bgColor="#022B40">Sign In</ActionButton>
+            <WideActionButton bgColor="#022B40">Sign In</WideActionButton>
           </RouterLink>
         </Center>
       </>
@@ -203,11 +208,11 @@ const EmailVerification = props => {
         <VerificationContainer>
           <Header>Verified!</Header>
           <Separator />
-          <Body>Thanks for verifying your email! Click the button below to continue.</Body>
+          <Body>Thanks for verifying! Click the button below to continue.</Body>
           <Separator />
           <Center>
             <RouterLink to="/">
-              <ActionButton bgColor="#8ED081">Continue</ActionButton>
+              <WideActionButton bgColor="#8ED081">Continue</WideActionButton>
             </RouterLink>
           </Center>
         </VerificationContainer>

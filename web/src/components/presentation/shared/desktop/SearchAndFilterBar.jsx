@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import FilterOptions from './FilterOptions';
 import { connect } from 'react-redux';
 import selectors from '@evry-member-app/shared/store/selectors';
+import { useEffect } from 'react';
 
 // Small Search Bar with Date & Filter Buttons
 
@@ -43,7 +44,8 @@ const Search = styled.div`
   input {
     width: 100%;
     background: none;
-    color: ${props => props.theme.colors.shades.blue};
+    color: #959595;
+    font-family: 'Roboto';
     caret-color: ${props => props.theme.colors.shades.pinkOrange};
     font-size: 16px;
     font-weight: 300;
@@ -95,6 +97,14 @@ const FilterButton = styled.button`
   }
 `;
 
+const ValidationMessage = styled.span`
+  font-family: 'Roboto';
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  color: #4a4a4b;
+`;
+
 const SearchAndFilterBar = ({
   bordered,
   placeholder,
@@ -104,10 +114,13 @@ const SearchAndFilterBar = ({
   request,
   clearData,
   notificationsFilters,
+  noValidation,
   type
 }) => {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [showValidation, setShowValidation] = useState(false);
+
   const handleClose = () => {
     setShowFilters(false);
   };
@@ -123,7 +136,11 @@ const SearchAndFilterBar = ({
         let dateFrom = notificationsFilters?.dateFrom;
         let dateTo = notificationsFilters?.dateTo;
         search({ dateFrom: dateFrom, dateTo: dateTo, query: query });
-      } else search({ query: query });
+      } else {
+        if (!showValidation) {
+          search({ query: query });
+        }
+      }
     }
   };
 
@@ -138,7 +155,13 @@ const SearchAndFilterBar = ({
             placeholder={placeholder}
             value={query}
             onChange={e => {
-              setQuery(e.target.value);
+              const { value } = e.target;
+              setQuery(value);
+              if (value.length >= 3 || noValidation) {
+                setShowValidation(false);
+              } else {
+                setShowValidation(true);
+              }
             }}
             onKeyDown={e => handleKeyDown(e)}
           />
@@ -173,6 +196,9 @@ const SearchAndFilterBar = ({
           />
         )}
       </Wrapper>
+      {!noValidation && showValidation && (
+        <ValidationMessage>Please type at least 3 characters to search</ValidationMessage>
+      )}
     </>
   );
 };

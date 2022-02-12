@@ -5,10 +5,16 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import SmallButton from '../../shared/desktop/SmallButton';
 import { PopOver } from '../../shared/desktop/PopOver';
+import { useRef } from 'react';
 
 // Provider Lookup Search Bar
 
-const { providerSearchQuery, geoLocationSearch, setNewCurrentLocation } = actions;
+const {
+  providerSearchQuery,
+  geoLocationSearch,
+  setNewCurrentLocation,
+  findAvailableSpecialities
+} = actions;
 const { getLocationData, getProviderSearchQueryLocation, getToken } = selectors;
 
 const Wrapper = styled.div`
@@ -32,10 +38,9 @@ const Search = styled.div`
   align-items: center;
   width: 100%;
 
-  img {
-    height: 24px;
-    width: 24px;
+  i {
     margin-right: 14px;
+    color: ${props => props.theme.colors.shades.blue};
   }
 
   input {
@@ -133,7 +138,7 @@ const FilterSearch = styled.div`
     line-height: 48px;
     height: 48px;
     width: 100%;
-    padding: 0 0 0 16px;
+    padding: 0 16px 0 16px;
     background: #f4f4f4;
     outline: none;
     border: 1px solid
@@ -154,7 +159,11 @@ const FilterSearch = styled.div`
       outline: none;
       box-shadow: none;
     }
-  }
+
+    &:invalid {
+      border: 2px red;
+      background-color: #ffa4aa;
+    }
 `;
 
 const ButtonWrapper = styled.div`
@@ -170,18 +179,82 @@ const ButtonWrapper = styled.div`
   }
 `;
 
+const AutoCompleteWrapper = styled.div`
+  background-color: white;
+  z-index: 100000000;
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 63px;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const AutoCompleteItem = styled.div`
+  padding: 8px;
+  color: black;
+  cursor: pointer;
+  list-style-type: none;
+  font-size: 1.1em;
+
+  &:hover {
+    background-color: blue;
+    color: white;
+  }
+`;
+
 const ProviderSearchBar = React.memo(
   ({
     providerSearchQuery,
     token,
     geoLocationSearch,
     setNewCurrentLocation,
-    searchLocationError
+    searchLocationError,
+    findAvailableSpecialities,
+    specialityList
   }) => {
     const [query, setQuery] = useState('');
     const [searchAddress, setSearchAddress] = useState({ state: '', city: '', zip: '' });
     const [filterModal, setFilterModal] = useState(false);
     const [filterError, setFilterError] = useState('');
+    const [showAutoComplete, setShowAutoComplete] = useState(true);
+    const autoCompleteList = useRef([]);
+
+    useEffect(() => {
+      findAvailableSpecialities(token);
+    }, []);
+
+    const RenderAutoComplete = React.memo(({ value }) => {
+      if (!showAutoComplete && autoCompleteList.current.length === 0) {
+        setShowAutoComplete(false);
+      } else setShowAutoComplete(true);
+
+      autoCompleteList.current = specialityList.filter(speciality =>
+        speciality.value.toUpperCase().includes(value.toUpperCase())
+      );
+
+      let listToRender = null;
+
+      const handleAutoCompleteClick = speciality => {
+        setQuery(speciality);
+        autoCompleteList.current.length = 0;
+        setShowAutoComplete(false);
+        search({ search: query });
+      };
+
+      autoCompleteList.current.length > 0 && showAutoComplete
+        ? (listToRender = (
+            <AutoCompleteWrapper>
+              {autoCompleteList.current.map(speciality => (
+                <AutoCompleteItem onClick={() => handleAutoCompleteClick(speciality.value)}>
+                  {speciality.value}
+                </AutoCompleteItem>
+              ))}
+            </AutoCompleteWrapper>
+          ))
+        : (listToRender = null);
+      return listToRender;
+    });
 
     const handleKeyDown = e => {
       if (e.key === 'Enter') {
@@ -223,7 +296,7 @@ const ProviderSearchBar = React.memo(
       if (
         (searchAddress.zip && searchAddress.city) ||
         (searchAddress.city && searchAddress.state) ||
-        searchAddress.zip
+        searchAddress.zip.length === 5
       ) {
         setFilterError('');
         geoLocationSearch({ ...request, token });
@@ -232,13 +305,14 @@ const ProviderSearchBar = React.memo(
     };
 
     return (
-      <div>
+      <div style={{ position: 'relative' }}>
         <Wrapper>
           <Search>
+            <i className="material-icons">search</i>
             <input
               type="text"
               name="search"
-              placeholder="Search our provider network."
+              placeholder="Search Provider, Practice Name, or Specialty."
               value={query}
               onChange={e => {
                 setQuery(e.target.value);
@@ -259,6 +333,7 @@ const ProviderSearchBar = React.memo(
             </PopOver>
           </FilterButtons>
         </Wrapper>
+        {query.length > 3 && <RenderAutoComplete value={query} />}
         {filterModal ? (
           <FilterWrapper onMouseLeave={() => setFilterModal(false)}>
             <FilterTitle>FILTERS</FilterTitle>
@@ -268,6 +343,7 @@ const ProviderSearchBar = React.memo(
                   type="text"
                   name="search"
                   placeholder={'City'}
+                  pattern="[a-zA-Z]+"
                   value={searchAddress.city}
                   onChange={e => {
                     setSearchAddress({ ...searchAddress, city: e.target.value });
@@ -278,6 +354,7 @@ const ProviderSearchBar = React.memo(
                   type="text"
                   name="search"
                   placeholder={'State'}
+                  pattern="[a-zA-Z]+"
                   value={searchAddress.state}
                   onChange={e => {
                     setSearchAddress({ ...searchAddress, state: e.target.value });
@@ -290,6 +367,9 @@ const ProviderSearchBar = React.memo(
                   type="text"
                   name="search"
                   placeholder={'Zip'}
+                  minlength="5"
+                  maxlength="5"
+                  pattern="[0-9]+"
                   value={searchAddress.zip}
                   onChange={e => {
                     setSearchAddress({ ...searchAddress, zip: e.target.value });
@@ -323,7 +403,8 @@ const ProviderSearchBar = React.memo(
 const mapStateToProps = state => ({
   locationData: getLocationData(state),
   token: getToken(state),
-  searchLocationError: getProviderSearchQueryLocation(state)?.error
+  searchLocationError: getProviderSearchQueryLocation(state)?.error,
+  specialityList: state?.app?.availableSpecialities
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -335,6 +416,9 @@ const mapDispatchToProps = dispatch => ({
   },
   setNewCurrentLocation: args => {
     dispatch(setNewCurrentLocation(args));
+  },
+  findAvailableSpecialities: token => {
+    dispatch(findAvailableSpecialities(token));
   }
 });
 

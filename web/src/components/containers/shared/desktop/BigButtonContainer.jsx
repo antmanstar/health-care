@@ -20,8 +20,7 @@ const BigButtonContainer = ({
   type,
   showModal,
   token,
-  downloadUnderstandYourBenefits,
-  error500Test
+  downloadUnderstandYourBenefits
 }) => {
   const benefitsClick = () => {
     downloadUnderstandYourBenefits(token);
@@ -32,9 +31,7 @@ const BigButtonContainer = ({
   };
 
   const contactDoctorClick = () => {
-    //showModal('ERROR_500');
-    error500Test();
-    alert('Contact my doc!!');
+    window.open("https://www.doctorondemand.com/evryhealth");
   };
 
   const downloadMembershipCardClick = () => {

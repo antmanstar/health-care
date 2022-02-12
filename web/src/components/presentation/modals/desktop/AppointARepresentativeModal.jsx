@@ -6,6 +6,10 @@ import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import actions from '@evry-member-app/shared/store/actions';
+import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
+import selectors from '@evry-member-app/shared/store/selectors';
+import ErrorMessage from '../../shared/desktop/ErrorMessage';
 
 const { showModal } = actions;
 
@@ -98,15 +102,45 @@ const LockedNote = styled.div`
 class AppointARepresentativeModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
 
-    this.handlers = {
-      handleUploadFileClick: this.handleUploadFileClick.bind(this)
+    this.state = {
+      showLoader: false,
+      errors: []
     };
   }
 
-  handleUploadFileClick() {
+  handleErrors = response => {
+    this.setState({ showLoader: false, errors: response.response.data.messages });
+  }
+
+  handleUploadFileClick = () => {
     this.props.showModal('UPLOAD_DOCUMENT');
+  }
+
+  handleDownloadFile = response => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Appoint a Representative Form.pdf');
+    document.body.appendChild(link);
+    link.click();
+  }
+
+  handleFileIDDownload = response => {
+    let id = response?.data?.data[0]?.file_id;
+
+    apis.fetchFileContent({
+      token: this.props.token,
+      id: id
+    }).then(this.handleDownloadFile).catch(this.handleErrors);
+  }
+
+  handleFormDownload = () => {
+    apis.fetchForms({
+      token: this.props.token,
+      category: 101,
+      formType: 1
+    }).then(this.handleFileIDDownload).catch(this.handleErrors);
   }
 
   render() {
@@ -151,7 +185,7 @@ class AppointARepresentativeModal extends Component {
                   <Instruction>
                     Download
                     {/* TODO: Need a download link here */}
-                    <a href="#">this form</a>
+                    <a href="#" onClick={this.handleFormDownload}>this form</a>
                     {`.`}
                   </Instruction>
                 </Flex>
@@ -174,7 +208,7 @@ class AppointARepresentativeModal extends Component {
                 <br />
                 <Flex className="no-margin">
                   <Spacer />
-                  <SmallButton text="Upload Form" onClick={this.handlers.handleUploadFileClick} />
+                  <SmallButton text="Upload Form" onClick={this.handleUploadFileClick} />
                 </Flex>
               </>
             )}
@@ -183,6 +217,8 @@ class AppointARepresentativeModal extends Component {
           <ModalButtonsCenter>
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsCenter>
+          {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );
@@ -199,6 +235,10 @@ AppointARepresentativeModal.defaultProps = {
   locked: false
 };
 
+const mapStateToProps = state => ({
+  token: selectors.getToken(state)
+});
+
 const mapDispatchToProps = dispatch => ({
   showModal: modal => {
     dispatch(showModal(modal));
@@ -206,6 +246,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(AppointARepresentativeModal);

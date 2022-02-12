@@ -37,7 +37,28 @@ const {
 
 const SqaushedSpaceBetween = styled(SpaceBetween)`
   margin: 32px 0 -8px;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  @media ${props => props.theme.device.tablet} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+`;
+
+const StyledModalHalfColumn = styled(ModalHalfColumn)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  @media ${props => props.theme.device.mobile} {
+    width: 75%;
+  }
+  @media ${props => props.theme.device.tablet} {
+    width: calc(50%-4px);
+  }
 `;
 
 const PhoneNumber = styled.div`
@@ -97,6 +118,9 @@ const FileFormats = styled.span`
     color: ${props => props.theme.colors.shades.pinkOrange};
   }
 `;
+const ValidationMessages = styled.div`
+  color: ${props => props.theme.colors.shades.pinkOrange};
+`;
 class UploadDocumentModal extends Component {
   constructor(props) {
     super(props);
@@ -104,7 +128,8 @@ class UploadDocumentModal extends Component {
       documentType: '',
       file: 'Choose a File',
       files: [],
-      isSubmitting: false
+      isSubmitting: false,
+      validationMessages: null
     };
 
     this.handlers = {
@@ -123,6 +148,21 @@ class UploadDocumentModal extends Component {
   }
 
   handleSubmit() {
+    console.log(this.state.file);
+    console.log(this.state.files);
+    let messages = [];
+    if (this.state.files.length === 0) {
+      messages.push('*A file is required.');
+      console.log(messages);
+    }
+    if (!this.state.documentType || this.state.documentType.length === 0) {
+      messages.push('*Document Type is required.');
+      console.log(messages);
+    }
+    if (messages.length > 0) {
+      this.setState({ validationMessages: messages });
+      return;
+    }
     this.setState({ isSubmitting: true });
     this.props.createCase(this.props.token);
   }
@@ -179,9 +219,9 @@ class UploadDocumentModal extends Component {
   }
 
   render() {
-    const { documentType, file, isSubmitting } = this.state;
+    const { documentType, file, isSubmitting, validationMessages } = this.state;
     const { phoneNumber, hideModal } = this.props;
-
+    console.log(validationMessages);
     return (
       <>
         <Scrim onClick={hideModal} />
@@ -234,6 +274,9 @@ class UploadDocumentModal extends Component {
                 </FileFormats>
               </ModalHalfColumn>
             </SqaushedSpaceBetween>
+            {validationMessages &&
+              validationMessages.length > 0 &&
+              validationMessages.map(message => <ValidationMessages>{message}</ValidationMessages>)}
           </ModalBody>
           <ModalSectionDivider />
           <ModalButtonsRight>

@@ -414,7 +414,6 @@ const NavBar = ({ signOut, permanentBg, phoneNumber, isSigningOut }) => {
         </LeftWrapper>
         <CenterWrapper>
           <MainNavigation
-            phoneNumber={phoneNumber}
             handleSignOut={handleSignOut}
             setMobileMenuOpen={setMobileMenuOpen}
             mobileOpen={mobileMenuOpen}

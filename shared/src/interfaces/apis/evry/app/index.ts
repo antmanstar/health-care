@@ -1,5 +1,7 @@
 import { axios } from '..'
 
+type TokenOnly = { token: string }
+
 // eslint-disable-next-line import/prefer-default-export
 export function providerSearch({
   page = 1,
@@ -80,4 +82,13 @@ export function geoLocationSearch({ city, state, zip, token }) {
       }
     }
   )
+}
+
+export function findAvailableSpecialities({ token }: TokenOnly) {
+  return axios.get(`/api/v1/Member/GetAvailableSpecialties`, {
+    headers: {
+      'Content-Type': 'application/json-patch+json',
+      Authorization: `Bearer ${token}`
+    }
+  })
 }

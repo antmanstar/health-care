@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 
   @media not ${defaultTheme.device.mobile} {
     h3 {

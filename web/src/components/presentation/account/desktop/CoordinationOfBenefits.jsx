@@ -15,17 +15,20 @@ const { setModalData, showModal } = actions;
 const { SpaceBetween, SectionDivider } = defaultTheme.components;
 
 const Wrapper = styled.div`
-  width: 48%;
+  width: 100%;
   padding: 16px;
   background: #fafafa;
   border-radius: 4px;
   box-sizing: border-box;
+  margin-bottom: 15px;
 
   .small-title-heading {
     font-size: 20px;
   }
 
   @media ${props => props.theme.device.desktop} {
+    width: 48%;
+
     .small-title-heading {
       font-size: 24px;
     }

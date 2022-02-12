@@ -94,7 +94,7 @@ class SupportRequestList extends Component {
           <Center>
             <p>Looking for just pending requests? </p>
             <Button type="button" onClick={() => this.setState({ showCompleted: false })}>
-              Hide Completed Requests
+              Show Pending Requests
             </Button>
             {`.`}
           </Center>

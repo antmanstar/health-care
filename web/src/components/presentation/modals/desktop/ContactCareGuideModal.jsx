@@ -121,7 +121,7 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => {
           ) : (
             <>
               <ColoredBackground />
-              {careGuide.error && careGuide.error.length > 0 ? (
+              {(careGuide.error && careGuide.error.length > 0) || !careGuide.first_name ? (
                 <ContactCareGuideProfile />
               ) : (
                 <ContactCareGuideProfile
@@ -145,20 +145,6 @@ const ContactCareGuideModal = React.memo(({ hideModal, careGuide, name }) => {
           <CenterText>
             <Title>{name ? `Hi ${name.first}, how can I help?` : 'Hi, how can I help?'}</Title>
           </CenterText>
-          {/* <SqaushedSpaceBetween>
-          <Column>
-            <FormLabel>Concierge Care</FormLabel>
-            <BigButtonContainer buttonKey="requestInformation" />
-            <BigButtonContainer buttonKey="scheduleAppointment" />
-          </Column>
-          <Column>
-            <FormLabel>
-              {careGuide ? `Contact ${careGuide.first_name}` : 'Contact Care Guide'}
-            </FormLabel>
-            <BigButtonContainer buttonKey="sendAMessage" />
-            <BigButtonContainer buttonKey="schedulePhoneCall" />
-          </Column>
-        </SqaushedSpaceBetween> */}
           <ModalButtonsCenter>
             <Column>
               <BigButtonContainer buttonKey="requestInformation" />

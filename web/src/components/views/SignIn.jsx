@@ -226,7 +226,7 @@ function SignIn({
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated && hasBasicInfo && isOnboardingComplete) {
+    if (isAuthenticated && hasBasicInfo) {
       history.push('/plan');
     } else if (authError && authError.data) {
       handleClearAuthError();
@@ -288,7 +288,7 @@ function SignIn({
                 buttonType="submit"
                 value="Submit"
                 text="Submit"
-                disabled={isSigningIn || isAuthenticated}
+                disabled={isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)}
               />
             </ButtonWrapper>
           </form>
@@ -341,7 +341,7 @@ function SignIn({
                 buttonType="submit"
                 value="Sign In"
                 text="Sign In"
-                disabled={isSigningIn || isAuthenticated}
+                disabled={isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)}
               />
             </ButtonWrapper>
           </form>
@@ -365,7 +365,9 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {(isSigningIn || isAuthenticated) && <LoadingSpinnerScreen />}
+      {(isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)) && (
+        <LoadingSpinnerScreen />
+      )}
     </Wrapper>
   );
 }

@@ -69,6 +69,14 @@ const EmptyLabel = styled.div`
   font-weight: 400;
 `;
 
+const FadedInfoItem = styled.div`
+  line-height: 48px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #ccc;
+  border-top: 1px solid ${props => props.theme.colors.shades.nearlyWhite};
+`;
+
 class MyInformationSection extends Component {
   constructor(props) {
     super(props);
@@ -114,6 +122,22 @@ class MyInformationSection extends Component {
     )
   }
 
+  extractPhoneNumber = (array, phoneType) => {
+    const numbers = array.filter(item => item.phone_type === phoneType);
+
+    return numbers[0] !== undefined ? numbers[0].phone_number : undefined;
+  };
+
+  renderPhoneNumber = (array, phoneType, backup) => {
+    let number = this.extractPhoneNumber(array, phoneType);
+
+    if (number) {
+      return <InfoItem text={`${number} (${phoneType})`} />;
+    } else {
+      return <FadedInfoItem>{backup}</FadedInfoItem>;
+    }
+  }
+
   renderInformation = () => {
     const address = this.props?.address;
     const phoneNumbers = this.props?.accountInfo?.phones || [];
@@ -125,9 +149,10 @@ class MyInformationSection extends Component {
     return (
       <>
         <InfoItem text={String(address) || 'No address'} />
-        {phoneNumbers.map(({ phone_type: type, phone_number: number }) => (
-          <InfoItem text={`${number} (${type})`} />
-        ))}
+
+        {this.renderPhoneNumber(phoneNumbers, "Cell Phone", "You have not entered a cell phone number.")}
+        {this.renderPhoneNumber(phoneNumbers, "Work Phone", "You have not entered a work phone number.")}
+        {this.renderPhoneNumber(phoneNumbers, "Home Phone", "You have not entered a home phone number.")}
       </>
     )
   }

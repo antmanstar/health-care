@@ -18,7 +18,6 @@ import UpdateCoordinationOfBenefitsModal from '../../../presentation/modals/desk
 import UpdatePasswordModal from '../../../presentation/modals/desktop/UpdatePasswordModal';
 import UpdateEmailModal from '../../../presentation/modals/desktop/UpdateEmailModal';
 import UpdatePersonalInformationModal from '../../../presentation/modals/desktop/UpdatePersonalInformationModal';
-import UpdateSecurityQuestionsModal from '../../../presentation/modals/desktop/UpdateSecurityQuestionsModal';
 import UploadDocumentModal from '../../../presentation/modals/desktop/UploadDocumentModal';
 import SubmissionResponseModal from '../../../presentation/modals/desktop/SubmissionResponseModal';
 import UpdateContactPreferences from '../../../presentation/modals/desktop/UpdateContactPreferences';
@@ -200,9 +199,6 @@ const ModalContainer = props => {
 
     case 'UPDATE_PERSONAL_INFORMATION':
       return <UpdatePersonalInformationModalWithData {...props} />;
-
-    case 'UPDATE_SECURITY_QUESTIONS':
-      return <UpdateSecurityQuestionsModal {...props} />;
 
     case 'UPLOAD_DOCUMENT':
       return <UploadDocumentModal {...props} />;

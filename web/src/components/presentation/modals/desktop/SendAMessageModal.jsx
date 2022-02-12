@@ -50,7 +50,7 @@ class SendAMessageModal extends Component {
         : '',
       message: '',
       errorMessage: null,
-      showLoader: false,
+      //showLoader: false,
       isSubmitting: false
     };
 
@@ -90,7 +90,6 @@ class SendAMessageModal extends Component {
       this.setState(stateObject);
       return;
     }
-    this.setState({ showLoader: true });
     this.props.createCase(event, this.props.token);
   }
 
@@ -169,7 +168,7 @@ class SendAMessageModal extends Component {
               <SmallButton text="Cancel" negative onClick={hideModal} disabled={isSubmitting} />
             </ModalButtonsRight>
           </form>
-          {this.state.showLoader && <LoadingSpinnerScreen />}
+          {isSubmitting && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );

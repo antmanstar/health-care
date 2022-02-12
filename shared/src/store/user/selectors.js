@@ -29,8 +29,9 @@ const addressMethods = {
     if (this.isEmpty()) {
       return ''
     }
-    return `${this.address1 || ''}\n${this.address2 || ''}\n${this.city || ''
-      }, ${this.state || ''} ${this.zip || ''}`
+    return `${this.address1 || ''}\n${this.address2 || ''}\n${
+      this.city || ''
+    }, ${this.state || ''} ${this.zip || ''}`
   }
 }
 
@@ -312,7 +313,7 @@ export const getBenefits = (state) =>
   }))
 
 export const getDocuments = (state) =>
-  getMembershipSummaryDocuments(state).map((document) => ({
+  getMembershipSummaryDocuments(state)?.map((document) => ({
     date: document.utc_date,
     displayName: document.display_name,
     fileId: document.file_id,
@@ -327,7 +328,7 @@ export const getMembership = (state) => ({
   benefitType: getBenefitType(state),
   benefits: getBenefits(state),
   familyMembers: getFamilyMembers(state),
-  documents: getDocuments(state),
+  //documents: getDocuments(state),
   memberId: getMemberId(state),
   name: getMemberName(state),
   payerId: getPayerId(state),
@@ -434,9 +435,11 @@ export const getEducationalResourcesDataFrame = (state) => {
   return dataFrame && omit(dataFrame, 'data')
 }
 
-export const getEducationalResources = (state) => get(state, ['user', 'educationalResources', 'data'], [])
+export const getEducationalResources = (state) =>
+  get(state, ['user', 'educationalResources', 'data'], [])
 
-export const getEducationalResourcesObject = (state) => get(state, ['user', 'educationalResources'])
+export const getEducationalResourcesObject = (state) =>
+  get(state, ['user', 'educationalResources'])
 
 export const getRewardBenefits = (state) => ({
   ...get(state, ['user', 'rewardBenefits'])
@@ -470,3 +473,9 @@ export const getAppointRepFormUploadCase = (state) =>
 export const getFileContent = (state) => get(state, ['user', 'fileContent'])
 
 export const getForms = (state) => get(state, ['user', 'forms'])
+
+export const getRequestInformationCase = (state) =>
+  get(state, ['user', 'requestInformationCase'])
+
+export const getMembershipDocument = (state) =>
+  get(state, ['user', 'membershipDocument'])

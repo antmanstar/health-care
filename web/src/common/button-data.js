@@ -55,8 +55,7 @@ export default {
   talkToADoctor: {
     text: 'Talk to a Doctor',
     icon: 'white_icons/medical-kit',
-    onClick: 'contactDoctorClick',
-    isComing: true
+    onClick: 'contactDoctorClick'
   },
   understandYourBenefits: {
     text: 'Understand your Benefits',
@@ -79,12 +78,6 @@ export default {
     text: 'Update Password',
     icon: 'lock',
     onClick: 'passwordClick',
-    svgIcon: false
-  },
-  updateSecurityQuestions: {
-    text: 'Update Security Questions',
-    icon: 'verified_user',
-    onClick: 'updateQuestionsClick',
     svgIcon: false
   },
   submitSupportRequest: {

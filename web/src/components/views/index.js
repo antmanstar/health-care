@@ -33,20 +33,9 @@ import MemberTools, { reflection as memberToolsReflection } from './MemberTools'
 import HealthAssessment, { reflection as healthAssessmentReflection } from './HealthAssessment';
 import PasswordReset, { reflection as passwordResetReflection } from './PasswordReset';
 import PasswordResetSuccess, { reflection as passwordResetSuccessReflection } from './PasswordResetSuccess';
-import UpdatePassword, { reflection as updatePasswordReflection } from './UpdatePassword';
-import UpdateSecurityQuestions, {
-  reflection as updateSecurityQuestionsReflection,
-} from './UpdateSecurityQuestions';
 import ContactSupportClaim, {
   reflection as contactSupportClaimReflection,
 } from './ContactSupportClaim';
-import PersonalInformation, {
-  reflection as personalInformationReflection,
-} from './PersonalInformation';
-import ContactPreferences, {
-  reflection as contactPreferencesReflection,
-} from './ContactPreferences';
-import VerifyEmail, { reflection as verifyEmailReflection } from './VerifyEmail';
 import EmailVerificationSent, {
   reflection as emailVerificationSentReflection,
 } from './EmailVerificationSent';
@@ -60,7 +49,6 @@ const reflections = [
   claimsReflection,
   claimsDetailsReflection,
   contactEvryReflection,
-  contactPreferencesReflection,
   contactSupportClaimReflection,
   coverageReflection,
   createAccountReflection,
@@ -68,7 +56,6 @@ const reflections = [
   dashboardReflection,
   documentReflection,
   downloadFormsReflection,
-  verifyEmailReflection,
   emailVerificationSentReflection,
   emailVerificationReflection,
   getStartedReflection,
@@ -78,7 +65,6 @@ const reflections = [
   onboardingReflection,
   passwordResetReflection,
   passwordResetSuccessReflection,
-  personalInformationReflection,
   planReflection,
   providerReflection,
   questionnaireReflection,
@@ -89,8 +75,6 @@ const reflections = [
   supportReflection,
   supportRequestReflection,
   supportRequestsReflection,
-  updatePasswordReflection,
-  updateSecurityQuestionsReflection,
   wellnessProgramReflection,
 ];
 
@@ -104,7 +88,6 @@ export {
   Claims,
   ClaimsDetails,
   ContactEvry,
-  ContactPreferences,
   ContactSupportClaim,
   Coverage,
   CreateAccount,
@@ -112,7 +95,6 @@ export {
   Dashboard,
   Documents,
   DownloadForms,
-  VerifyEmail,
   EmailVerificationSent,
   EmailVerification,
   GetStarted,
@@ -122,7 +104,6 @@ export {
   Onboarding,
   PasswordReset,
   PasswordResetSuccess,
-  PersonalInformation,
   Plan,
   ProviderLookup,
   Questionnaire,
@@ -133,7 +114,5 @@ export {
   Support,
   SupportRequest,
   SupportRequests,
-  UpdatePassword,
-  UpdateSecurityQuestions,
   WellnessProgram,
 };

@@ -10,11 +10,26 @@ import Loader from '../../shared/Loader/LoadingSpinnerScreen';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 
-const { showModal, fetchFileContent } = actions;
-const { getToken, getMembershipLoadingStatus } = selectors;
+const { showModal, fetchFileContent, fetchMembershipDocument, resetMembershipDocument } = actions;
+const { getToken, getMembershipLoadingStatus, getMembershipDocument } = selectors;
 // DESKTOP: My Membership Section for Document Center View
 
 const { SectionBackground, Container, SectionDivider, SpaceBetween } = defaultTheme.components;
+
+const membershipDocumentsEnum = {
+  WELCOME_LETTER: {
+    id: 43,
+    fileName: 'WelcomeLetter.pdf'
+  },
+  HANDBOOK: {
+    id: 41,
+    fileName: 'EvryMembershipHandbook.pdf'
+  },
+  ENROLLMENT_DOCUMENT: {
+    id: 42,
+    fileName: 'MyEnrollmentDocument.pdf'
+  }
+};
 
 const Row = styled.div`
   display: flex;
@@ -141,7 +156,7 @@ const MemberDocs = styled.div`
       line-height: 24px;
       cursor: pointer;
       font-weight: 300;
-
+      text-decoration: underline;
       &:hover {
         opacity: 0.7;
       }
@@ -163,17 +178,41 @@ class MyMembershipSection extends Component {
   handleReplaceCardClick() {
     this.props.showModal('REQUEST_NEW_MEMBERSHIP_CARD');
   }
-  handleMembershipDocumentsClick(event) {
-    console.log('handleMembershipDocumentsClick');
-    console.log(event.target);
-    //this.props.fetchFileContent(event.target.value, this.props.token)
+  handleMembershipDocumentsClick(docType) {
+    const { id, fileName } = membershipDocumentsEnum[docType];
+    this.props.fetchMembershipDocument(id, fileName, this.props.token);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.membershipDocument &&
+      prevProps.membershipDocument.isLoading === true &&
+      this.props.membershipDocument.isLoading === false
+    ) {
+      const blob = new Blob([this.props.membershipDocument.file], {
+        type: 'application/pdf'
+      });
+
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = this.props.membershipDocument.fileName
+        ? this.props.membershipDocument.fileName
+        : 'download.txt';
+      anchor.click();
+      URL.revokeObjectURL(url);
+    }
+  }
+
+  componentDidMount() {
+    this.props.resetMembershipDocument();
   }
 
   render() {
     const {
       benefitType,
       familyMembers,
-      documents: membershipDocs,
+      //documents: membershipDocs,
       name,
       memberId,
       rxBin,
@@ -276,32 +315,29 @@ class MyMembershipSection extends Component {
             <InfoSection>
               <Title>Membership Documents</Title>
               <SectionDivider />
-              {!membershipDocs ? (
-                <Loader />
-              ) : (
-                <Info>
-                  <MemberDocs>
-                    {membershipDocs
-                      .map(doc => (
-                        <a onClick={this.handleMembershipDocumentsClick} value={doc.file_id}>
-                          {doc.display_name}
-                        </a>
-                      ))
-                      .reduce((prev, docLink, i) => {
-                        const curr = prev.slice();
-                        if (i % 2) {
-                          curr[curr.length - 1] = curr[curr.length - 1].concat([docLink]);
-                        } else {
-                          curr.push([docLink]);
-                        }
-                        return curr;
-                      }, [])
-                      .map(row => (
-                        <div>{row}</div>
-                      ))}
-                  </MemberDocs>
-                </Info>
-              )}
+              <Info>
+                <MemberDocs>
+                  <div>
+                    <a onClick={() => this.handleMembershipDocumentsClick('WELCOME_LETTER')}>
+                      Welcome Letter
+                    </a>
+                  </div>
+                </MemberDocs>
+                <MemberDocs>
+                  <div>
+                    <a onClick={() => this.handleMembershipDocumentsClick('ENROLLMENT_DOCUMENT')}>
+                      My Enrollment Document
+                    </a>
+                  </div>
+                </MemberDocs>
+                <MemberDocs>
+                  <div>
+                    <a onClick={() => this.handleMembershipDocumentsClick('HANDBOOK')}>
+                      Evry Membership Handbook
+                    </a>
+                  </div>
+                </MemberDocs>
+              </Info>
             </InfoSection>
           </Row>
         </Container>
@@ -334,15 +370,19 @@ MyMembershipSection.defaultProps = {
 
 const mapStateToProps = state => ({
   token: getToken(state),
-  isLoading: getMembershipLoadingStatus(state)
+  isLoading: getMembershipLoadingStatus(state),
+  membershipDocument: getMembershipDocument(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   showModal: modal => {
     dispatch(showModal(modal));
   },
-  fetchFileContent: (fileId, token) => {
-    dispatch(fetchFileContent(file.file_id, token));
+  fetchMembershipDocument: (id, fileName, token) => {
+    dispatch(fetchMembershipDocument({ id, fileName, token }));
+  },
+  resetMembershipDocument: () => {
+    dispatch(resetMembershipDocument());
   }
 });
 

@@ -203,7 +203,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchProviders: args => {
-    console.log(args);
     dispatch(providerSearch(args));
   },
   fetchGeoLocation: args => {

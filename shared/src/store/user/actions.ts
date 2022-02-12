@@ -858,6 +858,21 @@ export const fetchMembershipSummary = (token) => ({
   }
 })
 
+export const fetchMembershipDocument = ({ id, fileName, token }) => {
+  return {
+    type: types.MEMBERSHIP_DOCUMENT_FETCH,
+    payload: {
+      id,
+      fileName,
+      token
+    }
+  }
+}
+
+export const resetMembershipDocument = () => ({
+  type: types.MEMBERSHIP_DOCUMENT_RESET
+})
+
 export const fetchRewardBenefits = (token) => ({
   type: types.REWARD_BENEFITS_FETCH,
   payload: {

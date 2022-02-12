@@ -4,6 +4,7 @@ import defaultTheme from '../../../../style/themes';
 import SectionHeader from '../../shared/desktop/SectionHeader';
 import CoordinationOfBenefits from './CoordinationOfBenefits';
 import Loader from '../../shared/Loader/Loader';
+import styled from 'styled-components';
 
 // Coordination of Benefits Section from the "Account Settings" View
 
@@ -14,6 +15,18 @@ const {
   TwoColumnRow,
   SpaceBetween
 } = defaultTheme.components;
+
+const EditedTwoColumnRow = styled(TwoColumnRow)`
+  flex-direction: column;
+
+  @media ${props => props.theme.device.tabletXL} {
+    flex-direction: row;
+  }
+`;
+
+const EditedContainer = styled(Container)`
+  padding-top: 0;
+`;
 
 class CoordinationOfBenefitsSection extends Component {
   constructor(props) {
@@ -37,7 +50,7 @@ class CoordinationOfBenefitsSection extends Component {
           </SpaceBetween>
         </Container>
         <SectionDivider />
-        <Container>
+        <EditedContainer>
           {!familyMembers && <Loader />}
           {familyMembers &&
             familyMembers
@@ -52,11 +65,11 @@ class CoordinationOfBenefitsSection extends Component {
                 curr[curr.length - 1].push(component);
 
                 if (i % 2 !== 0 || i === length - 1) {
-                  curr[curr.length - 1] = <TwoColumnRow>{curr[curr.length - 1]}</TwoColumnRow>;
+                  curr[curr.length - 1] = <EditedTwoColumnRow>{curr[curr.length - 1]}</EditedTwoColumnRow>;
                 }
                 return curr;
               }, [])}
-        </Container>
+        </EditedContainer>
       </SectionBackground>
     );
   }

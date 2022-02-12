@@ -3,8 +3,13 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
+import { connect } from 'react-redux';
+import selectors from '@evry-member-app/shared/store/selectors';
+import actions from '@evry-member-app/shared/store/actions';
 
 // Main Nav within Desktop NavBar
+const { getSupportPhoneNumber, getToken } = selectors;
+const { fetchEvryContactInfo } = actions;
 
 const mainBreakPoint = `1200px`;
 
@@ -34,7 +39,7 @@ const Navigation = styled.ul`
     overflow-x: hidden;
 
     div:last-child {
-      margin: 35px auto;
+      margin: 40px auto;
     }
   }
 `;
@@ -247,9 +252,20 @@ const PhoneNumber = styled.div`
   }
 `;
 
-const MainNavigation = ({ mobileOpen, setMobileMenuOpen, phoneNumber, handleSignOut }) => {
+const MainNavigation = ({
+  mobileOpen,
+  setMobileMenuOpen,
+  phoneNumber,
+  handleSignOut,
+  fetchEvryContactInfo,
+  token
+}) => {
   const [memberToolsOpen, setMemberToolsOpen] = useState(false);
   const [mobileComponents, setMobileComponents] = useState(false);
+
+  useEffect(() => {
+    fetchEvryContactInfo(token);
+  }, []);
 
   useEffect(() => {
     !mobileOpen
@@ -367,4 +383,15 @@ const MainNavigation = ({ mobileOpen, setMobileMenuOpen, phoneNumber, handleSign
   );
 };
 
-export default MainNavigation;
+const mapStateToProps = state => ({
+  phoneNumber: getSupportPhoneNumber(state),
+  token: getToken(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchEvryContactInfo: token => {
+    dispatch(fetchEvryContactInfo(token));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainNavigation);

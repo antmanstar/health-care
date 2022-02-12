@@ -182,6 +182,11 @@ const appReducer = (state = {}, action) => {
           }
         }
       }
+    case types.AVAILABLE_SPECIALITIES_SUCCESS:
+      return {
+        ...state,
+        availableSpecialities: action.payload
+      }
   }
 }
 

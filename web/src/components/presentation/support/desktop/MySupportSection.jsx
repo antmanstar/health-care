@@ -138,7 +138,7 @@ class MySupportSection extends Component {
                     onClick={this.handlers.handleContactCareGuideClick}
                   />
                   <SupportProfileWithMarginWrapper>
-                    {careGuide.error && careGuide.error.length > 0 ? (
+                    {(careGuide.error && careGuide.error.length > 0) || !careGuide.first_name ? (
                       <SupportProfile />
                     ) : (
                       <SupportProfile
@@ -153,7 +153,8 @@ class MySupportSection extends Component {
                         email={careGuide.email.email_address}
                         imgSrc={
                           careGuide.my_image_file_id && careGuide.my_image_file_id.length > 0
-                            ? `` //URL NEEDED
+                            ? `/api/v1/Member/GetFileContent?
+                            id=${careGuide.my_image_file_id}` //URL NEEDED
                             : null
                         }
                       />

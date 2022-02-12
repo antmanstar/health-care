@@ -103,6 +103,11 @@ export const providerSearchQuery = (query) => ({
   }
 })
 
+export const providerSearchQueryClear = () => ({
+  type: types.PROVIDER_SEARCH_QUERY_CLEAR,
+  payload: {}
+})
+
 export const setNewCurrentLocation = (query) => ({
   type: types.PROVIDER_SET_NEW_LOCATION,
   payload: {
@@ -110,9 +115,11 @@ export const setNewCurrentLocation = (query) => ({
   }
 })
 
-export const providerSearchQueryClear = () => ({
-  type: types.PROVIDER_SEARCH_QUERY_CLEAR,
-  payload: {}
+export const findAvailableSpecialities = (token) => ({
+  type: types.AVAILABLE_SPECIALITIES,
+  payload: {
+    token
+  }
 })
 
 export const saveInboxFilters = (startDate, endDate) => ({

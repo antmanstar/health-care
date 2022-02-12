@@ -1,6 +1,7 @@
 // import { combineReducers } from "redux";
 import { get, uniq } from 'lodash'
 import * as types from './types'
+import { downloadFile } from '../../utils/downloadFile'
 
 const initialState = {
   sendingFeedback: false
@@ -151,11 +152,20 @@ const userReducer = (state = initialState, action) => {
     case types.CLEAR_2FA:
       return { ...state, payload2FA: {}, auth: {} }
     case types.CREATE_CASE:
-      return { ...state }
+      return {
+        ...state,
+        sendingFeedback: true,
+        feedbackSended: false
+      }
     case types.CREATE_CASE_SUCCESS:
-      return { ...state, createCase: action.payload, sendingFeedback: true }
+      return {
+        ...state,
+        createCase: action.payload,
+        sendingFeedback: false,
+        feedbackSended: true
+      }
     case types.CLEAR_SENDING_FEEDBACK:
-      return { ...state, sendingFeedback: false }
+      return { ...state, sendingFeedback: false, feedbackSended: false }
     case types.CREATE_CASE_FAILURE:
       return { ...state, createCase: { error: action.error } }
     case types.CREATE_CASE_SCHEDULE_PHONE_SUCCESS:
@@ -232,6 +242,7 @@ const userReducer = (state = initialState, action) => {
         requestInformationCase: { status: 'OPEN', id: action.payload.id }
       }
     case types.CREATE_CASE_REQUEST_INFORMATION_FAILURE:
+
       return {
         ...state,
         requestInformationCase: {
@@ -255,7 +266,11 @@ const userReducer = (state = initialState, action) => {
           message: action.payload.messages
         }
       }
-
+    case types.REQUEST_INFORMATION_RESET:
+      return {
+        ...state,
+        requestInformationCase: { status: null, id: null }
+      }
     case types.CREATE_CASE_REQUEST_MAILED_CARD_SUCCESS:
       return {
         ...state,
@@ -290,19 +305,13 @@ const userReducer = (state = initialState, action) => {
           messages: action.payload.messages
         }
       }
-
-    case types.REQUEST_INFORMATION_RESET:
-      return {
-        ...state,
-        requestInformationCase: { status: null, id: null }
-      }
     case types.REQUEST_MAILED_CARD_RESET:
       return {
         ...state,
         requestMailedCardCase: { status: null, id: null }
       }
     case types.CREATE_CASE_APPOINTED_REP_FORM_UPLOAD_SUCCESS:
-    return {
+      return {
         ...state,
         appointRepFormUploadCase: {
           status: 'OPEN',
@@ -418,13 +427,22 @@ const userReducer = (state = initialState, action) => {
         }
       }
     case types.FILES_FETCH_SUCCESS:
-      return { ...state, files: { ...state.files, ...action.payload, isLoading: false } }
+      return {
+        ...state,
+        files: { ...state.files, ...action.payload, isLoading: false }
+      }
     case types.FORMS_FETCH:
-      return {...state, forms: {isLoading: true}}
+      return { ...state, forms: { isLoading: true } }
     case types.FORMS_FETCH_SUCCESS:
-      return {...state, forms: {formDataFrame: action.payload, isLoading: false}}
+      return {
+        ...state,
+        forms: { formDataFrame: action.payload, isLoading: false }
+      }
     case types.FORMS_FETCH_FAILURE:
-      return {...state, forms: {...action.payload, formDataFrame: null, isLoading: false}}
+      return {
+        ...state,
+        forms: { ...action.payload, formDataFrame: null, isLoading: false }
+      }
     case types.FIND_CASES:
       return {
         ...state,
@@ -485,6 +503,41 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         membershipSummary: { ...action.payload, isLoading: false }
+      }
+    case types.MEMBERSHIP_DOCUMENT_FETCH:
+      return {
+        ...state,
+        membershipDocument: {
+          id: action.payload.id,
+          fileName: action.payload.fileName,
+          isLoading: true
+        }
+      }
+    case types.MEMBERSHIP_DOCUMENT_FETCH_SUCCESS:
+      return {
+        ...state,
+        membershipDocument: {
+          ...state.membershipDocument,
+          file: action.payload,
+          isLoading: false
+        }
+      };
+    case types.MEMBERSHIP_DOCUMENT_FETCH_FAILURE:
+      return{
+        ...state,
+        membershipDocument: {
+          ...state.membershipDocument,
+          file: null,
+          error: action.payload,
+          isLoading: false
+        }
+      };
+    case types.MEMBERSHIP_DOCUMENT_RESET:
+      return {
+        ...state,
+        membershipDocument: {
+          isLoading: false
+        }
       }
     case types.REWARD_BENEFITS_FETCH_SUCCESS:
       return { ...state, rewardBenefits: action.payload }
@@ -640,27 +693,36 @@ const userReducer = (state = initialState, action) => {
     case types.CLEAR_SESSION_TIMED_OUT:
       return { ...state, sessionTimedOut: false }
     case types.FILE_CONTENT_FETCH:
-      return { ...state, fileContent: { fileName: action.payload.fileName, isLoading: true } }
+      return {
+        ...state,
+        fileContent: { fileName: action.payload.fileName, isLoading: true }
+      }
     case types.FILE_CONTENT_FETCH_SUCCESS:
       return {
         ...state,
-        fileContent: { ...state.fileContent, isLoading: false, file: action.payload }
+        fileContent: {
+          ...state.fileContent,
+          isLoading: false,
+          file: action.payload
+        }
       }
     case types.FILE_CONTENT_FETCH_FAILURE:
-      return { ...state, fileContent: { ...state.fileContent, isLoading: false, messages: action.payload.messages } }
+      return {
+        ...state,
+        fileContent: {
+          ...state.fileContent,
+          isLoading: false,
+          messages: action.payload.messages
+        }
+      }
     case types.DOWNLOAD_UNDERSTAND_BENEFITS:
       return { ...state, understandYourBenefit: { isLoading: true } }
     case types.DOWNLOAD_UNDERSTAND_BENEFITS_SUCCESS:
-      const url = window.URL.createObjectURL(new Blob([action.payload]))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', 'Understand your Benefits.pdf')
-      document.body.appendChild(link)
-      link.click()
+      downloadFile(action.payload, 'Understand your Benefits.pdf')
       return {
         ...state,
         understandYourBenefit: {
-          fileLink: link,
+          file: action.payload,
           isLoading: false
         }
       }

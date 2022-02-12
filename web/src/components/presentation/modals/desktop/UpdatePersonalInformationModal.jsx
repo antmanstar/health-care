@@ -29,6 +29,8 @@ const {
 
 const LargeModalWrapper = styled(ModalWrapper)`
   max-width: 1024px;
+  max-height: calc(100vh - 32px);
+  overflow-y: scroll;
 `;
 
 const EditedFormLabel = styled(FormLabel)`
@@ -203,6 +205,7 @@ const UpdatePersonalInformationModal = props => {
                       name="address"
                       type="text"
                       placeholder='Street Address'
+                      maxLength="100"
                     />
                   </Flex4>
                   <Flex1>
@@ -213,13 +216,14 @@ const UpdatePersonalInformationModal = props => {
                       name="apt"
                       type="text"
                       placeholder='Apt'
+                      maxLength="100"
                     />
                   </Flex1>
                 </FormSpaceBetween>
                 <FormSpaceBetween>
                   <Flex2>
                     <EditedFormLabel>City</EditedFormLabel>
-                    <EditedInput value={infoCity} onChange={e => setInfoCity(e.target.value)} name="city" type="text" placeholder='Zip' />
+                    <EditedInput value={infoCity} onChange={e => setInfoCity(e.target.value)} name="city" type="text" placeholder='Zip' maxLength="100" />
                   </Flex2>
                   <Flex2>
                     <EditedFormLabel>State</EditedFormLabel>
@@ -279,7 +283,7 @@ const UpdatePersonalInformationModal = props => {
                   </Flex2>
                   <Flex1>
                     <EditedFormLabel>Zip</EditedFormLabel>
-                    <EditedInput value={infoZip} onChange={e => setInfoZip(e.target.value)} name="postal" type="text" placeholder='Zip' />
+                    <EditedInput value={infoZip} onChange={e => setInfoZip(e.target.value)} name="postal" type="text" placeholder='Zip' maxLength="100" />
                   </Flex1>
                 </FormSpaceBetween>
               </Column>
@@ -290,6 +294,7 @@ const UpdatePersonalInformationModal = props => {
                   name="cellPhone"
                   type="phone"
                   placeholder='Enter a cell phone number.'
+                  maxLength="100"
                 />
                 <EditedFormLabel>Home Phone Number</EditedFormLabel>
                 <EditedInput
@@ -297,6 +302,7 @@ const UpdatePersonalInformationModal = props => {
                   name="homePhone"
                   type="phone"
                   placeholder='Enter a home phone number.'
+                  maxLength="100"
                 />
                 <EditedFormLabel>Work Phone Number</EditedFormLabel>
                 <EditedInput
@@ -304,6 +310,7 @@ const UpdatePersonalInformationModal = props => {
                   name="workPhone"
                   type="phone"
                   placeholder='Enter a work phone number.'
+                  maxLength="100"
                 />
               </Column>
             </FormSpaceBetween>
