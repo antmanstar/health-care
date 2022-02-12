@@ -82,10 +82,10 @@ const Earned = styled.div`
   min-width: ${props => (props.isBecome ? '120px' : '60px')};
   margin-top: ${props => (props.isBecome ? '16px' : '0')};
   color: ${props =>
-    props.isComing
-      ? props.theme.colors.shades.darkGray
-      : props.isBecome
+    props.isBecome
       ? props.theme.colors.roles.success
+      : props.isBecome
+      ? props.theme.colors.shades.darkGray
       : props.theme.colors.shades.pinkOrange};
 
   @media ${props => props.theme.device_up.tablet} {
@@ -194,10 +194,11 @@ const ActivityReward = React.memo(
     const [expanded, setExpanded] = useState(false);
 
     const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583278'
-    const isComing = date === null || new Date(date) < new Date() ? false : true;
+    const isComing =
+      isBecomeAnEvryMember || date === null || new Date(date) < new Date() ? false : true;
 
-    const handleOnClick = (e, link) => {
-      if (e.target.id == '583282') {
+    const handleOnClick = (e, buttonText, link) => {
+      if (buttonText == 'View Wellness Programs') {
         const element = document.getElementById('meetyourgoals');
         const y = element.getBoundingClientRect().top + window.pageYOffset - 65;
         window.scrollTo({ top: y, behavior: 'smooth' });
@@ -222,19 +223,25 @@ const ActivityReward = React.memo(
             )}
           </div>
           <Link onClick={() => setExpanded(!expanded)}>{expanded ? 'Read Less' : 'Read More'}</Link>
-          <ButtonWrapper>
-            {buttonText && (
-              <Button isComing={isComing} onClick={e => handleOnClick(e, action)} id={id}>
-                {buttonText}
-              </Button>
-            )}
-            {isComing && <ComingText>Coming Soon...</ComingText>}
-          </ButtonWrapper>
+          {!isBecomeAnEvryMember && (
+            <ButtonWrapper>
+              {buttonText && (
+                <Button
+                  isComing={isComing}
+                  onClick={e => handleOnClick(e, buttonText, action)}
+                  id={id}
+                >
+                  {buttonText}
+                </Button>
+              )}
+              {isComing && <ComingText>Coming Soon...</ComingText>}
+            </ButtonWrapper>
+          )}
         </InfoWrapper>
         <Earned isBecome={isBecomeAnEvryMember} isComing={isComing}>
           <EarnedText>{earned ? `Earn $${earned}` : ''}</EarnedText>
           {isBecomeAnEvryMember && (
-            <IconWrapper isComing={isComing}>
+            <IconWrapper isComing={!isBecomeAnEvryMember}>
               <i className="material-icons">check</i>
             </IconWrapper>
           )}

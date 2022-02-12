@@ -97,7 +97,7 @@ const StyledIcon = styled.i`
 
 const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
   const width = getWidth();
-  const [showRewards, setshowRewards] = useState(true);
+  const [showRewards, setShowRewards] = useState(true);
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
 
   useEffect(() => {
@@ -126,12 +126,12 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           <>
             <StyledSectionDivider />
             <Center>
-              <button type="button" onClick={() => setshowRewards(!showRewards)}>
+              <button type="button" onClick={() => setShowRewards(!showRewards)}>
                 {!showRewards ? 'Show Rewards' : 'Hide Rewards'}
               </button>
               {width > 768 && (
-                <ExpandIconWrapper onClick={() => setshowRewards(!showRewards)}>
-                  <div>{!showRewards ? 'Open' : 'Collaspe'}</div>
+                <ExpandIconWrapper onClick={() => setShowRewards(!showRewards)}>
+                  <div>{!showRewards ? 'Open' : 'Collapse'}</div>
                   <StyledIcon className="material-icons">
                     {showRewards ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
                   </StyledIcon>
