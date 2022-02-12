@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import DiscountItem from './DiscountItem';
+import DiscountItemCommon from './DiscountItemCommon';
 import images from '../../../../utils/images';
 import ScrollMenu from 'react-horizontal-scrolling-menu';
 import Pagination from '../../shared/desktop/Pagination';
 import paginate from '../../../../utils/pagination_static';
 import getWidth from '../../../../utils/getWidth';
+import { useEffect } from 'react/cjs/react.development';
 
 const { SectionBackground, Container, SectionDivider } = defaultTheme.components;
 
@@ -74,7 +76,7 @@ const DiscountFlex = styled.div`
   padding-right: 64px;
   gap: 10px;
   margin-top: 45px;
-  justify-content: center;
+  justify-content: ${props => (props.isCommon ? 'flex-start' : 'center')};
 
   > * {
     box-sizing: border-box;
@@ -208,6 +210,8 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
   };
 
   const benefits = getRewardsBenefitByCategory(currentCategory);
+  //   const isCommon = currentCategory?.category_name.toLowerCase() != 'participating retailers';
+  const isCommon = currentCategory?.category_name.toLowerCase() != 'diabetes care';
 
   const paginator =
     benefits &&
@@ -265,10 +269,15 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
               onUpdate={translate => setTranslate(translate)}
             />
           </CategoryMenuWrapper>
-          <DiscountFlex>
+          <DiscountFlex isCommon={isCommon}>
             {paginator.currentData.map(
               benefit =>
-                benefit && <DiscountItem title={benefit.benefit_name} key={benefit.benefit_id} />
+                benefit &&
+                (isCommon ? (
+                  <DiscountItem title={benefit.benefit_name} key={benefit.benefit_id} />
+                ) : (
+                  <DiscountItemCommon title={benefit.benefit_name} key={benefit.benefit_id} />
+                ))
             )}
           </DiscountFlex>
         </StyledContainer>

@@ -1,48 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ellipsis } from 'polished';
-import getWidth from '../../../../utils/getWidth';
 
 // DESKTOP: Discount Item of Reward Section
 
 const Wrapper = styled.div`
   display: flex;
-  width: 104px;
-  height: 84px;
-  flex-direction: column;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  position: relative;
 
-  border: 0.5px solid #97979788;
-  box-sizing: border-box;
-  border-radius: 3px;
-
+  background: white;
   align-items: center;
-  padding: 8px;
+  padding: 0px 0px 0px 32px;
 
-  justify-content: space-between;
-`;
+  width: 200px;
 
-const Logo = styled.img``;
-
-const Description = styled.p`
-  width: 100%;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-  color: background: #252526;
-  ${({ width }) => ellipsis(`${width * 0.8}px`)}
-
-  @media ${props => props.theme.device.tablet} {
-    ${({ width }) => ellipsis(`${0.35 * width}px`)}
+  @media ${props => props.theme.device_up.tablet} {
+    width: 100%;
   }
 `;
 
+const Icon = styled.div`
+  background: ${props => props.theme.colors.roles.success};
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 26px;
+`;
+
+const Description = styled.p`
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 300;
+  font-family: 'Roboto';
+  color: ${props => props.theme.colors.shades.darkGray};
+`;
+
 const DiscountItem = React.memo(({ title }) => {
-  const width = getWidth();
   return (
     <Wrapper>
-      <Logo />
-      <Description width={width}>{title}</Description>
+      <div>
+        <Icon />
+      </div>
+      <Description>{title}</Description>
     </Wrapper>
   );
 });

@@ -66,7 +66,13 @@ const Description = styled.p`
 
 const ArticleCard = React.memo(({ image, title, desc, buttonLabel, link, view }) => (
   <Container className={view}>
-    <Thumbnail src={image} />
+    <Thumbnail
+      src={
+        image
+          ? image
+          : 'https://www.ama-assn.org/sites/ama-assn.org/files/styles/article_stub_800_x_600/public/2019-08/2019-07-17-index-posters.jpg'
+      }
+    />
     <Title>{title}</Title>
     <Description>{desc}</Description>
     <SmallButton
