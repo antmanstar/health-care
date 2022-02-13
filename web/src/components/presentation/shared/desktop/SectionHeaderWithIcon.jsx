@@ -54,6 +54,15 @@ const SubTitle = styled.p`
   }
 `;
 
+const Link = styled.a`
+  margin-top: 4px;
+  color: ${props => props.theme.colors.shades.tealBlue};
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: underline;
+`;
+
 const CollaspeIcon = styled.i`
   color: ${props => props.theme.colors.shades.blue};
   @media ${props => props.theme.device.tablet} {
@@ -63,7 +72,13 @@ const CollaspeIcon = styled.i`
 `;
 
 const SectionHeaderWithIcon = React.memo(
-  ({ title, subTitle, icon, svgIcon, collapsed, onClick, noCollaspe }) => {
+  ({ title, subTitle, icon, svgIcon, collapsed, onClick, noCollaspe, highlightedText }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const sbtitle1 = subTitle.split('<br>')[0];
+    const normalText = highlightedText && sbtitle1.substring(0, sbtitle1.indexOf('<b>'));
+    const sbttitle2 = subTitle.split('<br>')[1];
+
     return (
       <Wrapper>
         <div>
@@ -75,7 +90,18 @@ const SectionHeaderWithIcon = React.memo(
             )}
             <Title>{title}</Title>
           </Inline>
-          <SubTitle>{subTitle}</SubTitle>
+          <SubTitle>
+            {!highlightedText ? sbtitle1 : normalText}
+            {highlightedText && <b>{highlightedText}</b>}
+            {expanded && <br />}
+            {expanded && <br />}
+            {sbttitle2 && expanded ? sbttitle2 : ''}
+          </SubTitle>
+          {sbttitle2 && (
+            <Link onClick={() => setExpanded(!expanded)}>
+              {expanded ? 'Read Less' : 'Read More'}
+            </Link>
+          )}
         </div>
         {!noCollaspe && (
           <CollaspeIcon className="material-icons" onClick={onClick}>
@@ -90,6 +116,7 @@ const SectionHeaderWithIcon = React.memo(
 SectionHeaderWithIcon.propTypes = {
   title: PropTypes.string.isRequired,
   subTitle: PropTypes.string,
+  highlightedText: PropTypes.string,
   icon: PropTypes.string.isRequired,
   svgIcon: PropTypes.bool,
   collapsed: PropTypes.bool.isRequired,

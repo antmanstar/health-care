@@ -36,7 +36,6 @@ const StyledCarousel = styled(Carousel)`
 `;
 
 const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
-  // console.log('wellnessGoals', wellnessGoals);
   const width = getWidth();
   const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -83,9 +82,10 @@ const MeetYourGoalsSection = React.memo(({ wellnessGoals }) => {
           title="Meet Your Goals"
           subTitle={
             width > 768
-              ? 'We have partnered with these amazing programs that are available to you and your family. Almost all of these will be paid for entirely by Evry on your behalf. Our medical team has worked diligently to review the clinical evidence and customer experience of these programs, and we’re extremely confident that each of these can help you live a healthier life. We are always working to add new programs to this list so check back often! If you’ve been interested in a different program that you don’t see below, contact your Care Guide about it so that they can work to make it available for you.'
+              ? 'We have partnered with these amazing programs that are available to you and your family. <b>Almost all of these will be paid for entirely by Evry on your behalf.</b> Our medical team has worked diligently to review the clinical evidence and customer experience of these programs, and we’re extremely confident that each of these can help you live a healthier life. <br>We are always working to add new programs to this list so check back often! If you’ve been interested in a different program that you don’t see below, contact your Care Guide about it so that they can work to make it available for you.'
               : 'Free & Discounted health programs.'
           }
+          highlightedText="Almost all of these will be paid for entirely by Evry on your behalf."
           svgIcon
           onClick={handelHeaderToggleClick}
           collapsed={collapsed}

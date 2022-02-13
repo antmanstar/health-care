@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -25,6 +25,7 @@ const StyledContainer = styled(Container)`
 const LeftWrapper = styled.div`
   display: flex;
   margin-right: 20px;
+  flex-direction: column;
 `;
 
 const Title = styled.h1`
@@ -44,6 +45,15 @@ const Description = styled.p`
     font-size: 12px;
     font-weight: 300;
   }
+`;
+
+const Link = styled.a`
+  margin-top: 4px;
+  color: ${props => props.theme.colors.shades.tealBlue};
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: underline;
 `;
 
 const CarePlanIcon = styled.img`
@@ -80,7 +90,12 @@ const StyledTooltip = styled(ReactTooltip)`
 `;
 
 const CarePlanHeader = React.memo(({ carePlan }) => {
+  const [expanded, setExpanded] = useState(false);
+
   const plan = getCarePlanInfo(carePlan && carePlan.care_plan_id);
+
+  const des1 = plan?.description?.split('<br>')[0];
+  const des2 = plan?.description?.split('<br>')[1];
 
   return (
     <StyledSectionBackground>
@@ -90,13 +105,25 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
         ) : (
           <SpaceBetween>
             <LeftWrapper>
-              <CarePlanIcon src={images[`${plan.image}-orange`]} />
-              <div>
-                <Title>{plan.title}</Title>
-                <Description>{plan.description}</Description>
+              <div style={{ display: 'flex' }}>
+                <CarePlanIcon src={images[`${plan.image}-orange`]} />
+                <div>
+                  <Title>{plan.title}</Title>
+                  <Description>
+                    {des1}
+                    {expanded && <br />}
+                    {expanded && <br />}
+                    {des2 && expanded ? des2 : ''}
+                  </Description>
+                  {des2 && (
+                    <Link onClick={() => setExpanded(!expanded)}>
+                      {expanded ? 'Read Less' : 'Read More'}
+                    </Link>
+                  )}
+                </div>
               </div>
             </LeftWrapper>
-            <QuestionIcon src={images['question-mark']} data-tip data-for="registerTip" />
+            {/* <QuestionIcon src={images['question-mark']} data-tip data-for="registerTip" />
             <StyledTooltip
               id="registerTip"
               place="bottom"
@@ -106,7 +133,7 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
               type="light"
             >
               {plan.description}
-            </StyledTooltip>
+            </StyledTooltip> */}
           </SpaceBetween>
         )}
       </StyledContainer>

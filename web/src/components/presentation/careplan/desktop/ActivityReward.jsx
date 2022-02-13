@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ellipsis } from 'polished';
 import styled from 'styled-components';
+import { useEffect } from 'react/cjs/react.development';
 
 // DESKTOP: Activity ActivityReward
 
@@ -192,10 +193,20 @@ const IconWrapper = styled.div`
 const ActivityReward = React.memo(
   ({ title, description, buttonText, earned, date, id, ctaType, action }) => {
     const [expanded, setExpanded] = useState(false);
+    const [ellipsible, setEllipsible] = useState(false);
 
     const isBecomeAnEvryMember = title === 'Become an Evry Member'; // or id === '583278'
     const isComing =
       isBecomeAnEvryMember || date === null || new Date(date) < new Date() ? false : true;
+
+    useEffect(() => {
+      setEllipsible(isEllipsible());
+    }, []);
+
+    const isEllipsible = () => {
+      var e = document.getElementById(id);
+      return e?.offsetHeight < e?.scrollHeight;
+    };
 
     const handleOnClick = (e, buttonText, link) => {
       if (buttonText == 'View Wellness Programs') {
@@ -217,12 +228,17 @@ const ActivityReward = React.memo(
                 isComing={isComing}
                 className={expanded ? '' : 'collapsed'}
                 isBecome={isBecomeAnEvryMember}
+                id={id}
               >
                 {description}
               </Description>
             )}
           </div>
-          <Link onClick={() => setExpanded(!expanded)}>{expanded ? 'Read Less' : 'Read More'}</Link>
+          {ellipsible && (
+            <Link onClick={() => setExpanded(!expanded)}>
+              {expanded ? 'Read Less' : 'Read More'}
+            </Link>
+          )}
           {!isBecomeAnEvryMember && (
             <ButtonWrapper>
               {buttonText && (
