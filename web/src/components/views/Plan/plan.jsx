@@ -12,7 +12,6 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
 import paginate from '../../../utils/pagination';
-import getWidth from '../../../utils/getWidth';
 
 const {
   fetchCarePlan,
@@ -35,7 +34,6 @@ const {
 const { LayoutWrapper } = defaultTheme.components;
 
 const Plan = React.memo(({}) => {
-  const width = getWidth();
   const CarePlanHeaderWithData = withStoreData(
     CarePlanHeader,
     state => ({
@@ -87,7 +85,6 @@ const Plan = React.memo(({}) => {
       const fetch = args =>
         fetchEducationalResources({
           token: stateProps.token,
-          recordsPerPage: width > 768 ? 6 : 2,
           ...args
         });
       return {

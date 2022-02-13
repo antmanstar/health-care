@@ -160,10 +160,12 @@ const RewardsSection = ({ rewardBenefits, rewardCategories }) => {
           </>
         )}
       </StyledSectionBackground>
-      <RewardsBenefit
-        rewardBenefits={rewardBenefits}
-        rewardCategories={rewardCategories}
-      ></RewardsBenefit>
+      {!collapsed && (
+        <RewardsBenefit
+          rewardBenefits={rewardBenefits}
+          rewardCategories={rewardCategories}
+        ></RewardsBenefit>
+      )}
     </>
   );
 };
