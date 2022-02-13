@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   width: 100%;
   background: #fafafa;
   padding: 16px 32px;
+  min-height: 100px;
 
   width: calc(50% - 10px);
   border: 1px solid
@@ -49,6 +50,10 @@ const Title = styled.h3`
   font-size: 16px;
   color: ${props =>
     props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.blue};
+
+  @media ${props => props.theme.device_up.mobile} {
+    ${ellipsis('65%')};
+  }
 `;
 
 const Description = styled.p`
@@ -65,11 +70,11 @@ const Description = styled.p`
   }
 
   @media ${props => props.theme.device_up.tablet} {
-    display: none;
+    font-size: 8px;
   }
 
   @media ${props => props.theme.device_up.mobile} {
-    width: 100%;
+    width: ${props => (props.isBecome ? '65%' : '80%')};
   }
 `;
 
@@ -99,7 +104,6 @@ const Earned = styled.div`
 
   @media ${props => props.theme.device_up.mobile} {
     margin-left: 10px;
-    position: unset;
   }
 `;
 

@@ -5,11 +5,10 @@ import defaultTheme from '../../../../style/themes';
 import getCarePlanInfo from '../../../../utils/carePlanInfo';
 import Loader from '../../shared/Loader/Loader';
 import images from '../../../../utils/images';
-import ReactTooltip from 'react-tooltip';
 
 // DESKTOP: Care Plan Icon, Title, and Subtitle on Care Plan View
 
-const { SectionBackground, Container, SpaceBetween } = defaultTheme.components;
+const { SectionBackground, Container, SectionDivider } = defaultTheme.components;
 const StyledSectionBackground = styled(SectionBackground)`
   @media ${props => props.theme.device_up.tablet} {
     margin: 0 auto 16px;
@@ -22,10 +21,25 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-const LeftWrapper = styled.div`
+const StyledSectionDivider = styled(SectionDivider)`
+  margin-top: -20px;
+  margin-bottom: 20px;
+`;
+
+const Wrapper = styled.div`
   display: flex;
-  margin-right: 20px;
   flex-direction: column;
+`;
+
+const MoreInfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 115px;
+  padding-right: 32px;
+
+  @media ${props => props.theme.device_up.tablet} {
+    padding-left: 68px;
+  }
 `;
 
 const Title = styled.h1`
@@ -33,6 +47,11 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 24px;
   color: ${props => props.theme.colors.shades.blue};
+
+  &.sm {
+    font-size: 12px;
+    line-height: 0px;
+  }
 `;
 
 const Description = styled.p`
@@ -43,12 +62,15 @@ const Description = styled.p`
 
   @media ${props => props.theme.device_up.tablet} {
     font-size: 12px;
-    font-weight: 300;
+  }
+
+  &.sm {
+    font-size: 12px;
+    margin-bottom: 20px;
   }
 `;
 
 const Link = styled.a`
-  margin-top: 4px;
   color: ${props => props.theme.colors.shades.tealBlue};
   cursor: pointer;
   font-size: 12px;
@@ -62,30 +84,6 @@ const CarePlanIcon = styled.img`
   margin-right: 32px;
   @media ${props => props.theme.device_up.tablet} {
     margin-right: 8px;
-  }
-`;
-
-const QuestionIcon = styled.img`
-  width: 18px;
-  margin-right: 5px;
-`;
-
-const StyledTooltip = styled(ReactTooltip)`
-  max-width: 40vh;
-  opacity: 1 !important;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  white-space: normal;
-  right: 20px;
-
-  @media ${props => props.theme.device.mobile} {
-  }
-
-  @media ${props => props.theme.device.tablet} {
-    height: 30px;
-    right: unset;
   }
 `;
 
@@ -103,40 +101,53 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
         {!plan ? (
           <Loader />
         ) : (
-          <SpaceBetween>
-            <LeftWrapper>
-              <div style={{ display: 'flex' }}>
-                <CarePlanIcon src={images[`${plan.image}-orange`]} />
-                <div>
-                  <Title>{plan.title}</Title>
-                  <Description>
-                    {des1}
-                    {expanded && <br />}
-                    {expanded && <br />}
-                    {des2 && expanded ? des2 : ''}
-                  </Description>
-                  {des2 && (
-                    <Link onClick={() => setExpanded(!expanded)}>
-                      {expanded ? 'Read Less' : 'Read More'}
-                    </Link>
-                  )}
-                </div>
+          <Wrapper>
+            <div style={{ display: 'flex' }}>
+              <CarePlanIcon src={images[`${plan.image}-orange`]} />
+              <div>
+                <Title>{plan.title}</Title>
+                <Description>{plan.note}</Description>
               </div>
-            </LeftWrapper>
-            {/* <QuestionIcon src={images['question-mark']} data-tip data-for="registerTip" />
-            <StyledTooltip
-              id="registerTip"
-              place="bottom"
-              textColor="#000000"
-              backgroundColor="#e1f9fa"
-              offset={{ top: -5, left: 0 }}
-              type="light"
-            >
-              {plan.description}
-            </StyledTooltip> */}
-          </SpaceBetween>
+            </div>
+          </Wrapper>
         )}
       </StyledContainer>
+      {plan && (
+        <>
+          {expanded && <StyledSectionDivider />}
+          {expanded && (
+            <MoreInfoWrapper>
+              <Title className="sm">What's a care plan?</Title>
+              <Description className="sm">
+                It’s our goal at Evry to help you live a healthier and happier life. This care plan
+                is a collection of educational content, wellness programs, rewards, and personalized
+                goals meant to help accomplish that mission. Participation is always optional but
+                warmly encouraged. This is simply one way we try to go above and beyond your normal
+                insurance coverage. You may change care plans at any time by contacting member
+                services.
+              </Description>
+              <Title className="sm">Why this care plan?</Title>
+              <Description className="sm" style={{ marginBottom: '10px' }}>
+                <span style={{ textDecoration: 'underline' }}>{plan.title}</span>
+                <br />
+                {des1}
+                {expanded && <br />}
+                {expanded && <br />}
+                {des2 && expanded ? des2 : ''}
+              </Description>
+            </MoreInfoWrapper>
+          )}
+          <MoreInfoWrapper>
+            <Link
+              onClick={() => setExpanded(!expanded)}
+              style={{ marginTop: expanded ? '4px' : '-26px' }}
+            >
+              {expanded ? 'Read Less' : 'Read More'}
+            </Link>
+          </MoreInfoWrapper>
+          {expanded && <br />}
+        </>
+      )}
     </StyledSectionBackground>
   );
 });
