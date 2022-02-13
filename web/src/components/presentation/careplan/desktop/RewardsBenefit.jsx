@@ -43,6 +43,10 @@ const Title = styled.h1`
   font-weight: 700;
   font-size: 18px;
   color: ${props => props.theme.colors.shades.blue};
+
+  @media ${props => props.theme.device_up.mobile} {
+    font-size: 16px;
+  }
 `;
 
 const Description = styled.p`
@@ -55,6 +59,10 @@ const Description = styled.p`
     margin-left: 4px;
     font-weight: 700;
     color: ${props => props.theme.colors.shades.blue};
+  }
+
+  @media ${props => props.theme.device_up.mobile} {
+    font-size: 12px;
   }
 `;
 

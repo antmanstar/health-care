@@ -12,7 +12,7 @@ import RewardsBenefit from './RewardsBenefit';
 const { SectionBackground, Container, SectionDivider } = defaultTheme.components;
 
 const StyledSectionBackground = styled(SectionBackground)`
-  padding-bottom: 24px;
+  padding-bottom: 6px;
   @media ${props => props.theme.device_up.tablet} {
     margin: 0 auto 16px;
   }
