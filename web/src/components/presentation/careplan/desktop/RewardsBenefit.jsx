@@ -9,7 +9,6 @@ import ScrollMenu from 'react-horizontal-scrolling-menu';
 import Pagination from '../../shared/desktop/Pagination';
 import paginate from '../../../../utils/pagination_static';
 import getWidth from '../../../../utils/getWidth';
-import { useEffect } from 'react/cjs/react.development';
 
 const { SectionBackground, Container, SectionDivider } = defaultTheme.components;
 
@@ -204,6 +203,8 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
   const scrollRef = useRef(null);
   const width = getWidth();
 
+  const visibility = scrollRef?.current?.checkFirstLastItemVisibility(translate);
+
   const menuItems = Object.values(rewardCategories)?.map((category, index) => (
     <Category className={curCategoryIndex === index ? 'active' : ''} key={category.category_id}>
       {category.category_name}
@@ -235,7 +236,6 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
   };
 
   const ArrowScrollIcon = ({ type }) => {
-    const visibility = scrollRef?.current?.checkFirstLastItemVisibility(translate);
     return (
       <ArrowIcon
         className="material-icons"
