@@ -185,10 +185,8 @@ class SupportRequest extends Component {
         statusText = 'On Hold';
         break;
       case 'submitted':
-        statusText = 'Submitted';
-        break;
       case 'created':
-        statusText = 'Created';
+        statusText = 'Submitted';
         break;
       case 'escalated':
         statusText = 'Escalated';

@@ -65,7 +65,6 @@ const Ellipsis = styled.span`
 
 const Pagination = React.memo(({ paginator }) => {
   const [pageList, setPageList] = useState([]);
-
   useEffect(() => {
     let pageListArray = [];
     Array(paginator.totalPages)
@@ -209,7 +208,13 @@ const Pagination = React.memo(({ paginator }) => {
           }
         }
       });
-
+      if(pageListArray.length === 0){
+        pageListArray.push({elementType: 'NUMBER', element: (<PageLink
+          active='true'
+        >
+          1
+        </PageLink>)})
+      }
     setPageList(pageListArray);
   }, [paginator]);
 

@@ -288,7 +288,7 @@ function SignIn({
                 buttonType="submit"
                 value="Submit"
                 text="Submit"
-                disabled={isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)}
+                disabled={isSigningIn || (isAuthenticated && hasBasicInfo)}
               />
             </ButtonWrapper>
           </form>
@@ -341,7 +341,7 @@ function SignIn({
                 buttonType="submit"
                 value="Sign In"
                 text="Sign In"
-                disabled={isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)}
+                disabled={isSigningIn || (isAuthenticated && hasBasicInfo)}
               />
             </ButtonWrapper>
           </form>
@@ -365,9 +365,9 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {(isSigningIn || (isAuthenticated && hasBasicInfo && isOnboardingComplete)) && (
+      {(isSigningIn || (isAuthenticated && hasBasicInfo)) && 
         <LoadingSpinnerScreen />
-      )}
+      }
     </Wrapper>
   );
 }

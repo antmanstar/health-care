@@ -34,22 +34,23 @@ const ScrollerWithInfiniteScroll = ({ isLoading, list, whenItemVisible, fetch, .
   }, [isLoading, list, whenItemVisible, fetch]);
 
   useEffect(() => {
-    if (scrollerRef && scrollerRef.current) {
+    if (scrollerRef.current) {
       scrollerRef.current.addEventListener('scroll', throttle(onScroll, 16), false);
+
+      return () => {
+        scrollerRef.current?.removeEventListener('scroll', onScroll, false);
+      };
     }
-    return () => {
-      scrollerRef.current.addEventListener('scroll', onScroll);
-    };
   }, []);
 
   useEffect(() => {
     let numberOfItemsInView = (window.innerHeight - 200) / 200;
     if (every(list, item => Boolean(item.ref)) && list.length > 0) {
       for (let i = 0; i < numberOfItemsInView; i++) {
-        !list[i]?.is_read && whenItemVisible(list[i]);
+        if (!list[i]?.is_read && list[i]?.ref.current) whenItemVisible(list[i]);
       }
     }
-  }, [isLoading]);
+  }, [list.length > 0]);
 
   const onScroll = () => {
     const { isLoading, list, whenItemVisible, fetch } = myStateRef.current;

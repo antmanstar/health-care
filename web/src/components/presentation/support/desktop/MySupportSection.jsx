@@ -131,7 +131,7 @@ class MySupportSection extends Component {
                   <SmallTitleAndButton
                     text="Your Care Guide"
                     buttonText={
-                      careGuide.error && careGuide.error.length > 0
+                      (careGuide.error && careGuide.error.length > 0) || !careGuide.first_name
                         ? ''
                         : `Contact ${careGuide.first_name}`
                     }

@@ -29,6 +29,8 @@ import withStoreData from '../../base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import constants from '@evry-member-app/shared/constants';
 import selectors from '@evry-member-app/shared/store/selectors';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const {
   fetchAccountInfo,
@@ -145,6 +147,12 @@ const SubmitClaimFeedbackSuccessWithData = withStoreData(
 );
 
 const ModalContainer = props => {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => getToken(state));
+  const authenticated = useSelector((state) => isAuthenticated(state));
+  useEffect(() => {
+    dispatch(fetchAccountInfo(token))}, [token, authenticated]);
+    
   switch (props.currentModal) {
     case 'APPOINT_REPRESENTATIVE':
       return <AppointARepresentativeModal {...props} />;

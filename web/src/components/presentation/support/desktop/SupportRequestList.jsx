@@ -82,7 +82,7 @@ class SupportRequestList extends Component {
           })}
         </Grouping>
         <SectionDivider />
-        {!showCompleted ? (
+        {/* {!showCompleted ? (
           <Center>
             <p>Looking for a completed request? </p>
             <Button type="button" onClick={() => this.setState({ showCompleted: true })}>
@@ -98,7 +98,7 @@ class SupportRequestList extends Component {
             </Button>
             {`.`}
           </Center>
-        )}
+        )} */}
       </>
     );
   }

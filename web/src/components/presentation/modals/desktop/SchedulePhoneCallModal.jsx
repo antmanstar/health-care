@@ -195,7 +195,7 @@ class SchedulePhoneCallModal extends Component {
       errors.push('*There must be a reason.');
     }
     if (phoneNumber.value.trim().length === 0) {
-      errors.push('*Phone number can not be blank');
+      errors.push('*Phone number can not be blank.');
     }
     if (date.value.trim().length === 0) {
       errors.push('*Date can not be blank.');

@@ -253,7 +253,7 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
           <Header>
             <Icon src={images['money-in-circle']} />
             <div>
-              <Title>Rewards Benefit</Title>
+              <Title>Reward Benefit</Title>
               <Description>
                 Use your EvryHealth Card at participating retailers to get discounts.
                 <span>Everyday</span>

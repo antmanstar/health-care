@@ -39,6 +39,18 @@ const FormError = styled.div`
   color: ${props => props.theme.colors.shades.pinkOrange};
 `;
 
+const StyledOption = styled.option`
+  width: 100%;
+  overflow-x: auto;
+  `;
+
+const StyledModalWrapper = styled(ModalWrapper)`
+  @media ${defaultTheme.device.tablet}{
+    max-width: 1000px;
+    width: 850px;
+  }
+`;
+
 class RequestInformationModal extends Component {
   constructor(props) {
     super(props);
@@ -128,7 +140,7 @@ class RequestInformationModal extends Component {
     return (
       <>
         <Scrim onClick={hideModal} />
-        <ModalWrapper className="extra-narrow">
+        <StyledModalWrapper>
           <ModalHeader>
             <ModalTitle>Request Information.</ModalTitle>
           </ModalHeader>
@@ -183,7 +195,7 @@ class RequestInformationModal extends Component {
             </ModalButtonsRight>
           </form>
           {isSubmitting && <LoadingSpinnerScreen />}
-        </ModalWrapper>
+        </StyledModalWrapper>
       </>
     );
   }

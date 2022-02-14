@@ -95,6 +95,7 @@ const images = {
   'heart-health-active': heartHealthActiveImg,
   'heart-health-blue': heartHealthBlueImg,
   'heart-health': heartHealthImg,
+  'heart-health-orange': heartHealthOrangeImg,
   'meet-goals': meetGoalsImg,
   'member-card': memberCardImg,
   mock_map: mockMapImg,

@@ -91,12 +91,28 @@ const PaginationWrapper = styled.div`
     }
   }
 `;
+
 const StyledSpaceBetween = styled(SpaceBetween)`
   @media ${props => props.theme.device_up.tablet} {
     flex-direction: column-reverse;
     gap: 20px;
   }
 `;
+
+const FilterLabel = styled.div`
+  display: flex;
+  margin-top: -10px;
+  margin-left: 35px;
+  padding: 0 10px 10px 0;
+  font-weight: bold;
+  font-size: 18px;
+  color: ${props => props.theme.colors.shades.pinkOrange};
+
+  @media (max-width: 500px) {
+    margin-left: 10px;
+  }
+`;
+
 class MyDocumentsSection extends Component {
   constructor(props) {
     super(props);
@@ -245,7 +261,24 @@ class MyDocumentsSection extends Component {
 
   render() {
     const { toggled } = this.state;
-    const { paginator, formsPaginator } = this.props;
+    const { paginator, formsPaginator, filesDataFrame } = this.props;
+    console.log('MyDocumentsSection');
+    console.log(this.props.filesDataFrame)
+
+    const FilterFiles = React.memo(() => {
+      let dateFrom = filesDataFrame?.request.dateFrom;
+      let dateTo = filesDataFrame?.request.dateTo;
+      let filterFile;
+  
+      if (dateFrom && dateTo) {
+        filterFile = (
+          <FilterLabel>
+            Filtered from: {dateFrom} - {dateTo}
+          </FilterLabel>
+        );
+        return filterFile;
+      } else return null;
+    }, [filesDataFrame?.request.dateFrom, filesDataFrame?.request.dateTo]);
 
     return (
       <>
@@ -281,6 +314,7 @@ class MyDocumentsSection extends Component {
             </StyledSpaceBetween>
           </Container>
           <SectionDivider />
+          <FilterFiles />
           <Container>{toggled ? <FormList /> : <DocumentList />}</Container>
         </SectionBackground>
         <LayoutWrapper>

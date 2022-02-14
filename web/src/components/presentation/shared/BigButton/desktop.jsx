@@ -54,8 +54,6 @@ const SvgIcon = styled.img`
 
 const BigButton = React.memo(({ text, icon, onClick, svgIcon, isComing }) => {
   //const isComing = text === 'Update Health Survey';
-  console.log('BigButton');
-  console.log(isComing);
   return (
     <Button onClick={onClick} className="big-button" isComing={isComing}>
       <StyledDiv>
