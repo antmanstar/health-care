@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
@@ -9,10 +10,29 @@ import truncate from '../../../../utils/string';
 import getWidth from '../../../../utils/getWidth';
 import Pagination from '../../shared/desktop/Pagination';
 import { isEmpty } from 'lodash';
+import actions from '@evry-member-app/shared/store/actions';
+import selectors from '@evry-member-app/shared/store/selectors';
+import paginate from '../../../../utils/pagination';
 
 // Education & Resources Section found on the "Care Plan" View.
 // TODO: Pass props through to SectionHeaders and ArticleCards
 // WAITING: Jong still needs to provide endpoints for this
+const {
+  fetchCarePlan,
+  fetchWellnessGoals,
+  fetchEducationalResources,
+  fetchRewardBenefits,
+  fetchRewardCategories
+} = actions;
+const {
+  getCarePlan,
+  getToken,
+  getWellnessGoals,
+  getEducationalResources,
+  getRewardBenefits,
+  getRewardCategories,
+  getEducationalResourcesDataFrame
+} = selectors;
 
 const { SectionBackground, Container, SectionDivider, SpaceBetween } = defaultTheme.components;
 
@@ -107,65 +127,88 @@ const Center = styled.div`
   }
 `;
 
-const EducationAndResourcesSection = React.memo(
-  ({ paginator, requests, token, requestsDataFrame }) => {
-    const width = getWidth();
-    const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
-    const [showFullResources, setShowFullResources] = useState(false);
+const EducationAndResourcesSection = React.memo(({}) => {
+  const width = getWidth();
+  const [collapsed, setCollapsed] = useState(width > 768 ? false : true);
+  const [showFullResources, setShowFullResources] = useState(false);
+  const [recordsPerPage, setRecordsPerPage] = useState(width > 786 ? 6 : 2);
 
-    useEffect(() => {
-      width > 768 && setCollapsed(false);
-      setShowFullResources(width > 768);
-    }, [width]);
+  const dispatch = useDispatch();
 
-    const handelHeaderToggleClick = () => {
-      setCollapsed(!collapsed);
-    };
+  // selectors
+  const requests = useSelector(getEducationalResources);
+  const requestsDataFrame = useSelector(getEducationalResourcesDataFrame);
+  const token = useSelector(getToken);
 
-    const handleResourcesToggleClick = () => {
-      setShowFullResources(!showFullResources);
-    };
+  // dispatch
+  const fetchData = args => dispatch(fetchEducationalResources(args));
+  const fetch = args =>
+    fetchData({
+      token: token,
+      recordsPerPage,
+      ...args
+    });
 
-    return (
-      <>
-        <StyledSectionBackground>
-          <StyledContainer>
-            <SectionHeaderWithIcon
-              icon="library_books"
-              title="Education & Resources"
-              subTitle="Explore our list of articles and learning materials specifically curated for you."
-              onClick={handelHeaderToggleClick}
-              collapsed={collapsed}
-            />
-          </StyledContainer>
-          <SectionDivider />
-          {!collapsed && (
-            <>
-              <StyledContainer>
-                {isEmpty(requests) && requestsDataFrame ? (
-                  <Loader />
-                ) : (
-                  <ArticleList>
-                    {requests.map((resource, index) => {
-                      let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
-                      if (return_cond)
-                        return (
-                          <ArticleCard
-                            key={resource.educational_resource_id}
-                            image={resource.title_image_file_id}
-                            title={resource.educational_resource_title}
-                            desc={truncate(130)(resource.educational_resource_summary)}
-                            link={resource.educational_resource_content}
-                            buttonLabel="Read More"
-                            view="plans"
-                          />
-                        );
-                    })}
-                  </ArticleList>
-                )}
-              </StyledContainer>
-              <SectionDivider />
-              {/* <StyledContainer>
+  const paginator = paginate(requestsDataFrame, fetch);
+
+  useEffect(() => {
+    fetchData({ token, recordsPerPage });
+  }, [recordsPerPage]);
+
+  useEffect(() => {
+    width > 768 && setCollapsed(false);
+    setShowFullResources(width > 768);
+    setRecordsPerPage(width > 786 ? 6 : 2);
+  }, [width]);
+
+  const handelHeaderToggleClick = () => {
+    setCollapsed(!collapsed);
+  };
+
+  const handleResourcesToggleClick = () => {
+    setShowFullResources(!showFullResources);
+  };
+
+  return (
+    <>
+      <StyledSectionBackground>
+        <StyledContainer>
+          <SectionHeaderWithIcon
+            icon="library_books"
+            title="Education & Resources"
+            subTitle="Explore our list of articles and learning materials specifically curated for you."
+            onClick={handelHeaderToggleClick}
+            collapsed={collapsed}
+          />
+        </StyledContainer>
+        <SectionDivider />
+        {!collapsed && (
+          <>
+            <StyledContainer>
+              {isEmpty(requests) && requestsDataFrame ? (
+                <Loader />
+              ) : (
+                <ArticleList>
+                  {requests.map((resource, index) => {
+                    let return_cond = (!showFullResources && index < 2) || showFullResources; // if the flag showFullResoures = true, show all resources, else return only 2 resources
+                    if (return_cond)
+                      return (
+                        <ArticleCard
+                          key={resource.educational_resource_id}
+                          image={resource.title_image_file_id}
+                          title={resource.educational_resource_title}
+                          desc={truncate(130)(resource.educational_resource_summary)}
+                          link={resource.educational_resource_content}
+                          buttonLabel="Read More"
+                          view="plans"
+                        />
+                      );
+                  })}
+                </ArticleList>
+              )}
+            </StyledContainer>
+            <SectionDivider />
+            {/* <StyledContainer>
                 {width <= 768 && (
                   <>
                     <Center>
@@ -184,24 +227,21 @@ const EducationAndResourcesSection = React.memo(
               </span>
             </SubTitle>
               </StyledContainer> */}
-            </>
-          )}
-        </StyledSectionBackground>
-        {!collapsed && (
-          <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
+          </>
         )}
-      </>
-    );
-  }
-);
+      </StyledSectionBackground>
+      {!collapsed && (
+        <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
+      )}
+    </>
+  );
+});
 
 EducationAndResourcesSection.propTypes = {
-  paginator: PropTypes.shape({}),
   requests: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 EducationAndResourcesSection.defaultProps = {
-  paginator: {},
   requests: []
 };
 

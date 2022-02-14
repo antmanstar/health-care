@@ -11,7 +11,6 @@ import withStoreData from '../../containers/base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
-import paginate from '../../../utils/pagination';
 
 const {
   fetchCarePlan,
@@ -52,6 +51,7 @@ const Plan = React.memo(({}) => {
       ...ownProps
     })
   );
+
   const MeetYourGoalsSectionWithData = withStoreData(
     MeetYourGoalsSection,
     state => ({
@@ -69,33 +69,6 @@ const Plan = React.memo(({}) => {
       wellnessGoals: stateProps.wellnessGoals,
       ...ownProps
     })
-  );
-
-  const EducationAndResourcesSectionWithData = withStoreData(
-    EducationAndResourcesSection,
-    state => ({
-      requests: getEducationalResources(state),
-      token: getToken(state),
-      requestsDataFrame: getEducationalResourcesDataFrame(state)
-    }),
-    dispatch => ({
-      fetchEducationalResources: args => dispatch(fetchEducationalResources(args))
-    }),
-    (stateProps, { fetchEducationalResources }, ownProps) => {
-      const fetch = args =>
-        fetchEducationalResources({
-          token: stateProps.token,
-          ...args
-        });
-      return {
-        fetch,
-        paginator: paginate(stateProps.requestsDataFrame, fetch),
-        shouldFetch: isEmpty(stateProps.requestsDataFrame),
-        requestsDataFrame: stateProps.requestsDataFrame,
-        requests: stateProps.requests,
-        ...ownProps
-      };
-    }
   );
 
   const RewardsSectionWithData = withStoreData(
@@ -131,7 +104,7 @@ const Plan = React.memo(({}) => {
         <CarePlanHeaderWithData />
         <RewardsSectionWithData />
         <MeetYourGoalsSectionWithData />
-        <EducationAndResourcesSectionWithData />
+        <EducationAndResourcesSection />
       </LayoutWrapper>
     </>
   );

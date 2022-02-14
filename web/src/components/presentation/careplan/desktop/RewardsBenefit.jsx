@@ -197,7 +197,7 @@ const PaginationWrapper = styled.div`
   }
 `;
 
-const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
+const RewardsBenefit = React.memo(({ rewardBenefits, rewardCategories }) => {
   const [curCategoryIndex, setCurCategoryIndex] = useState(0);
   const [translate, setTranslate] = useState(0);
   const scrollRef = useRef(null);
@@ -303,7 +303,7 @@ const RewardsBenefit = ({ rewardBenefits, rewardCategories }) => {
       <PaginationWrapper>{paginator && <Pagination paginator={paginator} />}</PaginationWrapper>
     </>
   );
-};
+});
 
 RewardsBenefit.propTypes = {
   rewardBenefits: PropTypes.shape({}).isRequired,
