@@ -267,9 +267,15 @@ const ProviderSearchBar = React.memo(
       providerSearchQuery({ query: args });
     };
 
+    const getNavError = error => {
+      setNewCurrentLocation({ error: error.message, filter: true });
+    };
+
     const getCurrentLocation = () => {
       setNewCurrentLocation({ isLoading: true, filter: true });
-      window.navigator.geolocation.getCurrentPosition(setCurrentLocation, console.log);
+      window.navigator.geolocation.getCurrentPosition(setCurrentLocation, error =>
+        getNavError(error)
+      );
     };
 
     const setCurrentLocation = position => {
@@ -313,6 +319,7 @@ const ProviderSearchBar = React.memo(
               type="text"
               name="search"
               placeholder="Search Provider, Practice Name, or Specialty."
+              maxlength="100"
               value={query}
               onChange={e => {
                 setQuery(e.target.value);

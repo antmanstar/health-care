@@ -50,14 +50,15 @@ class TimePicker extends Component {
 
   setChosenTime(value, callback) {
     if (callback) {
-      this.setState({ chosenTime: value }, callback(Moment(value).format('HH:mm')));
+      //this.setState({ chosenTime: value }, callback(Moment(value).format('HH:mm')));
+      this.setState({ chosenTime: value }, callback(value));
     } else {
       this.setState({ chosenTime: value });
     }
   }
 
   handleChange(value, callback) {
-    this.setChosenTime(value, callback);
+    this.setChosenTime(value.target.value, callback);
     this.closePicker();
   }
 

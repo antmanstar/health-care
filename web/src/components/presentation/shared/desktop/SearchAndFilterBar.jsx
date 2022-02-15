@@ -153,6 +153,7 @@ const SearchAndFilterBar = ({
             type="text"
             name="search"
             placeholder={placeholder}
+            maxlength="100"
             value={query}
             onChange={e => {
               const { value } = e.target;

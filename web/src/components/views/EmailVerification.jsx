@@ -4,7 +4,7 @@ import defaultTheme from '../../style/themes';
 import { Helmet } from 'react-helmet-async';
 import CheckCircle from '@evry-member-app/assets/images/vector/success-check.svg';
 import Danger from '@evry-member-app/assets/images/vector/danger.svg';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import queryString from 'query-string';
 import { Sparse } from '../layouts';
 import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
@@ -221,6 +221,12 @@ const EmailVerification = props => {
   }
 
   function renderProperItem() {
+    const queryParams = queryString.parse(location.search);
+
+    if (queryParams.email === undefined && queryParams.token === undefined) {
+      return <Redirect to={{ pathname: '/sign-in' }} />;
+    }
+
     switch (props.emailVerificationChallengeStatus) {
       case null:
       case '':

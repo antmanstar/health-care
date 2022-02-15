@@ -48,19 +48,6 @@ const SqaushedSpaceBetween = styled(SpaceBetween)`
   }
 `;
 
-const StyledModalHalfColumn = styled(ModalHalfColumn)`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-
-  @media ${props => props.theme.device.mobile} {
-    width: 75%;
-  }
-  @media ${props => props.theme.device.tablet} {
-    width: calc(50%-4px);
-  }
-`;
-
 const PhoneNumber = styled.div`
   display: flex;
   align-items: center;
@@ -73,6 +60,8 @@ const PhoneNumber = styled.div`
 `;
 
 const FilePicker = styled.div`
+  /* flex-grow: 1;
+  max-width: 50%; */
   input {
     position: absolute !important;
     height: 1px;
@@ -113,7 +102,8 @@ const FilePicker = styled.div`
     border-color: ${props => props.theme.colors.shades.darkGray};
   }
 `;
-const FileFormats = styled.span`
+const FileFormats = styled.div`
+
   & span {
     color: ${props => props.theme.colors.shades.pinkOrange};
   }
@@ -121,6 +111,33 @@ const FileFormats = styled.span`
 const ValidationMessages = styled.div`
   color: ${props => props.theme.colors.shades.pinkOrange};
 `;
+
+const InputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: right;
+  align-items: stretch;
+  gap: 10px;
+
+  @media ${defaultTheme.device.tablet} {
+    flex-direction: row;
+  }
+
+  & div{
+    width: 100%;
+    @media ${defaultTheme.device.tablet} {
+      width: calc(50% - 6px);
+    }
+  }
+`;
+
+const StyledSelect = styled(Select)`
+  /* flex-grow: 1;
+  width:50%; */
+`;
+
 class UploadDocumentModal extends Component {
   constructor(props) {
     super(props);
@@ -241,7 +258,7 @@ class UploadDocumentModal extends Component {
             <p>
               Choose from the list of document types and upload your file. We’ll take it from there!
             </p>
-            <SqaushedSpaceBetween>
+            {/* <SqaushedSpaceBetween>
               <ModalHalfColumn>
                 <Select
                   name="documentType"
@@ -251,7 +268,6 @@ class UploadDocumentModal extends Component {
                   onChange={this.handlers.handleChange}
                 >
                   <option>Appointed Representative Form</option>
-                  {/* <option>Complaint Form</option> */}
                 </Select>
               </ModalHalfColumn>
               <ModalHalfColumn>
@@ -273,7 +289,35 @@ class UploadDocumentModal extends Component {
                   docx.
                 </FileFormats>
               </ModalHalfColumn>
-            </SqaushedSpaceBetween>
+            </SqaushedSpaceBetween> */}
+            <InputContainer>
+              <StyledSelect
+                name="documentType"
+                placeholder="Select your document type"
+                icon="arrow"
+                value={documentType}
+                onChange={this.handlers.handleChange}
+              >
+                <option>Appointed Representative Form</option>
+              </StyledSelect>
+              <FilePicker>
+                <input
+                  name="file"
+                  id="file"
+                  type="file"
+                  onChange={this.handlers.handleChange}
+                  accept="image/gif, image/jpeg, image/png, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                />
+                <label htmlFor="file">
+                  <i className="material-icons">attachment</i>
+                  {truncate(30)(file.split('\\').pop())}
+                </label>
+              </FilePicker>
+              <FileFormats>
+                  <span>*</span>Acceptable file formats include: jpg, jpeg, gif, png, pdf, doc,
+                  docx.
+                </FileFormats>
+            </InputContainer>
             {validationMessages &&
               validationMessages.length > 0 &&
               validationMessages.map(message => <ValidationMessages>{message}</ValidationMessages>)}

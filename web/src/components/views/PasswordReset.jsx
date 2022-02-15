@@ -14,6 +14,7 @@ import selector from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
 import MessageAlert from "./MessageAlert";
 import history from '../../utils/history';
+import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
 
 const { getAuthError } = selector;
 const { initiatePasswordReset, savePasswordReset, clearAuthError } = actions;
@@ -299,6 +300,7 @@ class DesktopPasswordReset extends Component {
           </ButtonWrapper>
         </form>
         {this.renderAuthError()}
+        {initiatePasswordResetSubmission && !authError && <LoadingSpinnerScreen />}
         {initiatePasswordResetSubmission && authError && authError.length === 0 && (
           <MessageAlert>Your password reset has been submitted. Please check your email inbox.</MessageAlert>
         )}

@@ -5,8 +5,12 @@ import ContactPreference from '../../shared/desktop/ContactPreference';
 import SmallButton from '../../shared/desktop/SmallButton';
 import { connect } from 'react-redux';
 import selectors from '@evry-member-app/shared/store/selectors';
-import actions from '@evry-member-app/shared/store/actions';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import ErrorMessage from '../../shared/desktop/ErrorMessage';
+import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
+
+import actions from '@evry-member-app/shared/store/actions';
+const { setModalData, showModal } = actions;
 
 // MODAL - Update Your Contact Preferences
 // TODO: Need intial state from contact pref data .. then need to send new state back
@@ -31,11 +35,9 @@ class UpdateContactPreferences extends Component {
       paperless: prefs.paperless,
       email: prefs.receive_emails,
       text: prefs.receive_text_messages,
-      call: prefs.receive_phone_calls
-    };
-
-    this.handlers = {
-      generateClickHandler: this.generateClickHandler.bind(this)
+      call: prefs.receive_phone_calls,
+      showLoader: false,
+      errors: []
     };
   }
 
@@ -45,16 +47,33 @@ class UpdateContactPreferences extends Component {
     }));
   };
 
-  submitChanges = () => {
-    this.props.handleSubmit({
+  handleErrors = response => {
+    this.setState({ showLoader: false, errors: response?.response?.data?.messages });
+  }
+
+  createSuccessModal = () => {
+    this.setState({ showLoader: false });
+
+    this.props.setModalData({
+      type: 'SUCCESS',
+      title: 'Success!',
+      message: "Your contact preferences have been changed!"
+    });
+    this.props.showModal('SUBMISSION_RESPONSE');
+  }
+
+  submitChanges = e => {
+    e.preventDefault();
+    
+    this.setState({ showLoader: true });
+
+    apis.updateContactPreferences({
       token: this.props.token,
       paperless: this.state.paperless,
       receive_emails: this.state.email,
       receive_text_messages: this.state.text,
       receive_phone_calls: this.state.call
-    });
-
-    this.props.hideModal();
+    }).then(this.createSuccessModal).catch(this.handleErrors);
   }
 
   render() {
@@ -72,22 +91,22 @@ class UpdateContactPreferences extends Component {
             <ContactPreference
               text="Paperless"
               toggledOn={paperless}
-              handleClick={this.handlers.generateClickHandler('paperless')}
+              handleClick={this.generateClickHandler('paperless')}
             />
             <ContactPreference
               text="Receive Emails"
               toggledOn={email}
-              handleClick={this.handlers.generateClickHandler('email')}
+              handleClick={this.generateClickHandler('email')}
             />
             <ContactPreference
               text="Receive Text Messages"
               toggledOn={text}
-              handleClick={this.handlers.generateClickHandler('text')}
+              handleClick={this.generateClickHandler('text')}
             />
             <ContactPreference
               text="Receive Phone Calls"
               toggledOn={call}
-              handleClick={this.handlers.generateClickHandler('call')}
+              handleClick={this.generateClickHandler('call')}
             />
           </ModalBody>
           <ModalSectionDivider />
@@ -95,6 +114,8 @@ class UpdateContactPreferences extends Component {
             <SmallButton text="Submit Changes" onClick={this.submitChanges} />
             <SmallButton text="Cancel" negative onClick={hideModal} />
           </ModalButtonsRight>
+          {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+          {this.state.showLoader && <LoadingSpinnerScreen />}
         </ModalWrapper>
       </>
     );
@@ -110,8 +131,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  handleSubmit: payload => {
-    dispatch(actions.updateContactPreferences(payload));
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
   }
 });
 

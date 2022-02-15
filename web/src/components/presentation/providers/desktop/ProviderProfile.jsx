@@ -101,7 +101,7 @@ const ProviderProfile = React.memo(
           <br />
           {phone}
         </ProviderContactInfo>
-        <ProviderContactInfo>{`NPI: ${npiNumber}`}</ProviderContactInfo>
+        {/* <ProviderContactInfo>{`NPI: ${npiNumber}`}</ProviderContactInfo> */}
         <Tags>
           {specialties?.map(specialty => (
             <ProviderTag specialty text={specialty} />

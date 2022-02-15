@@ -129,6 +129,7 @@ const Text = styled.h4`
 
   &.title {
     text-align: center;
+    margin: 0px 8px;
     @media ${defaultTheme.device.tablet} {
       flex-grow: 2;
       margin-left: 24px;
@@ -200,7 +201,7 @@ class SupportRequest extends Component {
       default:
         statusText = '';
     }
-
+    
     return (
       <Wrapper className={status}>
         <SupportSummary>
@@ -271,7 +272,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SupportRequest);
+export default connect(null, mapDispatchToProps)(SupportRequest);

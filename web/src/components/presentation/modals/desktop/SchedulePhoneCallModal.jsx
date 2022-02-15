@@ -48,46 +48,47 @@ const FormError = styled.div`
 
 const DateTimeContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-
+  gap: 10px;
   width: 100%;
-
-  @media ${defaultTheme.device.tablet} {
-    flex-direction: row;
-    gap: 10px;
-  }
 `;
+
 const Equalizer = styled.div`
   flex-grow: 1;
-  width: 100%;
+  width: calc(50% - 6px);
+`;
 
-  @media ${defaultTheme.device.tablet} {
-    width: 48%;
+const ScrollableModalWrapper = styled(ModalWrapper)`
+  overflow-y: auto;
+  height: 100%;
+
+  @media (min-height: 440px) {
+    height: auto;
   }
 `;
 
-const includeTimes = [
-  new Date().setHours(8, 0, 0),
-  new Date().setHours(8, 30, 0),
-  new Date().setHours(9, 0, 0),
-  new Date().setHours(9, 30, 0),
-  new Date().setHours(10, 0, 0),
-  new Date().setHours(10, 30, 0),
-  new Date().setHours(11, 0, 0),
-  new Date().setHours(11, 30, 0),
-  new Date().setHours(12, 0, 0),
-  new Date().setHours(12, 30, 0),
-  new Date().setHours(13, 0, 0),
-  new Date().setHours(13, 30, 0),
-  new Date().setHours(14, 0, 0),
-  new Date().setHours(14, 30, 0),
-  new Date().setHours(15, 0, 0),
-  new Date().setHours(15, 30, 0),
-  new Date().setHours(16, 0, 0),
-  new Date().setHours(16, 30, 0),
-  new Date().setHours(17, 0, 0)
-];
+// const includeTimes = [
+//   new Date().setHours(8, 0, 0),
+//   new Date().setHours(8, 30, 0),
+//   new Date().setHours(9, 0, 0),
+//   new Date().setHours(9, 30, 0),
+//   new Date().setHours(10, 0, 0),
+//   new Date().setHours(10, 30, 0),
+//   new Date().setHours(11, 0, 0),
+//   new Date().setHours(11, 30, 0),
+//   new Date().setHours(12, 0, 0),
+//   new Date().setHours(12, 30, 0),
+//   new Date().setHours(13, 0, 0),
+//   new Date().setHours(13, 30, 0),
+//   new Date().setHours(14, 0, 0),
+//   new Date().setHours(14, 30, 0),
+//   new Date().setHours(15, 0, 0),
+//   new Date().setHours(15, 30, 0),
+//   new Date().setHours(16, 0, 0),
+//   new Date().setHours(16, 30, 0),
+//   new Date().setHours(17, 0, 0)
+// ];
 
 class SchedulePhoneCallModal extends Component {
   constructor(props) {
@@ -173,7 +174,6 @@ class SchedulePhoneCallModal extends Component {
   }
 
   handleDateTimeChange(value) {
-    console.log(value);
     this.setState({ dateTime: value });
   }
 
@@ -229,28 +229,28 @@ class SchedulePhoneCallModal extends Component {
         onChange={this.handlers.handleChange}
       />
     );
-    if (accountInfo.phones && accountInfo.phones.length > 0) {
-      phoneNumberInput = (
-        <Select
-          name="phoneNumber"
-          placeholder="What phone number should we call?"
-          icon="arrow"
-          value={phoneNumber}
-          onChange={this.handlers.handleChange}
-        >
-          {accountInfo.phones.map(phone => (
-            <option key={phone.phone_number} value={phone.phone_number}>
-              {phone.phone_number}
-            </option>
-          ))}
-        </Select>
-      );
-    }
+    // if (accountInfo.phones && accountInfo.phones.length > 0) {
+    //   phoneNumberInput = (
+    //     <Select
+    //       name="phoneNumber"
+    //       placeholder="What phone number should we call?"
+    //       icon="arrow"
+    //       value={phoneNumber}
+    //       onChange={this.handlers.handleChange}
+    //     >
+    //       {accountInfo.phones.map(phone => (
+    //         <option key={phone.phone_number} value={phone.phone_number}>
+    //           {phone.phone_number}
+    //         </option>
+    //       ))}
+    //     </Select>
+    //   );
+    // }
 
     return (
       <>
         <Scrim onClick={hideModal} />
-        <ModalWrapper className="extra-narrow">
+        <ScrollableModalWrapper className="extra-narrow">
           <ModalHeader>
             <ModalTitle>Schedule a Phone Call</ModalTitle>
           </ModalHeader>
@@ -300,7 +300,7 @@ class SchedulePhoneCallModal extends Component {
                 <Equalizer>
                   <TimePicker
                     inputName="time"
-                    chosenDate={time}
+                    chosenTime={time}
                     changeCallback={this.handlers.handleTimeChange}
                   />
                 </Equalizer>
@@ -317,7 +317,7 @@ class SchedulePhoneCallModal extends Component {
             </ModalButtonsRight>
           </form>
           {this.state.showLoader && <LoadingSpinnerScreen />}
-        </ModalWrapper>
+        </ScrollableModalWrapper>
       </>
     );
   }
@@ -349,7 +349,6 @@ const mapDispatchToProps = dispatch => ({
       0,
       2
     )}-${date.value.substring(3, 5)}T${time.value}`;
-
     dispatch(
       createSchedulePhoneCallCase({
         phoneNumber: phoneNumber.value,

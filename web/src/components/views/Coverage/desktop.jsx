@@ -10,6 +10,7 @@ import withStoreData from '../../containers/base/withStoreData';
 import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { Helmet } from 'react-helmet-async';
+import { connect } from 'react-redux';
 
 const { fetchBenefitCoverages, fetchAccumulators, fetchMembershipSummary } = actions;
 const {
@@ -31,7 +32,7 @@ const {
 
 const { LayoutWrapper } = defaultTheme.components;
 
-const Coverage = () => {
+const Coverage = ({ understandYourBenefitIsLoading }) => {
   const CoverageSummaryWithData = withStoreData(
     CoverageSummary,
     state => ({
@@ -106,7 +107,11 @@ const Coverage = () => {
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
       <LayoutWrapper>
-        <ActionButtonsContainer type="headerButtons" view="coverage" />
+        <ActionButtonsContainer
+          type="headerButtons"
+          view="coverage"
+          isLoading={[['understandYourBenefits', understandYourBenefitIsLoading]]}
+        />
         <CoverageSummaryWithData />
         <ClaimsTotals />
         <MedicalServicesSectionWithData />
@@ -115,8 +120,14 @@ const Coverage = () => {
   );
 };
 
+const mapStateToProps = state => ({
+  understandYourBenefitIsLoading: state?.user?.understandYourBenefit?.isLoading
+});
+
+const ConnectedCoverage = connect(mapStateToProps)(Coverage);
+
 const reflection = {
-  component: Coverage,
+  component: ConnectedCoverage,
   layout: Standard,
   layoutProps: {
     title: 'My Coverage'
@@ -125,6 +136,6 @@ const reflection = {
   forAuthorized: true
 };
 
-export default Coverage;
+export default ConnectedCoverage;
 
 export { reflection };

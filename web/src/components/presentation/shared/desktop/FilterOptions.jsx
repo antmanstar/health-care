@@ -102,7 +102,10 @@ const FilterOptions = ({
     setDateEnd(null);
     setClear(clear + 1);
     handleClose();
-    search({ dateFrom: null, dateTo: null, query: query });
+    if (type === 'notifications') {
+      clearData();
+      search({ dateFrom: null, dateTo: null, query: '' });
+    } else search({ dateFrom: null, dateTo: null, query: query });
   };
 
   const handleDateChange = (value, type) => {

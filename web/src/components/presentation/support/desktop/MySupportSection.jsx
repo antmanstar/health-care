@@ -92,7 +92,7 @@ const ButtonLink = styled.button`
   & div.left-group {
     display: flex;
     align-items: center;
-
+    text-align: left;
     i {
       margin-right: 16px;
     }

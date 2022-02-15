@@ -185,7 +185,7 @@ class AppointARepresentativeModal extends Component {
                   <Instruction>
                     Download
                     {/* TODO: Need a download link here */}
-                    <a href="#" onClick={this.handleFormDownload}>this form</a>
+                    <a onClick={this.handleFormDownload}>this form</a>
                     {`.`}
                   </Instruction>
                 </Flex>

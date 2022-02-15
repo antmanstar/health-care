@@ -59,12 +59,22 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const StyledModalWrapper = styled(ModalWrapper)`
+  overflow-y: auto;
+  height: 100%;
+  max-height: 520px;
+
+  @media ${defaultTheme.device.tablet}{
+    max-height: 410px;
+  }
+`;
+
 const SupportRequestModal = React.memo(({ modalData, hideModal }) => {
   console.log(modalData);
   return (
     <>
       <Scrim onClick={hideModal} />
-      <ModalWrapper>
+      <StyledModalWrapper>
         <ColoredModalHeader
           status={modalData.status === 'actionRequired' ? 'action required' : modalData.status}
           phoneNumber="1-800-234-4482"
@@ -99,7 +109,7 @@ const SupportRequestModal = React.memo(({ modalData, hideModal }) => {
         <ButtonsCenter>
           <SmallButton negative text="Cancel" onClick={hideModal} />
         </ButtonsCenter>
-      </ModalWrapper>
+      </StyledModalWrapper>
     </>
   );
 });

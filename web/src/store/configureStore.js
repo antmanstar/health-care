@@ -15,7 +15,9 @@ if (
 }
 
 evry.init({
-  baseURL: __evryAPIURL__
+  baseURL: __evryAPIURL__,
+  timeout: 15000,
+  timeoutErrorMessage: 'A timeout has occurred. Please refresh the page or try again later.'
 })
 
 export default (history, preloadedState) => configureStore(history, preloadedState, reduxDevTools);

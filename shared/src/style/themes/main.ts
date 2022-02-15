@@ -70,13 +70,15 @@ const theme = {
       margin-bottom: 8px;
       padding: 0 16px;
       line-height: 48px;
-      font-size: 16px;
+      font-size: 12px;
       font-weight: 400;
       background: ${(props) => props.theme.colors.shades.nearlyWhite};
       color: ${(props) => props.theme.colors.shades.blue};
       border: 1px solid transparent;
       border-radius: 4px;
-
+      @media ${props => props.theme.device.mobile}{
+        font-size: 16px;
+      }
       &:last-child {
         margin-bottom: 0;
       }

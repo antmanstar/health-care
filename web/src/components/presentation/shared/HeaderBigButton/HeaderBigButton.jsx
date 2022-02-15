@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import images from '../../../../utils/images';
+import { ButtonLoader, ButtonLoaderWrapper } from '../Loader/ButtonLoader';
 // Big Button w/ Icon - Used in "ActionButtons" and modals
 
 const Button = styled.button`
@@ -11,7 +12,9 @@ const Button = styled.button`
   width: auto;
   padding: 19px 16px;
   background: ${props =>
-    props.isComing ? props.theme.colors.shades.darkGray : props.theme.colors.shades.tealBlue};
+    props.isComing || props.isLoading
+      ? props.theme.colors.shades.darkGray
+      : props.theme.colors.shades.tealBlue};
   color: ${props => props.theme.colors.shades.white};
   border: none;
   border-radius: 4px;
@@ -29,8 +32,8 @@ const Button = styled.button`
     padding: 19px 32px;
   }
 
-  pointer-events: ${props => (props.isComing ? 'none' : 'auto')};
-  cursor: ${props => (props.isComing ? 'not-allowed' : 'pointer')};
+  pointer-events: ${props => (props.isComing || props.isLoading ? 'none' : 'auto')};
+  cursor: ${props => (props.isComing || props.isLoading ? 'not-allowed' : 'pointer')};
 `;
 
 const StyledDiv = styled.div`
@@ -51,11 +54,26 @@ const SvgIcon = styled.img`
   height: auto;
 `;
 
-const HeaderBigButton = React.memo(({ text, icon, onClick, svgIcon, isComing }) => {
+const HeaderBigButton = React.memo(({ text, icon, onClick, svgIcon, isComing, isLoading }) => {
+  const RenderText = () => {
+    if (isLoading)
+      return (
+        <ButtonLoaderWrapper>
+          <ButtonLoader />
+          {text.toString()}
+        </ButtonLoaderWrapper>
+      );
+    else return <>{text.toString()}</>;
+  };
   return (
-    <Button onClick={onClick} className="header-big-button" isComing={isComing}>
+    <Button
+      onClick={onClick}
+      className="header-big-button"
+      isComing={isComing}
+      isLoading={isLoading}
+    >
       <StyledDiv>
-        {text}
+        <RenderText />
         {isComing && <ComingText>Coming soon...</ComingText>}
       </StyledDiv>
       {svgIcon ? <SvgIcon src={images[icon]} /> : <Icon className="material-icons">{icon}</Icon>}

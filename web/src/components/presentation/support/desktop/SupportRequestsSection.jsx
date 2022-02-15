@@ -115,7 +115,6 @@ const SupportRequestsSection = ({
   useEffect(() => {
     width > 768 && setCollapsed(false);
   }, [width]);
-
   return (
     <>
       <SectionBackground>
@@ -142,14 +141,14 @@ const SupportRequestsSection = ({
             onClick={handleToggleClick}
             collapsed={collapsed}
           />
-          <InnerWrapper>
+          {!collapsed && <InnerWrapper>
             <SmallButton
               text="New Support Request"
               onClick={() => {
                 showModal('SUBMIT_NEW_SUPPORT_REQUEST');
               }}
             />
-          </InnerWrapper>
+          </InnerWrapper>}
         </StyledContainer>
         {!collapsed && (
           <>

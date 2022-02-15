@@ -13,7 +13,7 @@ import ErrorMessage from '../presentation/shared/desktop/ErrorMessage';
 import history from '../../utils/history';
 import { Divider } from '@material-ui/core';
 
-const { verifyEligibilityIdAndSSN, initRegister } = actions;
+const { verifyEligibilityIdAndSSN, initRegister, clearAuthError } = actions;
 const {
   getAuthError,
   isVerifiedRegisteringUser,
@@ -156,6 +156,7 @@ function Register({
   isVerifyingElegibility,
   verifyMembershipError,
   verifyEligibilityIdAndSSN,
+  handleClearAuthError,
   initRegister
 }) {
   const [memberId, setMemberId] = useState('');
@@ -186,6 +187,7 @@ function Register({
 
   const handleSubmit = e => {
     e.preventDefault();
+    handleClearAuthError();
     verifyEligibilityIdAndSSN({ eligibilityId: memberId, last4SSN: ssn });
   };
 
@@ -294,6 +296,9 @@ const mapDispatchToProps = dispatch => ({
   },
   initRegister: () => {
     dispatch(initRegister());
+  },
+  handleClearAuthError: () => {
+    dispatch(clearAuthError());
   }
 });
 

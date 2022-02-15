@@ -143,8 +143,8 @@ const UpdatePersonalInformationModal = props => {
 
     props.setModalData({
       type: 'SUCCESS',
-      title: 'Submitted!',
-      message: "Great! We'll get to work on that and send you a confirmation once complete."
+      title: 'Sent for Review!',
+      message: "Thank you for your update! Your information will be updated on your account after we review it."
     });
     props.showModal('SUBMISSION_RESPONSE');
   }
@@ -156,7 +156,9 @@ const UpdatePersonalInformationModal = props => {
     }).then(createSuccessModal).catch(handleErrors);
   }
 
-  function handleSubmit() {    
+  function handleSubmit(e) {    
+    e.preventDefault();
+
     setShowLoader(true);
 
     apis.createCaseUpdateAddress({
@@ -175,6 +177,7 @@ const UpdatePersonalInformationModal = props => {
   return (
     <>
       <Scrim onClick={props.hideModal} />
+            <form onSubmit={handleSubmit}>
       <LargeModalWrapper>
         <ModalHeader>
           <SpaceBetween>
@@ -195,124 +198,124 @@ const UpdatePersonalInformationModal = props => {
             </LockedNote>
           ) : (
             <FormSpaceBetween className="mobile-wrap">
-              <Column>
-                <FormSpaceBetween>
-                  <Flex4>
-                    <EditedFormLabel>Street Address</EditedFormLabel>
-                    <EditedInput
-                      value={infoAddress1}
-                      onChange={e => setInfoAddress1(e.target.value)}
-                      name="address"
-                      type="text"
-                      placeholder='Street Address'
-                      maxLength="100"
-                    />
-                  </Flex4>
-                  <Flex1>
-                    <EditedFormLabel>Apt #</EditedFormLabel>
-                    <EditedInput 
-                      value={infoAddress2} 
-                      onChange={e => setInfoAddress2(e.target.value)}
-                      name="apt"
-                      type="text"
-                      placeholder='Apt'
-                      maxLength="100"
-                    />
-                  </Flex1>
-                </FormSpaceBetween>
-                <FormSpaceBetween>
-                  <Flex2>
-                    <EditedFormLabel>City</EditedFormLabel>
-                    <EditedInput value={infoCity} onChange={e => setInfoCity(e.target.value)} name="city" type="text" placeholder='Zip' maxLength="100" />
-                  </Flex2>
-                  <Flex2>
-                    <EditedFormLabel>State</EditedFormLabel>
-                    <Select name="state" value={infoState} onChange={e => setInfoState(e.target.value)}>
-                      <option value="AL">Alabama</option>
-                      <option value="AK">Alaska</option>
-                      <option value="AZ">Arizona</option>
-                      <option value="AR">Arkansas</option>
-                      <option value="CA">California</option>
-                      <option value="CO">Colorado</option>
-                      <option value="CT">Connecticut</option>
-                      <option value="DE">Delaware</option>
-                      <option value="DC">District Of Columbia</option>
-                      <option value="FL">Florida</option>
-                      <option value="GA">Georgia</option>
-                      <option value="HI">Hawaii</option>
-                      <option value="ID">Idaho</option>
-                      <option value="IL">Illinois</option>
-                      <option value="IN">Indiana</option>
-                      <option value="IA">Iowa</option>
-                      <option value="KS">Kansas</option>
-                      <option value="KY">Kentucky</option>
-                      <option value="LA">Louisiana</option>
-                      <option value="ME">Maine</option>
-                      <option value="MD">Maryland</option>
-                      <option value="MA">Massachusetts</option>
-                      <option value="MI">Michigan</option>
-                      <option value="MN">Minnesota</option>
-                      <option value="MS">Mississippi</option>
-                      <option value="MO">Missouri</option>
-                      <option value="MT">Montana</option>
-                      <option value="NE">Nebraska</option>
-                      <option value="NV">Nevada</option>
-                      <option value="NH">New Hampshire</option>
-                      <option value="NJ">New Jersey</option>
-                      <option value="NM">New Mexico</option>
-                      <option value="NY">New York</option>
-                      <option value="NC">North Carolina</option>
-                      <option value="ND">North Dakota</option>
-                      <option value="OH">Ohio</option>
-                      <option value="OK">Oklahoma</option>
-                      <option value="OR">Oregon</option>
-                      <option value="PA">Pennsylvania</option>
-                      <option value="RI">Rhode Island</option>
-                      <option value="SC">South Carolina</option>
-                      <option value="SD">South Dakota</option>
-                      <option value="TN">Tennessee</option>
-                      <option value="TX">Texas</option>
-                      <option value="UT">Utah</option>
-                      <option value="VT">Vermont</option>
-                      <option value="VA">Virginia</option>
-                      <option value="WA">Washington</option>
-                      <option value="WV">West Virginia</option>
-                      <option value="WI">Wisconsin</option>
-                      <option value="WY">Wyoming</option>
-                    </Select>
-                  </Flex2>
-                  <Flex1>
-                    <EditedFormLabel>Zip</EditedFormLabel>
-                    <EditedInput value={infoZip} onChange={e => setInfoZip(e.target.value)} name="postal" type="text" placeholder='Zip' maxLength="100" />
-                  </Flex1>
-                </FormSpaceBetween>
-              </Column>
-              <Column>
-                <EditedFormLabel>Cell Phone Number</EditedFormLabel>
-                <EditedInput
-                  value={phoneCell} onChange={e => setPhoneCell(e.target.value)} 
-                  name="cellPhone"
-                  type="phone"
-                  placeholder='Enter a cell phone number.'
-                  maxLength="100"
-                />
-                <EditedFormLabel>Home Phone Number</EditedFormLabel>
-                <EditedInput
-                  value={phoneHome} onChange={e => setPhoneHome(e.target.value)} 
-                  name="homePhone"
-                  type="phone"
-                  placeholder='Enter a home phone number.'
-                  maxLength="100"
-                />
-                <EditedFormLabel>Work Phone Number</EditedFormLabel>
-                <EditedInput
-                 value={phoneWork} onChange={e => setPhoneWork(e.target.value)} 
-                  name="workPhone"
-                  type="phone"
-                  placeholder='Enter a work phone number.'
-                  maxLength="100"
-                />
-              </Column>
+                <Column>
+                  <FormSpaceBetween>
+                    <Flex4>
+                      <EditedFormLabel>Street Address</EditedFormLabel>
+                      <EditedInput
+                        value={infoAddress1}
+                        onChange={e => setInfoAddress1(e.target.value)}
+                        name="address"
+                        type="text"
+                        placeholder='Street Address'
+                        maxLength="100"
+                      />
+                    </Flex4>
+                    <Flex1>
+                      <EditedFormLabel>Apt #</EditedFormLabel>
+                      <EditedInput 
+                        value={infoAddress2} 
+                        onChange={e => setInfoAddress2(e.target.value)}
+                        name="apt"
+                        type="text"
+                        placeholder='Apt'
+                        maxLength="100"
+                      />
+                    </Flex1>
+                  </FormSpaceBetween>
+                  <FormSpaceBetween>
+                    <Flex2>
+                      <EditedFormLabel>City</EditedFormLabel>
+                      <EditedInput value={infoCity} onChange={e => setInfoCity(e.target.value)} name="city" type="text" placeholder='Zip' maxLength="100" />
+                    </Flex2>
+                    <Flex2>
+                      <EditedFormLabel>State</EditedFormLabel>
+                      <Select name="state" value={infoState} onChange={e => setInfoState(e.target.value)}>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="DC">District Of Columbia</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
+                      </Select>
+                    </Flex2>
+                    <Flex1>
+                      <EditedFormLabel>Zip</EditedFormLabel>
+                      <EditedInput value={infoZip} onChange={e => setInfoZip(e.target.value)} name="postal" type="text" placeholder='Zip' maxLength="100" />
+                    </Flex1>
+                  </FormSpaceBetween>
+                </Column>
+                <Column>
+                  <EditedFormLabel>Cell Phone Number</EditedFormLabel>
+                  <EditedInput
+                    value={phoneCell} onChange={e => setPhoneCell(e.target.value)} 
+                    name="cellPhone"
+                    type="phone"
+                    placeholder='Enter a cell phone number.'
+                    maxLength="100"
+                  />
+                  <EditedFormLabel>Home Phone Number</EditedFormLabel>
+                  <EditedInput
+                    value={phoneHome} onChange={e => setPhoneHome(e.target.value)} 
+                    name="homePhone"
+                    type="phone"
+                    placeholder='Enter a home phone number.'
+                    maxLength="100"
+                  />
+                  <EditedFormLabel>Work Phone Number</EditedFormLabel>
+                  <EditedInput
+                  value={phoneWork} onChange={e => setPhoneWork(e.target.value)} 
+                    name="workPhone"
+                    type="phone"
+                    placeholder='Enter a work phone number.'
+                    maxLength="100"
+                  />
+                </Column>
             </FormSpaceBetween>
           )}
         </ModalBody>
@@ -330,6 +333,7 @@ const UpdatePersonalInformationModal = props => {
         
         {showLoader && <LoadingSpinnerScreen />}
       </LargeModalWrapper>
+            </form>
     </>
   );
 };

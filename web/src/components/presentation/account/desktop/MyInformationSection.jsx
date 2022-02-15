@@ -253,7 +253,7 @@ class MyInformationSection extends Component {
               {this.renderPCPs()}
             </SmallContainer>
             <SmallContainer>
-              <SmallTitleAndButton text="Appointed Repesentative" buttonText="Update" onClick={this.handleAppointRepClick} />
+              <SmallTitleAndButton text="Appointed Representative" buttonText="Update" onClick={this.handleAppointRepClick} />
               {this.renderRepresentative()}
               <HelpArticleWrapper>
                 <HelpArticleLink text="Learn about Appointed Representatives" />

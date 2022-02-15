@@ -79,7 +79,8 @@ const caseTypeToMachineNames = {
   [8]: 'Address Update',
   [9]: 'Phone Number Update',
   [10]: 'PCP Update',
-  [11]: 'Appointed Representative Update'
+  [11]: 'Appointed Representative Update',
+  [12]: 'COB Update'
 };
 
 // DESKTOP: Support View

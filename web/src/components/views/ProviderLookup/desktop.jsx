@@ -148,7 +148,6 @@ const ProviderLookup = ({
         <ProviderLookupResults>
           <PaginationWrapper>
             {renderProviderList()}
-            {console.log(paginator)}
             {paginator?.currentPage && <Pagination paginator={paginator} />}
           </PaginationWrapper>
           <ProviderLookupSelectedItem

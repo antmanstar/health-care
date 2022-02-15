@@ -20,7 +20,8 @@ const BigButtonContainer = ({
   type,
   showModal,
   token,
-  downloadUnderstandYourBenefits
+  downloadUnderstandYourBenefits,
+  isLoading
 }) => {
   const benefitsClick = () => {
     downloadUnderstandYourBenefits(token);
@@ -31,7 +32,7 @@ const BigButtonContainer = ({
   };
 
   const contactDoctorClick = () => {
-    window.open("https://www.doctorondemand.com/evryhealth");
+    window.open('https://www.doctorondemand.com/evryhealth');
   };
 
   const downloadMembershipCardClick = () => {
@@ -116,6 +117,7 @@ const BigButtonContainer = ({
       isComing={buttonData[buttonKey].isComing}
       onClick={() => extractClickFunction(buttonData[buttonKey].onClick)()}
       view={view}
+      isLoading={isLoading}
     />
   ) : (
     <BigButton
@@ -135,7 +137,8 @@ BigButtonContainer.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  token: getToken(state)
+  token: getToken(state),
+  understandYourBenefitIsLoading: state?.user?.understandYourBenefit?.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({

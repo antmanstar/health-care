@@ -29,7 +29,7 @@ const SubmitProviderFeedbackModal = ({
   modalData,
   token,
   submitProviderFeedbackCase,
-  sendingFeedback
+  sentFeedback
 }) => {
   const [message, setMessage] = useState();
   const [feedbackChoice, setFeedbackChoice] = useState(modalData.feedbackChoice);
@@ -95,7 +95,7 @@ const SubmitProviderFeedbackModal = ({
             onChange={e => handleChange(e)}
             value={message}
           />
-          {sendingFeedback ? (
+          {sentFeedback ? (
             <p style={{ color: 'green' }}>Your feedback has been sent successfully!</p>
           ) : (
             ''
@@ -121,7 +121,7 @@ SubmitProviderFeedbackModal.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    sendingFeedback: state.user.sendingFeedback,
+    sentFeedback: state?.user?.feedbackSended,
     token: getToken(state)
   };
 };

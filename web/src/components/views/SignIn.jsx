@@ -224,7 +224,6 @@ function SignIn({
   isSessionTimedOut
 }) {
   const [showPassword, setShowPassword] = useState(false);
-
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo) {
       history.push('/plan');
@@ -288,7 +287,7 @@ function SignIn({
                 buttonType="submit"
                 value="Submit"
                 text="Submit"
-                disabled={isSigningIn || (isAuthenticated && hasBasicInfo)}
+                disabled={(isSigningIn || isAuthenticated) && !isSessionTimedOut}
               />
             </ButtonWrapper>
           </form>
@@ -341,7 +340,7 @@ function SignIn({
                 buttonType="submit"
                 value="Sign In"
                 text="Sign In"
-                disabled={isSigningIn || (isAuthenticated && hasBasicInfo)}
+                disabled={(isSigningIn || isAuthenticated) && !isSessionTimedOut}
               />
             </ButtonWrapper>
           </form>
@@ -365,7 +364,7 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {(isSigningIn || (isAuthenticated && hasBasicInfo)) && 
+      {((isSigningIn || isAuthenticated) && !isSessionTimedOut) && 
         <LoadingSpinnerScreen />
       }
     </Wrapper>

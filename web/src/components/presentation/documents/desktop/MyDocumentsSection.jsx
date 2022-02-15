@@ -101,7 +101,6 @@ const StyledSpaceBetween = styled(SpaceBetween)`
 
 const FilterLabel = styled.div`
   display: flex;
-  margin-top: -10px;
   margin-left: 35px;
   padding: 0 10px 10px 0;
   font-weight: bold;
@@ -262,8 +261,6 @@ class MyDocumentsSection extends Component {
   render() {
     const { toggled } = this.state;
     const { paginator, formsPaginator, filesDataFrame } = this.props;
-    console.log('MyDocumentsSection');
-    console.log(this.props.filesDataFrame)
 
     const FilterFiles = React.memo(() => {
       let dateFrom = filesDataFrame?.request.dateFrom;

@@ -176,6 +176,9 @@ const FeedbackButton = styled.button`
 
 const LoadingContainer = styled.div`
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   top: 0;
   right: 0;
   background: rgba(255, 255, 255, 0.8);
@@ -186,6 +189,23 @@ const LoadingContainer = styled.div`
 
 const EditedFormLabel = styled(FormLabel)`
   margin-top: 0;
+`;
+
+const WarningLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props.theme.colors.shades.pinkOrange};
+  gap: 10px;
+`;
+
+const CloseWarning = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  padding: 10px;
 `;
 
 const ProviderLookupSelectedItem = ({
@@ -208,6 +228,7 @@ const ProviderLookupSelectedItem = ({
   providerSearchQueryClear,
   fetchProviders,
   isLoadingCurrentLocation,
+  hasErrorCurrentLocation,
   loadingStatus,
   providerSearchData,
   token
@@ -218,6 +239,7 @@ const ProviderLookupSelectedItem = ({
   const [triggerSearch, setTriggerSearch] = useState(false);
   const [searchArea, setSearchArea] = useState(false);
   const [defaultZoom, setDefaultZoom] = useState(14);
+  const [mapOverlay, setMapOverlay] = useState(false);
 
   const defaultMapProps = {
     center: {
@@ -268,6 +290,11 @@ const ProviderLookupSelectedItem = ({
     });
     setDefaultZoom(prev => prev * 1.00001);
   }, [providerSearchQueryLocation]);
+
+  useEffect(() => {
+    if (isLoadingCurrentLocation || hasErrorCurrentLocation) setMapOverlay(true);
+    else setMapOverlay(false);
+  }, [isLoadingCurrentLocation, hasErrorCurrentLocation]);
 
   useEffect(() => {
     if (providerSearchQuery !== undefined) {
@@ -351,6 +378,10 @@ const ProviderLookupSelectedItem = ({
     showModal('SUBMIT_PROVIDER_FEEDBACK');
   };
 
+  const closeMapError = () => {
+    setMapOverlay(false);
+  };
+
   const LocationPin = props => {
     let hover = props.id === hoveredPinId ? true : false;
     let title =
@@ -400,9 +431,23 @@ const ProviderLookupSelectedItem = ({
             );
           })}
         </GoogleMap>
-        {isLoadingCurrentLocation && (
+        {mapOverlay && (
           <LoadingContainer>
-            <Loader />
+            {hasErrorCurrentLocation ? (
+              <>
+                <CloseWarning>
+                  <i className="material-icons" onClick={() => closeMapError()}>
+                    close
+                  </i>
+                </CloseWarning>
+                <WarningLabel>
+                  <i className="material-icons">warning</i>
+                  {hasErrorCurrentLocation}
+                </WarningLabel>
+              </>
+            ) : (
+              <Loader />
+            )}
           </LoadingContainer>
         )}
       </MapWrapper>
@@ -472,7 +517,8 @@ const mapStateToProps = state => ({
   providerSearchData: getProviderSearchData(state),
   providerSearchQuery: getProviderSearchQuery(state),
   providerSearchQueryLocation: getProviderSearchQueryLocation(state),
-  isLoadingCurrentLocation: state?.app?.geoLocation?.isLoading
+  isLoadingCurrentLocation: state?.app?.geoLocation?.isLoading,
+  hasErrorCurrentLocation: state?.app?.geoLocation?.error
 });
 
 const mapDispatchToProps = dispatch => ({

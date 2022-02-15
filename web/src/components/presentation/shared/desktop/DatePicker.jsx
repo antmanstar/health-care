@@ -16,6 +16,10 @@ const DatePickerWrapper = styled.div`
   input {
     border: none;
     height: 50px;
+
+    ::placeholder{
+      color: ${defaultTheme.colors.shades.gray};
+    }
   }
 
   & input.date-picker-input {
@@ -30,9 +34,12 @@ const DatePickerWrapper = styled.div`
     color: #00263a;
     font-family: 'Roboto';
     box-sizing: border-box;
-    @media screen and (min-width: 1200px) {
+    @media ${defaultTheme.device.mobile} {
       font-size: 16px;
     }
+    /* @media screen and (min-width: 1200px) {
+      font-size: 16px;
+    } */
   }
 
   & i {

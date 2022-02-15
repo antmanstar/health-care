@@ -9,6 +9,9 @@ import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
 import ErrorMessage from '../../shared/desktop/ErrorMessage';
 import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 
+import actions from '@evry-member-app/shared/store/actions';
+const { setModalData, showModal } = actions;
+
 // MODAL - Update Your Email
 
 const {
@@ -41,14 +44,27 @@ class UpdateYourEmailModal extends Component {
     this.setState({ showLoader: false, errors: response.response.data.messages });
   }
 
+  createSuccessModal = () => {
+    this.setState({ showLoader: false });
+
+    this.props.setModalData({
+      type: 'SUCCESS',
+      title: 'Email Verification Link Sent!',
+      message: "A link has been emailed to you"
+    });
+    this.props.showModal('SUBMISSION_RESPONSE');
+  }
+
   submitModal = e => {
+    e.preventDefault();
+
     this.setState({ showLoader: true });
 
     apis.emailChange({
       token: this.props.token,
       email_address: this.state.email_address,
       password: this.state.password
-    }).then(this.props.hideModal).catch(this.handleErrors);
+    }).then(this.createSuccessModal).catch(this.handleErrors);
   }
 
   render() {
@@ -56,34 +72,37 @@ class UpdateYourEmailModal extends Component {
       <>
         <Scrim onClick={this.props.hideModal} />
         <ModalWrapper className="narrow">
-          <ModalHeader>
-            <ModalTitle>Update your email</ModalTitle>
-          </ModalHeader>
-          <ModalBody>
-            <p>New Email</p>
-            <Input
-              name="email_address"
-              type="text"
-              placeholder="Enter an email address"
-              value={this.state.email_address}
-              onChange={this.handleChange}
-            />
-            <p>Confirm Password</p>
-            <Input
-              name="password"
-              type="password"
-              placeholder="Enter your current password"
-              value={this.state.password}
-              onChange={this.handleChange}
-            />
-          </ModalBody>
-          <ModalSectionDivider />
-          <ModalButtonsRight>
-            <SmallButton text="Submit Changes" onClick={this.submitModal} />
-            <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
-          </ModalButtonsRight>
-          {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
-          {this.state.showLoader && <LoadingSpinnerScreen />}
+          <form onSubmit={this.submitModal}>
+            <ModalHeader>
+              <ModalTitle>Update your email</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+              <p>Current Password</p>
+              <Input
+                name="password"
+                type="password"
+                placeholder="Enter your current password"
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+              <p>New Email</p>
+              <Input
+                name="email_address"
+                type="text"
+                placeholder="Enter an email address"
+                value={this.state.email_address}
+                onChange={this.handleChange}
+              />
+
+            </ModalBody>
+            <ModalSectionDivider />
+            <ModalButtonsRight>
+              <SmallButton text="Submit Changes" onClick={this.submitModal} />
+              <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
+            </ModalButtonsRight>
+            {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+            {this.state.showLoader && <LoadingSpinnerScreen />}
+          </form>
         </ModalWrapper>
       </>
     );
@@ -99,9 +118,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // handleSubmit: payload => {
-  //   dispatch(actions.updateContactPreferences(payload));
-  // }
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateYourEmailModal);

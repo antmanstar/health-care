@@ -42,13 +42,34 @@ const Wrapper = styled.div`
   }
 `;
 
-const ActionButtons = React.memo(({ buttons, view, type }) => {
+const ActionButtons = React.memo(({ buttons, view, type, isLoading }) => {
+  let renderButton = null;
   return (
     <Wrapper view={view} type={type}>
       {buttons &&
-        buttons.map((buttonKey, key) => (
-          <BigButtonContainer key={key} buttonKey={buttonKey} view={view} type={type} />
-        ))}
+        buttons.map((buttonKey, key) => {
+          isLoading
+            ? isLoading.map(loadingTuple => {
+                if (loadingTuple[0] === buttonKey)
+                  renderButton = (
+                    <BigButtonContainer
+                      key={key}
+                      buttonKey={buttonKey}
+                      view={view}
+                      type={type}
+                      isLoading={loadingTuple[1]}
+                    />
+                  );
+                else
+                  renderButton = (
+                    <BigButtonContainer key={key} buttonKey={buttonKey} view={view} type={type} />
+                  );
+              })
+            : (renderButton = (
+                <BigButtonContainer key={key} buttonKey={buttonKey} view={view} type={type} />
+              ));
+          return renderButton;
+        })}
     </Wrapper>
   );
 });

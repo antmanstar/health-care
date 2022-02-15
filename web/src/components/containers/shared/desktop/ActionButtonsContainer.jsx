@@ -6,7 +6,7 @@ import ActionButtons from '../../../presentation/shared/desktop/ActionButtons';
 
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
-const ActionButtonsContainer = ({ view, type }) => {
+const ActionButtonsContainer = ({ view, type, isLoading }) => {
   const mapViewToButtons = view => {
     const aliases = {
       account: ['updatePassword', 'talkToADoctor', 'contactCareGuide'],
@@ -18,7 +18,9 @@ const ActionButtonsContainer = ({ view, type }) => {
     }[view];
     return aliases;
   };
-  return <ActionButtons buttons={mapViewToButtons(view)} type={type} view={view} />;
+  return (
+    <ActionButtons buttons={mapViewToButtons(view)} type={type} view={view} isLoading={isLoading} />
+  );
 };
 
 ActionButtonsContainer.propTypes = {

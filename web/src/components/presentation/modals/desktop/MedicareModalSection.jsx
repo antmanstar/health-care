@@ -79,15 +79,6 @@ const MedicareModalSection = ({ handleChange, data }) => (
 );
 
 MedicareModalSection.propTypes = {
-  data: PropTypes.shape({
-    medicare: {
-      eligibility: PropTypes.string.isRequired,
-      partA: PropTypes.string.isRequired,
-      partB: PropTypes.string.isRequired,
-      partC: PropTypes.string.isRequired,
-      partD: PropTypes.string.isRequired
-    }
-  }).isRequired,
   handleChange: PropTypes.func.isRequired
 };
 

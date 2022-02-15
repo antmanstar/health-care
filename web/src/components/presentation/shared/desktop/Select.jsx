@@ -17,10 +17,10 @@ const StyledSelect = styled.select`
   padding: 0 16px;
   height: 50px;
   line-height: 17px;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 400;
   background: ${props => props.theme.colors.shades.nearlyWhite};
-  color: ${props => props.theme.colors.shades.blue};
+  color: ${props => props.value ? props.theme.colors.shades.blue : props.theme.colors.shades.gray};
   border: 1px solid transparent;
   border-radius: 4px;
   appearance: none;
@@ -28,6 +28,13 @@ const StyledSelect = styled.select`
   white-space: nowrap;
   overflow: hidden;
 
+  @media ${props => props.theme.device.mobile}{
+    font-size: 16px;
+  }
+
+  option:not(:first-of-type) {
+    color: ${props => props.theme.colors.shades.blue};
+  }
   option:disabled {
     /* TODO: this doesn't work and I don't know why ... dev tools show the right color assigned */
     color: ${props => props.theme.colors.shades.gray};
@@ -43,13 +50,14 @@ const StyledSelect = styled.select`
     border-color: ${props => props.theme.colors.shades.darkGray};
   }
 
+  ////TODO: Get rid of this mobile class.
   &.mobile {
     height: auto;
     box-sizing: border-box;
     margin-bottom: 0;
     padding: 16px;
     width: 100%;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 400;
     background: ${props => props.theme.colors.shades.white};
     color: ${props => props.theme.colors.shades.blue};
@@ -84,17 +92,19 @@ const Icon = styled.img`
   transform: translateY(-50%);
 `;
 
-const Select = React.memo(({ name, placeholder, icon, children, onChange, value, mobile }) => (
-  <Wrapper>
-    <StyledSelect className={mobile && 'mobile'} name={name} value={value} onChange={onChange}>
-      <option value="" selected disabled hidden>
-        {placeholder}
-      </option>
-      {children}
-    </StyledSelect>
-    <Icon src={images[`${icon}-select`]} />
-  </Wrapper>
-));
+const Select = React.memo(({ name, placeholder, icon, children, onChange, value, mobile }) => {
+  return (
+    <Wrapper>
+      <StyledSelect className={mobile && 'mobile'} name={name} value={value} onChange={onChange}>
+        <option value="" selected disabled hidden>
+          {placeholder}
+        </option>
+        {children}
+      </StyledSelect>
+      <Icon src={images[`${icon}-select`]} />
+    </Wrapper>
+  );
+});
 
 //  TODO: fix these
 Select.propTypes = {

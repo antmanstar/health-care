@@ -10,6 +10,9 @@ import ErrorMessage from '../../shared/desktop/ErrorMessage';
 import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
 import styled from 'styled-components';
 
+import actions from '@evry-member-app/shared/store/actions';
+const { setModalData, showModal } = actions;
+
 // MODAL - Update Your Password
 
 const {
@@ -49,10 +52,23 @@ class UpdateYourPasswordModal extends Component {
   }
 
   handleErrors = response => {
-    this.setState({ showLoader: false, errors: response.response.data.messages });
+    this.setState({ showLoader: false, errors: response?.response?.data?.messages });
+  }
+
+  createSuccessModal = () => {
+    this.setState({ showLoader: false }, () => {
+      this.props.setModalData({
+        type: 'SUCCESS',
+        title: 'Success!',
+        message: "Your password has been successfully changed!"
+      });
+      this.props.showModal('SUBMISSION_RESPONSE');
+    });
   }
 
   submitModal = e => {
+    e.preventDefault();
+
     this.setState({ showLoader: true });
 
     apis.passwordChange({
@@ -60,50 +76,52 @@ class UpdateYourPasswordModal extends Component {
       oldPassword: this.state.oldPassword,
       newPassword: this.state.newPassword,
       newPasswordConfirm: this.state.confirmPassword
-    }).then(this.props.hideModal).catch(this.handleErrors);
+    }).then(this.createSuccessModal).catch(this.handleErrors);
   }
 
   render() {
     return (
       <>
         <Scrim onClick={this.props.hideModal} />
-        <ModalWrapper className="narrow">
-          <ModalHeader>
-            <ModalTitle>Update your password.</ModalTitle>
-          </ModalHeader>
-          <ModalBody>
-            <Label>Current Password</Label>
-            <Input
-              name="oldPassword"
-              type="password"
-              placeholder="Enter your current password."
-              value={this.state.oldPassword}
-              onChange={this.handleChange}
-            />
-            <NewPWLabel>New Password</NewPWLabel>
-            <Input
-              name="newPassword"
-              type="password"
-              placeholder="Enter a new password."
-              value={this.state.newPassword}
-              onChange={this.handleChange}
-            />
-            <Input
-              name="confirmPassword"
-              type="password"
-              placeholder="Confirm your new password."
-              value={this.state.confirmPassword}
-              onChange={this.handleChange}
-            />
-          </ModalBody>
-          <ModalSectionDivider />
-          <ModalButtonsRight>
-            <SmallButton text="Submit Changes" onClick={this.submitModal} />
-            <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
-          </ModalButtonsRight>
-          {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
-          {this.state.showLoader && <LoadingSpinnerScreen />}
-        </ModalWrapper>
+        <form onSubmit={this.submitModal}>
+          <ModalWrapper className="narrow">
+            <ModalHeader>
+              <ModalTitle>Update your password.</ModalTitle>
+            </ModalHeader>
+            <ModalBody>
+              <Label>Current Password</Label>
+              <Input
+                name="oldPassword"
+                type="password"
+                placeholder="Enter your current password."
+                value={this.state.oldPassword}
+                onChange={this.handleChange}
+              />
+              <NewPWLabel>New Password</NewPWLabel>
+              <Input
+                name="newPassword"
+                type="password"
+                placeholder="Enter a new password."
+                value={this.state.newPassword}
+                onChange={this.handleChange}
+              />
+              <Input
+                name="confirmPassword"
+                type="password"
+                placeholder="Confirm your new password."
+                value={this.state.confirmPassword}
+                onChange={this.handleChange}
+              />
+            </ModalBody>
+            <ModalSectionDivider />
+            <ModalButtonsRight>
+              <SmallButton text="Submit Changes" onClick={this.submitModal} />
+              <SmallButton text="Cancel" negative onClick={this.props.hideModal} />
+            </ModalButtonsRight>
+            {this.state?.errors?.length > 0 && <ErrorMessage message={this.state.errors} />}
+            {this.state.showLoader && <LoadingSpinnerScreen />}
+          </ModalWrapper>
+        </form>
       </>
     );
   }
@@ -118,9 +136,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  // handleSubmit: payload => {
-  //   dispatch(actions.updateContactPreferences(payload));
-  // }
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UpdateYourPasswordModal);

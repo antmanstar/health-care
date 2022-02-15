@@ -9,6 +9,7 @@ import actions from '@evry-member-app/shared/store/actions';
 import selectors from '@evry-member-app/shared/store/selectors';
 import { connect } from 'react-redux';
 import ScrollerWithInfiniteScroll from '../../../containers/base/InfiniteScroll';
+import moment from 'moment';
 
 const { fetchNotifications, clearNotifications } = actions;
 const { getToken, getNotificationsFilters } = selectors;
@@ -93,6 +94,20 @@ const FilterLabel = styled.div`
   }
 `;
 
+const EmptyNotifications = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  font-size: 18pt;
+
+  i {
+    font-size: 70px;
+    margin-bottom: 15px;
+  }
+`;
+
 const NotificationCenter = ({
   handleClick,
   markNotificationsAsRead,
@@ -117,7 +132,8 @@ const NotificationCenter = ({
     if (dateFrom && dateTo) {
       filterMessage = (
         <FilterLabel>
-          Filtered from: {dateFrom} - {dateTo}
+          Filtered from: {moment(dateFrom).format('MMM DD, YYYY')} -{' '}
+          {moment(dateTo).format('MMM DD, YYYY')}
         </FilterLabel>
       );
       return filterMessage;
@@ -159,18 +175,26 @@ const NotificationCenter = ({
         >
           <FilterMessages />
           <MessageListWrapper>
-            {notifications.map(message => (
-              <Message
-                bodyText={message.body}
-                buttonText="Contact Customer Support"
-                dateSent={`${new Date(message.utc_date)}`}
-                isNew={!message.is_read}
-                title={message.title}
-                id={message.user_notification_id}
-                passThroughRef={message.ref}
-                // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
-              />
-            ))}
+            {notifications.length === 0 && !isPending ? (
+              <EmptyNotifications>
+                <i className="material-icons">access_time</i>
+                <div style={{ width: '100%' }} />
+                Nothing here!
+              </EmptyNotifications>
+            ) : (
+              notifications.map(message => (
+                <Message
+                  bodyText={message.body}
+                  buttonText="Contact Customer Support"
+                  dateSent={`${new Date(message.utc_date)}`}
+                  isNew={!message.is_read}
+                  title={message.title}
+                  id={message.user_notification_id}
+                  passThroughRef={message.ref}
+                  // onClick={() => markNotificationsAsRead({ ids: [message.user_notification_id] })}
+                />
+              ))
+            )}
             {notifications && isPending && <Loader />}
           </MessageListWrapper>
         </ScrollerWithInfiniteScroll>

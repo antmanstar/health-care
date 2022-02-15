@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Moment from 'moment';
+import { connect } from 'react-redux';
 import defaultTheme from '../../../../style/themes';
 import SmallButton from '../../shared/desktop/SmallButton';
 import MedicareModalSection from './MedicareModalSection';
 import OtherInsuranceModalSection from './OtherInsuranceModalSection';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import selectors from '@evry-member-app/shared/store/selectors';
 import LoadingSpinnerScreen from '../../shared/Loader/LoadingSpinnerScreen';
+import ErrorMessage from '../../shared/desktop/ErrorMessage';
+
+import actions from '@evry-member-app/shared/store/actions';
+const { setModalData, showModal } = actions;
 
 // MODAL - Update Coordination of Benefits
 
@@ -93,7 +99,8 @@ class UpdateCoordinationOfBenefitsModal extends Component {
       },
       maxDate: "",
       minDate: "",
-      showLoader: false
+      showLoader: false,
+      errors: []
     };
 
     this.handlers = {
@@ -132,8 +139,15 @@ class UpdateCoordinationOfBenefitsModal extends Component {
     this.setState({ showLoader: false });
   }
 
-  completeCase = (response) => {
-    this.props.hideModal();
+  createSuccessModal = () => {
+    this.setState({ showLoader: false });
+
+    this.props.setModalData({
+      type: 'SUCCESS',
+      title: 'Submitted!',
+      message: "Great! We'll get to work on that and send you a confirmation once complete."
+    });
+    this.props.showModal('SUBMISSION_RESPONSE');
   }
 
   convertMedicareEligibilityType(eligibilityType) {
@@ -167,7 +181,9 @@ class UpdateCoordinationOfBenefitsModal extends Component {
     return this.isValidDate(date) ? date.toJSON().slice(0, 10) : "";
   }
 
-  handleSubmit = () => {
+  handleSubmit = e => {
+    e.preventDefault();
+
     this.setState({ showLoader: true });
 
     const payload = {
@@ -198,70 +214,70 @@ class UpdateCoordinationOfBenefitsModal extends Component {
       other_insurance_coverage_through: this.toYMD(this.state.otherInsurance.endDate) || null
     };
 
-    apis.createCaseCoordinationOfBenefits(payload).then(this.completeCase).catch(this.handleErrors);
+    apis.createCaseCoordinationOfBenefits(payload).then(this.createSuccessModal).catch(this.handleErrors);
   }
 
   render() {
     const { medicare, otherInsurance, maxDate, minDate } = this.state;
     const { hideModal, locked, modalData } = this.props;
 
-    let whoseName = modalData ? `${modalData.name.first} ${modalData.name.last}'s` : "";
+    let whoseName = modalData ? `${modalData?.name?.first} ${modalData?.name?.last}'s` : "";
 
     return (
       <>
         <Scrim onClick={hideModal} />
         <Wrapper>
-          <ModalHeader>
-            <SpaceBetween>
-              <ModalTitle>{`Update ${whoseName} Coordination of Benefits`}</ModalTitle>
-            </SpaceBetween>
-          </ModalHeader>
-          <ModalBody>
+            <ModalHeader>
+              <SpaceBetween>
+                <ModalTitle>{`Update ${whoseName} Coordination of Benefits`}</ModalTitle>
+              </SpaceBetween>
+            </ModalHeader>
+            <ModalBody>
+              {locked ? (
+                <LockedNote>
+                  <div>
+                    <i className="material-icons">info_outline</i>
+                    <h3>Unable to make changes at this time.</h3>
+                  </div>
+                  <p>
+                    A recent change request has been submitted. Please check back later or call
+                    1-800-555-1234 with any questions or concerns.
+                  </p>
+                </LockedNote>
+              ) : (
+                <>
+                  <Container>
+                    <Row>
+                      <MedicareModalSection
+                        handleChange={this.handlers.handleMedicareStateChange}
+                        data={medicare}
+                      />
+                    </Row>
+                    <Row>
+                      <OtherInsuranceModalSection
+                        data={otherInsurance}
+                        handleChange={this.handlers.handleOtherInsuranceStateChange}
+                        handleDateChange={this.handlers.handleOtherInsuranceDateChange}
+                        minDate={minDate}
+                        maxDate={maxDate}
+                      />
+                    </Row>
+                  </Container>
+                </>
+              )}
+            </ModalBody>
+            <ModalSectionDivider />
             {locked ? (
-              <LockedNote>
-                <div>
-                  <i className="material-icons">info_outline</i>
-                  <h3>Unable to make changes at this time.</h3>
-                </div>
-                <p>
-                  A recent change request has been submitted. Please check back later or call
-                  1-800-555-1234 with any questions or concerns.
-                </p>
-              </LockedNote>
+              <ModalButtonsCenter>
+                <SmallButton text="Cancel" negative onClick={hideModal} />
+              </ModalButtonsCenter>
             ) : (
-              <>
-                <Container>
-                  <Row>
-                    <MedicareModalSection
-                      handleChange={this.handlers.handleMedicareStateChange}
-                      data={medicare}
-                    />
-                  </Row>
-                  <Row>
-                    <OtherInsuranceModalSection
-                      data={otherInsurance}
-                      handleChange={this.handlers.handleOtherInsuranceStateChange}
-                      handleDateChange={this.handlers.handleOtherInsuranceDateChange}
-                      minDate={minDate}
-                      maxDate={maxDate}
-                    />
-                  </Row>
-                </Container>
-              </>
+              <ModalButtonsRight>
+                <SmallButton text="Submit Changes" onClick={this.handleSubmit} />
+                <SmallButton text="Cancel" negative onClick={hideModal} />
+              </ModalButtonsRight>
             )}
-          </ModalBody>
-          <ModalSectionDivider />
-          {locked ? (
-            <ModalButtonsCenter>
-              <SmallButton text="Cancel" negative onClick={hideModal} />
-            </ModalButtonsCenter>
-          ) : (
-            <ModalButtonsRight>
-              <SmallButton text="Submit Changes" onClick={this.handleSubmit} />
-              <SmallButton text="Cancel" negative onClick={hideModal} />
-            </ModalButtonsRight>
-          )}
-          {this.state.showLoader && <LoadingSpinnerScreen />}
+            {this.state.showLoader && <LoadingSpinnerScreen />}
         </Wrapper>
       </>
     );
@@ -280,4 +296,17 @@ UpdateCoordinationOfBenefitsModal.defaultProps = {
   locked: false
 };
 
-export default UpdateCoordinationOfBenefitsModal;
+const mapStateToProps = state => ({
+  token: selectors.getToken(state)
+});
+
+const mapDispatchToProps = dispatch => ({
+  setModalData: data => {
+    dispatch(setModalData(data));
+  },
+  showModal: modal => {
+    dispatch(showModal(modal));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateCoordinationOfBenefitsModal);

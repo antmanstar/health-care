@@ -26,12 +26,19 @@ const SubTitle = styled.h2`
 const Img = styled.img`
   width: 128px;
 `;
+
+const StyledModalWrapper = styled(ModalWrapper)`
+  overflow-y: auto;
+  height: 100%;
+  max-height: 500px;
+`;
+
 const SubmissionResponseModal = props => {
   const { type, title, message } = props.modalData;
   return (
     <Fragment>
       <Scrim onClick={props.hideModal} />
-      <ModalWrapper className="extra-narrow">
+      <StyledModalWrapper className="extra-narrow">
         <ModalBodyColumn>
           {type === 'SUCCESS' && <Img src={images['check-in-circle']} alt="" />}
           <SubTitle>{title}</SubTitle>
@@ -41,7 +48,7 @@ const SubmissionResponseModal = props => {
         <ModalButtonsCenter>
           <SmallButton text="Close" onClick={props.hideModal} />
         </ModalButtonsCenter>
-      </ModalWrapper>
+      </StyledModalWrapper>
     </Fragment>
   );
 };

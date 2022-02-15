@@ -140,7 +140,13 @@ const appReducer = (state = {}, action) => {
     case types.PROVIDER_SET_NEW_LOCATION:
       return {
         ...state,
-        geoLocation: { ...get(state, ['geoLocation']), ...action.payload }
+        geoLocation: {
+          ...get(state, ['geoLocation']),
+          error: false,
+          latitude: false,
+          longitude: false,
+          ...action.payload
+        }
       }
     case types.GEOCODER:
       return {
@@ -157,7 +163,7 @@ const appReducer = (state = {}, action) => {
           ...get(state, ['providerSearch']),
           isLoadingAddress: false
         },
-        geoLocation: action.payload
+        geoLocation: { error: false, ...action.payload }
       }
     case types.GEOCODER_FAILURE:
       return { ...state }
