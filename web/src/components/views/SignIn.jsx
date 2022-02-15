@@ -13,12 +13,22 @@ import selectors from '@evry-member-app/shared/store/selectors';
 import Interpolation from '../../utils/Interpolation';
 import history from '../../utils/history';
 import { Helmet } from 'react-helmet-async';
+import Moment from 'moment';
 import LoadingSpinnerScreen from '../presentation/shared/Loader/LoadingSpinnerScreen';
+import AlertMessage from '../presentation/shared/desktop/AlertMessage';
 import MessageAlert from './MessageAlert';
 
-const { authenticate, clearAuthError, clear2FA, verify2FACode, clearSessionTimedOut } = actions;
+const {
+  authenticate,
+  clearAuthError,
+  clear2FA,
+  verify2FACode,
+  clearSessionTimedOut,
+  getActiveMaintenanceSchedule
+} = actions;
 const {
   getAuthError,
+  getMaintenanceSchedule,
   isSigningIn,
   getPayload2FA,
   hasBasicInfo,
@@ -221,16 +231,52 @@ function SignIn({
   isAuthenticated,
   isOnboardingComplete,
   payload2FA,
-  isSessionTimedOut
+  isSessionTimedOut,
+  getActiveMaintenanceSchedule,
+  maintenanceSchedule
 }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [maintananceScheduleList, setMaintananceScheduleList] = useState([]);
+
   useEffect(() => {
     if (isAuthenticated && hasBasicInfo) {
       history.push('/plan');
     } else if (authError && authError.data) {
       handleClearAuthError();
     }
-  }, [isAuthenticated, hasBasicInfo, isOnboardingComplete]);
+
+    if (maintenanceSchedule?.length) {
+      const filterDates = maintenanceSchedule.reduce((acc, current) => {
+        const x = acc.find(item => item.start_at_utc === current.start_at_utc);
+        if (!x) {
+          return acc.concat([current]);
+        } else {
+          return acc;
+        }
+      }, []);
+
+      for (let i = 0; i < filterDates.length; i++) {
+        const { start_at_utc, interval_in_minutes, message } = filterDates[i];
+        const actualDate = Moment(new Date()).utcOffset('-06:00');
+        const startAtUtc = Moment(start_at_utc).utcOffset('-06:00');
+        const diff = startAtUtc.diff(actualDate, 'days');
+
+        if (diff <= 10) {
+          setMaintananceScheduleList(prevState => [
+            ...prevState,
+            {
+              message,
+              interval_in_minutes,
+              start_at_utc,
+              showAlert: true
+            }
+          ]);
+        }
+      }
+    } else {
+      getActiveMaintenanceSchedule();
+    }
+  }, [isAuthenticated, hasBasicInfo, isOnboardingComplete, maintenanceSchedule]);
 
   const renderAuthError = () => {
     if (authError && authError.length > 0 && authError[0] === 'User not found.') {
@@ -267,6 +313,10 @@ function SignIn({
       <Helmet>
         <title>{reflection.layoutProps.title} - Evry Health</title>
       </Helmet>
+      {maintananceScheduleList.map(schedule => {
+        const { message, showAlert } = schedule;
+        return showAlert ? <AlertMessage message={message} key={Math.random() * 10000} /> : null;
+      })}
       {payload2FA && payload2FA.two_way_factor_challenge_required ? (
         <FormWrapper>
           <Title>Authenticate your account</Title>
@@ -364,9 +414,7 @@ function SignIn({
           </GoToRegistration>
         )}
       </BottomSectionDivider>
-      {((isSigningIn || isAuthenticated) && !isSessionTimedOut) && 
-        <LoadingSpinnerScreen />
-      }
+      {(isSigningIn || isAuthenticated) && !isSessionTimedOut && <LoadingSpinnerScreen />}
     </Wrapper>
   );
 }
@@ -391,15 +439,18 @@ SignIn.defaultProps = {
   payload2FA: null
 };
 
-const mapStateToProps = state => ({
-  isSigningIn: isSigningIn(state),
-  authError: getAuthError(state),
-  hasBasicInfo: hasBasicInfo(state),
-  isAuthenticated: isAuthenticated(state),
-  isOnboardingComplete: isOnboardingComplete(state),
-  payload2FA: getPayload2FA(state),
-  isSessionTimedOut: isSessionTimedOut(state)
-});
+const mapStateToProps = state => {
+  return {
+    maintenanceSchedule: getMaintenanceSchedule(state),
+    isSigningIn: isSigningIn(state),
+    authError: getAuthError(state),
+    hasBasicInfo: hasBasicInfo(state),
+    isAuthenticated: isAuthenticated(state),
+    isOnboardingComplete: isOnboardingComplete(state),
+    payload2FA: getPayload2FA(state),
+    isSessionTimedOut: isSessionTimedOut(state)
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   handleTwoFactorSubmit: e => {
@@ -418,6 +469,9 @@ const mapDispatchToProps = dispatch => ({
   },
   handleClear2FA: () => {
     dispatch(clear2FA());
+  },
+  getActiveMaintenanceSchedule: () => {
+    dispatch(getActiveMaintenanceSchedule());
   }
 });
 

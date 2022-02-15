@@ -73,7 +73,7 @@ const CollaspeIcon = styled.i`
 
 const SectionHeaderWithIcon = React.memo(
   ({ title, subTitle, icon, svgIcon, collapsed, onClick, noCollaspe, highlightedText }) => {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     const sbtitle1 = subTitle.split('<br>')[0];
     const normalText = highlightedText && sbtitle1.substring(0, sbtitle1.indexOf('<b>'));
@@ -97,11 +97,11 @@ const SectionHeaderWithIcon = React.memo(
             {expanded && <br />}
             {sbttitle2 && expanded ? sbttitle2 : ''}
           </SubTitle>
-          {sbttitle2 && (
+          {/* {sbttitle2 && (
             <Link onClick={() => setExpanded(!expanded)}>
               {expanded ? 'Read Less' : 'Read More'}
             </Link>
-          )}
+          )} */}
         </div>
         {!noCollaspe && (
           <CollaspeIcon className="material-icons" onClick={onClick}>

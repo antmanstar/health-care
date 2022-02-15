@@ -275,6 +275,13 @@ export default function* watcherSaga() {
     ),
     takeLatest(
       ...takeAllBundler(
+        types.GET_ACTIVE_MAINTENANCE_SCHEDULE,
+        generateFetchWorker,
+        api.getActiveMaintenanceSchedule
+      )
+    ),
+    takeLatest(
+      ...takeAllBundler(
         types.INITIATE_PASSWORD_RESET,
         generateFetchWorker,
         api.initiatePasswordReset

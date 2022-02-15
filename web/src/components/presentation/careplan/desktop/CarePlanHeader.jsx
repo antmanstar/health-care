@@ -128,7 +128,7 @@ const CarePlanHeader = React.memo(({ carePlan }) => {
               </Description>
               <Title className="sm">Why this care plan?</Title>
               <Description className="sm" style={{ marginBottom: '10px' }}>
-                <span style={{ textDecoration: 'underline' }}>{plan.title}</span>
+                {/* <span style={{ textDecoration: 'underline' }}>{plan.title}</span> */}
                 <br />
                 {des1}
                 {expanded && <br />}

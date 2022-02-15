@@ -1137,3 +1137,8 @@ export const downloadUnderstandYourBenefits = (token) => ({
     token
   }
 })
+
+export const getActiveMaintenanceSchedule = () => ({
+  type: types.GET_ACTIVE_MAINTENANCE_SCHEDULE,
+  payload: {}
+})

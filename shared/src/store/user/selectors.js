@@ -91,6 +91,9 @@ export const getCareGuideInfo = (state) => get(state, ['user', 'careGuideInfo'])
 
 export const getCarePlan = (state) => get(state, ['user', 'carePlan', 0])
 
+export const getMaintenanceSchedule = (state) =>
+  get(state, ['user', 'maintenanceSchedule'])
+
 export const getCarePlanSuggestion = (state) =>
   get(state, [
     'user',
@@ -174,6 +177,9 @@ export const isQuestionnaireLoaded = (state) =>
 export const getAuthError = (state) => get(state, ['user', 'auth', 'error'])
 
 export const getRegisterError = (state) => get(state, ['user', 'register'])
+
+export const getMaintenanceScheduleError = (state) =>
+  get(state, ['user', 'maintenanceScheduleError'])
 
 export const getVerifyMembershipError = (state) =>
   get(state, ['user', 'registering'])

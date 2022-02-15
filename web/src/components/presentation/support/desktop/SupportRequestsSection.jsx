@@ -154,7 +154,7 @@ const SupportRequestsSection = ({
           <>
             <SectionDivider />
             <Container>
-              <SupportRequestList showCompleted={showCompleted} list={requests}>
+              <SupportRequestList showCompleted={toggle} list={requests}>
                 {isEmpty(requests) &&
                 (!requestsDataFrame ||
                   (requestsDataFrame && requestsDataFrame.status === 'QUERYING')) ? (

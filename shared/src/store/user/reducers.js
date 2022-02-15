@@ -1,5 +1,6 @@
 // import { combineReducers } from "redux";
 import { get, uniq } from 'lodash'
+import actions from '../actions'
 import * as types from './types'
 import { downloadFile } from '../../utils/downloadFile'
 
@@ -242,7 +243,6 @@ const userReducer = (state = initialState, action) => {
         requestInformationCase: { status: 'OPEN', id: action.payload.id }
       }
     case types.CREATE_CASE_REQUEST_INFORMATION_FAILURE:
-
       return {
         ...state,
         requestInformationCase: {
@@ -474,6 +474,16 @@ const userReducer = (state = initialState, action) => {
         },
         isChoosingCarePlan: false
       }
+    case types.GET_ACTIVE_MAINTENANCE_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        maintenanceSchedule: action.payload
+      }
+    case types.GET_ACTIVE_MAINTENANCE_SCHEDULE_FAILURE:
+      return {
+        ...state,
+        maintenanceScheduleError: action.error
+      }
     case types.SAVE_PASSWORD_RESET_SUCCESS:
     case types.INITIATE_PASSWORD_RESET_SUCCESS:
       return { ...state, auth: { error: [] } }
@@ -521,9 +531,9 @@ const userReducer = (state = initialState, action) => {
           file: action.payload,
           isLoading: false
         }
-      };
+      }
     case types.MEMBERSHIP_DOCUMENT_FETCH_FAILURE:
-      return{
+      return {
         ...state,
         membershipDocument: {
           ...state.membershipDocument,
@@ -531,7 +541,7 @@ const userReducer = (state = initialState, action) => {
           error: action.payload,
           isLoading: false
         }
-      };
+      }
     case types.MEMBERSHIP_DOCUMENT_RESET:
       return {
         ...state,

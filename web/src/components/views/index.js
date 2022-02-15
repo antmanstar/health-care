@@ -1,7 +1,7 @@
 import Account, { reflection as accountReflection } from './Account';
 import ChooseCarePlan, { reflection as chooseCarePlanReflection } from './ChooseCarePlan';
 import CarePlanSuggestion, {
-  reflection as carePlanSuggestionReflection,
+  reflection as carePlanSuggestionReflection
 } from './CarePlanSuggestion';
 import Questionnaire, { reflection as questionnaireReflection } from './Questionnaire';
 import Claims, { reflection as claimsReflection } from './Claims';
@@ -15,7 +15,7 @@ import Support, { reflection as supportReflection } from './Support';
 import MeetYourGoals, { reflection as meetYourGoalsReflection } from './MeetYourGoals';
 import GetStarted, { reflection as getStartedReflection } from './GetStarted';
 import ArticlesAndResources, {
-  reflection as articlesAndResourcesReflection,
+  reflection as articlesAndResourcesReflection
 } from './ArticlesAndResources';
 import Rewards, { reflection as rewardsReflection } from './Rewards';
 import WellnessProgram, { reflection as wellnessProgramReflection } from './WellnessProgram';
@@ -32,14 +32,19 @@ import DownloadForms, { reflection as downloadFormsReflection } from './Download
 import MemberTools, { reflection as memberToolsReflection } from './MemberTools';
 import HealthAssessment, { reflection as healthAssessmentReflection } from './HealthAssessment';
 import PasswordReset, { reflection as passwordResetReflection } from './PasswordReset';
-import PasswordResetSuccess, { reflection as passwordResetSuccessReflection } from './PasswordResetSuccess';
+import PasswordResetSuccess, {
+  reflection as passwordResetSuccessReflection
+} from './PasswordResetSuccess';
 import ContactSupportClaim, {
-  reflection as contactSupportClaimReflection,
+  reflection as contactSupportClaimReflection
 } from './ContactSupportClaim';
 import EmailVerificationSent, {
-  reflection as emailVerificationSentReflection,
+  reflection as emailVerificationSentReflection
 } from './EmailVerificationSent';
 import EmailVerification, { reflection as emailVerificationReflection } from './EmailVerification';
+import MaintenanceSchedule, {
+  reflection as MaintenanceScheduleReflection
+} from './MaintenanceSchedule';
 
 const reflections = [
   accountReflection,
@@ -76,6 +81,7 @@ const reflections = [
   supportRequestReflection,
   supportRequestsReflection,
   wellnessProgramReflection,
+  MaintenanceScheduleReflection
 ];
 
 export default reflections;
@@ -115,4 +121,5 @@ export {
   SupportRequest,
   SupportRequests,
   WellnessProgram,
+  MaintenanceSchedule
 };

@@ -859,6 +859,14 @@ export function emailChange({ token, email_address, password }) {
   )
 }
 
+export function getActiveMaintenanceSchedule() {
+  return axios.post('/api/v1/System/GetMaintenanceSchedule', {
+    headers: {
+      'Content-Type': 'application/json-patch+json'
+    }
+  })
+}
+
 export function error500Test() {
   return axios.get('/api/v1/Member/InternalServerErrorTest', {
     headers: {

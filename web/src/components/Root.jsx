@@ -16,8 +16,16 @@ import SessionTimeout from './views/SessionTimeout';
 import { insightsPlugin } from '../insights/microsoft/appInsights';
 import { AppInsightsErrorBoundary } from '@microsoft/applicationinsights-react-js';
 import apis from '@evry-member-app/shared/interfaces/apis/evry/index';
+import history from '../utils/history';
 
-const { isAuthenticated, getCurrentModal } = selectors;
+const { getActiveMaintenanceSchedule } = actions;
+
+const {
+  isAuthenticated,
+  getCurrentModal,
+  getMaintenanceScheduleError,
+  getMaintenanceSchedule
+} = selectors;
 
 // Extract global style
 const { GlobalStyle } = defaultTheme.components;
@@ -39,7 +47,7 @@ const layouts = views.reduce((previous, view) => {
   return current;
 }, []);
 
-function renderPage(isAuthenticated, currentModal, store) {
+function renderPage(isAuthenticated, currentModal, maintenanceScheduleError, store) {
   return (
     <AppInsightsErrorBoundary
       onError={() => {
@@ -99,7 +107,14 @@ function renderPage(isAuthenticated, currentModal, store) {
   );
 }
 
-const Root = ({ isAuthenticated, currentModal, store }) => {
+const Root = ({
+  isAuthenticated,
+  currentModal,
+  getActiveMaintenanceSchedule,
+  maintenanceScheduleError,
+  maintenanceSchedule,
+  store
+}) => {
   const [pageMayLoad, setPageMayLoad] = useState(false);
 
   useEffect(() => {
@@ -115,13 +130,18 @@ const Root = ({ isAuthenticated, currentModal, store }) => {
         })
         .catch(() => {
           store.dispatch(actions.clearAuthError());
-
           setPageMayLoad(true);
         });
     } else {
       setPageMayLoad(true);
     }
-  }, []);
+
+    if (maintenanceScheduleError) {
+      history.push('/maintenance');
+    } else {
+      history.push('/');
+    }
+  }, [maintenanceScheduleError]);
 
   if (pageMayLoad) {
     return renderPage(isAuthenticated, currentModal, store);
@@ -139,9 +159,19 @@ Root.defaultProps = {
   currentModal: null
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: isAuthenticated(state),
-  currentModal: getCurrentModal(state)
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: isAuthenticated(state),
+    currentModal: getCurrentModal(state),
+    maintenanceSchedule: getMaintenanceSchedule(state),
+    maintenanceScheduleError: getMaintenanceScheduleError(state)
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  getActiveMaintenanceSchedule: () => {
+    dispatch(getActiveMaintenanceSchedule());
+  }
 });
 
-export default withRouter(connect(mapStateToProps)(Root));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Root));

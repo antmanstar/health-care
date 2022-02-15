@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import defaultTheme from '../../../../style/themes';
 import SupportRequest from './SupportRequest';
+import { bool } from 'prop-types';
 
 // Support Requests List for the Support Request Section on the Customer Support View
 // TODO: Need to bring in support requests from API
@@ -70,8 +71,8 @@ class SupportRequestList extends Component {
   }
 
   render() {
-    const { list, children } = this.props;
-    const { showCompleted } = this.state;
+    const { list, children, showCompleted } = this.props;
+    //const { showCompleted, headerText } = this.state;
     return (
       <>
         <Grouping>
@@ -106,12 +107,12 @@ class SupportRequestList extends Component {
 
 SupportRequestList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.shape({})),
-  showCompleted: PropTypes.func
+  showCompleted: bool//PropTypes.func
 };
 
 SupportRequestList.defaultProps = {
   list: [],
-  showCompleted: () => {}
+  showCompleted: false//() => {}
 };
 
 export default SupportRequestList;
